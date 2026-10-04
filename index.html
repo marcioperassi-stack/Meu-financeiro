@@ -2,219 +2,97 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111827">
 <title>Meu Financeiro</title>
 
 <style>
 *{box-sizing:border-box}
-
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f3f4f6;
-  color:#111827;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f4f6;
+ color:#111827
 }
-
 header{
-  background:#111827;
-  color:#fff;
-  padding:18px;
-  text-align:center;
+ background:#111827;
+ color:white;
+ padding:18px;
+ text-align:center
 }
-
-header h1{
-  margin:0 0 5px;
-}
-
+main{max-width:1050px;margin:auto;padding:12px}
 nav{
-  display:flex;
-  overflow-x:auto;
-  background:#fff;
-  border-bottom:1px solid #ddd;
+ display:flex;
+ gap:6px;
+ overflow:auto;
+ background:white;
+ padding:8px;
+ position:sticky;
+ top:0;
+ z-index:10
 }
-
 nav button{
-  border:0;
-  background:#fff;
-  padding:14px;
-  white-space:nowrap;
-  font-weight:bold;
+ border:0;
+ padding:10px 12px;
+ border-radius:8px;
+ white-space:nowrap
 }
-
-nav button.active{
-  background:#111827;
-  color:#fff;
+nav button.ativo{
+ background:#111827;
+ color:white
 }
-
-main{
-  max-width:1100px;
-  margin:auto;
-  padding:15px;
+section{display:none}
+section.ativa{display:block}
+.card{
+ background:white;
+ border-radius:12px;
+ padding:15px;
+ margin:10px 0;
+ box-shadow:0 1px 5px #ddd
 }
-
-.section{
-  display:none;
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+ gap:10px
 }
-
-.section.active{
-  display:block;
-}
-
-.card,
-.metric{
-  background:#fff;
-  border-radius:12px;
-  padding:15px;
-  margin-bottom:15px;
-  box-shadow:0 2px 8px #0001;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:12px;
-}
-
-.metric{
-  margin:0;
-}
-
-.metric b{
-  display:block;
-  margin-top:7px;
-  font-size:20px;
-}
-
-.green{color:#15803d}
-.red{color:#dc2626}
-.blue{color:#2563eb}
-.orange{color:#ea580c}
-
-.formgrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:10px;
-}
-
 label{
-  display:block;
-  margin-bottom:5px;
-  font-size:13px;
-  font-weight:bold;
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin-bottom:4px
 }
-
-input,
-select{
-  width:100%;
-  padding:11px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  background:#fff;
+input,select{
+ width:100%;
+ padding:10px;
+ border:1px solid #d1d5db;
+ border-radius:8px
 }
-
 .btn{
-  border:0;
-  border-radius:8px;
-  padding:10px 14px;
-  margin:3px;
-  background:#111827;
-  color:#fff;
-  font-weight:bold;
+ border:0;
+ border-radius:8px;
+ padding:10px 13px;
+ margin:4px 2px;
+ background:#111827;
+ color:white
 }
-
-.btn.greenbtn{background:#15803d}
-.btn.redbtn{background:#dc2626}
-.btn.bluebtn{background:#2563eb}
-.btn.graybtn{background:#6b7280}
-
+.danger{background:#b91c1c}
+.gray{background:#e5e7eb;color:#111827}
+.valor{font-size:21px;font-weight:bold}
+.ok{color:#15803d}
+.neg{color:#b91c1c}
+.small{font-size:12px;color:#6b7280}
+.table{
+ overflow:auto
+}
 table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
+ width:100%;
+ border-collapse:collapse;
+ font-size:13px
 }
-
 th,td{
-  padding:9px;
-  border-bottom:1px solid #e5e7eb;
-  text-align:left;
-  font-size:13px;
-}
-
-th{
-  background:#f9fafb;
-}
-
-.tablewrap{
-  overflow-x:auto;
-}
-
-.status{
-  padding:4px 7px;
-  border-radius:6px;
-  font-size:11px;
-  font-weight:bold;
-}
-
-.pago{
-  background:#dcfce7;
-  color:#166534;
-}
-
-.pendente{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-.small{
-  color:#6b7280;
-  font-size:12px;
-}
-
-.empty{
-  text-align:center;
-  padding:20px;
-  color:#6b7280;
-}
-
-.bar{
-  height:20px;
-  background:#e5e7eb;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.bar div{
-  height:100%;
-  background:#2563eb;
-  color:#fff;
-  text-align:right;
-  padding-right:6px;
-  font-size:12px;
-}
-
-.dangerbox{
-  border:2px solid #fecaca;
-  background:#fff7f7;
-}
-
-canvas{
-  width:100%;
-  height:250px;
-}
-
-.destaque{
-  border:2px solid #2563eb;
-}
-
-@media(max-width:600px){
-  main{
-    padding:10px;
-  }
-
-  th,td{
-    font-size:11px;
-  }
+ padding:8px;
+ border-bottom:1px solid #e5e7eb;
+ text-align:left
 }
 </style>
 </head>
@@ -222,255 +100,163 @@ canvas{
 <body>
 
 <header>
-  <h1>💰 Meu Financeiro</h1>
-  <div>Controle das suas finanças</div>
+<h1>💰 Meu Financeiro</h1>
+<div style="font-size:13px;color:#d1d5db">
+Controle pessoal + Uber/99
+</div>
 </header>
 
 <nav>
-  <button class="active" onclick="abrirAba('dashboard',this)">📊 Dashboard</button>
-  <button onclick="abrirAba('pessoal',this)">💰 Pessoal</button>
-  <button onclick="abrirAba('cartao',this)">💳 Cartão</button>
-  <button onclick="abrirAba('uber',this)">🚗 Uber/99</button>
-  <button onclick="abrirAba('metas',this)">🎯 Metas</button>
-  <button onclick="abrirAba('relatorios',this)">📈 Relatórios</button>
+<button class="ativo" onclick="abrir('dashboard',this)">🏠 Início</button>
+<button onclick="abrir('pessoal',this)">💰 Pessoal</button>
+<button onclick="abrir('uber',this)">🚗 Uber/99</button>
+<button onclick="abrir('cartao',this)">💳 Cartão</button>
+<button onclick="abrir('metas',this)">🎯 Metas</button>
+<button onclick="abrir('relatorios',this)">📊 Relatórios</button>
+<button onclick="abrir('config',this)">⚙️ Config.</button>
 </nav>
 
 <main>
 
-<!-- DASHBOARD -->
+<section id="dashboard" class="ativa">
 
-<section id="dashboard" class="section active">
+<div class="card">
+<h2>Resumo</h2>
 
-  <div class="cards">
+<div class="grid">
 
-    <div class="metric">
-      Entradas pessoais
-      <b id="dEntradas" class="green">R$ 0,00</b>
-    </div>
+<div>
+<div class="small">Entradas pessoais</div>
+<div id="dashEntradas" class="valor ok">R$ 0,00</div>
+</div>
 
-    <div class="metric">
-      Despesas pessoais
-      <b id="dDespesas" class="red">R$ 0,00</b>
-    </div>
+<div>
+<div class="small">Despesas pessoais</div>
+<div id="dashDespesas" class="valor neg">R$ 0,00</div>
+</div>
 
-    <div class="metric">
-      Saldo pessoal
-      <b id="dSaldo" class="blue">R$ 0,00</b>
-    </div>
+<div>
+<div class="small">Lucro Uber/99</div>
+<div id="dashUber" class="valor">R$ 0,00</div>
+</div>
 
-    <div class="metric">
-      Lucro Uber/99
-      <b id="dLucroUber" class="orange">R$ 0,00</b>
-    </div>
+<div>
+<div class="small">Resultado total</div>
+<div id="dashTotal" class="valor">R$ 0,00</div>
+</div>
 
-    <div class="metric destaque">
-      Resultado total
-      <b id="dResultadoTotal" class="blue">R$ 0,00</b>
-    </div>
+</div>
+</div>
 
-    <div class="metric">
-      Reserva Uber/99
-      <b id="dReserva" class="orange">R$ 0,00</b>
-    </div>
+<div class="card">
+<h3>🔔 Contas pendentes</h3>
+<div id="pendentes">Nenhuma conta pendente.</div>
+</div>
 
-  </div>
-
-  <div class="card">
-    <h3>📊 Entradas x Despesas</h3>
-    <canvas id="grafico"></canvas>
-  </div>
-
-  <div class="card">
-    <h3>🔔 Próximos pagamentos</h3>
-    <div id="proximos"></div>
-  </div>
+<div class="card">
+<h3>🏦 Reserva Uber/99</h3>
+<p class="small">
+10% do lucro depois de despesas e combustível.
+</p>
+<div id="dashReserva" class="valor">R$ 0,00</div>
+</div>
 
 </section>
 
 
-<!-- PESSOAL -->
+<section id="pessoal">
 
-<section id="pessoal" class="section">
+<div class="card">
 
-  <div class="card">
+<h2>💰 Lançamento pessoal</h2>
 
-    <h2>💰 Novo lançamento</h2>
+<div class="grid">
 
-    <div class="formgrid">
+<div>
+<label>Data</label>
+<input id="pData" type="date">
+</div>
 
-      <div>
-        <label>Data</label>
-        <input type="date" id="pData">
-      </div>
+<div>
+<label>Tipo</label>
+<select id="pTipo">
+<option>Entrada</option>
+<option>Despesa</option>
+</select>
+</div>
 
-      <div>
-        <label>Tipo</label>
-        <select id="pTipo">
-          <option value="Entrada">Entrada</option>
-          <option value="Despesa">Despesa</option>
-        </select>
-      </div>
+<div>
+<label>Categoria</label>
+<select id="pCategoria">
+<option>Salário</option>
+<option>Empréstimo</option>
+<option>Alimentação</option>
+<option>Moradia</option>
+<option>Transporte</option>
+<option>Saúde</option>
+<option>Contas</option>
+<option>Lazer</option>
+<option>Outros</option>
+</select>
+</div>
 
-      <div>
-        <label>Categoria</label>
-        <select id="pCategoria">
-          <option>Salário</option>
-          <option>Uber</option>
-          <option>99</option>
-          <option>Alimentação</option>
-          <option>Moradia</option>
-          <option>Água</option>
-          <option>Luz</option>
-          <option>Internet</option>
-          <option>Telefone</option>
-          <option>Combustível</option>
-          <option>Saúde</option>
-          <option>Transporte</option>
-          <option>Lazer</option>
-          <option>Compras</option>
-          <option>Empréstimo</option>
-          <option>Outros</option>
-        </select>
-      </div>
+<div>
+<label>Valor</label>
+<input id="pValor" type="number" step="0.01">
+</div>
 
-      <div>
-        <label>Valor</label>
-        <input type="number" id="pValor" step="0.01" placeholder="0,00">
-      </div>
+<div>
+<label>Descrição</label>
+<input id="pDescricao">
+</div>
 
-      <div>
-        <label>Descrição</label>
-        <input type="text" id="pDescricao" placeholder="Descrição">
-      </div>
+<div>
+<label>Pagamento</label>
+<select id="pStatus">
+<option>Pendente</option>
+<option>Pago</option>
+</select>
+</div>
 
-      <div>
-        <label>Status</label>
-        <select id="pStatus">
-          <option value="Pendente">Pendente</option>
-          <option value="Pago">Pago</option>
-        </select>
-      </div>
+<div>
+<label>Repetir</label>
+<select id="pRepetir">
+<option value="nao">Não</option>
+<option value="sim">Sim</option>
+</select>
+</div>
 
-      <div>
-        <label>Despesa</label>
-        <select id="pFixa">
-          <option value="Normal">Normal</option>
-          <option value="Fixa">Fixa</option>
-        </select>
-      </div>
+<div>
+<label>Periodicidade</label>
+<select id="pPeriodo">
+<option value="mensal">Mensal</option>
+<option value="semanal">Semanal</option>
+<option value="diaria">Diária</option>
+</select>
+</div>
 
-      <div>
-        <label>Repetir lançamento?</label>
-        <select id="pRepetir" onchange="mostrarPeriodicidade()">
-          <option value="nao">Não</option>
-          <option value="sim">Sim</option>
-        </select>
-      </div>
+</div>
 
-      <div id="periodicidadeArea" style="display:none">
-        <label>Periodicidade</label>
-        <select id="pPeriodo">
-          <option value="diaria">Diária</option>
-          <option value="semanal">Semanal</option>
-          <option value="mensal">Mensal</option>
-        </select>
-      </div>
+<button class="btn" onclick="adicionarPessoal()">Adicionar lançamento</button>
+<button class="btn gray" onclick="limparPessoal()">Limpar</button>
 
-    </div>
-
-    <br>
-
-    <button class="btn greenbtn" onclick="adicionarLancamento()">
-      ➕ Adicionar lançamento
-    </button>
-
-  </div>
+</div>
 
 
-  <div class="card">
+<div class="card">
 
-    <h3>📋 Lançamentos pessoais</h3>
+<h3>📋 Lançamentos pessoais</h3>
 
-    <div class="formgrid">
+<button class="btn danger" onclick="apagarPessoais()">
+🗑️ Apagar todos os lançamentos pessoais
+</button>
 
-      <div>
-        <label>Filtrar mês</label>
-        <input type="month" id="filtroMes" onchange="renderTudo()">
-      </div>
-
-    </div>
-
-    <div class="tablewrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Tipo</th>
-            <th>Categoria</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Status</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-
-        <tbody id="tabelaPessoal"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>🔄 Recorrências</h3>
-
-    <p class="small">
-      A recorrência funciona para <b>Entradas e Despesas</b>.
-      Você pode escolher diária, semanal ou mensal.
-    </p>
-
-    <button class="btn bluebtn" onclick="gerarRecorrenciasManual()">
-      🔄 Gerar próximas recorrências
-    </button>
-
-  </div>
-
-
-  <div class="card dangerbox">
-
-    <h3>🗑️ Apagar lançamentos</h3>
-
-    <p class="small">
-      Este botão apaga <b>todos os lançamentos pessoais</b>,
-      inclusive os recorrentes.
-      Não apaga Uber/99, cartão ou metas.
-    </p>
-
-    <button class="btn redbtn" onclick="apagarTodosLancamentos()">
-      🗑️ APAGAR TODOS OS LANÇAMENTOS
-    </button>
-
-  </div>
-
-</section>
-
-
-<!-- CARTÃO -->
-
-<section id="cartao" class="section">
-
-  <div class="card">
-
-    <h2>💳 Cartão de crédito</h2>
-
-    <div class="formgrid">
-
-      <div>
-        <label>Data da compra</label>
-        <input type="date" id="cData">
-     
+<div class="table">
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Tipo</th>
+<th>Categoria</th>
+<th>Descrição</th>
+<th>Valor</
