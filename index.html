@@ -1,15 +1,966 @@
-<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meu Financeiro</title>
-<style>body{font-family:Arial;margin:0;background:#f3f4f6;color:#111827}header{background:#111827;color:white;padding:18px}main{max-width:1000px;margin:auto;padding:14px}.card{background:white;padding:14px;border-radius:14px;margin:10px 0;border:1px solid #ddd}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.form{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}input,select,button{padding:9px;border-radius:8px;border:1px solid #ccc}button{background:#2563eb;color:white;border:0;font-weight:bold}.danger{background:#dc2626}table{width:100%;border-collapse:collapse}td,th{padding:7px;border-bottom:1px solid #ddd;text-align:left;font-size:12px}.table{overflow:auto}.muted{color:#6b7280}@media(max-width:700px){.grid,.form{grid-template-columns:repeat(2,1fr)}}@media(max-width:430px){.form{grid-template-columns:1fr}}</style>
-<header><h2>💰 Meu Financeiro</h2><div>Controle pessoal + Uber/99</div></header><main>
-<div class="grid"><div class="card">Entradas<br><b id="e">R$ 0,00</b></div><div class="card">Despesas<br><b id="d">R$ 0,00</b></div><div class="card">Saldo<br><b id="s">R$ 0,00</b></div><div class="card">Reserva 10%<br><b id="r">R$ 0,00</b></div></div>
-<div class="card"><h3>Lançamento pessoal</h3><div class="form"><input id="dt" type="date"><select id="tp"><option>Entrada</option><option>Despesa</option></select><select id="ca"><option>Salário</option><option>Uber / 99</option><option>Alimentação</option><option>Moradia</option><option>Contas</option><option>Carro</option><option>Cartão</option><option>Saúde</option><option>Lazer</option><option>Outros</option></select><input id="va" type="number" step=".01" placeholder="Valor"><input id="de" placeholder="Descrição"><button onclick="add()">Adicionar</button></div></div>
-<div class="card"><h3>Uber / 99</h3><div class="form"><input id="ad" type="date"><input id="ag" type="number" step=".01" placeholder="Ganhos"><input id="ac" type="number" step=".01" placeholder="Despesas"><input id="af" type="number" step=".01" placeholder="Combustível"><input id="ak" type="number" step=".1" placeholder="KM"><input id="ah" type="number" step=".1" placeholder="Horas"><button onclick="adda()">Adicionar</button></div><p class="muted">Reserva automática: 10% dos ganhos.</p></div>
-<div class="card"><h3>Lançamentos pessoais</h3><div class="table"><table><thead><tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Valor</th><th>Descrição</th><th></th></tr></thead><tbody id="tl"></tbody></table></div></div>
-<div class="card"><h3>Lançamentos Uber / 99</h3><div class="table"><table><thead><tr><th>Data</th><th>Ganhos</th><th>Despesas</th><th>Comb.</th><th>KM</th><th>Horas</th><th>Reserva</th><th></th></tr></thead><tbody id="ta"></tbody></table></div></div>
-</main><script>
-let x=JSON.parse(localStorage.getItem('MF')||'{"l":[],"a":[]}');const $=i=>document.getElementById(i),n=i=>+$(i).value||0,m=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
-function save(){localStorage.setItem('MF',JSON.stringify(x));render()}function add(){x.l.push({d:$('dt').value||new Date().toISOString().slice(0,10),t:$('tp').value,c:$('ca').value,v:n('va'),z:$('de').value});save()}function adda(){x.a.push({d:$('ad').value||new Date().toISOString().slice(0,10),g:n('ag'),c:n('ac'),f:n('af'),k:n('ak'),h:n('ah')});save()}function dl(q,i){x[q].splice(i,1);save()}function ed(q,i,v){x[q][i].d=v;save()}
-function render(){let e=x.l.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0)+x.a.reduce((s,a)=>s+a.g,0),d=x.l.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0)+x.a.reduce((s,a)=>s+a.c+a.f,0);$('e').textContent=m(e);$('d').textContent=m(d);$('s').textContent=m(e-d);$('r').textContent=m(e*.1);
-$('tl').innerHTML=x.l.map((a,i)=>`<tr><td><input type=date value="${a.d}" onchange="ed('l',${i},this.value)"></td><td>${a.t}</td><td>${a.c}</td><td>${m(a.v)}</td><td>${a.z||''}</td><td><button class=danger onclick="dl('l',${i})">×</button></td></tr>`).join('');
-$('ta').innerHTML=x.a.map((a,i)=>`<tr><td><input type=date value="${a.d}" onchange="ed('a',${i},this.value)"></td><td>${m(a.g)}</td><td>${m(a.c)}</td><td>${m(a.f)}</td><td>${a.k}</td><td>${a.h}</td><td>${m(a.g*.1)}</td><td><button class=danger onclick="dl('a',${i})">×</button></td></tr>`).join('')}render()
-</script></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meu Financeiro</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#f3f4f6;color:#111827}
+header{background:#111827;color:white;padding:18px}
+main{max-width:1100px;margin:auto;padding:14px}
+.card{background:white;padding:14px;border-radius:14px;margin:10px 0;border:1px solid #ddd}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.form{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+input,select,button{padding:9px;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
+button{background:#2563eb;color:white;border:0;font-weight:bold;cursor:pointer}
+.danger{background:#dc2626}
+.success{background:#16a34a}
+.warning{background:#d97706}
+.secondary{background:#4b5563}
+table{width:100%;border-collapse:collapse}
+td,th{padding:7px;border-bottom:1px solid #ddd;text-align:left;font-size:12px}
+.table{overflow:auto}
+.muted{color:#6b7280}
+.pago{color:#16a34a;font-weight:bold}
+.pendente{color:#dc2626;font-weight:bold}
+.hidden{display:none}
+.small{font-size:12px}
+@media(max-width:700px){
+.grid,.form{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:430px){
+.form{grid-template-columns:1fr}
+.grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>💰 Meu Financeiro</h2>
+<div>Controle pessoal + Uber/99</div>
+</header>
+
+<main>
+
+<!-- RESUMO -->
+<div class="grid">
+<div class="card">
+Entradas<br>
+<b id="e">R$ 0,00</b>
+</div>
+
+<div class="card">
+Despesas<br>
+<b id="d">R$ 0,00</b>
+</div>
+
+<div class="card">
+Saldo<br>
+<b id="s">R$ 0,00</b>
+</div>
+
+<div class="card">
+Reserva 10%<br>
+<b id="r">R$ 0,00</b>
+</div>
+</div>
+
+
+<!-- LANÇAMENTO PESSOAL -->
+<div class="card">
+
+<h3>📋 Lançamento pessoal</h3>
+
+<div class="form">
+
+<input id="dt" type="date">
+
+<select id="tp">
+<option>Entrada</option>
+<option>Despesa</option>
+</select>
+
+<select id="ca">
+<option>Salário</option>
+<option>Uber / 99</option>
+<option>Alimentação</option>
+<option>Moradia</option>
+<option>Contas</option>
+<option>Carro</option>
+<option>Cartão de crédito</option>
+<option>Saúde</option>
+<option>Lazer</option>
+<option>Outros</option>
+</select>
+
+<input id="va" type="number" step=".01" placeholder="Valor">
+
+<input id="de" placeholder="Descrição">
+
+<select id="pg">
+<option>Pendente</option>
+<option>Pago</option>
+</select>
+
+<select id="fixa">
+<option value="nao">Despesa normal</option>
+<option value="sim">Despesa fixa</option>
+</select>
+
+<select id="rep">
+<option value="nao">Não repetir</option>
+<option value="sim">Repetir despesa</option>
+</select>
+
+<select id="periodo">
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+</select>
+
+<button onclick="add()">Adicionar</button>
+
+</div>
+
+<p class="muted small">
+Use "Despesa fixa" para contas que fazem parte das suas despesas fixas.
+Use "Repetir despesa" para criar lançamentos recorrentes.
+</p>
+
+</div>
+
+
+<!-- CARTÃO -->
+<div class="card">
+
+<h3>💳 Cartão de crédito</h3>
+
+<div class="form">
+
+<input id="cdt" type="date">
+
+<input id="cdesc" placeholder="Compra / descrição">
+
+<input id="cvalor" type="number" step=".01" placeholder="Valor total">
+
+<input id="cparc" type="number" min="1" value="1" placeholder="Parcelas">
+
+<input id="cvenc" type="number" min="1" max="31" value="10" placeholder="Dia vencimento">
+
+<button onclick="addCartao()">Adicionar compra</button>
+
+</div>
+
+<p class="muted small">
+Exemplo: compra de R$ 1.200 em 6 parcelas = 6 lançamentos de R$ 200.
+</p>
+
+</div>
+
+
+<!-- UBER -->
+<div class="card">
+
+<h3>🚗 Uber / 99</h3>
+
+<div class="form">
+
+<input id="ad" type="date">
+
+<input id="ag" type="number" step=".01" placeholder="Ganhos">
+
+<input id="ac" type="number" step=".01" placeholder="Despesas">
+
+<input id="af" type="number" step=".01" placeholder="Combustível">
+
+<input id="ak" type="number" step=".1" placeholder="KM">
+
+<input id="ah" type="number" step=".1" placeholder="Horas">
+
+<button onclick="adda()">Adicionar</button>
+
+</div>
+
+<p class="muted">
+Reserva automática: <b>10% do resultado do Uber/99</b>,
+calculado como: ganhos − despesas − combustível.
+</p>
+
+</div>
+
+
+<!-- LISTA PESSOAL -->
+<div class="card">
+
+<h3>📋 Lançamentos pessoais</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+<tr>
+<th>Data</th>
+<th>Tipo</th>
+<th>Categoria</th>
+<th>Valor</th>
+<th>Descrição</th>
+<th>Status</th>
+<th>Fixa</th>
+<th>Repetição</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="tl"></tbody>
+
+</table>
+
+</div>
+</div>
+
+
+<!-- CARTÃO -->
+<div class="card">
+
+<h3>💳 Compras no cartão</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+<tr>
+<th>Data</th>
+<th>Descrição</th>
+<th>Total</th>
+<th>Parcela</th>
+<th>Valor parcela</th>
+<th>Vencimento</th>
+<th>Status</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="tc"></tbody>
+
+</table>
+
+</div>
+</div>
+
+
+<!-- UBER -->
+<div class="card">
+
+<h3>🚗 Lançamentos Uber / 99</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+<tr>
+<th>Data</th>
+<th>Ganhos</th>
+<th>Despesas</th>
+<th>Comb.</th>
+<th>Resultado</th>
+<th>KM</th>
+<th>Horas</th>
+<th>Reserva</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="ta"></tbody>
+
+</table>
+
+</div>
+</div>
+
+
+<!-- CONTROLE -->
+<div class="card">
+
+<h3>⚙️ Controle</h3>
+
+<button class="secondary" onclick="gerarRecorrencias()">
+Gerar próximas despesas recorrentes
+</button>
+
+<button class="warning" onclick="limparDados()">
+Apagar todos os dados
+</button>
+
+<p class="muted small">
+As despesas recorrentes podem ser diárias, semanais ou mensais.
+</p>
+
+</div>
+
+</main>
+
+
+<script>
+
+let x=JSON.parse(
+localStorage.getItem('MF') ||
+'{"l":[],"a":[],"c":[]}'
+);
+
+if(!x.l)x.l=[];
+if(!x.a)x.a=[];
+if(!x.c)x.c=[];
+
+
+const $=i=>document.getElementById(i);
+
+const n=i=>+$(i).value||0;
+
+const m=v=>new Intl.NumberFormat(
+'pt-BR',
+{
+style:'currency',
+currency:'BRL'
+}
+).format(v);
+
+
+function hoje(){
+
+return new Date().toISOString().slice(0,10);
+
+}
+
+
+function save(){
+
+localStorage.setItem(
+'MF',
+JSON.stringify(x)
+);
+
+render();
+
+}
+
+
+/* =========================
+LANÇAMENTO PESSOAL
+========================= */
+
+function add(){
+
+let tipo=$('tp').value;
+let valor=n('va');
+
+if(valor<=0){
+
+alert('Digite um valor válido.');
+
+return;
+
+}
+
+x.l.push({
+
+d:$('dt').value||hoje(),
+
+t:tipo,
+
+c:$('ca').value,
+
+v:valor,
+
+z:$('de').value,
+
+p:$('pg').value,
+
+fixa:$('fixa').value,
+
+rep:$('rep').value,
+
+periodo:$('periodo').value,
+
+origem:'pessoal'
+
+});
+
+save();
+
+$('va').value='';
+$('de').value='';
+
+}
+
+
+/* =========================
+UBER
+========================= */
+
+function adda(){
+
+let ganhos=n('ag');
+let despesas=n('ac');
+let combustivel=n('af');
+
+x.a.push({
+
+d:$('ad').value||hoje(),
+
+g:ganhos,
+
+c:despesas,
+
+f:combustivel,
+
+k:n('ak'),
+
+h:n('ah')
+
+});
+
+save();
+
+$('ag').value='';
+$('ac').value='';
+$('af').value='';
+$('ak').value='';
+$('ah').value='';
+
+}
+
+
+/* =========================
+CARTÃO
+========================= */
+
+function addCartao(){
+
+let data=$('cdt').value||hoje();
+
+let descricao=$('cdesc').value;
+
+let total=n('cvalor');
+
+let parcelas=Math.max(
+1,
+parseInt($('cparc').value)||1
+);
+
+let venc=Math.min(
+31,
+Math.max(
+1,
+parseInt($('cvenc').value)||10
+)
+);
+
+if(total<=0){
+
+alert('Digite o valor da compra.');
+
+return;
+
+}
+
+let valorParcela=total/parcelas;
+
+let inicio=new Date(data+'T12:00:00');
+
+for(let i=0;i<parcelas;i++){
+
+let d=new Date(inicio);
+
+d.setMonth(d.getMonth()+i);
+
+let ano=d.getFullYear();
+
+let mes=String(d.getMonth()+1).padStart(2,'0');
+
+let dia=String(venc).padStart(2,'0');
+
+let dataParcela=
+ano+'-'+mes+'-'+dia;
+
+x.c.push({
+
+d:dataParcela,
+
+desc:descricao,
+
+total:total,
+
+parcela:i+1,
+
+parcelas:parcelas,
+
+valor:valorParcela,
+
+venc:venc,
+
+p:'Pendente'
+
+});
+
+}
+
+save();
+
+$('cdesc').value='';
+$('cvalor').value='';
+$('cparc').value='1';
+
+}
+
+
+/* =========================
+EXCLUIR
+========================= */
+
+function dl(q,i){
+
+if(confirm('Excluir este lançamento?')){
+
+x[q].splice(i,1);
+
+save();
+
+}
+
+}
+
+
+/* =========================
+PAGAMENTO
+========================= */
+
+function baixa(i){
+
+x.l[i].p=
+x.l[i].p==='Pago'
+?'Pendente'
+:'Pago';
+
+save();
+
+}
+
+
+function baixaCartao(i){
+
+x.c[i].p=
+x.c[i].p==='Pago'
+?'Pendente'
+:'Pago';
+
+save();
+
+}
+
+
+/* =========================
+ALTERAR DATA
+========================= */
+
+function ed(q,i,v){
+
+x[q][i].d=v;
+
+save();
+
+}
+
+
+/* =========================
+RECORRÊNCIAS
+========================= */
+
+function gerarRecorrencias(){
+
+let hojeData=new Date();
+
+let criadas=0;
+
+let modelos=x.l.filter(a=>
+a.rep==='sim' &&
+a.t==='Despesa'
+);
+
+modelos.forEach(modelo=>{
+
+if(modelo.gerada)
+return;
+
+let proxima=new Date(
+modelo.d+'T12:00:00'
+);
+
+let limite=new Date(hojeData);
+
+limite.setMonth(
+limite.getMonth()+1
+);
+
+while(proxima<=limite){
+
+let data=
+proxima.toISOString().slice(0,10);
+
+let existe=x.l.some(a=>
+a.recorrenteId===modelo.id &&
+a.d===data
+);
+
+if(!existe){
+
+if(!modelo.id)
+modelo.id=
+'R'+Date.now()+Math.random();
+
+x.l.push({
+
+d:data,
+
+t:'Despesa',
+
+c:modelo.c,
+
+v:modelo.v,
+
+z:modelo.z,
+
+p:'Pendente',
+
+fixa:modelo.fixa,
+
+rep:'nao',
+
+periodo:modelo.periodo,
+
+recorrenteId:modelo.id,
+
+origem:'recorrente'
+
+});
+
+criadas++;
+
+}
+
+if(modelo.periodo==='diaria'){
+
+proxima.setDate(
+proxima.getDate()+1
+);
+
+}
+
+else if(modelo.periodo==='semanal'){
+
+proxima.setDate(
+proxima.getDate()+7
+);
+
+}
+
+else{
+
+proxima.setMonth(
+proxima.getMonth()+1
+);
+
+}
+
+}
+
+});
+
+save();
+
+alert(
+criadas+
+' despesa(s) recorrente(s) gerada(s).'
+);
+
+}
+
+
+/* =========================
+RESUMO
+========================= */
+
+function render(){
+
+let entradasPessoais=
+x.l
+.filter(a=>a.t==='Entrada')
+.reduce((s,a)=>s+a.v,0);
+
+
+let despesasPessoais=
+x.l
+.filter(a=>a.t==='Despesa')
+.reduce((s,a)=>s+a.v,0);
+
+
+let ganhosUber=
+x.a.reduce((s,a)=>s+a.g,0);
+
+
+let despesasUber=
+x.a.reduce((s,a)=>s+a.c+a.f,0);
+
+
+let resultadoUber=
+x.a.reduce(
+(s,a)=>s+(a.g-a.c-a.f),
+0
+);
+
+
+let entradas=
+entradasPessoais+
+ganhosUber;
+
+
+let despesas=
+despesasPessoais+
+despesasUber;
+
+
+let saldo=
+entradas-despesas;
+
+
+/* RESERVA CORRETA */
+
+let reserva=
+Math.max(
+0,
+resultadoUber*0.10
+);
+
+
+$('e').textContent=m(entradas);
+
+$('d').textContent=m(despesas);
+
+$('s').textContent=m(saldo);
+
+$('r').textContent=m(reserva);
+
+
+/* =========================
+TABELA PESSOAL
+========================= */
+
+$('tl').innerHTML=x.l.map((a,i)=>`
+
+<tr>
+
+<td>
+<input
+type="date"
+value="${a.d}"
+onchange="ed('l',${i},this.value)">
+</td>
+
+<td>${a.t}</td>
+
+<td>${a.c}</td>
+
+<td>${m(a.v)}</td>
+
+<td>${a.z||''}</td>
+
+<td>
+
+<button
+class="${a.p==='Pago'?'success':'warning'}"
+onclick="baixa(${i})">
+
+${a.p||'Pendente'}
+
+</button>
+
+</td>
+
+<td>
+${a.fixa==='sim'?'Sim':'Não'}
+</td>
+
+<td>
+${a.rep==='sim'
+?a.periodo
+:'Não'}
+</td>
+
+<td>
+
+<button
+class="danger"
+onclick="dl('l',${i})">
+
+×
+</button>
+
+</td>
+
+</tr>
+
+`).join('');
+
+
+/* =========================
+TABELA CARTÃO
+========================= */
+
+$('tc').innerHTML=x.c.map((a,i)=>`
+
+<tr>
+
+<td>${a.d}</td>
+
+<td>${a.desc}</td>
+
+<td>${m(a.total)}</td>
+
+<td>${a.parcela}/${a.parcelas}</td>
+
+<td>${m(a.valor)}</td>
+
+<td>Dia ${a.venc}</td>
+
+<td>
+
+<button
+class="${a.p==='Pago'?'success':'warning'}"
+onclick="baixaCartao(${i})">
+
+${a.p}
+
+</button>
+
+</td>
+
+<td>
+
+<button
+class="danger"
+onclick="dl('c',${i})">
+
+×
+</button>
+
+</td>
+
+</tr>
+
+`).join('');
+
+
+/* =========================
+TABELA UBER
+========================= */
+
+$('ta').innerHTML=x.a.map((a,i)=>{
+
+let resultado=
+a.g-a.c-a.f;
+
+let reserva=
+Math.max(
+0,
+resultado*0.10
+);
+
+return `
+
+<tr>
+
+<td>
+<input
+type="date"
+value="${a.d}"
+onchange="ed('a',${i},this.value)">
+</td>
+
+<td>${m(a.g)}</td>
+
+<td>${m(a.c)}</td>
+
+<td>${m(a.f)}</td>
+
+<td>${m(resultado)}</td>
+
+<td>${a.k}</td>
+
+<td>${a.h}</td>
+
+<td>${m(reserva)}</td>
+
+<td>
+
+<button
+class="danger"
+onclick="dl('a',${i})">
+
+×
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}).join('');
+
+}
+
+
+/* =========================
+APAGAR TUDO
+========================= */
+
+function limparDados(){
+
+if(confirm(
+'ATENÇÃO: isso apagará todos os lançamentos. Continuar?'
+)){
+
+localStorage.removeItem('MF');
+
+x={
+l:[],
+a:[],
+c:[]
+};
+
+render();
+
+}
+
+}
+
+
+/* DATAS INICIAIS */
+
+$('dt').value=hoje();
+$('ad').value=hoje();
+$('cdt').value=hoje();
+
+
+render();
+
+</script>
+
+</body>
+</html>
