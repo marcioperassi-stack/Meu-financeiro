@@ -12,43 +12,57 @@ body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111827}
 header{background:#111827;color:#fff;padding:18px;position:sticky;top:0;z-index:10}
 header h2{margin:0 0 4px}
 header small{opacity:.8}
+
 .nav{display:flex;gap:6px;overflow:auto;padding:10px;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:76px;z-index:9}
 .nav button{white-space:nowrap;background:#e5e7eb;color:#111827}
 .nav button.active{background:#2563eb;color:#fff}
+
 main{max-width:1150px;margin:auto;padding:12px}
 .page{display:none}
 .page.active{display:block}
+
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .card{background:#fff;padding:14px;border-radius:16px;margin:10px 0;border:1px solid #e5e7eb;box-shadow:0 2px 8px #00000008}
 .metric{font-size:22px;font-weight:700;margin-top:6px}
 .muted{color:#6b7280}
+
 .form{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 input,select,button{padding:10px;border-radius:9px;border:1px solid #d1d5db;width:100%}
 button{background:#2563eb;color:white;border:0;font-weight:bold;cursor:pointer}
+
 .secondary{background:#4b5563}
 .success{background:#16a34a}
 .warning{background:#d97706}
 .danger{background:#dc2626}
 .purple{background:#7c3aed}
+
 .table{overflow:auto}
 table{width:100%;border-collapse:collapse}
 td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px;white-space:nowrap}
+
 .pago{color:#16a34a;font-weight:bold}
 .pendente{color:#dc2626;font-weight:bold}
+
 .badge{display:inline-block;padding:4px 7px;border-radius:999px;font-size:11px;font-weight:bold;background:#e5e7eb}
+
 .progress{height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden}
 .progress>div{height:100%;background:#2563eb}
+
 .chart{height:230px;display:flex;align-items:flex-end;gap:7px;padding:15px 5px;border-bottom:1px solid #ddd}
 .bar{flex:1;min-width:12px;background:#2563eb;border-radius:5px 5px 0 0;position:relative}
 .bar span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}
+
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;background:#2563eb}
 .dot.red{background:#dc2626}
 .dot.green{background:#16a34a}
+
 .alert{padding:10px;border-radius:10px;margin:6px 0;background:#fff7ed;border:1px solid #fed7aa}
 .ok{background:#f0fdf4;border-color:#bbf7d0}
+
 .small{font-size:12px}
-.hidden{display:none}
+
+.loan{background:#f5f3ff;border-color:#ddd6fe}
 
 @media(max-width:700px){
 .grid{grid-template-columns:1fr 1fr}
@@ -68,7 +82,7 @@ td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px
 
 <header>
 <h2>💰 Meu Financeiro Pro</h2>
-<small>Controle pessoal + Uber/99 + cartão + metas</small>
+<small>Controle pessoal + Uber/99 + cartão + metas + empréstimos</small>
 </header>
 
 <div class="nav">
@@ -82,13 +96,13 @@ td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px
 
 <main>
 
+<!-- DASHBOARD -->
 <section id="dashboard" class="page active">
 
 <div class="card">
 <h3>📊 Visão geral</h3>
 
 <div class="form">
-
 <select id="periodoDash" onchange="render()">
 <option value="dia">Hoje</option>
 <option value="semana">Esta semana</option>
@@ -100,7 +114,6 @@ td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px
 
 <div></div>
 <div></div>
-
 </div>
 </div>
 
@@ -157,6 +170,7 @@ Reserva 10%
 </section>
 
 
+<!-- PESSOAL -->
 <section id="pessoal" class="page">
 
 <div class="card">
@@ -173,6 +187,7 @@ Reserva 10%
 </select>
 
 <select id="ca">
+
 <option>Salário</option>
 <option>Uber / 99</option>
 <option>Alimentação</option>
@@ -182,7 +197,11 @@ Reserva 10%
 <option>Cartão de crédito</option>
 <option>Saúde</option>
 <option>Lazer</option>
+
+<option>Empréstimo</option>
+
 <option>Outros</option>
+
 </select>
 
 <input id="va" type="number" step=".01" placeholder="Valor">
@@ -201,7 +220,7 @@ Reserva 10%
 
 <select id="rep">
 <option value="nao">Não repetir</option>
-<option value="sim">Repetir despesa</option>
+<option value="sim">Repetir lançamento</option>
 </select>
 
 <select id="periodo">
@@ -213,6 +232,11 @@ Reserva 10%
 <button onclick="add()">Adicionar</button>
 
 </div>
+
+<p class="muted small">
+💡 A opção "Repetir lançamento" funciona para <b>Entradas e Despesas</b>.
+</p>
+
 </div>
 
 
@@ -225,6 +249,7 @@ Reserva 10%
 <table>
 
 <thead>
+
 <tr>
 <th>Data</th>
 <th>Tipo</th>
@@ -236,6 +261,7 @@ Reserva 10%
 <th>Repetição</th>
 <th></th>
 </tr>
+
 </thead>
 
 <tbody id="tl"></tbody>
@@ -257,6 +283,7 @@ Reserva 10%
 </section>
 
 
+<!-- CARTAO -->
 <section id="cartao" class="page">
 
 <div class="card">
@@ -311,7 +338,6 @@ Compras até o fechamento entram na fatura correspondente.
 <div class="card">
 
 <h3>🧾 Faturas</h3>
-
 <div id="faturas"></div>
 
 </div>
@@ -326,6 +352,7 @@ Compras até o fechamento entram na fatura correspondente.
 <table>
 
 <thead>
+
 <tr>
 <th>Data</th>
 <th>Descrição</th>
@@ -336,6 +363,7 @@ Compras até o fechamento entram na fatura correspondente.
 <th>Status</th>
 <th></th>
 </tr>
+
 </thead>
 
 <tbody id="tc"></tbody>
@@ -343,11 +371,13 @@ Compras até o fechamento entram na fatura correspondente.
 </table>
 
 </div>
+
 </div>
 
 </section>
 
 
+<!-- UBER -->
 <section id="uber" class="page">
 
 <div class="card">
@@ -366,6 +396,7 @@ Compras até o fechamento entram na fatura correspondente.
 <button onclick="adda()">Adicionar</button>
 
 </div>
+
 </div>
 
 
@@ -397,7 +428,6 @@ Reserva
 <div class="card">
 
 <h3>📊 Indicadores</h3>
-
 <div id="uind"></div>
 
 </div>
@@ -412,6 +442,7 @@ Reserva
 <table>
 
 <thead>
+
 <tr>
 <th>Data</th>
 <th>Ganhos</th>
@@ -425,6 +456,7 @@ Reserva
 <th>Reserva</th>
 <th></th>
 </tr>
+
 </thead>
 
 <tbody id="ta"></tbody>
@@ -432,11 +464,13 @@ Reserva
 </table>
 
 </div>
+
 </div>
 
 </section>
 
 
+<!-- METAS -->
 <section id="metas" class="page">
 
 <div class="card">
@@ -456,6 +490,7 @@ Reserva
 <button onclick="addMeta()">Criar meta</button>
 
 </div>
+
 </div>
 
 <div id="metasLista"></div>
@@ -463,6 +498,7 @@ Reserva
 </section>
 
 
+<!-- RELATORIOS -->
 <section id="relatorios" class="page">
 
 <div class="card">
@@ -472,7 +508,6 @@ Reserva
 <div class="form">
 
 <input id="ri" type="date">
-
 <input id="rf" type="date">
 
 <button onclick="relatorio()">Calcular</button>
@@ -516,6 +551,7 @@ x.c=x.c||[];
 x.m=x.m||[];
 x.config=x.config||{fechamento:5,vencimento:10};
 
+
 const $=i=>document.getElementById(i);
 
 const n=i=>+$(i).value||0;
@@ -525,9 +561,27 @@ style:'currency',
 currency:'BRL'
 }).format(v);
 
-const hoje=()=>new Date().toISOString().slice(0,10);
+const hoje=()=>{
+
+let d=new Date();
+
+return d.getFullYear()+'-'+
+String(d.getMonth()+1).padStart(2,'0')+'-'+
+String(d.getDate()).padStart(2,'0');
+
+};
+
 
 const parse=d=>new Date(d+'T12:00:00');
+
+
+function dataLocal(d){
+
+return d.getFullYear()+'-'+
+String(d.getMonth()+1).padStart(2,'0')+'-'+
+String(d.getDate()).padStart(2,'0');
+
+}
 
 
 function save(){
@@ -574,7 +628,7 @@ render();
 
 
 /* =========================
-   NOVO LANÇAMENTO
+   LANÇAMENTO PESSOAL
 ========================= */
 
 function add(){
@@ -582,16 +636,17 @@ function add(){
 let v=n('va');
 
 if(v<=0){
-return alert('Digite um valor válido.');
+
+alert('Digite um valor válido.');
+
+return;
+
 }
 
-let dataInicial=$('dt').value||hoje();
-
-let repetir=$('rep').value;
 
 let modelo={
 
-d:dataInicial,
+d:$('dt').value||hoje(),
 
 t:$('tp').value,
 
@@ -605,35 +660,25 @@ p:$('pg').value,
 
 fixa:$('fixa').value,
 
-rep:repetir,
+rep:$('rep').value,
 
 periodo:$('periodo').value,
 
-origem:'pessoal'
+origem:'pessoal',
+
+id:'R'+Date.now()+Math.random()
 
 };
 
 
-/* Se for recorrente, cria um ID único */
-
-if(repetir==='sim' && modelo.t==='Despesa'){
-
-modelo.id='R'+Date.now()+Math.random();
-
-}
-
-
 x.l.push(modelo);
-
-
-/* Salva o lançamento original */
 
 save();
 
 
-/* Gera automaticamente as próximas ocorrências */
+/* Se for recorrente, gera automaticamente */
 
-if(repetir==='sim' && modelo.t==='Despesa'){
+if(modelo.rep==='sim'){
 
 gerarRecorrencias();
 
@@ -647,7 +692,134 @@ $('de').value='';
 
 
 /* =========================
-   UBER / 99
+   RECORRÊNCIAS
+========================= */
+
+function gerarRecorrencias(){
+
+let limite=new Date();
+
+limite.setMonth(limite.getMonth()+12);
+
+let criadas=0;
+
+
+/*
+   Agora funciona para:
+   ENTRADA
+   DESPESA
+*/
+
+x.l
+.filter(a=>a.rep==='sim')
+.forEach(modelo=>{
+
+if(!modelo.id){
+
+modelo.id='R'+Date.now()+Math.random();
+
+}
+
+
+let p=parse(modelo.d);
+
+
+/*
+   Começa na próxima ocorrência
+*/
+
+while(true){
+
+if(modelo.periodo==='diaria'){
+
+p.setDate(p.getDate()+1);
+
+}
+
+else if(modelo.periodo==='semanal'){
+
+p.setDate(p.getDate()+7);
+
+}
+
+else{
+
+p.setMonth(p.getMonth()+1);
+
+}
+
+
+if(p>limite)break;
+
+
+let dt=dataLocal(p);
+
+
+let existe=x.l.some(a=>
+
+a.recorrenteId===modelo.id &&
+a.d===dt
+
+);
+
+
+if(!existe){
+
+x.l.push({
+
+d:dt,
+
+t:modelo.t,
+
+c:modelo.c,
+
+v:modelo.v,
+
+z:modelo.z,
+
+p:'Pendente',
+
+fixa:modelo.fixa,
+
+rep:'nao',
+
+periodo:modelo.periodo,
+
+recorrenteId:modelo.id,
+
+origem:'recorrente'
+
+});
+
+criadas++;
+
+}
+
+}
+
+});
+
+
+localStorage.setItem('MF',JSON.stringify(x));
+
+render();
+
+
+if(criadas>0){
+
+alert(criadas+' lançamento(s) recorrente(s) gerado(s).');
+
+}else{
+
+alert('Nenhuma nova recorrência foi necessária.');
+
+}
+
+}
+
+
+/* =========================
+   UBER
 ========================= */
 
 function adda(){
@@ -694,7 +866,11 @@ parseInt($('cparc').value)||1
 );
 
 if(total<=0){
-return alert('Digite o valor da compra.');
+
+alert('Digite o valor da compra.');
+
+return;
+
 }
 
 let vp=total/parcelas;
@@ -703,28 +879,32 @@ let inicio=parse(data);
 
 let venc=x.config.vencimento;
 
+
 for(let i=0;i<parcelas;i++){
 
 let d=new Date(inicio);
 
 d.setMonth(d.getMonth()+i);
 
-let ultimo=new Date(
+let ultimoDia=new Date(
 d.getFullYear(),
 d.getMonth()+1,
 0
 ).getDate();
 
+let dia=Math.min(venc,ultimoDia);
+
 let dt=new Date(
 d.getFullYear(),
 d.getMonth(),
-Math.min(venc,ultimo),
+dia,
 12
 );
 
+
 x.c.push({
 
-d:dt.toISOString().slice(0,10),
+d:dataLocal(dt),
 
 desc:desc,
 
@@ -811,174 +991,6 @@ save();
 }
 
 
-/* =================================================
-   RECORRÊNCIAS CORRIGIDAS
-================================================= */
-
-function gerarRecorrencias(){
-
-let limite=new Date();
-
-/* Gera 3 meses para frente */
-
-limite.setMonth(limite.getMonth()+3);
-
-let criadas=0;
-
-
-/* Procura os modelos recorrentes */
-
-x.l
-.filter(a=>
-a.rep==='sim' &&
-a.t==='Despesa' &&
-a.id
-)
-.forEach(modelo=>{
-
-let p=parse(modelo.d);
-
-
-/* Avança até 3 meses */
-
-while(p<=limite){
-
-let dt=p.toISOString().slice(0,10);
-
-
-/* Verifica se já existe */
-
-let existe=x.l.some(a=>
-a.recorrenteId===modelo.id &&
-a.d===dt
-);
-
-
-/* Cria a ocorrência */
-
-if(!existe && dt!==modelo.d){
-
-x.l.push({
-
-d:dt,
-
-t:'Despesa',
-
-c:modelo.c,
-
-v:modelo.v,
-
-z:modelo.z,
-
-p:'Pendente',
-
-fixa:modelo.fixa,
-
-rep:'nao',
-
-periodo:modelo.periodo,
-
-recorrenteId:modelo.id,
-
-origem:'recorrente'
-
-});
-
-criadas++;
-
-}
-
-
-/* Próxima ocorrência */
-
-if(modelo.periodo==='diaria'){
-
-p.setDate(p.getDate()+1);
-
-}
-
-else if(modelo.periodo==='semanal'){
-
-p.setDate(p.getDate()+7);
-
-}
-
-else if(modelo.periodo==='mensal'){
-
-/*
-Mantém o dia original quando possível.
-Se o mês não tiver esse dia,
-usa o último dia disponível.
-*/
-
-let diaOriginal=parse(modelo.d).getDate();
-
-let proximoMes=p.getMonth()+1;
-
-let ano=p.getFullYear();
-
-if(proximoMes>11){
-
-proximoMes=0;
-
-ano++;
-
-}
-
-let ultimoDia=
-new Date(
-ano,
-proximoMes+1,
-0
-).getDate();
-
-p=new Date(
-ano,
-proximoMes,
-Math.min(diaOriginal,ultimoDia),
-12
-);
-
-}
-
-else{
-
-/* Segurança */
-
-break;
-
-}
-
-}
-
-});
-
-
-localStorage.setItem('MF',JSON.stringify(x));
-
-render();
-
-
-if(criadas>0){
-
-alert(
-criadas+
-' despesa(s) recorrente(s) gerada(s) com sucesso!'
-);
-
-}
-
-else{
-
-alert(
-'Nenhuma nova recorrência precisava ser gerada.'
-);
-
-}
-
-}
-
-
 /* =========================
    FILTROS
 ========================= */
@@ -989,11 +1001,11 @@ let a=parse(d);
 
 let b=parse(base||hoje());
 
-if(periodo==='todos')
-return true;
+if(periodo==='todos')return true;
 
 if(periodo==='dia')
 return d===(base||hoje());
+
 
 if(periodo==='semana'){
 
@@ -1015,8 +1027,8 @@ return a>=ini&&a<=fim;
 
 }
 
-return
-a.getMonth()===b.getMonth() &&
+
+return a.getMonth()===b.getMonth() &&
 a.getFullYear()===b.getFullYear();
 
 }
@@ -1036,23 +1048,28 @@ let a=x.a.filter(
 a=>dentro(a.d,periodo,base)
 );
 
+
 let ep=l
 .filter(z=>z.t==='Entrada')
 .reduce((s,z)=>s+z.v,0);
 
+
 let dp=l
 .filter(z=>z.t==='Despesa')
 .reduce((s,z)=>s+z.v,0);
+
 
 let gu=a.reduce(
 (s,z)=>s+z.g,
 0
 );
 
+
 let cu=a.reduce(
 (s,z)=>s+z.c+z.f,
 0
 );
+
 
 return{
 
@@ -1089,7 +1106,7 @@ let d=new Date();
 
 d.setDate(d.getDate()-i);
 
-let dt=d.toISOString().slice(0,10);
+let dt=dataLocal(d);
 
 let t=totais('dia',dt);
 
@@ -1097,10 +1114,11 @@ vals.push({dt,t});
 
 }
 
+
 let max=Math.max(
 1,
-...vals.map(
-v=>Math.max(
+...vals.map(v=>
+Math.max(
 v.t.entradas,
 v.t.despesas,
 Math.abs(v.t.lucro)
@@ -1108,21 +1126,19 @@ Math.abs(v.t.lucro)
 )
 );
 
+
 $('dashChart').innerHTML=
+vals.map(v=>
 
-vals.map(v=>`
-
-<div class="bar"
+`<div class="bar"
 style="height:${Math.max(
 5,
 v.t.entradas/max*100
 )}%">
-
 <span>${m(v.t.entradas)}</span>
+</div>`
 
-</div>
-
-`).join('');
+).join('');
 
 }
 
@@ -1140,14 +1156,17 @@ let arr=x.l
 a.t==='Despesa' &&
 a.p!=='Pago'
 )
-.sort(
-(a,b)=>parse(a.d)-parse(b.d)
+.sort((a,b)=>
+parse(a.d)-parse(b.d)
 )
 .slice(0,8);
 
+
 $('alertas').innerHTML=
 
-arr.length?
+arr.length
+
+?
 
 arr.map(a=>{
 
@@ -1159,15 +1178,20 @@ let texto=
 
 diff<0
 ?'Vencida'
-:diff===0
+:
+diff===0
 ?'Vence hoje'
-:'Vence em '+diff+' dia(s)';
+:
+'Vence em '+diff+' dia(s)';
+
 
 return`
 
 <div class="alert">
 
-<b>${a.z||a.c}</b><br>
+<b>${a.z||a.c}</b>
+
+<br>
 
 ${a.d} · ${m(a.v)} · ${texto}
 
@@ -1185,7 +1209,7 @@ ${a.d} · ${m(a.v)} · ${texto}
 
 
 /* =========================
-   FATURA
+   FATURA ATUAL
 ========================= */
 
 function faturaAtual(){
@@ -1200,13 +1224,13 @@ let ano=hojeD.getFullYear();
 
 let mes=hojeD.getMonth();
 
-let dataFech=
-new Date(
+let dataFech=new Date(
 ano,
 mes,
 fech,
 12
 );
+
 
 if(hojeD<=dataFech){
 
@@ -1216,26 +1240,34 @@ dataFech.getMonth()-1
 
 }
 
-let proxVenc=
-new Date(
+
+let proxVenc=new Date(
+
 dataFech.getFullYear(),
+
 dataFech.getMonth()+1,
+
 venc,
+
 12
+
 );
+
 
 let total=x.c
 .filter(a=>{
 
 let d=parse(a.d);
 
-return d>dataFech&&d<=proxVenc;
+return d>dataFech &&
+d<=proxVenc;
 
 })
 .reduce(
 (s,a)=>s+a.valor,
 0
 );
+
 
 $('faturaAtual').textContent=m(total);
 
@@ -1251,13 +1283,12 @@ $('faturaInfo').textContent=
 
 function render(){
 
-let per=
-$('periodoDash')?.value||'mes';
+let per=$('periodoDash')?.value||'mes';
 
-let base=
-$('dataDash')?.value||hoje();
+let base=$('dataDash')?.value||hoje();
 
 let t=totais(per,base);
+
 
 $('e').textContent=m(t.entradas);
 
@@ -1267,17 +1298,17 @@ $('s').textContent=m(t.lucro);
 
 $('r').textContent=m(t.reserva);
 
+
 barras();
 
 alertas();
 
 faturaAtual();
 
-$('fechamento').value=
-x.config.fechamento;
 
-$('vencimento').value=
-x.config.vencimento;
+$('fechamento').value=x.config.fechamento;
+
+$('vencimento').value=x.config.vencimento;
 
 
 /* LANÇAMENTOS */
@@ -1300,7 +1331,13 @@ onchange="ed('l',${i},this.value)"
 
 <td>${a.t}</td>
 
-<td>${a.c}</td>
+<td>
+
+${a.c==='Empréstimo'
+?'<span class="badge">💰 Empréstimo</span>'
+:a.c}
+
+</td>
 
 <td>${m(a.v)}</td>
 
@@ -1319,13 +1356,19 @@ ${a.p||'Pendente'}
 
 </td>
 
-<td>${a.fixa==='sim'?'Sim':'Não'}</td>
+<td>
+
+${a.fixa==='sim'?'Sim':'Não'}
+
+</td>
 
 <td>
 
 ${a.rep==='sim'
 ?a.periodo
-:'Não'}
+:(a.origem==='recorrente'
+?'Gerado'
+:'Não')}
 
 </td>
 
@@ -1335,9 +1378,7 @@ ${a.rep==='sim'
 class="danger"
 onclick="dl('l',${i})"
 >
-
 ×
-
 </button>
 
 </td>
@@ -1386,9 +1427,7 @@ ${a.p}
 class="danger"
 onclick="dl('c',${i})"
 >
-
 ×
-
 </button>
 
 </td>
@@ -1401,26 +1440,23 @@ onclick="dl('c',${i})"
 /* UBER */
 
 let ug=x.a.reduce(
-(s,a)=>s+a.g,
-0
+(s,a)=>s+a.g,0
 );
 
 let uc=x.a.reduce(
-(s,a)=>s+a.c+a.f,
-0
+(s,a)=>s+a.c+a.f,0
 );
 
 let ul=ug-uc;
 
 let uk=x.a.reduce(
-(s,a)=>s+a.k,
-0
+(s,a)=>s+a.k,0
 );
 
 let uh=x.a.reduce(
-(s,a)=>s+a.h,
-0
+(s,a)=>s+a.h,0
 );
+
 
 $('ug').textContent=m(ug);
 
@@ -1431,32 +1467,27 @@ $('ul').textContent=m(ul);
 $('ur').textContent=
 m(Math.max(0,ul*.1));
 
+
 $('uind').innerHTML=
 
-`<b>Ganho por hora:</b> ${
-m(uh?ug/uh:0)
-}
+`<b>Ganho por hora:</b>
+${m(uh?ug/uh:0)}
 
 &nbsp;
 
-<b>Ganho por KM:</b> ${
-m(uk?ug/uk:0)
-}
+<b>Ganho por KM:</b>
+${m(uk?ug/uk:0)}
 
 &nbsp;
 
-<b>KM:</b> ${
-uk.toFixed(1)
-}
+<b>KM:</b>
+${uk.toFixed(1)}
 
 &nbsp;
 
-<b>Horas:</b> ${
-uh.toFixed(1)
-}`;
+<b>Horas:</b>
+${uh.toFixed(1)}`;
 
-
-/* TABELA UBER */
 
 $('ta').innerHTML=
 
@@ -1502,9 +1533,7 @@ onchange="ed('a',${i},this.value)"
 class="danger"
 onclick="dl('a',${i})"
 >
-
 ×
-
 </button>
 
 </td>
@@ -1533,7 +1562,9 @@ return`
 
 <h3>🎯 ${a.n}</h3>
 
-<b>${m(a.j)} de ${m(a.v)}</b>
+<b>
+${m(a.j)} de ${m(a.v)}
+</b>
 
 <div class="progress">
 
@@ -1542,22 +1573,15 @@ return`
 </div>
 
 <p>
-
-${p.toFixed(1)}%
-
-· Falta
-
+${p.toFixed(1)}% · Falta
 ${m(Math.max(0,a.v-a.j))}
-
 </p>
 
 <button
 class="danger"
 onclick="x.m.splice(${i},1);save()"
 >
-
 Excluir meta
-
 </button>
 
 </div>
@@ -1599,18 +1623,16 @@ Object.keys(grupos)
 
 let arr=grupos[k];
 
-let total=
-arr.reduce(
-(s,a)=>s+a.valor,
-0
+let total=arr.reduce(
+(s,a)=>s+a.valor,0
 );
 
-let pend=
-arr.filter(a=>a.p!=='Pago')
+let pend=arr
+.filter(a=>a.p!=='Pago')
 .reduce(
-(s,a)=>s+a.valor,
-0
+(s,a)=>s+a.valor,0
 );
+
 
 return`
 
@@ -1642,7 +1664,9 @@ Vencimento dia ${x.config.vencimento}
 
 ||
 
-'<p class="muted">Nenhuma compra cadastrada.</p>';
+'<p class="muted">
+Nenhuma compra cadastrada.
+</p>';
 
 }
 
@@ -1657,11 +1681,14 @@ let v=n('mv');
 
 if(!$('mn').value||v<=0){
 
-return alert(
+alert(
 'Informe o nome e o valor da meta.'
 );
 
+return;
+
 }
+
 
 x.m.push({
 
@@ -1674,6 +1701,7 @@ j:n('mj'),
 p:$('mp').value
 
 });
+
 
 save();
 
@@ -1698,6 +1726,7 @@ let i=$('ri').value||hoje();
 
 let f=$('rf').value||i;
 
+
 let l=x.l.filter(
 a=>a.d>=i&&a.d<=f
 );
@@ -1706,46 +1735,79 @@ let u=x.a.filter(
 a=>a.d>=i&&a.d<=f
 );
 
+
 let e=
+
 l.filter(a=>a.t==='Entrada')
 .reduce((s,a)=>s+a.v,0)
+
 +
+
 u.reduce((s,a)=>s+a.g,0);
 
+
 let p=
+
 l.filter(a=>a.t==='Despesa')
 .reduce((s,a)=>s+a.v,0);
 
-let cu=
-u.reduce((s,a)=>s+a.c,0);
 
-let cf=
-u.reduce((s,a)=>s+a.f,0);
+let cu=u.reduce(
+(s,a)=>s+a.c,0
+);
+
+let cf=u.reduce(
+(s,a)=>s+a.f,0
+);
+
 
 let lucro=e-p-cu-cf;
 
-$('relatorioBox').innerHTML=`
+
+$('relatorioBox').innerHTML=
+
+`
 
 <div class="grid">
 
 <div class="card">
+
 Receitas
-<div class="metric">${m(e)}</div>
+
+<div class="metric">
+${m(e)}
+</div>
+
 </div>
 
 <div class="card">
+
 Despesas pessoais
-<div class="metric">${m(p)}</div>
+
+<div class="metric">
+${m(p)}
+</div>
+
 </div>
 
 <div class="card">
+
 Custos Uber/99
-<div class="metric">${m(cu+cf)}</div>
+
+<div class="metric">
+${m(cu+cf)}
+</div>
+
 </div>
 
 <div class="card">
+
 Lucro real
-<div class="metric">${m(lucro)}</div>
+
+<div class="metric">
+${m(lucro)}
+</div>
+
 </div>
 
 </div>
@@ -1761,7 +1823,12 @@ Lucro real
 
 function resumoPeriodos(){
 
-let h=['dia','semana','mes'];
+let h=[
+'dia',
+'semana',
+'mes'
+];
+
 
 $('resumoPeriodos').innerHTML=
 
@@ -1772,9 +1839,11 @@ let t=totais(p,hoje());
 let nome=
 p==='dia'
 ?'Hoje'
-:p==='semana'
+:
+p==='semana'
 ?'Semana'
 :'Mês';
+
 
 return`
 
@@ -1784,13 +1853,23 @@ return`
 
 <br>
 
-Entradas: ${m(t.entradas)}
+Entradas:
+${m(t.entradas)}
 
-· Despesas: ${m(t.despesas)}
+·
 
-· Lucro: ${m(t.lucro)}
+Despesas:
+${m(t.despesas)}
 
-· Reserva: ${m(t.reserva)}
+·
+
+Lucro:
+${m(t.lucro)}
+
+·
+
+Reserva:
+${m(t.reserva)}
 
 </div>
 
@@ -1831,6 +1910,10 @@ $('ad').value=hoje();
 $('cdt').value=hoje();
 
 $('dataDash').value=hoje();
+
+$('ri').value=hoje();
+
+$('rf').value=hoje();
 
 render();
 
