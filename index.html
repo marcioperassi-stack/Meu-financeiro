@@ -1,2433 +1,799 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111827">
-<title>Meu Financeiro</title>
-
+<title>Meu Financeiro Pro</title>
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f3f4f6;
-  color:#111827;
+body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111827}
+header{background:#111827;color:#fff;padding:18px;position:sticky;top:0;z-index:10}
+header h2{margin:0 0 4px}
+header small{opacity:.8}
+.nav{display:flex;gap:6px;overflow:auto;padding:10px;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:76px;z-index:9}
+.nav button{white-space:nowrap;background:#e5e7eb;color:#111827}
+.nav button.active{background:#2563eb;color:#fff}
+main{max-width:1150px;margin:auto;padding:12px}
+.page{display:none}
+.page.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:#fff;padding:14px;border-radius:16px;margin:10px 0;border:1px solid #e5e7eb;box-shadow:0 2px 8px #00000008}
+.metric{font-size:22px;font-weight:700;margin-top:6px}
+.muted{color:#6b7280}
+.form{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+input,select,button{padding:10px;border-radius:9px;border:1px solid #d1d5db;width:100%}
+button{background:#2563eb;color:white;border:0;font-weight:bold;cursor:pointer}
+.secondary{background:#4b5563}
+.success{background:#16a34a}
+.warning{background:#d97706}
+.danger{background:#dc2626}
+.purple{background:#7c3aed}
+.table{overflow:auto}
+table{width:100%;border-collapse:collapse}
+td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px;white-space:nowrap}
+.pago{color:#16a34a;font-weight:bold}
+.pendente{color:#dc2626;font-weight:bold}
+.badge{display:inline-block;padding:4px 7px;border-radius:999px;font-size:11px;font-weight:bold;background:#e5e7eb}
+.progress{height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;background:#2563eb}
+.chart{height:230px;display:flex;align-items:flex-end;gap:7px;padding:15px 5px;border-bottom:1px solid #ddd}
+.bar{flex:1;min-width:12px;background:#2563eb;border-radius:5px 5px 0 0;position:relative}
+.bar span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;background:#2563eb}
+.dot.red{background:#dc2626}
+.dot.green{background:#16a34a}
+.alert{padding:10px;border-radius:10px;margin:6px 0;background:#fff7ed;border:1px solid #fed7aa}
+.ok{background:#f0fdf4;border-color:#bbf7d0}
+.small{font-size:12px}
+.hidden{display:none}
+@media(max-width:700px){
+.grid{grid-template-columns:1fr 1fr}
+.form{grid-template-columns:1fr 1fr}
+.nav{top:76px}
 }
-
-header{
-  background:#111827;
-  color:#fff;
-  padding:18px;
-  text-align:center;
-}
-
-header h1{
-  margin:0 0 5px;
-}
-
-nav{
-  display:flex;
-  overflow-x:auto;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-}
-
-nav button{
-  border:0;
-  background:#fff;
-  padding:14px;
-  white-space:nowrap;
-  font-weight:bold;
-}
-
-nav button.active{
-  background:#111827;
-  color:#fff;
-}
-
-main{
-  max-width:1100px;
-  margin:auto;
-  padding:15px;
-}
-
-.section{
-  display:none;
-}
-
-.section.active{
-  display:block;
-}
-
-.card,
-.metric{
-  background:#fff;
-  border-radius:12px;
-  padding:15px;
-  margin-bottom:15px;
-  box-shadow:0 2px 8px #0001;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:12px;
-}
-
-.metric{
-  margin:0;
-}
-
-.metric b{
-  display:block;
-  margin-top:7px;
-  font-size:20px;
-}
-
-.green{color:#15803d}
-.red{color:#dc2626}
-.blue{color:#2563eb}
-.orange{color:#ea580c}
-
-.formgrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:10px;
-}
-
-label{
-  display:block;
-  margin-bottom:5px;
-  font-size:13px;
-  font-weight:bold;
-}
-
-input,
-select{
-  width:100%;
-  padding:11px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  background:#fff;
-}
-
-.btn{
-  border:0;
-  border-radius:8px;
-  padding:10px 14px;
-  margin:3px;
-  background:#111827;
-  color:#fff;
-  font-weight:bold;
-}
-
-.btn.greenbtn{background:#15803d}
-.btn.redbtn{background:#dc2626}
-.btn.bluebtn{background:#2563eb}
-.btn.graybtn{background:#6b7280}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-
-th,td{
-  padding:9px;
-  border-bottom:1px solid #e5e7eb;
-  text-align:left;
-  font-size:13px;
-}
-
-th{
-  background:#f9fafb;
-}
-
-.tablewrap{
-  overflow-x:auto;
-}
-
-.status{
-  padding:4px 7px;
-  border-radius:6px;
-  font-size:11px;
-  font-weight:bold;
-}
-
-.pago{
-  background:#dcfce7;
-  color:#166534;
-}
-
-.pendente{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-.small{
-  color:#6b7280;
-  font-size:12px;
-}
-
-.empty{
-  text-align:center;
-  padding:20px;
-  color:#6b7280;
-}
-
-.bar{
-  height:20px;
-  background:#e5e7eb;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.bar div{
-  height:100%;
-  background:#2563eb;
-  color:#fff;
-  text-align:right;
-  padding-right:6px;
-  font-size:12px;
-}
-
-.dangerbox{
-  border:2px solid #fecaca;
-  background:#fff7f7;
-}
-
-canvas{
-  width:100%;
-  height:250px;
-}
-
-.destaque{
-  border:2px solid #2563eb;
-}
-
-@media(max-width:600px){
-  main{
-    padding:10px;
-  }
-
-  th,td{
-    font-size:11px;
-  }
+@media(max-width:430px){
+.form{grid-template-columns:1fr}
+.grid{grid-template-columns:1fr 1fr}
+.metric{font-size:18px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>💰 Meu Financeiro</h1>
-  <div>Controle das suas finanças</div>
+<h2>💰 Meu Financeiro Pro</h2>
+<small>Controle pessoal + Uber/99 + cartão + metas</small>
 </header>
 
-<nav>
-  <button class="active" onclick="abrirAba('dashboard',this)">📊 Dashboard</button>
-  <button onclick="abrirAba('pessoal',this)">💰 Pessoal</button>
-  <button onclick="abrirAba('cartao',this)">💳 Cartão</button>
-  <button onclick="abrirAba('uber',this)">🚗 Uber/99</button>
-  <button onclick="abrirAba('metas',this)">🎯 Metas</button>
-  <button onclick="abrirAba('relatorios',this)">📈 Relatórios</button>
-</nav>
+<div class="nav">
+<button class="active" onclick="aba('dashboard',this)">📊 Dashboard</button>
+<button onclick="aba('pessoal',this)">📋 Pessoal</button>
+<button onclick="aba('cartao',this)">💳 Cartão</button>
+<button onclick="aba('uber',this)">🚗 Uber/99</button>
+<button onclick="aba('metas',this)">🎯 Metas</button>
+<button onclick="aba('relatorios',this)">📈 Relatórios</button>
+</div>
 
 <main>
 
-<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
 
-<section id="dashboard" class="section active">
+<div class="card">
+<h3>📊 Visão geral</h3>
+<div class="form">
+<select id="periodoDash" onchange="render()">
+<option value="dia">Hoje</option>
+<option value="semana">Esta semana</option>
+<option value="mes" selected>Este mês</option>
+<option value="todos">Todos os dados</option>
+</select>
 
-  <div class="cards">
+<input id="dataDash" type="date">
 
-    <div class="metric">
-      Entradas pessoais
-      <b id="dEntradas" class="green">R$ 0,00</b>
-    </div>
+<div></div>
+<div></div>
+</div>
+</div>
 
-    <div class="metric">
-      Despesas pessoais
-      <b id="dDespesas" class="red">R$ 0,00</b>
-    </div>
+<div class="grid">
+<div class="card">
+Entradas
+<div class="metric" id="e">R$ 0,00</div>
+</div>
 
-    <div class="metric">
-      Saldo pessoal
-      <b id="dSaldo" class="blue">R$ 0,00</b>
-    </div>
+<div class="card">
+Despesas
+<div class="metric" id="d">R$ 0,00</div>
+</div>
 
-    <div class="metric">
-      Lucro Uber/99
-      <b id="dLucroUber" class="orange">R$ 0,00</b>
-    </div>
+<div class="card">
+Lucro real
+<div class="metric" id="s">R$ 0,00</div>
+</div>
 
-    <div class="metric destaque">
-      Resultado total
-      <b id="dResultadoTotal" class="blue">R$ 0,00</b>
-    </div>
+<div class="card">
+Reserva 10%
+<div class="metric" id="r">R$ 0,00</div>
+</div>
+</div>
 
-    <div class="metric">
-      Reserva Uber/99
-      <b id="dReserva" class="orange">R$ 0,00</b>
-    </div>
+<div class="grid">
+<div class="card">
+💳 Carteira PIX
+<div class="metric" id="pixSaldo">R$ 0,00</div>
+</div>
 
-  </div>
+<div class="card">
+💵 Carteira Dinheiro
+<div class="metric" id="dinSaldo">R$ 0,00</div>
+</div>
+</div>
 
-  <div class="card">
-    <h3>📊 Entradas x Despesas</h3>
-    <canvas id="grafico"></canvas>
-  </div>
+<div class="card">
+<h3>📈 Ganhos, despesas e lucro</h3>
+<div id="dashChart" class="chart"></div>
+<div class="legend">
+<span><i class="dot"></i>Ganhos</span>
+<span><i class="dot red"></i>Despesas</span>
+<span><i class="dot green"></i>Lucro</span>
+</div>
+</div>
 
-  <div class="card">
-    <h3>🔔 Próximos pagamentos</h3>
-    <div id="proximos"></div>
-  </div>
+<div class="grid">
+
+<div class="card">
+<h3>🔔 Contas a vencer</h3>
+<div id="alertas"></div>
+</div>
+
+<div class="card">
+<h3>💳 Fatura atual</h3>
+<div class="metric" id="faturaAtual">R$ 0,00</div>
+<p id="faturaInfo" class="muted small"></p>
+</div>
+
+</div>
+</section>
+
+
+<section id="pessoal" class="page">
+
+<div class="card">
+<h3>📋 Lançamento pessoal</h3>
+
+<div class="form">
+
+<input id="dt" type="date">
+
+<select id="tp">
+<option>Entrada</option>
+<option>Despesa</option>
+</select>
+
+<select id="ca">
+<option>Salário</option>
+<option>Uber / 99</option>
+<option>Alimentação</option>
+<option>Moradia</option>
+<option>Contas</option>
+<option>Carro</option>
+<option>Cartão de crédito</option>
+<option>Saúde</option>
+<option>Lazer</option>
+<option>Empréstimo</option>
+<option>Outros</option>
+</select>
+
+<input id="va" type="number" step=".01" placeholder="Valor">
+
+<select id="carteira">
+<option value="PIX">💳 PIX</option>
+<option value="Dinheiro">💵 Dinheiro</option>
+</select>
+
+<input id="de" placeholder="Descrição">
+
+<select id="pg">
+<option>Pendente</option>
+<option>Pago</option>
+</select>
+
+<select id="fixa">
+<option value="nao">Despesa normal</option>
+<option value="sim">Despesa fixa</option>
+</select>
+
+<select id="rep">
+<option value="nao">Não repetir</option>
+<option value="sim">Repetir</option>
+</select>
+
+<select id="periodo">
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+</select>
+
+<button onclick="add()">
+  <section id="cartao" class="page">
+<div class="card">
+<h3>💳 Configuração da fatura</h3>
+<div class="form">
+<label>Dia de fechamento
+<input id="fechamento" type="number" min="1" max="31" value="5" onchange="saveConfig()">
+</label>
+<label>Dia de vencimento
+<input id="vencimento" type="number" min="1" max="31" value="10" onchange="saveConfig()">
+</label>
+<div></div>
+<div></div>
+</div>
+<p class="muted small">Compras até o fechamento entram na fatura correspondente.</p>
+</div>
+
+<div class="card">
+<h3>💳 Nova compra</h3>
+<div class="form">
+<input id="cdt" type="date">
+<input id="cdesc" placeholder="Compra / descrição">
+<input id="cvalor" type="number" step=".01" placeholder="Valor total">
+<input id="cparc" type="number" min="1" value="1" placeholder="Parcelas">
+<button onclick="addCartao()">Adicionar compra</button>
+</div>
+</div>
+
+<div class="card">
+<h3>🧾 Faturas</h3>
+<div id="faturas"></div>
+</div>
+
+<div class="card">
+<h3>🛒 Compras no cartão</h3>
+<div class="table">
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Descrição</th>
+<th>Total</th>
+<th>Parcela</th>
+<th>Valor</th>
+<th>Vencimento</th>
+<th>Status</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="tc"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+
+<section id="uber" class="page">
+
+<div class="card">
+<h3>🚗 Controle Uber / 99</h3>
+
+<div class="form">
+
+<input id="ad" type="date">
+
+<input id="ag" type="number" step=".01" placeholder="Ganhos">
+
+<input id="ac" type="number" step=".01" placeholder="Despesas">
+
+<input id="af" type="number" step=".01" placeholder="Combustível">
+
+<input id="ak" type="number" step=".1" placeholder="KM">
+
+<input id="ah" type="number" step=".1" placeholder="Horas">
+
+<select id="acarteira">
+<option value="PIX">💳 PIX</option>
+<option value="Dinheiro">💵 Dinheiro</option>
+</select>
+
+<button onclick="adda()">Adicionar</button>
+
+</div>
+</div>
+
+<div class="grid">
+
+<div class="card">
+Ganhos
+<div class="metric" id="ug">R$ 0,00</div>
+</div>
+
+<div class="card">
+Custos
+<div class="metric" id="uc">R$ 0,00</div>
+</div>
+
+<div class="card">
+Lucro líquido
+<div class="metric" id="ul">R$ 0,00</div>
+</div>
+
+<div class="card">
+Reserva
+<div class="metric" id="ur">R$ 0,00</div>
+</div>
+
+</div>
+
+<div class="card">
+<h3>📊 Indicadores</h3>
+<div id="uind"></div>
+</div>
+
+<div class="card">
+<h3>🚗 Lançamentos Uber / 99</h3>
+
+<div class="table">
+
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Ganhos</th>
+<th>Carteira</th>
+<th>Despesas</th>
+<th>Comb.</th>
+<th>Lucro</th>
+<th>KM</th>
+<th>Horas</th>
+<th>R$/h</th>
+<th>R$/km</th>
+<th>Reserva</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="ta"></tbody>
+
+</table>
+</div>
+</div>
 
 </section>
 
 
-<!-- PESSOAL -->
+<section id="metas" class="page">
 
-<section id="pessoal" class="section">
+<div class="card">
+<h3>🎯 Nova meta de economia</h3>
 
-  <div class="card">
+<div class="form">
 
-    <h2>💰 Novo lançamento</h2>
+<input id="mn" placeholder="Nome da meta">
 
-    <div class="formgrid">
+<input id="mv" type="number" step=".01" placeholder="Valor da meta">
 
-      <div>
-        <label>Data</label>
-        <input type="date" id="pData">
-      </div>
+<input id="mj" type="number" step=".01" placeholder="Já guardado">
 
-      <div>
-        <label>Tipo</label>
-        <select id="pTipo">
-          <option value="Entrada">Entrada</option>
-          <option value="Despesa">Despesa</option>
-        </select>
-      </div>
+<input id="mp" type="date">
 
-      <div>
-        <label>Categoria</label>
-        <select id="pCategoria">
-          <option>Salário</option>
-          <option>Uber</option>
-          <option>99</option>
-          <option>Alimentação</option>
-          <option>Moradia</option>
-          <option>Água</option>
-          <option>Luz</option>
-          <option>Internet</option>
-          <option>Telefone</option>
-          <option>Combustível</option>
-          <option>Saúde</option>
-          <option>Transporte</option>
-          <option>Lazer</option>
-          <option>Compras</option>
-          <option>Empréstimo</option>
-          <option>Outros</option>
-        </select>
-      </div>
+<button onclick="addMeta()">Criar meta</button>
 
-      <div>
-        <label>Valor</label>
-        <input type="number" id="pValor" step="0.01" placeholder="0,00">
-      </div>
+</div>
+</div>
 
-      <div>
-        <label>Descrição</label>
-        <input type="text" id="pDescricao" placeholder="Descrição">
-      </div>
-
-      <div>
-        <label>Status</label>
-        <select id="pStatus">
-          <option value="Pendente">Pendente</option>
-          <option value="Pago">Pago</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Despesa</label>
-        <select id="pFixa">
-          <option value="Normal">Normal</option>
-          <option value="Fixa">Fixa</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Repetir lançamento?</label>
-        <select id="pRepetir" onchange="mostrarPeriodicidade()">
-          <option value="nao">Não</option>
-          <option value="sim">Sim</option>
-        </select>
-      </div>
-
-      <div id="periodicidadeArea" style="display:none">
-        <label>Periodicidade</label>
-        <select id="pPeriodo">
-          <option value="diaria">Diária</option>
-          <option value="semanal">Semanal</option>
-          <option value="mensal">Mensal</option>
-        </select>
-      </div>
-
-    </div>
-
-    <br>
-
-    <button class="btn greenbtn" onclick="adicionarLancamento()">
-      ➕ Adicionar lançamento
-    </button>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>📋 Lançamentos pessoais</h3>
-
-    <div class="formgrid">
-
-      <div>
-        <label>Filtrar mês</label>
-        <input type="month" id="filtroMes" onchange="renderTudo()">
-      </div>
-
-    </div>
-
-    <div class="tablewrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Tipo</th>
-            <th>Categoria</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Status</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-
-        <tbody id="tabelaPessoal"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>🔄 Recorrências</h3>
-
-    <p class="small">
-      A recorrência funciona para <b>Entradas e Despesas</b>.
-      Você pode escolher diária, semanal ou mensal.
-    </p>
-
-    <button class="btn bluebtn" onclick="gerarRecorrenciasManual()">
-      🔄 Gerar próximas recorrências
-    </button>
-
-  </div>
-
-
-  <div class="card dangerbox">
-
-    <h3>🗑️ Apagar lançamentos</h3>
-
-    <p class="small">
-      Este botão apaga <b>todos os lançamentos pessoais</b>,
-      inclusive os recorrentes.
-      Não apaga Uber/99, cartão ou metas.
-    </p>
-
-    <button class="btn redbtn" onclick="apagarTodosLancamentos()">
-      🗑️ APAGAR TODOS OS LANÇAMENTOS
-    </button>
-
-  </div>
+<div id="metasLista"></div>
 
 </section>
 
 
-<!-- CARTÃO -->
+<section id="relatorios" class="page">
 
-<section id="cartao" class="section">
+<div class="card">
 
-  <div class="card">
+<h3>📈 Relatório de lucro real</h3>
 
-    <h2>💳 Cartão de crédito</h2>
+<div class="form">
 
-    <div class="formgrid">
+<label>
+Mês do relatório
+<input id="rm" type="month" onchange="relatorio()">
+</label>
 
-      <div>
-        <label>Data da compra</label>
-        <input type="date" id="cData">
-      </div>
+<input id="ri" type="date" class="hidden">
 
-      <div>
-        <label>Descrição</label>
-        <input type="text" id="cDescricao">
-      </div>
+<input id="rf" type="date" class="hidden">
 
-      <div>
-        <label>Valor total</label>
-        <input type="number" id="cValor" step="0.01">
-      </div>
+<button onclick="relatorio()">Calcular mês</button>
 
-      <div>
-        <label>Parcelas</label>
-        <input type="number" id="cParcelas" min="1" value="1">
-      </div>
+</div>
 
-    </div>
+<div id="relatorioBox"></div>
 
-    <br>
+</div>
 
-    <button class="btn bluebtn" onclick="adicionarCartao()">
-      ➕ Adicionar compra
-    </button>
 
-  </div>
+<div class="card">
 
+<h3>📅 Resumo por período</h3>
 
-  <div class="card">
+<div id="resumoPeriodos"></div>
 
-    <h3>⚙️ Configuração da fatura</h3>
+</div>
 
-    <div class="formgrid">
 
-      <div>
-        <label>Dia de fechamento</label>
-        <input type="number" id="fechamento" min="1" max="31">
-      </div>
+<div class="card">
 
-      <div>
-        <label>Dia de vencimento</label>
-        <input type="number" id="vencimento" min="1" max="31">
-      </div>
+<button class="danger" onclick="limparDadosPessoais()">
+🗑️ Apagar lançamentos pessoais
+</button>
 
-    </div>
-
-    <br>
-
-    <button class="btn" onclick="salvarConfiguracao()">
-      Salvar configuração
-    </button>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>🧾 Compras</h3>
-
-    <div class="tablewrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Parcela</th>
-            <th>Valor</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-
-        <tbody id="tabelaCartao"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- UBER -->
-
-<section id="uber" class="section">
-
-  <div class="card">
-
-    <h2>🚗 Controle Uber / 99</h2>
-
-    <div class="formgrid">
-
-      <div>
-        <label>Data</label>
-        <input type="date" id="uData">
-      </div>
-
-      <div>
-        <label>Ganhos</label>
-        <input type="number" id="uGanhos" step="0.01">
-      </div>
-
-      <div>
-        <label>Despesas</label>
-        <input type="number" id="uDespesas" step="0.01">
-      </div>
-
-      <div>
-        <label>Combustível</label>
-        <input type="number" id="uCombustivel" step="0.01">
-      </div>
-
-      <div>
-        <label>Km rodados</label>
-        <input type="number" id="uKm" step="0.1">
-      </div>
-
-      <div>
-        <label>Horas trabalhadas</label>
-        <input type="number" id="uHoras" step="0.1">
-      </div>
-
-    </div>
-
-    <br>
-
-    <button class="btn greenbtn" onclick="adicionarUber()">
-      ➕ Adicionar dia
-    </button>
-
-  </div>
-
-
-  <div class="cards">
-
-    <div class="metric">
-      Ganhos
-      <b id="uTotalGanhos" class="green">R$ 0,00</b>
-    </div>
-
-    <div class="metric">
-      Despesas
-      <b id="uTotalDespesas" class="red">R$ 0,00</b>
-    </div>
-
-    <div class="metric">
-      Combustível
-      <b id="uTotalCombustivel" class="orange">R$ 0,00</b>
-    </div>
-
-    <div class="metric">
-      KM rodados
-      <b id="uTotalKm" class="blue">0 km</b>
-    </div>
-
-    <div class="metric">
-      Horas trabalhadas
-      <b id="uTotalHoras" class="blue">0 h</b>
-    </div>
-
-    <div class="metric">
-      Lucro real
-      <b id="uLucro" class="blue">R$ 0,00</b>
-    </div>
-
-    <div class="metric">
-      Reserva 10%
-      <b id="uReserva" class="orange">R$ 0,00</b>
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>📊 Indicadores Uber / 99</h3>
-
-    <div class="cards">
-
-      <div class="metric">
-        Lucro por KM
-        <b id="uLucroKm" class="green">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Lucro por hora
-        <b id="uLucroHora" class="green">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Ganho bruto por KM
-        <b id="uGanhoKm" class="blue">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Ganho bruto por hora
-        <b id="uGanhoHora" class="blue">R$ 0,00</b>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>📋 Controle diário</h3>
-
-    <div class="tablewrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Ganhos</th>
-            <th>Despesas</th>
-            <th>Comb.</th>
-            <th>Km</th>
-            <th>Horas</th>
-            <th>Lucro</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-
-        <tbody id="tabelaUber"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- METAS -->
-
-<section id="metas" class="section">
-
-  <div class="card">
-
-    <h2>🎯 Metas de economia</h2>
-
-    <div class="formgrid">
-
-      <div>
-        <label>Nome da meta</label>
-        <input type="text" id="mNome">
-      </div>
-
-      <div>
-        <label>Valor da meta</label>
-        <input type="number" id="mValor" step="0.01">
-      </div>
-
-      <div>
-        <label>Já guardado</label>
-        <input type="number" id="mGuardado" step="0.01" value="0">
-      </div>
-
-      <div>
-        <label>Prazo</label>
-        <input type="date" id="mPrazo">
-      </div>
-
-    </div>
-
-    <br>
-
-    <button class="btn greenbtn" onclick="adicionarMeta()">
-      ➕ Criar meta
-    </button>
-
-  </div>
-
-  <div id="listaMetas"></div>
-
-</section>
-
-
-<!-- RELATÓRIOS -->
-
-<section id="relatorios" class="section">
-
-  <div class="card">
-
-    <h2>📈 Relatório financeiro</h2>
-
-    <div class="cards">
-
-      <div class="metric">
-        Entradas pessoais
-        <b id="rEntradas" class="green">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Despesas pessoais
-        <b id="rDespesas" class="red">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Saldo pessoal
-        <b id="rSaldoPessoal" class="blue">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Lucro Uber/99
-        <b id="rUber" class="orange">R$ 0,00</b>
-      </div>
-
-      <div class="metric destaque">
-        Resultado financeiro total
-        <b id="rResultadoTotal" class="blue">R$ 0,00</b>
-      </div>
-
-    </div>
-
-    <p class="small">
-      Resultado total = entradas pessoais − despesas pessoais + lucro real Uber/99.
-    </p>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>🚗 Resumo Uber/99</h3>
-
-    <div class="cards">
-
-      <div class="metric">
-        Ganhos
-        <b id="rUberGanhos" class="green">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        KM rodados
-        <b id="rUberKm" class="blue">0 km</b>
-      </div>
-
-      <div class="metric">
-        Horas trabalhadas
-        <b id="rUberHoras" class="blue">0 h</b>
-      </div>
-
-      <div class="metric">
-        Lucro por KM
-        <b id="rLucroKm" class="green">R$ 0,00</b>
-      </div>
-
-      <div class="metric">
-        Lucro por hora
-        <b id="rLucroHora" class="green">R$ 0,00</b>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>📊 Despesas por categoria</h3>
-
-    <div id="categoriasRelatorio"></div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>💾 Backup dos dados</h3>
-
-    <p class="small">
-      Faça backup para não perder seus lançamentos.
-    </p>
-
-    <button class="btn bluebtn" onclick="fazerBackup()">
-      📤 Fazer backup
-    </button>
-
-    <button class="btn graybtn" onclick="document.getElementById('arquivoBackup').click()">
-      📥 Restaurar backup
-    </button>
-
-    <input
-      type="file"
-      id="arquivoBackup"
-      accept=".json"
-      style="display:none"
-      onchange="restaurarBackup(event)"
-    >
-
-  </div>
+</div>
 
 </section>
 
 </main>
 
-
 <script>
 
-/* ==================================================
-   BANCO DE DADOS
-================================================== */
+let x=JSON.parse(localStorage.getItem('MF')||'{"l":[],"a":[],"c":[],"m":[],"config":{"fechamento":5,"vencimento":10}}');
 
-const CHAVE="MEU_FINANCEIRO";
+x.l=x.l||[];
+x.a=x.a||[];
+x.c=x.c||[];
+x.m=x.m||[];
+x.config=x.config||{fechamento:5,vencimento:10};
 
-function estadoInicial(){
-  return {
-    l:[],
-    a:[],
-    c:[],
-    m:[],
-    config:{
-      fechamento:5,
-      vencimento:10
-    }
-  };
+const $=i=>document.getElementById(i),
+n=i=>+$(i).value||0,
+m=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v),
+hoje=()=>new Date().toISOString().slice(0,10),
+parse=d=>new Date(d+'T12:00:00');
+
+function save(){
+localStorage.setItem('MF',JSON.stringify(x));
+render();
 }
 
-let dados;
-
-try{
-  dados=JSON.parse(localStorage.getItem(CHAVE));
-}catch(e){
-  dados=null;
+function saveConfig(){
+x.config.fechamento=Math.min(31,Math.max(1,+$('fechamento').value||5));
+x.config.vencimento=Math.min(31,Math.max(1,+$('vencimento').value||10));
+save();
 }
 
-if(!dados || typeof dados!=="object"){
-  dados=estadoInicial();
+function aba(id,b){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+$(id).classList.add('active');
+
+document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+b.classList.add('active');
+
+render();
 }
 
-dados.l=Array.isArray(dados.l)?dados.l:[];
-dados.a=Array.isArray(dados.a)?dados.a:[];
-dados.c=Array.isArray(dados.c)?dados.c:[];
-dados.m=Array.isArray(dados.m)?dados.m:[];
+function add(){
 
-if(!dados.config){
-  dados.config={
-    fechamento:5,
-    vencimento:10
-  };
+let v=n('va');
+
+if(v<=0){
+return alert('Digite um valor válido.');
 }
 
+x.l.push({
+d:$('dt').value||hoje(),
+t:$('tp').value,
+c:$('ca').value,
+v,
+z:$('de').value,
+p:$('pg').value,
+fixa:$('fixa').value,
+rep:$('rep').value,
+periodo:$('periodo').value,
+carteira:$('carteira').value,
+origem:'pessoal'
+});
 
-/* ==================================================
-   FUNÇÕES BÁSICAS
-================================================== */
+save();
 
-function salvar(){
-  localStorage.setItem(CHAVE,JSON.stringify(dados));
+$('va').value='';
+$('de').value='';
 }
 
-function el(id){
-  return document.getElementById(id);
+function adda(){
+
+let g=n('ag');
+
+if(g<=0){
+return alert('Digite o valor dos ganhos.');
 }
 
-function numero(id){
-  return Number(el(id).value)||0;
+x.a.push({
+d:$('ad').value||hoje(),
+g,
+c:n('ac'),
+f:n('af'),
+k:n('ak'),
+h:n('ah'),
+carteira:$('acarteira').value
+});
+
+save();
+
+['ag','ac','af','ak','ah'].forEach(i=>$(i).value='');
+
 }
 
-function dinheiro(valor){
-  return Number(valor||0).toLocaleString("pt-BR",{
-    style:"currency",
-    currency:"BRL"
-  });
+function addCartao(){
+
+let data=$('cdt').value||hoje(),
+desc=$('cdesc').value,
+total=n('cvalor'),
+parcelas=Math.max(1,parseInt($('cparc').value)||1);
+
+if(total<=0){
+return alert('Digite o valor da compra.');
 }
 
-function gerarId(){
-  return Date.now().toString(36)+
-         Math.random().toString(36).substring(2);
+let vp=total/parcelas,
+inicio=parse(data),
+venc=x.config.vencimento;
+
+for(let i=0;i<parcelas;i++){
+
+let d=new Date(inicio);
+d.setMonth(d.getMonth()+i);
+
+let dt=new Date(
+d.getFullYear(),
+d.getMonth(),
+Math.min(
+venc,
+new Date(d.getFullYear(),d.getMonth()+1,0).getDate()
+),
+12
+);
+
+x.c.push({
+d:dt.toISOString().slice(0,10),
+desc,
+total,
+parcela:i+1,
+parcelas,
+valor:vp,
+venc,
+p:'Pendente'
+});
+
 }
 
-function hoje(){
-  const d=new Date();
+save();
 
-  return d.getFullYear()+"-"+
-    String(d.getMonth()+1).padStart(2,"0")+"-"+
-    String(d.getDate()).padStart(2,"0");
+$('cdesc').value='';
+$('cvalor').value='';
+$('cparc').value=1;
+
 }
 
-function dataBR(data){
+function dl(q,i){
 
-  if(!data)return "";
-
-  const p=data.split("-");
-
-  if(p.length!==3)return data;
-
-  return p[2]+"/"+p[1]+"/"+p[0];
+if(confirm('Excluir este lançamento?')){
+x[q].splice(i,1);
+save();
 }
 
-
-/* ==================================================
-   NAVEGAÇÃO
-================================================== */
-
-function abrirAba(id,botao){
-
-  document.querySelectorAll(".section")
-    .forEach(s=>s.classList.remove("active"));
-
-  document.querySelectorAll("nav button")
-    .forEach(b=>b.classList.remove("active"));
-
-  el(id).classList.add("active");
-  botao.classList.add("active");
-
-  renderTudo();
 }
 
+function baixa(i){
 
-/* ==================================================
-   RECORRÊNCIAS
-================================================== */
+x.l[i].p=x.l[i].p==='Pago'?'Pendente':'Pago';
+save();
 
-function mostrarPeriodicidade(){
-
-  el("periodicidadeArea").style.display=
-    el("pRepetir").value==="sim"
-    ?"block"
-    :"none";
 }
 
-function adicionarMeses(data,quantidade){
+function baixaCartao(i){
 
-  const dia=data.getDate();
+x.c[i].p=x.c[i].p==='Pago'?'Pendente':'Pago';
+save();
 
-  const nova=new Date(
-    data.getFullYear(),
-    data.getMonth(),
-    1
-  );
-
-  nova.setMonth(
-    nova.getMonth()+quantidade
-  );
-
-  const ultimoDia=
-    new Date(
-      nova.getFullYear(),
-      nova.getMonth()+1,
-      0
-    ).getDate();
-
-  nova.setDate(
-    Math.min(dia,ultimoDia)
-  );
-
-  return nova;
 }
 
-function calcularDataInicial(data,periodo,n){
+function ed(q,i,v){
 
-  const d=new Date(
-    data.getFullYear(),
-    data.getMonth(),
-    data.getDate()
-  );
+x[q][i].d=v;
+save();
 
-  if(periodo==="diaria"){
-    d.setDate(d.getDate()+n);
-  }
-
-  if(periodo==="semanal"){
-    d.setDate(d.getDate()+(n*7));
-  }
-
-  if(periodo==="mensal"){
-    return adicionarMeses(d,n);
-  }
-
-  return d;
-}
-
-function gerarOcorrencias(modelo){
-
-  if(modelo.repetir!=="sim"){
-    return;
-  }
-
-  const inicio=new Date(
-    modelo.data+"T12:00:00"
-  );
-
-  let contador=1;
-
-  while(contador<=400){
-
-    const novaData=
-      calcularDataInicial(
-        inicio,
-        modelo.periodo,
-        contador
-      );
-
-    const limite=new Date(
-      inicio.getFullYear(),
-      inicio.getMonth()+12,
-      inicio.getDate()
-    );
-
-    if(novaData>limite){
-      break;
-    }
-
-    const dataTexto=
-      novaData.getFullYear()+"-"+
-      String(novaData.getMonth()+1).padStart(2,"0")+"-"+
-      String(novaData.getDate()).padStart(2,"0");
-
-    const jaExiste=dados.l.some(item=>
-      item.recorrenciaId===modelo.id &&
-      item.data===dataTexto
-    );
-
-    if(!jaExiste){
-
-      dados.l.push({
-
-        id:gerarId(),
-        data:dataTexto,
-        tipo:modelo.tipo,
-        categoria:modelo.categoria,
-        valor:modelo.valor,
-        descricao:modelo.descricao+" (recorrente)",
-
-        /*
-          As ocorrências futuras começam pendentes.
-        */
-        status:"Pendente",
-
-        fixa:modelo.fixa,
-        repetir:"nao",
-        periodo:"",
-        recorrenciaId:modelo.id,
-        origem:"recorrente"
-
-      });
-
-    }
-
-    contador++;
-  }
 }
 
 function gerarRecorrencias(){
 
-  dados.l
-    .filter(item=>item.repetir==="sim")
-    .forEach(modelo=>{
-      gerarOcorrencias(modelo);
-    });
+let limite=new Date();
+limite.setMonth(limite.getMonth()+6);
 
-  salvar();
+let criadas=0;
+
+x.l
+.filter(a=>a.rep==='sim')
+.forEach(modelo=>{
+
+if(!modelo.id){
+modelo.id='R'+Date.now()+Math.random();
 }
 
-function gerarRecorrenciasManual(){
+let p=parse(modelo.d);
 
-  gerarRecorrencias();
+while(p<=limite){
 
-  renderTudo();
+let dt=p.toISOString().slice(0,10);
 
-  alert("Recorrências atualizadas.");
+let ex=x.l.some(a=>
+a.recorrenteId===modelo.id &&
+a.d===dt
+);
+
+if(!ex && dt!==modelo.d){
+
+x.l.push({
+d:dt,
+t:modelo.t,
+c:modelo.c,
+v:modelo.v,
+z:modelo.z,
+p:modelo.t==='Entrada'?'Pago':'Pendente',
+fixa:modelo.fixa,
+rep:'nao',
+periodo:modelo.periodo,
+carteira:modelo.carteira||'PIX',
+recorrenteId:modelo.id,
+origem:'recorrente'
+});
+
+criadas++;
+
 }
 
-
-/* ==================================================
-   LANÇAMENTOS PESSOAIS
-================================================== */
-
-function adicionarLancamento(){
-
-  const valor=numero("pValor");
-
-  if(valor<=0){
-
-    alert("Digite um valor maior que zero.");
-
-    return;
-  }
-
-  const item={
-
-    id:gerarId(),
-
-    data:el("pData").value||hoje(),
-
-    tipo:el("pTipo").value,
-
-    categoria:el("pCategoria").value,
-
-    valor:valor,
-
-    descricao:el("pDescricao").value.trim(),
-
-    status:el("pStatus").value,
-
-    fixa:el("pFixa").value,
-
-    repetir:el("pRepetir").value,
-
-    periodo:
-      el("pRepetir").value==="sim"
-      ?el("pPeriodo").value
-      :"",
-
-    recorrenciaId:null,
-
-    origem:"manual"
-
-  };
-
-  if(item.repetir==="sim"){
-    item.recorrenciaId=item.id;
-  }
-
-  dados.l.push(item);
-
-  if(item.repetir==="sim"){
-    gerarOcorrencias(item);
-  }
-
-  salvar();
-
-  el("pValor").value="";
-  el("pDescricao").value="";
-
-  renderTudo();
-
-  alert("Lançamento adicionado.");
+if(modelo.periodo==='diaria'){
+p.setDate(p.getDate()+1);
+}
+else if(modelo.periodo==='semanal'){
+p.setDate(p.getDate()+7);
+}
+else{
+p.setMonth(p.getMonth()+1);
 }
 
-function excluirLancamento(id){
-
-  const item=dados.l.find(a=>a.id===id);
-
-  if(!item){
-
-    alert("Lançamento não encontrado.");
-
-    return;
-  }
-
-  let mensagem=
-    "Deseja excluir este lançamento?";
-
-  if(item.repetir==="sim" || item.recorrenciaId){
-
-    mensagem=
-      "Este lançamento pertence a uma recorrência.\n\n"+
-      "TODOS os lançamentos dessa recorrência serão apagados.\n\n"+
-      "Deseja continuar?";
-  }
-
-  if(!confirm(mensagem)){
-    return;
-  }
-
-  const grupo=
-    item.recorrenciaId || item.id;
-
-  if(item.repetir==="sim" || item.recorrenciaId){
-
-    dados.l=dados.l.filter(a=>
-      a.id!==grupo &&
-      a.recorrenciaId!==grupo
-    );
-
-  }else{
-
-    dados.l=dados.l.filter(a=>
-      a.id!==id
-    );
-
-  }
-
-  salvar();
-
-  renderTudo();
-
-  alert("Lançamento excluído.");
 }
 
-function apagarTodosLancamentos(){
+});
 
-  if(dados.l.length===0){
+save();
 
-    alert("Não existem lançamentos para apagar.");
+alert(criadas+' lançamento(s) recorrente(s) gerado(s).');
 
-    return;
-  }
-
-  const confirmar=confirm(
-
-    "⚠️ ATENÇÃO!\n\n"+
-    "Todos os lançamentos pessoais serão apagados.\n\n"+
-    "Isso inclui ENTRADAS, DESPESAS e RECORRÊNCIAS.\n\n"+
-    "Uber/99, cartão e metas NÃO serão apagados.\n\n"+
-    "Deseja realmente continuar?"
-
-  );
-
-  if(!confirmar){
-    return;
-  }
-
-  dados.l=[];
-
-  salvar();
-
-  renderTudo();
-
-  alert("Todos os lançamentos pessoais foram apagados.");
 }
 
-function baixarLancamento(id){
+function dentro(d,periodo,base){
 
-  const item=dados.l.find(a=>a.id===id);
+let a=parse(d),
+b=parse(base||hoje());
 
-  if(!item)return;
+if(periodo==='todos')return true;
 
-  item.status=
-    item.status==="Pago"
-    ?"Pendente"
-    :"Pago";
+if(periodo==='dia')
+return d===(base||hoje());
 
-  salvar();
+if(periodo==='semana'){
 
-  renderTudo();
+let ini=new Date(b);
+let day=ini.getDay();
+
+ini.setDate(ini.getDate()-(day||7)+1);
+
+let fim=new Date(ini);
+fim.setDate(ini.getDate()+6);
+
+return a>=ini&&a<=fim;
+
 }
 
+return a.getMonth()===b.getMonth() &&
+a.getFullYear()===b.getFullYear();
 
-/* ==================================================
-   CARTÃO
-================================================== */
-
-function adicionarCartao(){
-
-  const valor=numero("cValor");
-
-  const parcelas=
-    Math.max(
-      1,
-      parseInt(el("cParcelas").value)||1
-    );
-
-  if(valor<=0){
-
-    alert("Digite o valor da compra.");
-
-    return;
-  }
-
-  const valorParcela=
-    valor/parcelas;
-
-  for(let i=1;i<=parcelas;i++){
-
-    dados.c.push({
-
-      id:gerarId(),
-
-      data:el("cData").value||hoje(),
-
-      descricao:
-        el("cDescricao").value||
-        "Compra no cartão",
-
-      total:valor,
-
-      parcelas:parcelas,
-
-      parcela:i,
-
-      valor:valorParcela
-
-    });
-
-  }
-
-  salvar();
-
-  el("cDescricao").value="";
-  el("cValor").value="";
-  el("cParcelas").value="1";
-
-  renderTudo();
-
-  alert("Compra adicionada ao cartão.");
 }
 
-function excluirCartao(id){
+function totais(periodo,base){
 
-  if(!confirm("Excluir esta parcela?")){
-    return;
-  }
+let l=x.l.filter(a=>dentro(a.d,periodo,base)),
+a=x.a.filter(a=>dentro(a.d,periodo,base));
 
-  dados.c=dados.c.filter(a=>a.id!==id);
+let ep=l
+.filter(z=>z.t==='Entrada')
+.reduce((s,z)=>s+z.v,0);
 
-  salvar();
+let dp=l
+.filter(z=>z.t==='Despesa')
+.reduce((s,z)=>s+z.v,0);
 
-  renderTudo();
+let gu=a.reduce((s,z)=>s+z.g,0);
+
+let cu=a.reduce((s,z)=>s+z.c+z.f,0);
+
+let lucroUber=a.reduce((s,z)=>s+z.g-z.c-z.f,0);
+
+return{
+entradas:ep+gu,
+despesas:dp+cu,
+lucro:ep+gu-dp-cu,
+reserva:Math.max(0,lucroUber*.1)
+};
+
+}function barras(){
+
+let vals=[];
+
+for(let i=6;i>=0;i--){
+
+let d=new Date();
+d.setDate(d.getDate()-i);
+
+let dt=d.toISOString().slice(0,10);
+let t=totais('dia',dt);
+
+vals.push({dt,t});
+
 }
 
-function salvarConfiguracao(){
-
-  dados.config.fechamento=
-    parseInt(el("fechamento").value)||5;
-
-  dados.config.vencimento=
-    parseInt(el("vencimento").value)||10;
-
-  salvar();
-
-  alert("Configuração salva.");
-}
-
-
-/* ==================================================
-   UBER / 99
-================================================== */
-
-function adicionarUber(){
-
-  const ganhos=numero("uGanhos");
-
-  if(ganhos<=0){
-
-    alert("Digite os ganhos do dia.");
-
-    return;
-  }
-
-  dados.a.push({
-
-    id:gerarId(),
-
-    data:el("uData").value||hoje(),
-
-    ganhos:ganhos,
-
-    despesas:numero("uDespesas"),
-
-    combustivel:numero("uCombustivel"),
-
-    km:numero("uKm"),
-
-    horas:numero("uHoras")
-
-  });
-
-  salvar();
-
-  el("uGanhos").value="";
-  el("uDespesas").value="";
-  el("uCombustivel").value="";
-  el("uKm").value="";
-  el("uHoras").value="";
-
-  renderTudo();
-}
-
-function excluirUber(id){
-
-  if(!confirm("Excluir este dia?")){
-    return;
-  }
-
-  dados.a=dados.a.filter(a=>a.id!==id);
-
-  salvar();
-
-  renderTudo();
-}
-
-
-/* ==================================================
-   METAS
-================================================== */
-
-function adicionarMeta(){
-
-  const nome=el("mNome").value.trim();
-  const valor=numero("mValor");
-
-  if(!nome || valor<=0){
-
-    alert("Informe o nome e o valor da meta.");
-
-    return;
-  }
-
-  dados.m.push({
-
-    id:gerarId(),
-
-    nome:nome,
-
-    valor:valor,
-
-    guardado:numero("mGuardado"),
-
-    prazo:el("mPrazo").value
-
-  });
-
-  salvar();
-
-  el("mNome").value="";
-  el("mValor").value="";
-  el("mGuardado").value="0";
-  el("mPrazo").value="";
-
-  renderTudo();
-}
-
-function adicionarValorMeta(id){
-
-  const valor=Number(
-    prompt("Quanto deseja adicionar?")||0
-  );
-
-  if(valor<=0)return;
-
-  const meta=dados.m.find(a=>a.id===id);
-
-  if(!meta)return;
-
-  meta.guardado+=valor;
-
-  salvar();
-
-  renderTudo();
-}
-
-function excluirMeta(id){
-
-  if(!confirm("Excluir esta meta?")){
-    return;
-  }
-
-  dados.m=dados.m.filter(a=>a.id!==id);
-
-  salvar();
-
-  renderTudo();
-}
-
-
-/* ==================================================
-   BACKUP
-================================================== */
-
-function fazerBackup(){
-
-  const arquivo=new Blob(
-    [JSON.stringify(dados,null,2)],
-    {type:"application/json"}
-  );
-
-  const url=
-    URL.createObjectURL(arquivo);
-
-  const link=document.createElement("a");
-
-  link.href=url;
-
-  link.download=
-    "backup-meu-financeiro.json";
-
-  link.click();
-
-  URL.revokeObjectURL(url);
-}
-
-function restaurarBackup(event){
-
-  const arquivo=event.target.files[0];
-
-  if(!arquivo)return;
-
-  const leitor=new FileReader();
-
-  leitor.onload=function(){
-
-    try{
-
-      const novo=
-        JSON.parse(leitor.result);
-
-      if(!novo ||
-         typeof novo!=="object"){
-
-        throw new Error();
-      }
-
-      dados={
-
-        l:Array.isArray(novo.l)
-          ?novo.l:[],
-
-        a:Array.isArray(novo.a)
-          ?novo.a:[],
-
-        c:Array.isArray(novo.c)
-          ?novo.c:[],
-
-        m:Array.isArray(novo.m)
-          ?novo.m:[],
-
-        config:novo.config||{
-          fechamento:5,
-          vencimento:10
-        }
-
-      };
-
-      salvar();
-
-      renderTudo();
-
-      alert("Backup restaurado com sucesso.");
-
-    }catch(e){
-
-      alert("O arquivo de backup é inválido.");
-
-    }
-
-  };
-
-  leitor.readAsText(arquivo);
-}
-
-
-/* ==================================================
-   CÁLCULO UBER / 99
-================================================== */
-
-function calcularUber(){
-
-  let ganhos=0;
-  let despesas=0;
-  let combustivel=0;
-  let km=0;
-  let horas=0;
-
-  dados.a.forEach(a=>{
-
-    ganhos+=Number(a.ganhos)||0;
-
-    despesas+=Number(a.despesas)||0;
-
-    combustivel+=
-      Number(a.combustivel)||0;
-
-    km+=Number(a.km)||0;
-
-    horas+=Number(a.horas)||0;
-
-  });
-
-  const lucro=
-    ganhos-
-    despesas-
-    combustivel;
-
-  const reserva=
-    Math.max(0,lucro)*0.10;
-
-  const lucroKm=
-    km>0
-    ?lucro/km
-    :0;
-
-  const lucroHora=
-    horas>0
-    ?lucro/horas
-    :0;
-
-  const ganhoKm=
-    km>0
-    ?ganhos/km
-    :0;
-
-  const ganhoHora=
-    horas>0
-    ?ganhos/horas
-    :0;
-
-  return {
-    ganhos,
-    despesas,
-    combustivel,
-    km,
-    horas,
-    lucro,
-    reserva,
-    lucroKm,
-    lucroHora,
-    ganhoKm,
-    ganhoHora
-  };
-}
-
-
-/* ==================================================
-   DASHBOARD
-================================================== */
-
-function renderDashboard(){
-
-  let entradas=0;
-  let despesas=0;
-
-  dados.l.forEach(item=>{
-
-    if(item.tipo==="Entrada"){
-
-      entradas+=Number(item.valor)||0;
-
-    }else{
-
-      despesas+=Number(item.valor)||0;
-
-    }
-
-  });
-
-  const uber=calcularUber();
-
-  const saldoPessoal=
-    entradas-despesas;
-
-  const resultadoTotal=
-    saldoPessoal+uber.lucro;
-
-  el("dEntradas").textContent=
-    dinheiro(entradas);
-
-  el("dDespesas").textContent=
-    dinheiro(despesas);
-
-  el("dSaldo").textContent=
-    dinheiro(saldoPessoal);
-
-  el("dLucroUber").textContent=
-    dinheiro(uber.lucro);
-
-  el("dResultadoTotal").textContent=
-    dinheiro(resultadoTotal);
-
-  el("dReserva").textContent=
-    dinheiro(uber.reserva);
-
-  desenharGrafico(
-    entradas+uber.ganhos,
-    despesas+uber.despesas+uber.combustivel
-  );
-
-  const pendentes=
-    dados.l
-      .filter(a=>
-        a.tipo==="Despesa" &&
-        a.status!=="Pago"
-      )
-      .sort((a,b)=>
-        a.data.localeCompare(b.data)
-      )
-      .slice(0,8);
-
-  if(pendentes.length===0){
-
-    el("proximos").innerHTML=
-      '<div class="empty">Nenhum pagamento pendente.</div>';
-
-  }else{
-
-    el("proximos").innerHTML=
-      pendentes.map(a=>`
-
-        <div style="padding:8px 0;border-bottom:1px solid #eee">
-
-          <b>${dataBR(a.data)}</b>
-          -
-          ${a.categoria}
-          -
-          ${a.descricao||""}
-
-          <strong class="red">
-            ${dinheiro(a.valor)}
-          </strong>
-
-        </div>
-
-      `).join("");
-
-  }
+let max=Math.max(
+1,
+...vals.map(v=>Math.max(
+v.t.entradas,
+v.t.despesas,
+Math.abs(v.t.lucro)
+))
+);
+
+$('dashChart').innerHTML=vals.map(v=>
+
+`<div class="bar"
+style="height:${Math.max(5,v.t.entradas/max*100)}%">
+<span>${m(v.t.entradas)}</span>
+</div>`
+
+).join('');
 
 }
 
 
-/* ==================================================
-   TABELA PESSOAL
-================================================== */
+function alertas(){
 
-function renderPessoal(){
+let hojeD=parse(hoje());
 
-  const filtro=
-    el("filtroMes").value;
+let arr=x.l
+.filter(a=>a.t==='Despesa'&&a.p!=='Pago')
+.sort((a,b)=>parse(a.d)-parse(b.d))
+.slice(0,8);
 
-  let lista=[...dados.l];
+$('alertas').innerHTML=arr.length?
 
-  if(filtro){
+arr.map(a=>{
 
-    lista=lista.filter(a=>
-      a.data.startsWith(filtro)
-    );
+let diff=Math.round(
+(parse(a.d)-hojeD)/86400000
+);
 
-  }
+let texto=
+diff<0?'Vencida':
+diff===0?'Vence hoje':
+'Vence em '+diff+' dia(s)';
 
-  lista.sort((a,b)=>
-    b.data.localeCompare(a.data)
-  );
+return `
+<div class="alert">
+<b>${a.z||a.c}</b><br>
+${a.d} · ${m(a.v)} · ${texto}
+</div>
+`;
 
-  if(lista.length===0){
+}).join('')
 
-    el("tabelaPessoal").innerHTML=
-      '<tr><td colspan="7" class="empty">Nenhum lançamento.</td></tr>';
+:
 
-    return;
-  }
-
-  el("tabelaPessoal").innerHTML=
-    lista.map(a=>`
-
-      <tr>
-
-        <td>${dataBR(a.data)}</td>
-
-        <td class="${a.tipo==="Entrada"?"green":"red"}">
-          ${a.tipo}
-        </td>
-
-        <td>${a.categoria}</td>
-
-        <td>
-          ${a.descricao||"-"}
-          ${
-            a.repetir==="sim"
-            ?"<br><span class='small'>🔄 Recorrente</span>"
-            :""
-          }
-        </td>
-
-        <td>${dinheiro(a.valor)}</td>
-
-        <td>
-
-          <span class="status ${
-            a.status==="Pago"
-            ?"pago"
-            :"pendente"
-          }">
-
-            ${a.status}
-
-          </span>
-
-        </td>
-
-        <td>
-
-          <button
-            class="btn graybtn"
-            onclick="baixarLancamento('${a.id}')">
-
-            ${
-              a.status==="Pago"
-              ?"Desfazer"
-              :"Baixar"
-            }
-
-          </button>
-
-          <button
-            class="btn redbtn"
-            onclick="excluirLancamento('${a.id}')">
-
-            🗑️
-
-          </button>
-
-        </td>
-
-      </tr>
-
-    `).join("");
-
-}
-
-
-/* ==================================================
-   TABELA CARTÃO
-================================================== */
-
-function renderCartao(){
-
-  const lista=
-    [...dados.c].sort((a,b)=>
-      a.data.localeCompare(b.data)
-    );
-
-  if(lista.length===0){
-
-    el("tabelaCartao").innerHTML=
-      '<tr><td colspan="5" class="empty">Nenhuma compra.</td></tr>';
-
-    return;
-  }
-
-  el("tabelaCartao").innerHTML=
-    lista.map(a=>`
-
-      <tr>
-
-        <td>${dataBR(a.data)}</td>
-
-        <td>${a.descricao}</td>
-
-        <td>${a.parcela}/${a.parcelas}</td>
-
-        <td>${dinheiro(a.valor)}</td>
-
-        <td>
-
-          <button
-            class="btn redbtn"
-            onclick="excluirCartao('${a.id}')">
-
-            🗑️
-
-          </button>
-
-        </td>
-
-      </tr>
-
-    `).join("");
-
-}
-
-
-/* ==================================================
-   UBER
-================================================== */
-
-function renderUber(){
-
-  const uber=calcularUber();
-
-  el("uTotalGanhos").textContent=
-    dinheiro(uber.ganhos);
-
-  el("uTotalDespesas").textContent=
-    dinheiro(uber.despesas);
-
-  el("uTotalCombustivel").textContent=
-    dinheiro(uber.combustivel);
-
-  el("uTotalKm").textContent=
-    uber.km.toLocaleString("pt-BR",{
-      maximumFractionDigits:1
-    })+" km";
-
-  el("uTotalHoras").textContent=
-    uber.horas.toLocaleString("pt-BR",{
-      maximumFractionDigits:1
-    })+" h";
-
-  el("uLucro").textContent=
-    dinheiro(uber.lucro);
-
-  el("uReserva").textContent=
-    dinheiro(uber.reserva);
-
-  el("uLucroKm").textContent=
-    dinheiro(uber.lucroKm);
-
-  el("uLucroHora").textContent=
-    dinheiro(uber.lucroHora);
-
-  el("uGanhoKm").textContent=
-    dinheiro(uber.ganhoKm);
-
-  el("uGanhoHora").textContent=
-    dinheiro(uber.ganhoHora);
-
-
-  const lista=
-    [...dados.a].sort((a,b)=>
-      b.data.localeCompare(a.data)
-    );
-
-  if(lista.length===0){
-
-    el("tabelaUber").innerHTML=
-      '<tr><td colspan="8" class="empty">Nenhum dia lançado.</td></tr>';
-
-    return;
-  }
-
-  el("tabelaUber").innerHTML=
-    lista.map(a=>{
-
-      const lucroDia=
-        Number(a.ganhos||0)-
-        Number(a.despesas||0)-
-        Number(a.combustivel||0);
-
-      return `
-
-        <tr>
-
-          <td>${dataBR(a.data)}</td>
-
-          <td>${dinheiro(a.ganhos)}</td>
-
-          <td>${dinheiro(a.despesas)}</td>
-
-          <td>${dinheiro(a.combustivel)}</td>
-
-          <td>${Number(a.km||0).toLocaleString("pt-BR")}</td>
-
-          <td>${Number(a.horas||0).toLocaleString("pt-BR")}</td>
-
-          <td class="${lucroDia>=0?"green":"red"}">
-            ${dinheiro(lucroDia)}
-          </td>
-
-          <td>
-
-            <button
-              class="btn redbtn"
-              onclick="excluirUber('${a.id}')">
-
-              🗑️
-
-            </button>
-
-          </td>
-
-        </tr>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* ==================================================
-   METAS
-================================================== */
-
-function renderMetas(){
-
-  if(dados.m.length===0){
-
-    el("listaMetas").innerHTML=
-      '<div class="card empty">Nenhuma meta cadastrada.</div>';
-
-    return;
-  }
-
-  el("listaMetas").innerHTML=
-    dados.m.map(m=>{
-
-      const percentual=
-        m.valor>0
-        ?Math.min(
-          100,
-          (m.guardado/m.valor)*100
-        )
-        :0;
-
-      return `
-
-        <div class="card">
-
-          <h3>🎯 ${m.nome}</h3>
-
-          <p>
-            ${dinheiro(m.guardado)}
-            de
-            ${dinheiro(m.valor)}
-          </p>
-
-          <div class="bar">
-
-            <div style="width:${percentual}%">
-              ${percentual.toFixed(0)}%
-            </div>
-
-          </div>
-
-          <p class="small">
-            Prazo:
-            ${
-              m.prazo
-              ?dataBR(m.prazo)
-              :"Não informado"
-            }
-          </p>
-
-          <button
-            class="btn greenbtn"
-            onclick="adicionarValorMeta('${m.id}')">
-
-            ➕ Adicionar
-
-          </button>
-
-          <button
-            class="btn redbtn"
-            onclick="excluirMeta('${m.id}')">
-
-            🗑️ Excluir
-
-          </button>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* ==================================================
-   RELATÓRIOS
-================================================== */
-
-function renderRelatorios(){
-
-  let entradas=0;
-  let despesas=0;
-
-  const categorias={};
-
-  dados.l.forEach(a=>{
-
-    const valor=
-      Number(a.valor)||0;
-
-    if(a.tipo==="Entrada"){
-
-      entradas+=valor;
-
-    }else{
-
-      despesas+=valor;
-
-      categorias[a.categoria]=
-        (categorias[a.categoria]||0)+valor;
-
-    }
-
-  });
-
-  const uber=calcularUber();
-
-  const saldoPessoal=
-    entradas-despesas;
-
-  /*
-    CORREÇÃO PRINCIPAL:
-
-    Saldo pessoal
-    +
-    lucro real Uber/99
-  */
-
-  const resultadoTotal=
-    saldoPessoal+uber.lucro;
-
-
-  el("rEntradas").textContent=
-    dinheiro(entradas);
-
-  el("rDespesas").textContent=
-    dinheiro(despesas);
-
-  el("rSaldoPessoal").textContent=
-    dinheiro(saldoPessoal);
-
-  el("rUber").textContent=
-    dinheiro(uber.lucro);
-
-  el("rResultadoTotal").textContent=
-    dinheiro(resultadoTotal);
-
-
-  /*
-    Resumo Uber/99
-  */
-
-  el("rUberGanhos").textContent=
-    dinheiro(uber.ganhos);
-
-  el("rUberKm").textContent=
-    uber.km.toLocaleString("pt-BR",{
-      maximumFractionDigits:1
-    })+" km";
-
-  el("rUberHoras").textContent=
-    uber.horas.toLocaleString("pt-BR",{
-      maximumFractionDigits:1
-    })+" h";
-
-  el("rLucroKm").textContent=
-    dinheiro(uber.lucroKm);
-
-  el("rLucroHora").textContent=
-    dinheiro(uber.lucroHora);
-
-
-  const nomes=
-    Object.keys(categorias)
-      .sort((a,b)=>
-        categorias[b]-categorias[a]
-      );
-
-  if(nomes.length===0){
-
-    el("categoriasRelatorio").innerHTML=
-      '<div class="empty">Nenhuma despesa registrada.</div>';
-
-    return;
-  }
-
-  const maior=
-    Math.max(
-      ...nomes.map(n=>categorias[n])
-    );
-
-  el("categoriasRelatorio").innerHTML=
-    nomes.map(nome=>{
-
-      const porcentagem=
-        maior>0
-        ?(categorias[nome]/maior)*100
-        :0;
-
-      return `
-
-        <div style="margin-bottom:12px">
-
-          <b>${nome}</b>
-
-          <span style="float:right">
-            ${dinheiro(categorias[nome])}
-          </span>
-
-          <div class="bar">
-
-            <div style="width:${porcentagem}%"></div>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-
-/* ==================================================
-   GRÁFICO
-================================================== */
-
-function desenharGrafico(entradas,despesas){
-
-  const canvas=el("grafico");
-
-  const ctx=canvas.getContext("2d");
-
-  const largura=
-    canvas.clientWidth||600;
-
-  const altura=250;
-
-  canvas.width=largura;
-  canvas.height=altura;
-
-  ctx.clearRect(
-    0,
-    0,
-    largura,
-    altura
-  );
-
-  const maior=
-    Math.max(
-      entradas,
-      despesas,
-      1
-    );
-
-  const base=205;
-
-  const escala=150/maior;
-
-  const larguraBarra=
-    Math.min(
-      110,
-      largura/4
-    );
-
-  const alturaEntrada=
-    entradas*escala;
-
-  const alturaDespesa=
-    despesas*escala;
-
-  ctx.fillStyle="#16a34a";
-
-  ctx.fillRect(
-
-    largura/2-
-    larguraBarra-
-    10,
-
-    base-alturaEntrada,
-
-    larguraBarra,
-
-    alturaEntrada
-
-  );
-
-  ctx.fillStyle="#dc2626";
-
-  ctx.fillRect(
-
-    largura/2+10,
-
-    base-alturaDespesa,
-
-    larguraBarra,
-
-    alturaDespesa
-
-  );
-
-  ctx.fillStyle="#111827";
-
-  ctx.font="13px Arial";
-
-  ctx.textAlign="center";
-
-  ctx.fillText(
-    "Entradas",
-    largura/2-larguraBarra/2-10,
-    235
-  );
-
-  ctx.fillText(
-    "Despesas",
-    largura/2+larguraBarra/2+10,
-    235
-  );
-
-  ctx.font="bold 12px Arial";
-
-  ctx.fillText(
-    dinheiro(entradas),
-    largura/2-larguraBarra/2-10,
-    Math.max(
-      15,
-      base-alturaEntrada-8
-    )
-  );
-
-  ctx.fillText(
-    dinheiro(despesas),
-    largura/2+larguraBarra/2+10,
-    Math.max(
-      15,
-      base-alturaDespesa-8
-    )
-  );
-
-}
-
-
-/* ==================================================
-   RENDER GERAL
-================================================== */
-
-function renderTudo(){
-
-  /*
-    Garante que as recorrências existem.
-  */
-
-  gerarRecorrencias();
-
-  renderDashboard();
-  renderPessoal();
-  renderCartao();
-  renderUber();
-  renderMetas();
-  renderRelatorios();
-
-  el("fechamento").value=
-    dados.config.fechamento;
-
-  el("vencimento").value=
-    dados.config.vencimento;
-}
-
-
-/* ==================================================
-   INICIALIZAÇÃO
-================================================== */
-
-const dataInicial=hoje();
-
-el("pData").value=dataInicial;
-el("cData").value=dataInicial;
-el("uData").value=dataInicial;
-
-el("filtroMes").value=
-  dataInicial.substring(0,7);
-
-el("fechamento").value=
-  dados.config.fechamento;
-
-el("vencimento").value=
-  dados.config.vencimento;
-
-salvar();
-
-renderTudo();
-
-</script>
-
-</body>
-</html>
+'<div class="alert ok">Nenhuma conta
