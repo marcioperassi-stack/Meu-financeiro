@@ -216,8 +216,45 @@ Reserva 10%
 <option value="mensal">Mensal</option>
 </select>
 
-<button onclick="add()">
-  <section id="cartao" class="page">
+<button onclick="add()">Adicionar</button>
+
+</div>
+</div>
+
+<div class="card">
+<h3>📋 Lançamentos</h3>
+<div class="table">
+
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Tipo</th>
+<th>Categoria</th>
+<th>Valor</th>
+<th>Carteira</th>
+<th>Descrição</th>
+<th>Status</th>
+<th>Fixa</th>
+<th>Repetição</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="tl"></tbody>
+
+</table>
+</div>
+</div>
+
+<div class="card">
+<button class="warning" onclick="gerarRecorrencias()">
+🔄 Gerar próximas recorrências
+</button>
+</div>
+
+</section>
+<section id="cartao" class="page">
 <div class="card">
 <h3>💳 Configuração da fatura</h3>
 <div class="form">
@@ -726,7 +763,8 @@ lucro:ep+gu-dp-cu,
 reserva:Math.max(0,lucroUber*.1)
 };
 
-}function barras(){
+}
+  function barras(){
 
 let vals=[];
 
@@ -796,4 +834,652 @@ ${a.d} · ${m(a.v)} · ${texto}
 
 :
 
-'<div class="alert ok">Nenhuma conta
+'<div class="alert ok">Nenhuma conta pendente próxima.</div>';
+
+}
+
+
+function faturaAtual(){
+
+let hojeD=parse(hoje()),
+fech=x.config.fechamento,
+venc=x.config.vencimento,
+ano=hojeD.getFullYear(),
+mes=hojeD.getMonth();
+
+let dataFech=new Date(
+ano,
+mes,
+fech,
+12
+);
+
+if(hojeD<=dataFech)
+dataFech.setMonth(dataFech.getMonth()-1);
+
+let proxVenc=new Date(
+dataFech.getFullYear(),
+dataFech.getMonth()+1,
+venc,
+12
+);
+
+let total=x.c
+.filter(a=>{
+let d=parse(a.d);
+return d>dataFech&&d<=proxVenc;
+})
+.reduce((s,a)=>s+a.valor,0);
+
+$('faturaAtual').textContent=m(total);
+
+$('faturaInfo').textContent=
+`Fechamento: dia ${fech} · Vencimento: dia ${venc}`;
+
+}
+
+
+function render(){
+
+let per=$('periodoDash')?.value||'mes',
+base=$('dataDash')?.value||hoje();
+
+let t=totais(per,base);
+
+let lp=x.l.filter(a=>
+dentro(a.d,per,base)&&
+a.t==='Entrada'
+);
+
+let ua=x.a.filter(a=>
+dentro(a.d,per,base)
+);
+
+let pix=
+lp.filter(a=>
+(a.carteira||'PIX')==='PIX'
+)
+.reduce((s,a)=>s+a.v,0)
+
++
+
+ua.filter(a=>
+(a.carteira||'PIX')==='PIX'
+)
+.reduce((s,a)=>s+a.g,0);
+
+let din=
+lp.filter(a=>
+(a.carteira||'PIX')==='Dinheiro'
+)
+.reduce((s,a)=>s+a.v,0)
+
++
+
+ua.filter(a=>
+(a.carteira||'PIX')==='Dinheiro'
+)
+.reduce((s,a)=>s+a.g,0);
+
+$('e').textContent=m(t.entradas);
+$('pixSaldo').textContent=m(pix);
+$('dinSaldo').textContent=m(din);
+$('d').textContent=m(t.despesas);
+$('s').textContent=m(t.lucro);
+$('r').textContent=m(t.reserva);
+
+barras();
+alertas();
+faturaAtual();
+
+$('fechamento').value=x.config.fechamento;
+$('vencimento').value=x.config.vencimento;
+
+
+$('tl').innerHTML=x.l.map((a,i)=>`
+
+<tr>
+
+<td>
+<input type="date"
+value="${a.d}"
+onchange="ed('l',${i},this.value)">
+</td>
+
+<td>${a.t}</td>
+
+<td>${a.c}</td>
+
+<td>${m(a.v)}</td>
+
+<td>${a.t==='Entrada'?(a.carteira||'PIX'):'—'}</td>
+
+<td>${a.z||''}</td>
+
+<td>
+<button
+class="${a.p==='Pago'?'success':'warning'}"
+onclick="baixa(${i})">
+${a.p||'Pendente'}
+</button>
+</td>
+
+<td>${a.fixa==='sim'?'Sim':'Não'}</td>
+
+<td>${a.rep==='sim'?a.periodo:'Não'}</td>
+
+<td>
+<button
+class="danger"
+onclick="dl('l',${i})">
+×
+</button>
+</td>
+
+</tr>
+
+`).join('');
+
+
+$('tc').innerHTML=x.c.map((a,i)=>`
+
+<tr>
+
+<td>${a.d}</td>
+<td>${a.desc}</td>
+<td>${m(a.total)}</td>
+<td>${a.parcela}/${a.parcelas}</td>
+<td>${m(a.valor)}</td>
+<td>Dia ${a.venc}</td>
+
+<td>
+<button
+class="${a.p==='Pago'?'success':'warning'}"
+onclick="baixaCartao(${i})">
+${a.p}
+</button>
+</td>
+
+<td>
+<button
+class="danger"
+onclick="dl('c',${i})">
+×
+</button>
+</td>
+
+</tr>
+
+`).join('');
+
+
+let ug=x.a.reduce(
+(s,a)=>s+a.g,0
+);
+
+let uc=x.a.reduce(
+(s,a)=>s+a.c+a.f,0
+);
+
+let ul=ug-uc;
+
+let uk=x.a.reduce(
+(s,a)=>s+a.k,0
+);
+
+let uh=x.a.reduce(
+(s,a)=>s+a.h,0
+);
+
+$('ug').textContent=m(ug);
+$('uc').textContent=m(uc);
+$('ul').textContent=m(ul);
+$('ur').textContent=m(Math.max(0,ul*.1));
+
+$('uind').innerHTML=`
+
+<b>Ganho por hora:</b>
+${m(uh?ug/uh:0)}
+
+&nbsp;
+
+<b>Ganho por KM:</b>
+${m(uk?ug/uk:0)}
+
+&nbsp;
+
+<b>KM:</b>
+${uk.toFixed(1)}
+
+&nbsp;
+
+<b>Horas:</b>
+${uh.toFixed(1)}
+
+`;
+
+
+$('ta').innerHTML=x.a.map((a,i)=>{
+
+let l=a.g-a.c-a.f;
+
+return `
+
+<tr>
+
+<td>
+<input type="date"
+value="${a.d}"
+onchange="ed('a',${i},this.value)">
+</td>
+
+<td>${m(a.g)}</td>
+
+<td>${a.carteira||'PIX'}</td>
+
+<td>${m(a.c)}</td>
+
+<td>${m(a.f)}</td>
+
+<td>${m(l)}</td>
+
+<td>${a.k}</td>
+
+<td>${a.h}</td>
+
+<td>${m(a.h?a.g/a.h:0)}</td>
+
+<td>${m(a.k?a.g/a.k:0)}</td>
+
+<td>${m(Math.max(0,l*.1))}</td>
+
+<td>
+<button
+class="danger"
+onclick="dl('a',${i})">
+×
+</button>
+</td>
+
+</tr>
+
+`;
+
+}).join('');
+
+
+$('metasLista').innerHTML=x.m.map((a,i)=>{
+
+let p=Math.min(
+100,
+a.v?a.j/a.v*100:0
+);
+
+return `
+
+<div class="card">
+
+<h3>🎯 ${a.n}</h3>
+
+<b>${m(a.j)} de ${m(a.v)}</b>
+
+<div class="progress">
+<div style="width:${p}%"></div>
+</div>
+
+<p>
+${p.toFixed(1)}%
+· Falta ${m(Math.max(0,a.v-a.j))}
+</p>
+
+<button
+class="danger"
+onclick="x.m.splice(${i},1);save()">
+Excluir meta
+</button>
+
+</div>
+
+`;
+
+}).join('');
+
+
+montarFaturas();
+resumoPeriodos();
+
+}
+
+
+function montarFaturas(){
+
+let grupos={};
+
+x.c.forEach(a=>{
+
+let k=a.d.slice(0,7);
+
+(grupos[k]??=[]).push(a);
+
+});
+
+$('faturas').innerHTML=
+Object.keys(grupos)
+.sort()
+.map(k=>{
+
+let arr=grupos[k];
+
+let total=arr.reduce(
+(s,a)=>s+a.valor,0
+);
+
+let pend=arr
+.filter(a=>a.p!=='Pago')
+.reduce((s,a)=>s+a.valor,0);
+
+return `
+
+<div class="card">
+
+<b>Fatura ${k}</b>
+
+<br>
+
+Total: ${m(total)}
+· Pendente: ${m(pend)}
+
+<br>
+
+<span class="badge">
+Fechamento dia ${x.config.fechamento}
+</span>
+
+<span class="badge">
+Vencimento dia ${x.config.vencimento}
+</span>
+
+</div>
+
+`;
+
+}).join('')
+
+||
+
+'<p class="muted">
+Nenhuma compra cadastrada.
+</p>';
+
+}
+
+
+function addMeta(){
+
+let v=n('mv');
+
+if(!$('mn').value||v<=0)
+return alert(
+'Informe o nome e o valor da meta.'
+);
+
+x.m.push({
+n:$('mn').value,
+v,
+j:n('mj'),
+p:$('mp').value
+});
+
+save();
+
+$('mn').value='';
+$('mv').value='';
+$('mj').value='';
+$('mp').value='';
+
+}
+
+
+function relatorio(){
+
+let mes=$('rm').value||hoje().slice(0,7);
+
+let inicio=mes+'-01';
+
+let prox=new Date(
+parse(inicio)
+);
+
+prox.setMonth(
+prox.getMonth()+1
+);
+
+let fim=new Date(
+prox.getFullYear(),
+prox.getMonth(),
+0,
+12
+)
+.toISOString()
+.slice(0,10);
+
+
+let l=x.l.filter(
+a=>a.d>=inicio&&a.d<=fim
+);
+
+let u=x.a.filter(
+a=>a.d>=inicio&&a.d<=fim
+);
+
+
+let ep=l
+.filter(a=>a.t==='Entrada')
+.reduce((s,a)=>s+a.v,0);
+
+let dp=l
+.filter(a=>a.t==='Despesa')
+.reduce((s,a)=>s+a.v,0);
+
+let gu=u.reduce(
+(s,a)=>s+a.g,0
+);
+
+let cu=u.reduce(
+(s,a)=>s+a.c,0
+);
+
+let cf=u.reduce(
+(s,a)=>s+a.f,0
+);
+
+let receitas=ep+gu;
+
+let lucro=
+receitas-dp-cu-cf;
+
+
+let pix=
+l.filter(a=>
+a.t==='Entrada' &&
+(a.carteira||'PIX')==='PIX'
+)
+.reduce((s,a)=>s+a.v,0)
+
++
+
+u.filter(a=>
+(a.carteira||'PIX')==='PIX'
+)
+.reduce((s,a)=>s+a.g,0);
+
+
+let din=
+l.filter(a=>
+a.t==='Entrada' &&
+(a.carteira||'PIX')==='Dinheiro'
+)
+.reduce((s,a)=>s+a.v,0)
+
++
+
+u.filter(a=>
+(a.carteira||'PIX')==='Dinheiro'
+)
+.reduce((s,a)=>s+a.g,0);
+
+
+$('ri').value=inicio;
+$('rf').value=fim;
+
+
+$('relatorioBox').innerHTML=`
+
+<div class="grid">
+
+<div class="card">
+Receitas
+<div class="metric">
+${m(receitas)}
+</div>
+</div>
+
+<div class="card">
+Despesas pessoais
+<div class="metric">
+${m(dp)}
+</div>
+</div>
+
+<div class="card">
+Custos Uber/99
+<div class="metric">
+${m(cu+cf)}
+</div>
+</div>
+
+<div class="card">
+Lucro real
+<div class="metric">
+${m(lucro)}
+</div>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+💳 PIX
+<div class="metric">
+${m(pix)}
+</div>
+</div>
+
+<div class="card">
+💵 Dinheiro
+<div class="metric">
+${m(din)}
+</div>
+</div>
+
+</div>
+
+<p class="muted small">
+Período: ${inicio} até ${fim}.
+Somente lançamentos deste mês foram considerados,
+inclusive ocorrências recorrentes.
+</p>
+
+`;
+
+}
+
+
+function resumoPeriodos(){
+
+let h=[
+'dia',
+'semana',
+'mes'
+];
+
+$('resumoPeriodos').innerHTML=
+
+h.map(p=>{
+
+let t=totais(p,hoje());
+
+let nome=
+p==='dia'
+?'Hoje':
+p==='semana'
+?'Semana':
+'Mês';
+
+return `
+
+<div class="card">
+
+<b>${nome}</b>
+
+<br>
+
+Entradas:
+${m(t.entradas)}
+
+· Despesas:
+${m(t.despesas)}
+
+· Lucro:
+${m(t.lucro)}
+
+· Reserva:
+${m(t.reserva)}
+
+</div>
+
+`;
+
+}).join('');
+
+}
+
+
+function limparDadosPessoais(){
+
+if(!confirm(
+'ATENÇÃO: isso apagará SOMENTE os lançamentos pessoais. Uber/99, cartão, metas e configurações serão preservados. Continuar?'
+)){
+return;
+}
+
+x.l=[];
+
+localStorage.setItem(
+'MF',
+JSON.stringify(x)
+);
+
+render();
+
+alert(
+'Lançamentos pessoais apagados. Os demais dados foram preservados.'
+);
+
+}
+
+
+$('dt').value=hoje();
+$('ad').value=hoje();
+$('cdt').value=hoje();
+$('dataDash').value=hoje();
+$('rm').value=hoje().slice(0,7);
+
+render();
+relatorio();
+
+</script>
+
+</body>
+</html>
