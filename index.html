@@ -27,7 +27,7 @@ button{cursor:pointer}
 .kpi{background:white;padding:14px;border-radius:10px;box-shadow:0 2px 7px #0001}
 .kpi small{display:block;color:#6b7280}.kpi strong{font-size:19px}
 .table{overflow:auto}
-table{width:100%;border-collapse:collapse;min-width:700px}
+table{width:100%;border-collapse:collapse;min-width:850px}
 th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left;font-size:13px}
 th{background:#f9fafb}
 .ok{color:#15803d;font-weight:bold}.pending{color:#b45309;font-weight:bold}
@@ -35,6 +35,8 @@ th{background:#f9fafb}
 .bar{height:16px;background:#e5e7eb;border-radius:8px;overflow:hidden;margin:6px 0 12px}
 .bar i{display:block;height:100%;background:#2563eb}
 .hidden{display:none}
+.total-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;font-weight:bold}
+.recebimento{background:#f9fafb;padding:10px;border-radius:10px}
 </style>
 </head>
 
@@ -125,9 +127,23 @@ Lucro Uber/99
 </select>
 </div>
 
-<div>
-<label>Valor</label>
-<input id="pValor" type="number" step="0.01">
+<div id="pValorArea">
+<label>Valor da despesa</label>
+<input id="pValor" type="number" step="0.01" placeholder="Valor">
+</div>
+
+<div id="pDinheiroArea" class="recebimento">
+<label>💵 Recebido em dinheiro</label>
+<input id="pDinheiro" type="number" step="0.01" value="0">
+</div>
+
+<div id="pPixArea" class="recebimento">
+<label>📱 Recebido em PIX</label>
+<input id="pPix" type="number" step="0.01" value="0">
+</div>
+
+<div id="pTotalArea" class="total-box">
+Total recebido: <span id="pTotal">R$ 0,00</span>
 </div>
 
 <div>
@@ -143,8 +159,8 @@ Lucro Uber/99
 </select>
 </div>
 
-<div>
-<label>Forma</label>
+<div id="pWalletArea">
+<label>Forma da despesa</label>
 <select id="pWallet">
 <option>PIX</option>
 <option>Dinheiro</option>
@@ -174,7 +190,8 @@ Lucro Uber/99
 </div>
 
 <p class="muted">
-Escolha diária, semanal ou mensal e informe a quantidade de parcelas.
+Para uma entrada, informe quanto recebeu em dinheiro e quanto recebeu em PIX.
+O total será calculado automaticamente.
 </p>
 
 </div>
@@ -194,8 +211,9 @@ Escolha diária, semanal ou mensal e informe a quantidade de parcelas.
 <th>Categoria</th>
 <th>Descrição</th>
 <th>Valor</th>
+<th>Dinheiro</th>
+<th>PIX</th>
 <th>Status</th>
-<th>Forma</th>
 <th>Ação</th>
 </tr>
 </thead>
@@ -305,9 +323,18 @@ Escolha diária, semanal ou mensal e informe a quantidade de parcelas.
 <input id="uData" type="date">
 </div>
 
-<div>
-<label>Ganhos</label>
-<input id="uGanhos" type="number" step="0.01">
+<div class="recebimento">
+<label>💵 Ganhos em dinheiro</label>
+<input id="uDinheiro" type="number" step="0.01" value="0">
+</div>
+
+<div class="recebimento">
+<label>📱 Ganhos em PIX</label>
+<input id="uPix" type="number" step="0.01" value="0">
+</div>
+
+<div class="total-box">
+Total dos ganhos: <span id="uTotal">R$ 0,00</span>
 </div>
 
 <div>
@@ -330,14 +357,6 @@ Escolha diária, semanal ou mensal e informe a quantidade de parcelas.
 <input id="uHoras" type="number" step="0.1" value="0">
 </div>
 
-<div>
-<label>Recebimento</label>
-<select id="uWallet">
-<option>PIX</option>
-<option>Dinheiro</option>
-</select>
-</div>
-
 </div>
 
 <div class="actions">
@@ -345,6 +364,7 @@ Escolha diária, semanal ou mensal e informe a quantidade de parcelas.
 </div>
 
 <p class="muted">
+Os ganhos em dinheiro + PIX formam o total recebido.
 Reserva = 10% do lucro depois de descontar despesas + combustível.
 </p>
 
@@ -365,6 +385,8 @@ Reserva = 10% do lucro depois de descontar despesas + combustível.
 <div class="kpi"><small>Lucro/KM</small><strong id="utKmLucro">R$ 0,00</strong></div>
 <div class="kpi"><small>Lucro/hora</small><strong id="utHoraLucro">R$ 0,00</strong></div>
 <div class="kpi"><small>Reserva</small><strong id="utReserva">R$ 0,00</strong></div>
+<div class="kpi"><small>Dinheiro</small><strong id="utDinheiro">R$ 0,00</strong></div>
+<div class="kpi"><small>PIX</small><strong id="utPix">R$ 0,00</strong></div>
 
 </div>
 </div>
@@ -378,7 +400,9 @@ Reserva = 10% do lucro depois de descontar despesas + combustível.
 <thead>
 <tr>
 <th>Data</th>
-<th>Ganhos</th>
+<th>Total</th>
+<th>Dinheiro</th>
+<th>PIX</th>
 <th>Despesas</th>
 <th>Comb.</th>
 <th>KM</th>
@@ -468,6 +492,12 @@ const KEY="MEU_FINANCEIRO_NOVO";
 
 let db=JSON.parse(localStorage.getItem(KEY)||'{"pessoal":[],"cartao":[],"uber":[],"metas":[],"cfg":{"fech":5,"venc":10}}');
 
+db.pessoal=db.pessoal||[];
+db.cartao=db.cartao||[];
+db.uber=db.uber||[];
+db.metas=db.metas||[];
+db.cfg=db.cfg||{fech:5,venc:10};
+
 const $=id=>document.getElementById(id);
 
 const dinheiro=v=>(Number(v)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
@@ -506,6 +536,46 @@ d.setMonth(d.getMonth()+n);
 return d.toISOString().slice(0,10);
 }
 
+function atualizarEntradaPessoal(){
+
+let tipo=$("pTipo").value;
+
+let dinheiroVal=Number($("pDinheiro").value)||0;
+let pixVal=Number($("pPix").value)||0;
+
+let total=dinheiroVal+pixVal;
+
+if(tipo==="entrada"){
+
+$("pValorArea").classList.add("hidden");
+$("pDinheiroArea").classList.remove("hidden");
+$("pPixArea").classList.remove("hidden");
+$("pTotalArea").classList.remove("hidden");
+$("pWalletArea").classList.add("hidden");
+
+$("pTotal").textContent=dinheiro(total);
+
+}else{
+
+$("pValorArea").classList.remove("hidden");
+$("pDinheiroArea").classList.add("hidden");
+$("pPixArea").classList.add("hidden");
+$("pTotalArea").classList.add("hidden");
+$("pWalletArea").classList.remove("hidden");
+
+}
+
+}
+
+function atualizarTotalUber(){
+
+let dinheiroVal=Number($("uDinheiro").value)||0;
+let pixVal=Number($("uPix").value)||0;
+
+$("uTotal").textContent=dinheiro(dinheiroVal+pixVal);
+
+}
+
 function inicializar(){
 
 $("pData").value=hoje();
@@ -519,6 +589,9 @@ $("rMes").value=mesAtual();
 
 $("fech").value=db.cfg.fech;
 $("venc").value=db.cfg.venc;
+
+atualizarEntradaPessoal();
+atualizarTotalUber();
 
 }
 
@@ -538,6 +611,14 @@ render();
 
 });
 
+$("pTipo").addEventListener("change",atualizarEntradaPessoal);
+
+$("pDinheiro").addEventListener("input",atualizarEntradaPessoal);
+$("pPix").addEventListener("input",atualizarEntradaPessoal);
+
+$("uDinheiro").addEventListener("input",atualizarTotalUber);
+$("uPix").addEventListener("input",atualizarTotalUber);
+
 $("pRepeat").addEventListener("change",function(){
 
 $("qtdArea").classList.toggle("hidden",this.value==="nao");
@@ -549,17 +630,39 @@ $("addP").addEventListener("click",function(){
 let data=$("pData").value||hoje();
 let tipo=$("pTipo").value;
 let cat=$("pCat").value;
-let valor=Number($("pValor").value);
-let desc=$("pDesc").value||cat;
-let status=$("pStatus").value;
-let wallet=$("pWallet").value;
-let repeticao=$("pRepeat").value;
-let quantidade=Number($("pQtd").value)||1;
+let valor;
+let dinheiroVal=0;
+let pixVal=0;
+let wallet="";
+
+if(tipo==="entrada"){
+
+dinheiroVal=Number($("pDinheiro").value)||0;
+pixVal=Number($("pPix").value)||0;
+
+valor=dinheiroVal+pixVal;
 
 if(valor<=0){
-alert("Informe o valor.");
+alert("Informe o valor recebido em dinheiro e/ou PIX.");
 return;
 }
+
+}else{
+
+valor=Number($("pValor").value)||0;
+wallet=$("pWallet").value;
+
+if(valor<=0){
+alert("Informe o valor da despesa.");
+return;
+}
+
+}
+
+let desc=$("pDesc").value||cat;
+let status=$("pStatus").value;
+let repeticao=$("pRepeat").value;
+let quantidade=Number($("pQtd").value)||1;
 
 if(repeticao==="nao") quantidade=1;
 
@@ -581,6 +684,8 @@ data:dataParcela,
 tipo:tipo,
 cat:cat,
 valor:valor,
+dinheiro:dinheiroVal,
+pix:pixVal,
 desc:desc,
 status:status,
 wallet:wallet,
@@ -593,7 +698,11 @@ total:quantidade
 salvar();
 
 $("pValor").value="";
+$("pDinheiro").value="0";
+$("pPix").value="0";
 $("pDesc").value="";
+
+atualizarEntradaPessoal();
 
 render();
 
@@ -635,7 +744,19 @@ let lista=db.pessoal
 .filter(x=>x.data.slice(0,7)===mes)
 .sort((a,b)=>b.data.localeCompare(a.data));
 
-$("listaP").innerHTML=lista.map(x=>`
+$("listaP").innerHTML=lista.map(x=>{
+
+let din=Number(x.dinheiro)||0;
+let pix=Number(x.pix)||0;
+
+if(x.tipo==="entrada" && din===0 && pix===0){
+
+if(x.wallet==="PIX")pix=Number(x.valor)||0;
+else if(x.wallet==="Dinheiro")din=Number(x.valor)||0;
+
+}
+
+return`
 
 <tr>
 <td>${x.data}</td>
@@ -643,12 +764,15 @@ $("listaP").innerHTML=lista.map(x=>`
 <td>${x.cat}</td>
 <td>${x.desc}${x.total>1?" ("+x.parcela+"/"+x.total+")":""}</td>
 <td>${dinheiro(x.valor)}</td>
+<td>${x.tipo==="entrada"?dinheiro(din):"-"}</td>
+<td>${x.tipo==="entrada"?dinheiro(pix):"-"}</td>
 <td class="${x.status==="pago"?"ok":"pending"}">${x.status}</td>
-<td>${x.wallet}</td>
 <td><button class="btn gray" onclick="baixarP('${x.id}')">${x.status==="pago"?"Pendente":"Pagar"}</button></td>
 </tr>
 
-`).join("")||'<tr><td colspan="8">Nenhum lançamento neste mês.</td></tr>';
+`;
+
+}).join("")||'<tr><td colspan="9">Nenhum lançamento neste mês.</td></tr>';
 
 }
 
@@ -747,10 +871,13 @@ $("listaC").innerHTML=lista.map(x=>`
 
 $("addU").addEventListener("click",function(){
 
-let ganhos=Number($("uGanhos").value)||0;
+let dinheiroVal=Number($("uDinheiro").value)||0;
+let pixVal=Number($("uPix").value)||0;
+
+let ganhos=dinheiroVal+pixVal;
 
 if(ganhos<=0){
-alert("Informe os ganhos.");
+alert("Informe quanto recebeu em dinheiro e/ou PIX.");
 return;
 }
 
@@ -758,20 +885,24 @@ db.uber.push({
 id:id(),
 data:$("uData").value||hoje(),
 ganhos:ganhos,
+dinheiro:dinheiroVal,
+pix:pixVal,
 desp:Number($("uDesp").value)||0,
 comb:Number($("uComb").value)||0,
 km:Number($("uKm").value)||0,
-horas:Number($("uHoras").value)||0,
-wallet:$("uWallet").value
+horas:Number($("uHoras").value)||0
 });
 
 salvar();
 
-$("uGanhos").value="";
+$("uDinheiro").value="0";
+$("uPix").value="0";
 $("uDesp").value="0";
 $("uComb").value="0";
 $("uKm").value="0";
 $("uHoras").value="0";
+
+atualizarTotalUber();
 
 render();
 
@@ -797,11 +928,25 @@ let lista=db.uber
 .filter(x=>x.data.slice(0,7)===mes)
 .sort((a,b)=>b.data.localeCompare(a.data));
 
-$("listaU").innerHTML=lista.map(x=>`
+$("listaU").innerHTML=lista.map(x=>{
+
+let din=Number(x.dinheiro)||0;
+let pix=Number(x.pix)||0;
+
+if(din===0 && pix===0){
+
+if(x.wallet==="PIX")pix=Number(x.ganhos)||0;
+else if(x.wallet==="Dinheiro")din=Number(x.ganhos)||0;
+
+}
+
+return`
 
 <tr>
 <td>${x.data}</td>
 <td>${dinheiro(x.ganhos)}</td>
+<td>${dinheiro(din)}</td>
+<td>${dinheiro(pix)}</td>
 <td>${dinheiro(x.desp)}</td>
 <td>${dinheiro(x.comb)}</td>
 <td>${x.km}</td>
@@ -809,13 +954,35 @@ $("listaU").innerHTML=lista.map(x=>`
 <td><button class="btn red" onclick="excluirU('${x.id}')">Excluir</button></td>
 </tr>
 
-`).join("")||'<tr><td colspan="7">Nenhum lançamento.</td></tr>';
+`;
+
+}).join("")||'<tr><td colspan="9">Nenhum lançamento.</td></tr>';
 
 let ganhos=lista.reduce((a,x)=>a+x.ganhos,0);
 let custos=lista.reduce((a,x)=>a+x.desp+x.comb,0);
 let lucro=ganhos-custos;
 let km=lista.reduce((a,x)=>a+x.km,0);
 let horas=lista.reduce((a,x)=>a+x.horas,0);
+
+let dinheiroTotal=lista.reduce((a,x)=>{
+
+let v=Number(x.dinheiro)||0;
+
+if(v===0 && (!x.pix && !x.dinheiro) && x.wallet==="Dinheiro")v=Number(x.ganhos)||0;
+
+return a+v;
+
+},0);
+
+let pixTotal=lista.reduce((a,x)=>{
+
+let v=Number(x.pix)||0;
+
+if(v===0 && (!x.pix && !x.dinheiro) && x.wallet==="PIX")v=Number(x.ganhos)||0;
+
+return a+v;
+
+},0);
 
 $("utGanhos").textContent=dinheiro(ganhos);
 $("utCustos").textContent=dinheiro(custos);
@@ -825,6 +992,8 @@ $("utHoras").textContent=horas.toFixed(1);
 $("utKmLucro").textContent=dinheiro(km?lucro/km:0);
 $("utHoraLucro").textContent=dinheiro(horas?lucro/horas:0);
 $("utReserva").textContent=dinheiro(Math.max(0,lucro*0.10));
+$("utDinheiro").textContent=dinheiro(dinheiroTotal);
+$("utPix").textContent=dinheiro(pixTotal);
 
 }
 
