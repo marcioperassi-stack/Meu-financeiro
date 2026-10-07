@@ -1,5 +1,5 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><title>Meu Financeiro Pro</title><style>
-*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111827}header{background:#111827;color:#fff;padding:18px;position:sticky;top:0;z-index:10}header h2{margin:0 0 4px}.nav{display:flex;gap:6px;overflow:auto;padding:10px;background:#fff;position:sticky;top:75px;z-index:9}.nav button{border:0;padding:10px 13px;border-radius:10px;background:#e5e7eb;white-space:nowrap}.nav button.on{background:#111827;color:#fff}main{max-width:1100px;margin:auto;padding:12px}.tab{display:none}.tab.on{display:block}.card{background:#fff;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #0001}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}label{font-size:12px;font-weight:bold;display:block;margin-bottom:4px}input,select,button{font:inherit}input,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:9px;background:#fff}button{cursor:pointer}.btn{border:0;border-radius:9px;padding:10px 14px;background:#111827;color:#fff}.btn2{border:0;border-radius:9px;padding:9px 12px;background:#e5e7eb}.danger{background:#b91c1c;color:#fff}.ok{background:#15803d;color:#fff}.muted{color:#6b7280;font-size:13px}.big{font-size:24px;font-weight:bold}.tablewrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;font-size:13px}.tbl th,.tbl td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;white-space:nowrap}.pill{padding:4px 8px;border-radius:20px;background:#e5e7eb;font-size:11px}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:30;padding:20px;overflow:auto}.modal.on{display:block}.modalbox{max-width:600px;margin:30px auto;background:#fff;border-radius:15px;padding:18px}.close{float:right;border:0;background:#eee;border-radius:8px;padding:7px}.sep{height:1px;background:#e5e7eb;margin:14px 0}
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meu Financeiro Pro</title><style>
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#f3f4f6;color:#111827}header{background:#111827;color:#fff;padding:18px}.nav{display:flex;gap:6px;overflow:auto;padding:10px;background:#fff;position:sticky;top:0;z-index:5}.nav button{border:0;padding:10px;border-radius:9px;white-space:nowrap}.nav .on{background:#111827;color:#fff}main{max-width:1100px;margin:auto;padding:12px}.tab{display:none}.tab.on{display:block}.card{background:#fff;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 7px #0001}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}label{font-size:12px;font-weight:bold;display:block;margin-bottom:4px}input,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;background:#fff}.btn,.btn2{border:0;border-radius:8px;padding:9px 12px}.btn{background:#111827;color:#fff}.btn2{background:#e5e7eb}.danger{background:#b91c1c;color:#fff}.big{font-size:23px;font-weight:bold}.muted{color:#6b7280;font-size:13px}.tablewrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;font-size:12px}.tbl th,.tbl td{padding:8px;border-bottom:1px solid #e5e7eb;white-space:nowrap;text-align:left}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:20;padding:15px;overflow:auto}.modal.on{display:block}.modalbox{max-width:600px;margin:30px auto;background:#fff;border-radius:14px;padding:18px}.close{float:right;border:0;padding:7px}
 </style></head><body>
 <header><h2>💰 Meu Financeiro Pro</h2><small>Controle pessoal e Uber/99</small></header>
 <div class="nav">
@@ -9,228 +9,128 @@
 <button onclick="tab('cart',this)">💳 Cartão</button>
 <button onclick="tab('met',this)">🎯 Metas</button>
 <button onclick="tab('rel',this)">📈 Relatórios</button>
-</div>
-<main>
-<section id="dash" class="tab on">
-<div class="grid">
+</div><main>
+
+<section id="dash" class="tab on"><div class="grid">
 <div class="card"><div class="muted">Entradas</div><div id="dE" class="big">R$ 0,00</div></div>
 <div class="card"><div class="muted">Despesas</div><div id="dD" class="big">R$ 0,00</div></div>
 <div class="card"><div class="muted">Combustível</div><div id="dF" class="big">R$ 0,00</div></div>
 <div class="card"><div class="muted">Lucro real</div><div id="dL" class="big">R$ 0,00</div></div>
-</div>
-<div class="card"><h3>📅 Resumo do mês</h3><div id="dashMes"></div></div>
-</section>
+</div><div class="card"><h3>📅 Resumo do mês</h3><div id="dashMes"></div></div></section>
 
 <section id="pes" class="tab">
-<div class="card"><h3>👤 Lançamento pessoal</h3>
-<div class="grid">
+<div class="card"><h3>👤 Lançamento pessoal</h3><div class="grid">
 <div><label>Data</label><input id="dt" type="date"></div>
 <div><label>Tipo</label><select id="tp"><option>Entrada</option><option>Despesa</option></select></div>
-<div><label>Categoria</label><select id="ca"><option>Salário</option><option>Extra</option><option>Alimentação</option><option>Casa</option><option>Saúde</option><option>Transporte</option><option>Contas</option><option>Outros</option></select></div>
-<div><label>PIX</label><input id="vPix" type="number" step=".01" placeholder="0,00"></div>
-<div><label>Dinheiro</label><input id="vDin" type="number" step=".01" placeholder="0,00"></div>
+<div><label>Categoria</label><select id="ca"><option>Salário</option><option>Extra</option><option>Empréstimo</option><option>Alimentação</option><option>Casa</option><option>Saúde</option><option>Transporte</option><option>Contas</option><option>Outros</option></select></div>
+<div><label>PIX</label><input id="vPix" type="number" step=".01"></div>
+<div><label>Dinheiro</label><input id="vDin" type="number" step=".01"></div>
 <div><label>Total</label><input id="va" readonly></div>
-<div><label>Descrição</label><input id="de" placeholder="Descrição"></div>
+<div><label>Descrição</label><input id="de"></div>
 <div><label>Pagamento</label><select id="pg"><option>Pendente</option><option>Pago</option></select></div>
 <div><label>Despesa</label><select id="fixa"><option>Despesa normal</option><option>Despesa fixa</option></select></div>
 <div><label>Repetir</label><select id="rep"><option value="nao">Não repetir</option><option value="sim">Repetir despesa</option></select></div>
 <div><label>Periodicidade</label><select id="periodo"><option value="diaria">Diária</option><option value="semanal">Semanal</option><option value="mensal">Mensal</option></select></div>
 <div><label>Quantidade 1 a 60</label><input id="qtdrep" type="number" min="1" max="60" value="1"></div>
 </div><br><button class="btn" onclick="add()">Adicionar lançamento</button></div>
-<div class="card"><h3>📋 Lançamentos pessoais</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>Data</th><th>Tipo</th><th>Total</th><th>PIX</th><th>Dinheiro</th><th>Descrição</th><th>Status</th><th>Ação</th></tr></thead><tbody id="lt"></tbody></table></div></div>
+<div class="card"><h3>📋 Lançamentos pessoais</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Total</th><th>PIX</th><th>Dinheiro</th><th>Status</th><th>Ação</th></tr></thead><tbody id="lt"></tbody></table></div></div>
 </section>
 
 <section id="uber" class="tab">
-<div class="card"><h3>🚗 Uber/99</h3>
-<div class="grid">
+<div class="card"><h3>🚗 Uber/99</h3><div class="grid">
 <div><label>Data</label><input id="ad" type="date"></div>
 <div><label>Recebido PIX</label><input id="agpix" type="number" step=".01"></div>
 <div><label>Recebido dinheiro</label><input id="agdin" type="number" step=".01"></div>
-<div><label>Despesas PIX</label><input id="acpix" type="number" step=".01"></div>
-<div><label>Despesas dinheiro</label><input id="acdin" type="number" step=".01"></div>
+<div><label>Manutenção</label><select id="amtip"><option>Troca de óleo</option><option>Arrefecimento</option><option>Serviços mecânicos</option></select></div>
+<div><label>Manutenção PIX</label><input id="acpix" type="number" step=".01"></div>
+<div><label>Manutenção dinheiro</label><input id="acdin" type="number" step=".01"></div>
 <div><label>Combustível PIX</label><input id="afpix" type="number" step=".01"></div>
 <div><label>Combustível dinheiro</label><input id="afdin" type="number" step=".01"></div>
 <div><label>KM</label><input id="ak" type="number" step=".1"></div>
 <div><label>Horas</label><input id="ah" type="number" step=".1"></div>
 </div><br><button class="btn" onclick="adda()">Adicionar Uber/99</button></div>
+
 <div class="grid">
 <div class="card"><div class="muted">Total recebido</div><div id="uG" class="big">R$ 0,00</div></div>
-<div class="card"><div class="muted">Despesas + combustível</div><div id="uC" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Manutenção + combustível</div><div id="uC" class="big">R$ 0,00</div></div>
 <div class="card"><div class="muted">Lucro Uber/99</div><div id="uL" class="big">R$ 0,00</div></div>
 <div class="card"><div class="muted">Total KM</div><div id="uK" class="big">0</div></div>
 <div class="card"><div class="muted">Total horas</div><div id="uH" class="big">0</div></div>
 </div>
-<div class="card"><h3>📋 Lançamentos Uber/99</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>Data</th><th>PIX</th><th>Dinheiro</th><th>Despesas</th><th>Combustível</th><th>KM</th><th>Horas</th><th>Ação</th></tr></thead><tbody id="at"></tbody></table></div></div>
+<div class="card"><h3>📋 Lançamentos Uber/99</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>Data</th><th>PIX</th><th>Dinheiro</th><th>Manutenção</th><th>Tipo</th><th>Combustível</th><th>KM</th><th>Horas</th><th>Ação</th></tr></thead><tbody id="at"></tbody></table></div></div>
 </section>
 
-<section id="cart" class="tab">
-<div class="card"><h3>💳 Cartão de crédito</h3>
-<div class="grid">
-<div><label>Fechamento</label><input id="cf" type="number" min="1" max="31" value="5"></div>
-<div><label>Vencimento</label><input id="cv" type="number" min="1" max="31" value="10"></div>
-<div><label>Data</label><input id="cd" type="date"></div>
-<div><label>Valor</label><input id="ccv" type="number" step=".01"></div>
-<div><label>Descrição</label><input id="ccz"></div>
-</div><br><button class="btn" onclick="addc()">Adicionar compra</button></div>
-<div class="card"><h3>Fatura</h3><div id="cardbox"></div></div>
-</section>
+<section id="cart" class="tab"><div class="card"><h3>💳 Cartão de crédito</h3><div class="grid">
+<div><label>Fechamento</label><input id="cf" type="number" value="5"></div><div><label>Vencimento</label><input id="cv" type="number" value="10"></div>
+<div><label>Data</label><input id="cd" type="date"></div><div><label>Valor</label><input id="ccv" type="number" step=".01"></div><div><label>Descrição</label><input id="ccz"></div>
+</div><br><button class="btn" onclick="addc()">Adicionar compra</button></div><div class="card"><h3>Fatura</h3><div id="cardbox"></div></div></section>
 
-<section id="met" class="tab">
-<div class="card"><h3>🎯 Meta de economia</h3>
-<div class="grid"><div><label>Nome</label><input id="mn"></div><div><label>Valor da meta</label><input id="mv" type="number" step=".01"></div><div><label>Guardado</label><input id="mg" type="number" step=".01"></div></div><br><button class="btn" onclick="addm()">Adicionar meta</button></div>
-<div id="metas"></div>
-</section>
+<section id="met" class="tab"><div class="card"><h3>🎯 Meta de economia</h3><div class="grid"><div><label>Nome</label><input id="mn"></div><div><label>Valor</label><input id="mv" type="number" step=".01"></div><div><label>Guardado</label><input id="mg" type="number" step=".01"></div></div><br><button class="btn" onclick="addm()">Adicionar meta</button></div><div id="metas"></div></section>
 
-<section id="rel" class="tab">
-<div class="card"><h3>📈 Relatório mensal</h3>
-<div class="grid"><div><label>Data inicial</label><input id="ri" type="date"></div><div><label>Data final</label><input id="rf" type="date"></div></div><br><button class="btn" onclick="relatorio()">Gerar relatório</button></div>
-<div id="relatorioBox"></div>
-</section>
+<section id="rel" class="tab"><div class="card"><h3>📈 Relatório mensal</h3><div class="grid"><div><label>Data inicial</label><input id="ri" type="date"></div><div><label>Data final</label><input id="rf" type="date"></div></div><br><button class="btn" onclick="relatorio()">Gerar relatório</button></div><div id="relatorioBox"></div></section>
 </main>
 
-<div id="modal" class="modal"><div class="modalbox"><button class="close" onclick="fechar()">✕</button><h3 id="mtitulo">Editar</h3><div id="mform"></div></div></div>
+<div id="modal" class="modal"><div class="modalbox"><button class="close" onclick="fechar()">✕</button><h3 id="mtitulo"></h3><div id="mform"></div></div></div>
 <script>
 const $=i=>document.getElementById(i),n=i=>+$(i).value||0,m=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v),hoje=()=>new Date().toISOString().slice(0,10),parse=d=>new Date(d+'T12:00:00');
 let x=JSON.parse(localStorage.getItem('MF')||'{"l":[],"a":[],"c":[],"m":[],"config":{"fech":5,"venc":10}}');
 x.l=x.l||[];x.a=x.a||[];x.c=x.c||[];x.m=x.m||[];x.config=x.config||{fech:5,venc:10};
-x.l.forEach(a=>{a.ppix=Number(a.ppix)||0;a.pdin=Number(a.pdin)||0;if(!a.ppix&&!a.pdin&&a.v)a.pdin=Number(a.v)||0;a.v=a.ppix+a.pdin});
-x.a.forEach(a=>{a.gpix=Number(a.gpix)||0;a.gdin=Number(a.gdin)||0;if(!a.gpix&&!a.gdin&&a.g)a.gdin=Number(a.g)||0;a.g=a.gpix+a.gdin;a.cpix=Number(a.cpix)||0;a.cdin=Number(a.cdin)||0;if(!a.cpix&&!a.cdin&&a.c)a.cdin=Number(a.c)||0;a.c=a.cpix+a.cdin;a.fpix=Number(a.fpix)||0;a.fdin=Number(a.fdin)||0;if(!a.fpix&&!a.fdin&&a.f)a.fdin=Number(a.f)||0;a.f=a.fpix+a.fdin});
+x.l.forEach(a=>{a.ppix=+a.ppix||0;a.pdin=+a.pdin||0;if(!a.ppix&&!a.pdin&&a.v)a.pdin=+a.v;a.v=a.ppix+a.pdin});
+x.a.forEach(a=>{a.gpix=+a.gpix||0;a.gdin=+a.gdin||0;if(!a.gpix&&!a.gdin&&a.g)a.gdin=+a.g;a.g=a.gpix+a.gdin;a.cpix=+a.cpix||0;a.cdin=+a.cdin||0;if(!a.cpix&&!a.cdin&&a.c)a.cdin=+a.c;a.c=a.cpix+a.cdin;a.fpix=+a.fpix||0;a.fdin=+a.fdin||0;if(!a.fpix&&!a.fdin&&a.f)a.fdin=+a.f;a.f=a.fpix+a.fdin;a.mt=a.mt||'Serviços mecânicos'});
 function save(){localStorage.setItem('MF',JSON.stringify(x));render()}
 function tab(id,b){document.querySelectorAll('.tab').forEach(a=>a.classList.remove('on'));$(id).classList.add('on');document.querySelectorAll('.nav button').forEach(a=>a.classList.remove('on'));b.classList.add('on');render()}
-function atualizarTotalPessoal(){let v=n('vPix')+n('vDin');$('va').value=v?v.toFixed(2):''}
-$('vPix').addEventListener('input',atualizarTotalPessoal);$('vDin').addEventListener('input',atualizarTotalPessoal);
+function totalP(){let v=n('vPix')+n('vDin');$('va').value=v?v.toFixed(2):''}
+$('vPix').oninput=totalP;$('vDin').oninput=totalP;
 function add(){
 let pix=n('vPix'),din=n('vDin'),v=pix+din;if(v<=0)return alert('Digite um valor válido.');
-let qtd=$('rep').value==='sim'?Math.min(60,Math.max(1,parseInt($('qtdrep').value)||1)):1,base=parse($('dt').value||hoje());
-for(let i=0;i<qtd;i++){let d=new Date(base);if(i){if($('periodo').value==='diaria')d.setDate(d.getDate()+i);else if($('periodo').value==='semanal')d.setDate(d.getDate()+7*i);else d.setMonth(d.getMonth()+i)}
-x.l.push({d:d.toISOString().slice(0,10),t:$('tp').value,c:$('ca').value,v,ppix:pix,pdin:din,z:$('de').value,p:i?'Pendente':$('pg').value,fixa:$('fixa').value,rep:$('rep').value,periodo:$('periodo').value,origem:i?'recorrente':'pessoal',parcela:i+1,totalParcelas:qtd})}
-save();$('va').value='';$('vPix').value='';$('vDin').value='';$('de').value='';$('qtdrep').value=1}
-function adda(){
-let pix=n('agpix'),din=n('agdin'),cp=n('acpix'),cd=n('acdin'),fp=n('afpix'),fd=n('afdin'),total=pix+din;
-if(total<=0)return alert('Informe PIX e/ou dinheiro recebido.');
-x.a.push({d:$('ad').value||hoje(),gpix:pix,gdin:din,g:total,cpix:cp,cdin:cd,c:cp+cd,fpix:fp,fdin:fd,f:fp+fd,k:n('ak'),h:n('ah')});
+let q=$('rep').value==='sim'?Math.min(60,Math.max(1,+$('qtdrep').value||1)):1,b=parse($('dt').value||hoje());
+for(let i=0;i<q;i++){let d=new Date(b);if(i)if($('periodo').value==='diaria')d.setDate(d.getDate()+i);else if($('periodo').value==='semanal')d.setDate(d.getDate()+7*i);else d.setMonth(d.getMonth()+i);
+x.l.push({d:d.toISOString().slice(0,10),t:$('tp').value,c:$('ca').value,v,ppix:pix,pdin:din,z:$('de').value,p:i?'Pendente':$('pg').value,fixa:$('fixa').value,rep:$('rep').value,periodo:$('periodo').value,parcela:i+1,totalParcelas:q})}
+save();['vPix','vDin','de'].forEach(i=>$(i).value='');$('va').value='';$('qtdrep').value=1}
+  function adda(){
+let pix=n('agpix'),din=n('agdin'),cp=n('acpix'),cd=n('acdin'),fp=n('afpix'),fd=n('afdin');
+if(pix+din<=0)return alert('Informe o valor recebido.');
+x.a.push({d:$('ad').value||hoje(),gpix:pix,gdin:din,g:pix+din,cpix:cp,cdin:cd,c:cp+cd,fpix:fp,fdin:fd,f:fp+fd,mt:$('amtip').value,k:n('ak'),h:n('ah')});
 save();['agpix','agdin','acpix','acdin','afpix','afdin','ak','ah'].forEach(i=>$(i).value='')
-}function addc(){
+}
+function addc(){
 let v=n('ccv');if(v<=0)return alert('Informe o valor.');
 x.c.push({d:$('cd').value||hoje(),v,z:$('ccz').value});
-x.config.fech=n('cf')||5;x.config.venc=n('cv')||10;save();
-$('ccv').value='';$('ccz').value=''
+x.config.fech=n('cf')||5;x.config.venc=n('cv')||10;save();$('ccv').value='';$('ccz').value=''
 }
 function addm(){
-let nome=$('mn').value,valor=n('mv'),guardado=n('mg');
-if(!nome||valor<=0)return alert('Preencha a meta.');
-x.m.push({n:nome,v:valor,g:guardado});save();
-$('mn').value='';$('mv').value='';$('mg').value=''
+let nome=$('mn').value,v=n('mv'),g=n('mg');if(!nome||v<=0)return alert('Preencha a meta.');
+x.m.push({n:nome,v,g});save();$('mn').value='';$('mv').value='';$('mg').value=''
 }
-let editTipo='',editIndex=-1;
-function abrirEdit(tipo,i){
-editTipo=tipo;editIndex=i;
-let a=tipo==='p'?x.l[i]:x.a[i];
-$('mtitulo').textContent=tipo==='p'?'✏️ Editar lançamento pessoal':'✏️ Editar Uber/99';
-if(tipo==='p'){
-$('mform').innerHTML=`
-<div class="grid">
+function baixa(i){x.l[i].p=x.l[i].p==='Pago'?'Pendente':'Pago';save()}
+function del(t,i){if(!confirm('Excluir este lançamento?'))return;t==='p'?x.l.splice(i,1):x.a.splice(i,1);save()}
+let et='',ei=-1;
+function editar(t,i){
+et=t;ei=i;let a=t==='p'?x.l[i]:x.a[i];$('mtitulo').textContent=t==='p'?'✏️ Editar lançamento pessoal':'✏️ Editar Uber/99';
+if(t==='p')$('mform').innerHTML=`<div class="grid">
 <div><label>Data</label><input id="ed_d" type="date" value="${a.d}"></div>
 <div><label>Tipo</label><select id="ed_t"><option ${a.t==='Entrada'?'selected':''}>Entrada</option><option ${a.t==='Despesa'?'selected':''}>Despesa</option></select></div>
-<div><label>PIX</label><input id="ed_ppix" type="number" step=".01" value="${a.ppix||0}"></div>
-<div><label>Dinheiro</label><input id="ed_pdin" type="number" step=".01" value="${a.pdin||0}"></div>
-<div><label>Descrição</label><input id="ed_z" value="${(a.z||'').replace(/"/g,'&quot;')}"></div>
-<div><label>Status</label><select id="ed_p"><option ${a.p==='Pendente'?'selected':''}>Pendente</option><option ${a.p==='Pago'?'selected':''}>Pago</option></select></div>
-</div><br><button class="btn" onclick="salvarEdit()">💾 Salvar</button>
-<button class="btn2" onclick="fechar()">Cancelar</button>`;
-}else{
-$('mform').innerHTML=`
-<div class="grid">
-<div><label>Data</label><input id="ed_d" type="date" value="${a.d}"></div>
-<div><label>Recebido PIX</label><input id="ed_gpix" type="number" step=".01" value="${a.gpix||0}"></div>
-<div><label>Recebido dinheiro</label><input id="ed_gdin" type="number" step=".01" value="${a.gdin||0}"></div>
-<div><label>Despesas PIX</label><input id="ed_cpix" type="number" step=".01" value="${a.cpix||0}"></div>
-<div><label>Despesas dinheiro</label><input id="ed_cdin" type="number" step=".01" value="${a.cdin||0}"></div>
-<div><label>Combustível PIX</label><input id="ed_fpix" type="number" step=".01" value="${a.fpix||0}"></div>
-<div><label>Combustível dinheiro</label><input id="ed_fdin" type="number" step=".01" value="${a.fdin||0}"></div>
-<div><label>KM</label><input id="ed_k" type="number" step=".1" value="${a.k||0}"></div>
-<div><label>Horas</label><input id="ed_h" type="number" step=".1" value="${a.h||0}"></div>
-</div><br><button class="btn" onclick="salvarEdit()">💾 Salvar</button>
-<button class="btn2" onclick="fechar()">Cancelar</button>`;
-}
-$('modal').classList.add('on')
-}
-function salvarEdit(){
-if(editTipo==='p'){
-let a=x.l[editIndex];a.d=$('ed_d').value||hoje();a.t=$('ed_t').value;a.ppix=n('ed_ppix');a.pdin=n('ed_pdin');a.v=a.ppix+a.pdin;a.z=$('ed_z').value;a.p=$('ed_p').value
-}else{
-let a=x.a[editIndex];a.d=$('ed_d').value||hoje();a.gpix=n('ed_gpix');a.gdin=n('ed_gdin');a.g=a.gpix+a.gdin;a.cpix=n('ed_cpix');a.cdin=n('ed_cdin');a.c=a.cpix+a.cdin;a.fpix=n('ed_fpix');a.fdin=n('ed_fdin');a.f=a.fpix+a.fdin;a.k=n('ed_k');a.h=n('ed_h')
-}
-fechar();save()
-}
-function fechar(){$('modal').classList.remove('on');editTipo='';editIndex=-1}
-function del(tipo,i){
-if(!confirm('Excluir este lançamento?'))return;
-if(tipo==='p')x.l.splice(i,1);else x.a.splice(i,1);save()
-}
-function baixa(i){
-x.l[i].p=x.l[i].p==='Pago'?'Pendente':'Pago';save()
-}
-function gerarRecorrencias(){
-let hojeD=parse(hoje()),limite=new Date(hojeD);limite.setMonth(limite.getMonth()+1);
-let modelos=x.l.filter(a=>a.rep==='sim'&&a.d<=hoje());
-modelos.forEach(a=>{
-let existe=x.l.some(b=>b.d>a.d&&b.z===a.z&&b.v===a.v&&b.origem==='recorrente');
-if(existe)return;
-let d=parse(a.d);
-if(a.periodo==='diaria')d.setDate(d.getDate()+1);
-else if(a.periodo==='semanal')d.setDate(d.getDate()+7);
-else d.setMonth(d.getMonth()+1);
-if(d<=limite)x.l.push({...a,d:d.toISOString().slice(0,10),p:'Pendente',origem:'recorrente'})
-})
-save()
-}
-function renderPessoal(){
-$('lt').innerHTML=x.l.slice().sort((a,b)=>b.d.localeCompare(a.d)).map((a,i)=>{
-let real=x.l.indexOf(a);
-return `<tr><td>${a.d}</td><td>${a.t}</td><td>${m(a.v)}</td><td>${m(a.ppix||0)}</td><td>${m(a.pdin||0)}</td><td>${a.z||''}</td><td><button class="btn2" onclick="baixa(${real})">${a.p||'Pendente'}</button></td><td><button class="btn2" onclick="abrirEdit('p',${real})">✏️ Editar</button> <button class="btn2 danger" onclick="del('p',${real})">Excluir</button></td></tr>`
-}).join('')||'<tr><td colspan="8" class="muted">Nenhum lançamento.</td></tr>'
-}
-function renderUber(){
-let g=x.a.reduce((s,a)=>s+a.g,0),c=x.a.reduce((s,a)=>s+a.c+a.f,0),k=x.a.reduce((s,a)=>s+(Number(a.k)||0),0),h=x.a.reduce((s,a)=>s+(Number(a.h)||0),0);
-$('uG').textContent=m(g);$('uC').textContent=m(c);$('uL').textContent=m(g-c);$('uK').textContent=k.toFixed(1);$('uH').textContent=h.toFixed(1);
-$('at').innerHTML=x.a.slice().sort((a,b)=>b.d.localeCompare(a.d)).map((a,i)=>{
-let real=x.a.indexOf(a);
-return `<tr><td>${a.d}</td><td>${m(a.gpix||0)}</td><td>${m(a.gdin||0)}</td><td>${m(a.c)}</td><td>${m(a.f)}</td><td>${a.k||0}</td><td>${a.h||0}</td><td><button class="btn2" onclick="abrirEdit('u',${real})">✏️ Editar</button> <button class="btn2 danger" onclick="del('u',${real})">Excluir</button></td></tr>`
-}).join('')||'<tr><td colspan="8" class="muted">Nenhum lançamento.</td></tr>'
-}function renderDash(){
+<div><label>Categoria</label><select id="ed_c"><option>
+function dash(){
 let mes=hoje().slice(0,7),l=x.l.filter(a=>a.d.slice(0,7)===mes),u=x.a.filter(a=>a.d.slice(0,7)===mes);
-let ep=l.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=l.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0),ug=u.reduce((s,a)=>s+a.g,0),uc=u.reduce((s,a)=>s+a.c+a.f,0);
-let e=ep+ug,d=dp+uc;
-$('dE').textContent=m(e);$('dD').textContent=m(d);$('dF').textContent=m(u.reduce((s,a)=>s+a.f,0));$('dL').textContent=m(e-d);
-$('dashMes').innerHTML=`<p>Entradas pessoais: <b>${m(ep)}</b></p><p>Uber/99 recebido: <b>${m(ug)}</b></p><p>Despesas pessoais: <b>${m(dp)}</b></p><p>Custos Uber/99: <b>${m(uc)}</b></p><p><b>Lucro real: ${m(e-d)}</b></p>`
+let ep=l.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=l.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0),ug=u.reduce((s,a)=>s+a.g,0),mc=u.reduce((s,a)=>s+a.c,0),fu=u.reduce((s,a)=>s+a.f,0);
+$('dE').textContent=m(ep+ug);$('dD').textContent=m(dp+mc);$('dF').textContent=m(fu);$('dL').textContent=m(ep+ug-dp-mc-fu);
+$('dashMes').innerHTML=`<p>Entradas pessoais: <b>${m(ep)}</b></p><p>Uber/99: <b>${m(ug)}</b></p><p>Despesas pessoais: <b>${m(dp)}</b></p><p>Manutenção: <b>${m(mc)}</b></p><p>Combustível: <b>${m(fu)}</b></p><p><b>Lucro real: ${m(ep+ug-dp-mc-fu)}</b></p>`
 }
-function renderCartao(){
-let fech=Number(x.config.fech)||5,venc=Number(x.config.venc)||10;
-$('cf').value=fech;$('cv').value=venc;
+function card(){
+x.config.fech=n('cf')||5;x.config.venc=n('cv')||10;
 let total=x.c.reduce((s,a)=>s+a.v,0);
-$('cardbox').innerHTML=`<p>Fechamento: dia <b>${fech}</b> · Vencimento: dia <b>${venc}</b></p><h3>Total das compras: ${m(total)}</h3>`+
-(x.c.length?`<div class="tablewrap"><table class="tbl"><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Ação</th></tr>`+x.c.map((a,i)=>`<tr><td>${a.d}</td><td>${a.z||''}</td><td>${m(a.v)}</td><td><button class="btn2 danger" onclick="x.c.splice(${i},1);save()">Excluir</button></td></tr>`).join('')+'</table></div>':'<p class="muted">Nenhuma compra.</p>')
+$('cardbox').innerHTML=`<p>Fechamento: dia <b>${x.config.fech}</b> · Vencimento: dia <b>${x.config.venc}</b></p><h3>Total: ${m(total)}</h3>`+
+(x.c.length?'<table class="tbl"><tr><th>Data</th><th>Descrição</th><th>Valor</th><th></th></tr>'+x.c.map((a,i)=>`<tr><td>${a.d}</td><td>${a.z||''}</td><td>${m(a.v)}</td><td><button class="btn2 danger" onclick="x.c.splice(${i},1);save()">Excluir</button></td></tr>`).join('')+'</table>':'<p class="muted">Nenhuma compra.</p>')
 }
-function renderMetas(){
-$('metas').innerHTML=x.m.map((a,i)=>{let pct=a.v?Math.min(100,a.g/a.v*100):0;return `<div class="card"><h3>🎯 ${a.n}</h3><p>${m(a.g)} de ${m(a.v)} — ${pct.toFixed(0)}%</p><progress value="${pct}" max="100" style="width:100%"></progress><br><br><button class="btn2" onclick="x.m[${i}].g=+prompt('Novo valor guardado',x.m[${i}].g)||0;save()">Atualizar</button> <button class="btn2 danger" onclick="x.m.splice(${i},1);save()">Excluir</button></div>`}).join('')||'<div class="card"><p class="muted">Nenhuma meta cadastrada.</p></div>'
+function metas(){
+$('metas').innerHTML=x.m.map((a,i)=>{let p=a.v?Math.min(100,a.g/a.v*100):0;return `<div class="card"><h3>🎯 ${a.n}</h3><p>${m(a.g)} de ${m(a.v)} — ${p.toFixed(0)}%</p><progress value="${p}" max="100" style="width:100%"></progress><br><br><button class="btn2" onclick="x.m[${i}].g=+prompt('Valor guardado',x.m[${i}].g)||0;save()">Atualizar</button> <button class="btn2 danger" onclick="x.m.splice(${i},1);save()">Excluir</button></div>`}).join('')||'<div class="card"><p class="muted">Nenhuma meta.</p></div>'
 }
 function relatorio(){
-let i=$('ri').value||hoje(),f=$('rf').value||i,l=x.l.filter(a=>a.d>=i&&a.d<=f),u=x.a.filter(a=>a.d>=i&&a.d<=f),meses={};
-[...l.map(a=>a.d),...u.map(a=>a.d)].forEach(d=>meses[d.slice(0,7)]=1);
-let keys=Object.keys(meses).sort();
+let ini=$('ri').value||hoje(),fim=$('rf').value||ini,l=x.l.filter(a=>a.d>=ini&&a.d<=fim),u=x.a.filter(a=>a.d>=ini&&a.d<=fim),ks={};
+[...l,...u].forEach(a=>ks[a.d.slice(0,7)]=1);
+let keys=Object.keys(ks).sort();
 $('relatorioBox').innerHTML=keys.length?keys.map(k=>{
 let lm=l.filter(a=>a.d.slice(0,7)===k),um=u.filter(a=>a.d.slice(0,7)===k);
 let ep=lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0);
-let pix=um.reduce((s,a)=>s+(a.gpix||0),0),din=um.reduce((s,a)=>s+(a.gdin||0),0),cp=um.reduce((s,a)=>s+(a.cpix||0),0),cd=um.reduce((s,a)=>s+(a.cdin||0),0),fp=um.reduce((s,a)=>s+(a.fpix||0),0),fd=um.reduce((s,a)=>s+(a.fdin||0),0);
-let recebido=pix+din+ep,custos=cp+cd+fp+fd+dp,lucro=recebido-custos;
-return `<div class="card"><h3>📅 ${k}</h3><div class="grid"><div>Uber PIX<br><b>${m(pix)}</b></div><div>Uber dinheiro<br><b>${m(din)}</b></div><div>Entrada pessoal PIX<br><b>${m(lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+(a.ppix||0),0))}</b></div><div>Entrada pessoal dinheiro<br><b>${m(lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+(a.pdin||0),0))}</b></div><div>Despesas PIX<br><b>${m(cp+lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+(a.ppix||0),0))}</b></div><div>Despesas dinheiro<br><b>${m(cd+lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+(a.pdin||0),0))}</b></div><div>Combustível PIX<br><b>${m(fp)}</b></div><div>Combustível dinheiro<br><b>${m(fd)}</b></div><div>Total recebido<br><b>${m(recebido)}</b></div><div>Custos totais<br><b>${m(custos)}</b></div><div>Lucro real<br><b>${m(lucro)}</b></div></div></div>`
-}).join(''):'<div class="card"><p class="muted">Nenhum lançamento no período.</p></div>'
-}
-function render(){
-renderPessoal();renderUber();renderDash();renderCartao();renderMetas();
-}
-$('dt').value=hoje();$('ad').value=hoje();$('cd').value=hoje();$('ri').value=hoje().slice(0,8)+'01';$('rf').value=hoje();
-$('cf').value=x.config.fech;$('cv').value=x.config.venc;
-render();gerarRecorrencias();
-</script></body></html>
+let gp=um.reduce((s,a)=>s+a.gpix,0),gd=um.reduce((s,a)=>s+a.gdin,0),mp
