@@ -86,8 +86,7 @@ let pix=n('vPix'),din=n('vDin'),v=pix+din;if(v<=0)return alert('Digite um valor 
 let q=$('rep').value==='sim'?Math.min(60,Math.max(1,+$('qtdrep').value||1)):1,b=parse($('dt').value||hoje());
 for(let i=0;i<q;i++){let d=new Date(b);if(i)if($('periodo').value==='diaria')d.setDate(d.getDate()+i);else if($('periodo').value==='semanal')d.setDate(d.getDate()+7*i);else d.setMonth(d.getMonth()+i);
 x.l.push({d:d.toISOString().slice(0,10),t:$('tp').value,c:$('ca').value,v,ppix:pix,pdin:din,z:$('de').value,p:i?'Pendente':$('pg').value,fixa:$('fixa').value,rep:$('rep').value,periodo:$('periodo').value,parcela:i+1,totalParcelas:q})}
-save();['vPix','vDin','de'].forEach(i=>$(i).value='');$('va').value='';$('qtdrep').value=1}
-  function adda(){
+save();['vPix','vDin','de'].forEach(i=>$(i).value='');$('va').value='';$('qtdrep').value=1}function adda(){
 let pix=n('agpix'),din=n('agdin'),cp=n('acpix'),cd=n('acdin'),fp=n('afpix'),fd=n('afdin');
 if(pix+din<=0)return alert('Informe o valor recebido.');
 x.a.push({d:$('ad').value||hoje(),gpix:pix,gdin:din,g:pix+din,cpix:cp,cdin:cd,c:cp+cd,fpix:fp,fdin:fd,f:fp+fd,mt:$('amtip').value,k:n('ak'),h:n('ah')});
@@ -110,8 +109,40 @@ et=t;ei=i;let a=t==='p'?x.l[i]:x.a[i];$('mtitulo').textContent=t==='p'?'✏️ E
 if(t==='p')$('mform').innerHTML=`<div class="grid">
 <div><label>Data</label><input id="ed_d" type="date" value="${a.d}"></div>
 <div><label>Tipo</label><select id="ed_t"><option ${a.t==='Entrada'?'selected':''}>Entrada</option><option ${a.t==='Despesa'?'selected':''}>Despesa</option></select></div>
-<div><label>Categoria</label><select id="ed_c"><option>
-function dash(){
+<div><label>Categoria</label><select id="ed_c"><option>Salário</option><option>Extra</option><option>Empréstimo</option><option>Alimentação</option><option>Casa</option><option>Saúde</option><option>Transporte</option><option>Contas</option><option>Outros</option></select></div>
+<div><label>PIX</label><input id="ed_p1" type="number" step=".01" value="${a.ppix||0}"></div>
+<div><label>Dinheiro</label><input id="ed_p2" type="number" step=".01" value="${a.pdin||0}"></div>
+<div><label>Descrição</label><input id="ed_z" value="${(a.z||'').replace(/"/g,'&quot;')}"></div>
+<div><label>Status</label><select id="ed_p"><option ${a.p==='Pendente'?'selected':''}>Pendente</option><option ${a.p==='Pago'?'selected':''}>Pago</option></select></div>
+</div><br><button class="btn" onclick="salvarEd()">💾 Salvar</button> <button class="btn2" onclick="fechar()">Cancelar</button>`;
+else $('mform').innerHTML=`<div class="grid">
+<div><label>Data</label><input id="ed_d" type="date" value="${a.d}"></div>
+<div><label>Recebido PIX</label><input id="ed_g1" type="number" step=".01" value="${a.gpix||0}"></div>
+<div><label>Recebido dinheiro</label><input id="ed_g2" type="number" step=".01" value="${a.gdin||0}"></div>
+<div><label>Manutenção</label><select id="ed_mt"><option ${a.mt==='Troca de óleo'?'selected':''}>Troca de óleo</option><option ${a.mt==='Arrefecimento'?'selected':''}>Arrefecimento</option><option ${a.mt==='Serviços mecânicos'?'selected':''}>Serviços mecânicos</option></select></div>
+<div><label>Manutenção PIX</label><input id="ed_c1" type="number" step=".01" value="${a.cpix||0}"></div>
+<div><label>Manutenção dinheiro</label><input id="ed_c2" type="number" step=".01" value="${a.cdin||0}"></div>
+<div><label>Combustível PIX</label><input id="ed_f1" type="number" step=".01" value="${a.fpix||0}"></div>
+<div><label>Combustível dinheiro</label><input id="ed_f2" type="number" step=".01" value="${a.fdin||0}"></div>
+<div><label>KM</label><input id="ed_k" type="number" value="${a.k||0}"></div>
+<div><label>Horas</label><input id="ed_h" type="number" step=".1" value="${a.h||0}"></div>
+</div><br><button class="btn" onclick="salvarEd()">💾 Salvar</button> <button class="btn2" onclick="fechar()">Cancelar</button>`;
+$('modal').classList.add('on')
+}
+function salvarEd(){
+if(et==='p'){let a=x.l[ei];a.d=$('ed_d').value||hoje();a.t=$('ed_t').value;a.c=$('ed_c').value;a.ppix=n('ed_p1');a.pdin=n('ed_p2');a.v=a.ppix+a.pdin;a.z=$('ed_z').value;a.p=$('ed_p').value}
+else{let a=x.a[ei];a.d=$('ed_d').value||hoje();a.gpix=n('ed_g1');a.gdin=n('ed_g2');a.g=a.gpix+a.gdin;a.mt=$('ed_mt').value;a.cpix=n('ed_c1');a.cdin=n('ed_c2');a.c=a.cpix+a.cdin;a.fpix=n('ed_f1');a.fdin=n('ed_f2');a.f=a.fpix+a.fdin;a.k=n('ed_k');a.h=n('ed_h')}
+fechar();save()
+}
+function fechar(){$('modal').classList.remove('on');et='';ei=-1}
+function renderP(){
+$('lt').innerHTML=x.l.slice().sort((a,b)=>b.d.localeCompare(a.d)).map(a=>{let i=x.l.indexOf(a);return `<tr><td>${a.d}</td><td>${a.t}</td><td>${a.c}</td><td>${m(a.v)}</td><td>${m(a.ppix)}</td><td>${m(a.pdin)}</td><td><button class="btn2" onclick="baixa(${i})">${a.p||'Pendente'}</button></td><td><button class="btn2" onclick="editar('p',${i})">✏️ Editar</button> <button class="btn2 danger" onclick="del('p',${i})">Excluir</button></td></tr>`}).join('')||'<tr><td colspan="8">Nenhum lançamento.</td></tr>'
+}
+function renderU(){
+let g=x.a.reduce((s,a)=>s+a.g,0),c=x.a.reduce((s,a)=>s+a.c+a.f,0),k=x.a.reduce((s,a)=>s+(+a.k||0),0),h=x.a.reduce((s,a)=>s+(+a.h||0),0);
+$('uG').textContent=m(g);$('uC').textContent=m(c);$('uL').textContent=m(g-c);$('uK').textContent=k.toFixed(1);$('uH').textContent=h.toFixed(1);
+$('at').innerHTML=x.a.slice().sort((a,b)=>b.d.localeCompare(a.d)).map(a=>{let i=x.a.indexOf(a);return `<tr><td>${a.d}</td><td>${m(a.gpix)}</td><td>${m(a.gdin)}</td><td>${m(a.c)}</td><td>${a.mt}</td><td>${m(a.f)}</td><td>${a.k||0}</td><td>${a.h||0}</td><td><button class="btn2" onclick="editar('u',${i})">✏️ Editar</button> <button class="btn2 danger" onclick="del('u',${i})">Excluir</button></td></tr>`}).join('')||'<tr><td colspan="9">Nenhum lançamento.</td></tr>'
+}function dash(){
 let mes=hoje().slice(0,7),l=x.l.filter(a=>a.d.slice(0,7)===mes),u=x.a.filter(a=>a.d.slice(0,7)===mes);
 let ep=l.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=l.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0),ug=u.reduce((s,a)=>s+a.g,0),mc=u.reduce((s,a)=>s+a.c,0),fu=u.reduce((s,a)=>s+a.f,0);
 $('dE').textContent=m(ep+ug);$('dD').textContent=m(dp+mc);$('dF').textContent=m(fu);$('dL').textContent=m(ep+ug-dp-mc-fu);
@@ -133,4 +164,12 @@ let keys=Object.keys(ks).sort();
 $('relatorioBox').innerHTML=keys.length?keys.map(k=>{
 let lm=l.filter(a=>a.d.slice(0,7)===k),um=u.filter(a=>a.d.slice(0,7)===k);
 let ep=lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0);
-let gp=um.reduce((s,a)=>s+a.gpix,0),gd=um.reduce((s,a)=>s+a.gdin,0),mp
+let gp=um.reduce((s,a)=>s+a.gpix,0),gd=um.reduce((s,a)=>s+a.gdin,0),mp=um.reduce((s,a)=>s+a.cpix,0),md=um.reduce((s,a)=>s+a.cdin,0),fp=um.reduce((s,a)=>s+a.fpix,0),fd=um.reduce((s,a)=>s+a.fdin,0);
+let epix=lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.ppix,0),edin=lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.pdin,0),dpix=lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.ppix,0),ddin=lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.pdin,0);
+let rec=gp+gd+ep,cust=mp+md+fp+fd+dp;
+return `<div class="card"><h3>📅 ${k}</h3><div class="grid"><div>Uber PIX<br><b>${m(gp)}</b></div><div>Uber dinheiro<br><b>${m(gd)}</b></div><div>Entrada pessoal PIX<br><b>${m(epix)}</b></div><div>Entrada pessoal dinheiro<br><b>${m(edin)}</b></div><div>Manutenção PIX<br><b>${m(mp)}</b></div><div>Manutenção dinheiro<br><b>${m(md)}</b></div><div>Combustível PIX<br><b>${m(fp)}</b></div><div>Combustível dinheiro<br><b>${m(fd)}</b></div><div>Despesa pessoal PIX<br><b>${m(dpix)}</b></div><div>Despesa pessoal dinheiro<br><b>${m(ddin)}</b></div><div>Total recebido<br><b>${m(rec)}</b></div><div>Custos totais<br><b>${m(cust)}</b></div><div>Lucro real<br><b>${m(rec-cust)}</b></div></div></div>`
+}).join(''):'<div class="card"><p>Nenhum lançamento no período.</p></div>'
+}
+function render(){renderP();renderU();dash();card();metas()}
+$('dt').value=hoje();$('ad').value=hoje();$('cd').value=hoje();$('ri').value=hoje().slice(0,8)+'01';$('rf').value=hoje();render();
+</script></body></html>
