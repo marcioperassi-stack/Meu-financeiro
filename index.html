@@ -3,213 +3,247 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
 <title>Meu Financeiro Pro</title>
 
 <style>
 *{box-sizing:border-box}
-
 body{
-  font-family:Arial,sans-serif;
-  margin:0;
-  background:#f3f4f6;
-  color:#111827
+font-family:Arial,sans-serif;
+margin:0;
+background:#f3f4f6;
+color:#111827
 }
-
 header{
-  background:#111827;
-  color:#fff;
-  padding:18px
+background:#111827;
+color:#fff;
+padding:18px;
+position:sticky;
+top:0;
+z-index:10
 }
-
-header h1{
-  margin:0 0 5px;
-  font-size:24px
-}
-
+header h2{margin:0 0 4px}
 header small{opacity:.8}
 
-nav{
-  display:flex;
-  overflow-x:auto;
-  background:#fff;
-  border-bottom:1px solid #ddd
+.nav{
+display:flex;
+gap:6px;
+overflow:auto;
+padding:10px;
+background:#fff;
+border-bottom:1px solid #ddd;
+position:sticky;
+top:76px;
+z-index:9
 }
-
-nav button{
-  border:0;
-  background:#fff;
-  padding:14px 12px;
-  font-weight:bold;
-  white-space:nowrap
+.nav button{
+white-space:nowrap;
+background:#e5e7eb;
+color:#111827
 }
-
-nav button.active{
-  color:#2563eb;
-  border-bottom:3px solid #2563eb
+.nav button.active{
+background:#2563eb;
+color:#fff
 }
 
 main{
-  max-width:1100px;
-  margin:auto;
-  padding:15px
+max-width:1150px;
+margin:auto;
+padding:12px
 }
 
-.tab{display:none}
-.tab.active{display:block}
-
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:16px;
-  margin-bottom:15px;
-  box-shadow:0 2px 8px #00000012
-}
+.page{display:none}
+.page.active{display:block}
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px
 }
 
-.kpi{
-  border-radius:14px;
-  padding:18px;
-  color:#fff;
-  min-height:105px
+.card{
+background:#fff;
+padding:14px;
+border-radius:16px;
+margin:10px 0;
+border:1px solid #e5e7eb;
+box-shadow:0 2px 8px #00000008
 }
 
-.kpi small{
-  display:block;
-  opacity:.9;
-  margin-bottom:8px
+.metric{
+font-size:22px;
+font-weight:700;
+margin-top:6px
 }
 
-.kpi b{font-size:24px}
+.muted{color:#6b7280}
 
-.k1{background:#2563eb}
-.k2{background:#dc2626}
-.k3{background:#16a34a}
-.k4{background:#7c3aed}
-
-label{
-  display:block;
-  font-weight:bold;
-  margin:9px 0 5px
+.form{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px
 }
 
-input,select{
-  width:100%;
-  padding:11px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  background:#fff
+input,select,button{
+padding:10px;
+border-radius:9px;
+border:1px solid #d1d5db;
+width:100%
 }
 
-button{cursor:pointer}
-
-.btn{
-  border:0;
-  border-radius:8px;
-  padding:11px 15px;
-  font-weight:bold;
-  margin-top:10px
+button{
+background:#2563eb;
+color:white;
+border:0;
+font-weight:bold;
+cursor:pointer
 }
 
-.primary{background:#2563eb;color:#fff}
-.success{background:#16a34a;color:#fff}
-.danger{background:#dc2626;color:#fff}
-.gray{background:#e5e7eb;color:#111827}
+.secondary{background:#4b5563}
+.success{background:#16a34a}
+.warning{background:#d97706}
+.danger{background:#dc2626}
+.purple{background:#7c3aed}
+
+.table{overflow:auto}
 
 table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:12px;
-  font-size:14px
+width:100%;
+border-collapse:collapse
 }
 
-th,td{
-  border-bottom:1px solid #e5e7eb;
-  padding:9px;
-  text-align:left
+td,th{
+padding:8px;
+border-bottom:1px solid #e5e7eb;
+text-align:left;
+font-size:12px;
+white-space:nowrap
 }
-
-th{background:#f9fafb}
 
 .badge{
-  display:inline-block;
-  padding:5px 8px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold
+display:inline-block;
+padding:4px 7px;
+border-radius:999px;
+font-size:11px;
+font-weight:bold;
+background:#e5e7eb
 }
 
-.pago{
-  background:#dcfce7;
-  color:#166534
+.progress{
+height:12px;
+background:#e5e7eb;
+border-radius:99px;
+overflow:hidden
 }
 
-.pendente{
-  background:#fee2e2;
-  color:#991b1b
+.progress>div{
+height:100%;
+background:#2563eb
 }
 
 .chart{
-  height:220px;
-  display:flex;
-  align-items:flex-end;
-  gap:8px;
-  padding:15px 5px;
-  border-top:1px solid #eee
+height:230px;
+display:flex;
+align-items:flex-end;
+gap:7px;
+padding:15px 5px;
+border-bottom:1px solid #ddd
 }
 
 .bar{
-  flex:1;
-  background:#2563eb;
-  border-radius:6px 6px 0 0;
-  min-height:4px;
-  position:relative
+flex:1;
+min-width:12px;
+background:#2563eb;
+border-radius:5px 5px 0 0;
+position:relative
 }
 
 .bar span{
-  position:absolute;
-  bottom:-22px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:11px
+position:absolute;
+bottom:100%;
+left:50%;
+transform:translateX(-50%);
+font-size:9px;
+white-space:nowrap
 }
 
-.muted{
-  color:#6b7280;
-  font-size:13px
+.legend{
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+font-size:12px
 }
+
+.dot{
+display:inline-block;
+width:10px;
+height:10px;
+border-radius:50%;
+margin-right:4px;
+background:#2563eb
+}
+
+.dot.red{background:#dc2626}
+.dot.green{background:#16a34a}
+
+.alert{
+padding:10px;
+border-radius:10px;
+margin:6px 0;
+background:#fff7ed;
+border:1px solid #fed7aa
+}
+
+.ok{
+background:#f0fdf4;
+border-color:#bbf7d0
+}
+
+.small{font-size:12px}
+.hidden{display:none}
 
 .modal{
-  position:fixed;
-  inset:0;
-  background:#0008;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-  z-index:20
+position:fixed;
+inset:0;
+background:#0008;
+display:none;
+align-items:center;
+justify-content:center;
+padding:16px;
+z-index:100
 }
 
 .modal.show{display:flex}
 
 .modalbox{
-  background:#fff;
-  width:100%;
-  max-width:600px;
-  max-height:90vh;
-  overflow:auto;
-  border-radius:15px;
-  padding:18px
+background:#fff;
+width:min(620px,100%);
+max-height:90vh;
+overflow:auto;
+border-radius:18px;
+padding:18px;
+box-shadow:0 10px 40px #0005
 }
 
-@media(max-width:600px){
-  header h1{font-size:21px}
-  .kpi b{font-size:20px}
-  table{font-size:12px}
+.modalbox h3{margin-top:0}
+
+.modal-actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-top:12px
+}
+
+@media(max-width:700px){
+.grid{grid-template-columns:1fr 1fr}
+.form{grid-template-columns:1fr 1fr}
+.nav{top:76px}
+}
+
+@media(max-width:430px){
+.form{grid-template-columns:1fr}
+.grid{grid-template-columns:1fr 1fr}
+.metric{font-size:18px}
 }
 </style>
 </head>
@@ -217,324 +251,991 @@ th{background:#f9fafb}
 <body>
 
 <header>
-<h1>💰 Meu Financeiro Pro</h1>
-<small>Controle pessoal e profissional em um só lugar</small>
+<h2>💰 Meu Financeiro Pro</h2>
+<small>Controle pessoal + Uber/99 + cartão + metas</small>
 </header>
 
-<nav>
-<button class="active" onclick="aba('dashboard',this)">📊 Dashboard</button>
-<button onclick="aba('pessoal',this)">💰 Pessoal</button>
-<button onclick="aba('uber',this)">🚗 Uber/99</button>
-<button onclick="aba('cartao',this)">💳 Cartão</button>
-<button onclick="aba('metas',this)">🎯 Metas</button>
-<button onclick="aba('relatorios',this)">📈 Relatórios</button>
-</nav>
+<div class="nav">
+
+<button class="active"
+onclick="aba('dashboard',this)">
+📊 Dashboard
+</button>
+
+<button onclick="aba('pessoal',this)">
+📋 Pessoal
+</button>
+
+<button onclick="aba('cartao',this)">
+💳 Cartão
+</button>
+
+<button onclick="aba('uber',this)">
+🚗 Uber/99
+</button>
+
+<button onclick="aba('metas',this)">
+🎯 Metas
+</button>
+
+<button onclick="aba('relatorios',this)">
+📈 Relatórios
+</button>
+
+</div>
+
+
+<div id="editModal" class="modal">
+
+<div class="modalbox">
+
+<h3 id="editTitulo">
+✏️ Editar lançamento
+</h3>
+
+<div id="editForm" class="form"></div>
+
+<div class="modal-actions">
+
+<button class="secondary"
+onclick="fecharEdicao()">
+Cancelar
+</button>
+
+<button class="success"
+onclick="salvarEdicao()">
+💾 Salvar alterações
+</button>
+
+</div>
+
+</div>
+</div>
+
 
 <main>
 
-<section id="dashboard" class="tab active">
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
 
 <div class="card">
-<h2>📊 Visão geral</h2>
 
-<label>Mês de referência</label>
-<input type="month" id="mesDash" onchange="render()">
+<h3>📊 Visão geral</h3>
+
+<div class="form">
+
+<select id="periodoDash"
+onchange="render()">
+
+<option value="dia">
+Hoje
+</option>
+
+<option value="semana">
+Esta semana
+</option>
+
+<option value="mes" selected>
+Este mês
+</option>
+
+<option value="todos">
+Todos os dados
+</option>
+
+</select>
+
+<input
+id="dataDash"
+type="date"
+onchange="render()">
+
+<div></div>
+<div></div>
+
 </div>
+</div>
+
 
 <div class="grid">
 
-<div class="kpi k1">
-<small>💰 Entradas</small>
-<b id="dE">R$ 0,00</b>
+<div class="card">
+Entradas
+<div class="metric" id="e">
+R$ 0,00
 </div>
-
-<div class="kpi k2">
-<small>🔴 Despesas</small>
-<b id="dD">R$ 0,00</b>
-</div>
-
-<div class="kpi k3">
-<small>🟢 Lucro</small>
-<b id="dL">R$ 0,00</b>
-</div>
-
-<div class="kpi k4">
-<small>🚗 Uber/99</small>
-<b id="dU">R$ 0,00</b>
-</div>
-
 </div>
 
 <div class="card">
-<h3>📊 Resumo do mês</h3>
+Despesas
+<div class="metric" id="d">
+R$ 0,00
+</div>
+</div>
+
+<div class="card">
+Lucro real
+<div class="metric" id="s">
+R$ 0,00
+</div>
+</div>
+
+<div class="card">
+Reserva 10%
+<div class="metric" id="r">
+R$ 0,00
+</div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📈 Ganhos, despesas e lucro
+</h3>
+
+<div id="dashChart"
+class="chart">
+</div>
+
+<div class="legend">
+
+<span>
+<i class="dot"></i>
+Ganhos
+</span>
+
+<span>
+<i class="dot red"></i>
+Despesas
+</span>
+
+<span>
+<i class="dot green"></i>
+Lucro
+</span>
+
+</div>
+
+</div>
+
 
 <div class="grid">
 
-<div>
-<span class="muted">Entradas pessoais</span>
-<h3 id="dEP">R$ 0,00</h3>
-</div>
+<div class="card">
 
-<div>
-<span class="muted">Despesas pessoais</span>
-<h3 id="dDP">R$ 0,00</h3>
-</div>
+<h3>
+🔔 Contas a vencer
+</h3>
 
-<div>
-<span class="muted">Recebido Uber/99</span>
-<h3 id="dUG">R$ 0,00</h3>
-</div>
-
-<div>
-<span class="muted">Despesas Uber/99</span>
-<h3 id="dUC">R$ 0,00</h3>
-</div>
+<div id="alertas"></div>
 
 </div>
-</div>
+
 
 <div class="card">
-<h3>📈 Entradas x Despesas</h3>
-<div id="grafico" class="chart"></div>
+
+<h3>
+💳 Fatura atual
+</h3>
+
+<div
+class="metric"
+id="faturaAtual">
+R$ 0,00
+</div>
+
+<p
+id="faturaInfo"
+class="muted small">
+</p>
+
+</div>
+
 </div>
 
 </section>
 
 
-<section id="pessoal" class="tab">
+<!-- PESSOAL -->
+
+<section id="pessoal" class="page">
 
 <div class="card">
 
-<h2>💰 Lançamentos pessoais</h2>
+<h3>
+📋 Lançamento pessoal
+</h3>
 
-<div class="grid">
+<div class="form">
 
-<div>
-<label>Data</label>
-<input type="date" id="ad">
-</div>
+<input
+id="dt"
+type="date">
 
-<div>
-<label>Tipo</label>
-<select id="at">
-<option>Entrada</option>
-<option>Despesa</option>
+<select id="tp">
+
+<option>
+Entrada
+</option>
+
+<option>
+Despesa
+</option>
+
 </select>
-</div>
 
-<div>
-<label>Categoria</label>
+
 <select id="ca">
-<option>Salário</option>
-<option>Extra</option>
-<option>Empréstimo</option>
-<option>Alimentação</option>
-<option>Casa</option>
-<option>Saúde</option>
-<option>Transporte</option>
-<option>Contas</option>
-<option>Outros</option>
+
+<option>
+Salário
+</option>
+
+<option>
+Uber / 99
+</option>
+
+<option>
+Alimentação
+</option>
+
+<option>
+Moradia
+</option>
+
+<option>
+Contas
+</option>
+
+<option>
+Carro
+</option>
+
+<option>
+Cartão de crédito
+</option>
+
+<option>
+Saúde
+</option>
+
+<option>
+Lazer
+</option>
+
+<option>
+Outros
+</option>
+
 </select>
-</div>
 
-<div>
-<label>Descrição</label>
-<input id="desc" placeholder="Descrição">
-</div>
 
-<div>
-<label>PIX</label>
-<input id="pix" type="number" step="0.01" placeholder="0,00">
-</div>
+<input
+id="va"
+type="number"
+step=".01"
+placeholder="Valor">
 
-<div>
-<label>Dinheiro</label>
-<input id="din" type="number" step="0.01" placeholder="0,00">
-</div>
 
-</div>
+<input
+id="de"
+placeholder="Descrição">
 
-<label>Tipo de despesa</label>
 
-<select id="dtipo">
-<option>Normal</option>
-<option>Fixa</option>
-<option>Repetir</option>
+<select id="pg">
+
+<option>
+Pendente
+</option>
+
+<option>
+Pago
+</option>
+
 </select>
 
-<div id="repbox" style="display:none">
 
-<label>Periodicidade</label>
+<select id="fixa">
+
+<option value="nao">
+Despesa normal
+</option>
+
+<option value="sim">
+Despesa fixa mensal
+</option>
+
+</select>
+
+
+<select id="rep">
+
+<option value="nao">
+Não repetir
+</option>
+
+<option value="sim">
+Repetir despesa
+</option>
+
+</select>
+
 
 <select id="periodo">
-<option>Diária</option>
-<option>Semanal</option>
-<option>Mensal</option>
+
+<option value="diaria">
+Diária
+</option>
+
+<option value="semanal">
+Semanal
+</option>
+
+<option value="mensal">
+Mensal
+</option>
+
 </select>
 
-<label>Quantidade de repetições</label>
 
-<input id="qtdrep" type="number" min="1" max="60" value="1">
+<input
+id="qtdrep"
+type="number"
+min="1"
+max="60"
+value="1"
+placeholder="Quantidade">
 
-</div>
 
-<label>Status</label>
-
-<select id="status">
-<option>Pago</option>
-<option>Pendente</option>
-</select>
-
-<button class="btn primary" onclick="add()">
-➕ Adicionar lançamento
+<button onclick="add()">
+Adicionar
 </button>
 
 </div>
 
+</div>
+
+
 <div class="card">
-<h3>📋 Lançamentos pessoais</h3>
-<div id="ptabela"></div>
+
+<h3>
+📋 Lançamentos
+</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Data</th>
+<th>Tipo</th>
+<th>Categoria</th>
+<th>Valor</th>
+<th>Descrição</th>
+<th>Status</th>
+<th>Fixa</th>
+<th>Repetição</th>
+<th></th>
+
+</tr>
+
+</thead>
+
+<tbody id="tl">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<button
+class="warning"
+onclick="gerarRecorrencias()">
+
+🔄 Atualizar recorrências
+
+</button>
+
 </div>
 
 </section>
 
 
-<section id="uber" class="tab">
+<!-- CARTÃO -->
+
+<section id="cartao" class="page">
 
 <div class="card">
 
-<h2>🚗 Controle Uber/99</h2>
+<h3>
+💳 Configuração da fatura
+</h3>
+
+<div class="form">
+
+<label>
+
+Dia de fechamento
+
+<input
+id="fechamento"
+type="number"
+min="1"
+max="31"
+value="5"
+onchange="saveConfig()">
+
+</label>
+
+
+<label>
+
+Dia de vencimento
+
+<input
+id="vencimento"
+type="number"
+min="1"
+max="31"
+value="10"
+onchange="saveConfig()">
+
+</label>
+
+<div></div>
+<div></div>
+
+</div>
+
+<p class="muted small">
+
+Compras até o fechamento entram na
+fatura correspondente.
+
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+💳 Nova compra
+</h3>
+
+<div class="form">
+
+<input
+id="cdt"
+type="date">
+
+<input
+id="cdesc"
+placeholder="Compra / descrição">
+
+<input
+id="cvalor"
+type="number"
+step=".01"
+placeholder="Valor total">
+
+<input
+id="cparc"
+type="number"
+min="1"
+value="1"
+placeholder="Parcelas">
+
+<button onclick="addCartao()">
+Adicionar compra
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🧾 Faturas
+</h3>
+
+<div id="faturas"></div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🛒 Compras no cartão
+</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Data</th>
+<th>Descrição</th>
+<th>Total</th>
+<th>Parcela</th>
+<th>Valor</th>
+<th>Vencimento</th>
+<th>Status</th>
+<th></th>
+
+</tr>
+
+</thead>
+
+<tbody id="tc">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- UBER -->
+
+<section id="uber" class="page">
+
+<div class="card">
+
+<h3>
+🚗 Controle Uber / 99
+</h3>
+
+<div class="form">
+
+
+<input
+id="ad"
+type="date">
+
+
+<input
+id="agpix"
+type="number"
+step=".01"
+placeholder="PIX recebido">
+
+
+<input
+id="agdin"
+type="number"
+step=".01"
+placeholder="Dinheiro recebido">
+
+
+<select id="tipoDespesaUber">
+
+<option value="">
+Tipo de despesa
+</option>
+
+<option value="Manutenção">
+🔧 Manutenção
+</option>
+
+<option value="Lavagem do carro">
+🧼 Lavagem do carro
+</option>
+
+<option value="Troca de óleo">
+🛠️ Troca de óleo
+</option>
+
+<option value="Arrefecimento">
+💧 Arrefecimento
+</option>
+
+<option value="Serviços mecânicos">
+🔧 Serviços mecânicos
+</option>
+
+<option value="Alimentação">
+🍽️ Alimentação
+</option>
+
+<option value="Pedágio">
+🛣️ Pedágio
+</option>
+
+<option value="Estacionamento">
+🅿️ Estacionamento
+</option>
+
+<option value="Outros">
+📦 Outros
+</option>
+
+</select>
+
+
+<input
+id="adespesa"
+type="number"
+step=".01"
+placeholder="Valor da despesa">
+
+
+<select id="carteiraDespesaUber">
+
+<option value="PIX">
+Despesa PIX
+</option>
+
+<option value="Dinheiro">
+Despesa dinheiro
+</option>
+
+</select>
+
+
+<input
+id="afpix"
+type="number"
+step=".01"
+placeholder="Combustível PIX">
+
+
+<input
+id="afdin"
+type="number"
+step=".01"
+placeholder="Combustível dinheiro">
+
+
+<input
+id="ak"
+type="number"
+step=".1"
+placeholder="KM trabalhados">
+
+
+<input
+id="ah"
+type="number"
+step=".1"
+placeholder="Horas trabalhadas">
+
+
+<button onclick="adda()">
+Adicionar
+</button>
+
+</div>
+
+
+<p class="muted small">
+
+As despesas podem ser classificadas por categoria.
+O combustível permanece separado.
+
+</p>
+
+</div>
+
 
 <div class="grid">
 
-<div>
-<label>Data</label>
-<input type="date" id="aud">
-</div>
-
-<div>
-<label>Recebido PIX</label>
-<input id="agpix" type="number" step="0.01" placeholder="0,00">
-</div>
-
-<div>
-<label>Recebido dinheiro</label>
-<input id="agdin" type="number" step="0.01" placeholder="0,00">
-</div>
-
-<div>
-<label>Tipo de despesa</label>
-
-<select id="amtip">
-<option>Troca de óleo</option>
-<option>Arrefecimento</option>
-<option>Serviços mecânicos</option>
-<option>Alimentação</option>
-<option>Combustível</option>
-</select>
-
-</div>
-
-<div>
-<label>Despesa PIX</label>
-<input id="acpix" type="number" step="0.01" placeholder="0,00">
-</div>
-
-<div>
-<label>Despesa dinheiro</label>
-<input id="acdin" type="number" step="0.01" placeholder="0,00">
-</div>
-
-<div>
-<label>KM rodados</label>
-<input id="ak" type="number" placeholder="0">
-</div>
-
-<div>
-<label>Horas trabalhadas</label>
-<input id="ah" type="number" step="0.1" placeholder="0">
-</div>
-
-</div>
-
-<button class="btn primary" onclick="adda()">
-➕ Adicionar Uber/99
-</button>
-
-</div>
-
-<div class="card">
-<h3>🚗 Lançamentos Uber/99</h3>
-<div id="utabela"></div>
-</div>
-
-</section>
-
-
-<section id="cartao" class="tab">
 
 <div class="card">
 
-<h2>💳 Cartão de crédito</h2>
+Ganhos
+
+<div
+class="metric"
+id="ug">
+R$ 0,00
+</div>
+
+</div>
+
+
+<div class="card">
+
+Custos
+
+<div
+class="metric"
+id="uc">
+R$ 0,00
+</div>
+
+</div>
+
+
+<div class="card">
+
+Lucro líquido
+
+<div
+class="metric"
+id="ul">
+R$ 0,00
+</div>
+
+</div>
+
+
+<div class="card">
+
+Reserva
+
+<div
+class="metric"
+id="ur">
+R$ 0,00
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📊 Indicadores Uber / 99
+</h3>
+
+<div id="uind"></div>
+
+</div>
+
 
 <div class="grid">
 
-<div>
-<label>Fechamento</label>
-<input id="fech" type="number" min="1" max="31" value="5">
+
+<div class="card">
+
+⏱️ Horas trabalhadas
+
+<div
+class="metric"
+id="uHoras">
+0,0 h
 </div>
 
-<div>
-<label>Vencimento</label>
-<input id="venc" type="number" min="1" max="31" value="10">
+</div>
+
+
+<div class="card">
+
+🛣️ KM trabalhados
+
+<div
+class="metric"
+id="uKm">
+0,0 km
 </div>
 
 </div>
 
-<button class="btn primary" onclick="addcard()">
-➕ Lançar compra
-</button>
 
-<div id="ctabela"></div>
+<div class="card">
+
+💰 Ganho por hora
+
+<div
+class="metric"
+id="uPorHora">
+R$ 0,00
+</div>
 
 </div>
+
+
+<div class="card">
+
+🛣️ Ganho por KM
+
+<div
+class="metric"
+id="uPorKm">
+R$ 0,00
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🚗 Lançamentos Uber / 99
+</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Data</th>
+<th>PIX</th>
+<th>Dinheiro</th>
+<th>Despesas</th>
+<th>Combustível</th>
+<th>Lucro</th>
+<th>KM</th>
+<th>Horas</th>
+<th>R$/h</th>
+<th>R$/km</th>
+<th>Reserva</th>
+<th></th>
+
+</tr>
+
+</thead>
+
+<tbody id="ta">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
 
 </section>
 
 
-<section id="metas" class="tab">
+<!-- METAS -->
+
+<section id="metas" class="page">
 
 <div class="card">
 
-<h2>🎯 Metas de economia</h2>
+<h3>
+🎯 Nova meta de economia
+</h3>
 
-<label>Nome da meta</label>
-<input id="mn" placeholder="Ex.: Reserva de emergência">
+<div class="form">
 
-<label>Valor da meta</label>
-<input id="mv" type="number" step="0.01" placeholder="0,00">
+<input
+id="mn"
+placeholder="Nome da meta">
 
-<button class="btn success" onclick="addmeta()">
-➕ Criar meta
+<input
+id="mv"
+type="number"
+step=".01"
+placeholder="Valor da meta">
+
+<input
+id="mj"
+type="number"
+step=".01"
+placeholder="Já guardado">
+
+<input
+id="mp"
+type="date">
+
+<button onclick="addMeta()">
+Criar meta
 </button>
 
-<div id="mtabela"></div>
+</div>
 
 </div>
+
+<div id="metasLista"></div>
 
 </section>
 
 
-<section id="relatorios" class="tab">
+<!-- RELATÓRIOS -->
+
+<section id="relatorios" class="page">
 
 <div class="card">
 
-<h2>📈 Relatório mensal</h2>
+<h3>
+📈 Relatório de lucro real
+</h3>
 
-<label>Mês</label>
-<input type="month" id="mesRel" onchange="relatorio()">
+<div class="form">
 
-<div id="relatorio"></div>
+<input
+id="ri"
+type="date">
+
+<input
+id="rf"
+type="date">
+
+<button onclick="relatorio()">
+Calcular
+</button>
+
+</div>
+
+<div id="relatorioBox"></div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🚗 Relatório Uber / 99
+</h3>
+
+<div id="relatorioUber"></div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📅 Resumo por período
+</h3>
+
+<div id="resumoPeriodos"></div>
+
+</div>
+
+
+<div class="card">
+
+<button
+class="danger"
+onclick="limparDados()">
+
+Apagar todos os dados
+
+</button>
 
 </div>
 
@@ -543,783 +1244,2049 @@ th{background:#f9fafb}
 </main>
 
 
-<div id="modal" class="modal">
-
-<div class="modalbox">
-
-<h2>✏️ Editar lançamento</h2>
-
-<div id="mform"></div>
-
-<button class="btn primary" onclick="salvarEdicao()">
-Salvar
-</button>
-
-<button class="btn gray" onclick="fecharModal()">
-Cancelar
-</button>
-
-</div>
-</div>
-
-
 <script>
 
-const $=id=>document.getElementById(id);
+let x=JSON.parse(
+localStorage.getItem('MF')||
+'{"l":[],"a":[],"c":[],"m":[],"config":{"fechamento":5,"vencimento":10}}'
+);
 
-const hoje=()=>{
-let d=new Date();
-return d.toISOString().slice(0,10);
+x.l=x.l||[];
+x.a=x.a||[];
+x.c=x.c||[];
+x.m=x.m||[];
+
+x.config=x.config||{
+fechamento:5,
+vencimento:10
 };
 
-const n=id=>Number($(id)?.value||0);
 
-const m=v=>
-Number(v||0).toLocaleString('pt-BR',{
-style:'currency',
-currency:'BRL'
-});
-
-
-let x=JSON.parse(localStorage.getItem('MF')||'{}');
-
-x.a=x.a||[];
-x.card=x.card||[];
-x.metas=x.metas||[];
-x.cfg=x.cfg||{fech:5,venc:10};
-
-
-function save(){
-localStorage.setItem('MF',JSON.stringify(x));
-}
-
-
-/* MIGRAÇÃO DOS LANÇAMENTOS ANTIGOS */
+/*
+CONVERSÃO DOS DADOS ANTIGOS
+*/
 
 x.a.forEach(a=>{
 
-if(a.gpix===undefined)
-a.gpix=Number(a.g||a.v||0);
+a.gpix=Number(a.gpix)||0;
+a.gdin=Number(a.gdin)||0;
 
-if(a.gdin===undefined)
-a.gdin=0;
+if(!a.gpix&&!a.gdin&&a.g)
+a.gdin=Number(a.g)||0;
 
-if(a.g===undefined)
-a.g=Number(a.gpix||0)+Number(a.gdin||0);
+a.g=a.gpix+a.gdin;
 
-if(a.cpix===undefined)
-a.cpix=Number(a.c||0);
 
-if(a.cdin===undefined)
-a.cdin=0;
+if(a.cpix===undefined &&
+a.cdin===undefined){
 
-if(a.c===undefined)
-a.c=Number(a.cpix||0)+Number(a.cdin||0);
-
-if(a.mt===undefined)
-a.mt='Serviços mecânicos';
-
-if(a.fpix!==undefined || a.fdin!==undefined){
-
-a.c=Number(a.c||0)+
-Number(a.fpix||0)+
-Number(a.fdin||0);
-
-a.cpix=Number(a.cpix||0)+
-Number(a.fpix||0);
-
-a.cdin=Number(a.cdin||0)+
-Number(a.fdin||0);
+a.cdin=Number(a.c)||0;
+a.cpix=0;
 
 }
+
+a.cpix=Number(a.cpix)||0;
+a.cdin=Number(a.cdin)||0;
+
+a.c=a.cpix+a.cdin;
+
+
+if(a.fpix===undefined &&
+a.fdin===undefined){
+
+a.fdin=Number(a.f)||0;
+a.fpix=0;
+
+}
+
+a.fpix=Number(a.fpix)||0;
+a.fdin=Number(a.fdin)||0;
+
+a.f=a.fpix+a.fdin;
+
+
+/*
+CORREÇÃO IMPORTANTE:
+KM E HORAS SEMPRE COMO NÚMERO
+*/
+
+a.k=Number(a.k)||0;
+a.h=Number(a.h)||0;
 
 });
 
 
-function aba(id,btn){
+const $=i=>document.getElementById(i);
 
-document.querySelectorAll('.tab')
-.forEach(e=>e.classList.remove('active'));
+const n=i=>+$(i).value||0;
 
-document.querySelectorAll('nav button')
-.forEach(e=>e.classList.remove('active'));
+const m=v=>
+new Intl.NumberFormat(
+'pt-BR',
+{
+style:'currency',
+currency:'BRL'
+}
+).format(v);
+
+const hoje=()=>
+new Date()
+.toISOString()
+.slice(0,10);
+
+const parse=d=>
+new Date(d+'T12:00:00');
+
+
+function save(){
+
+localStorage.setItem(
+'MF',
+JSON.stringify(x)
+);
+
+render();
+
+}
+
+
+function saveConfig(){
+
+x.config.fechamento=
+Math.min(
+31,
+Math.max(
+1,
++$('fechamento').value||5
+)
+);
+
+x.config.vencimento=
+Math.min(
+31,
+Math.max(
+1,
++$('vencimento').value||10
+)
+);
+
+save();
+
+}
+
+
+function aba(id,b){
+
+document
+.querySelectorAll('.page')
+.forEach(
+p=>p.classList.remove('active')
+);
 
 $(id).classList.add('active');
 
-if(btn)btn.classList.add('active');
+document
+.querySelectorAll('.nav button')
+.forEach(
+x=>x.classList.remove('active')
+);
+
+b.classList.add('active');
 
 render();
 
 }
 
 
-$('ad').value=hoje();
-$('aud').value=hoje();
+/*
+ID ÚNICO
+*/
 
-$('mesDash').value=hoje().slice(0,7);
-$('mesRel').value=hoje().slice(0,7);
+function gerarId(prefixo){
+
+return prefixo+
+Date.now()+
+Math.random()
+.toString(36)
+.slice(2,8);
+
+}
 
 
-$('dtipo').onchange=()=>{
+/*
+================================================
+DESPESAS FIXAS
+================================================
+*/
 
-$('repbox').style.display=
-$('dtipo').value==='Repetir'
-?'block'
-:'none';
+function adicionarOcorrenciaFixa(
+modelo,
+data,
+primeira=false
+){
 
-};
+let existe=x.l.some(a=>
+a.fixa==='sim' &&
+a.fixaId===modelo.fixaId &&
+a.d===data
+);
 
+if(existe)
+return false;
+
+
+x.l.push({
+
+d:data,
+
+t:'Despesa',
+
+c:modelo.c,
+
+v:Number(modelo.v)||0,
+
+z:modelo.z||'',
+
+p:primeira?
+(modelo.p||'Pendente'):
+'Pendente',
+
+fixa:'sim',
+
+rep:'nao',
+
+periodo:'mensal',
+
+fixaId:modelo.fixaId,
+
+origem:'fixa'
+
+});
+
+return true;
+
+}
+
+
+/*
+Gera as despesas fixas mensalmente.
+*/
+
+function garantirFixas(){
+
+let hojeData=parse(hoje());
+
+let limite=new Date(
+hojeData.getFullYear(),
+hojeData.getMonth()+12,
+1,
+12
+);
+
+let modelos=x.l.filter(a=>
+a.t==='Despesa' &&
+a.fixa==='sim' &&
+a.fixaId &&
+a.origem==='fixa-modelo'
+);
+
+let criadas=0;
+
+
+modelos.forEach(modelo=>{
+
+let dia=parse(modelo.d).getDate();
+
+let p=new Date(
+hojeData.getFullYear(),
+hojeData.getMonth(),
+1,
+12
+);
+
+
+while(p<=limite){
+
+let ultimo=
+new Date(
+p.getFullYear(),
+p.getMonth()+1,
+0
+).getDate();
+
+let diaReal=
+Math.min(
+dia,
+ultimo
+);
+
+let data=
+new Date(
+p.getFullYear(),
+p.getMonth(),
+diaReal,
+12
+)
+.toISOString()
+.slice(0,10);
+
+
+if(
+adicionarOcorrenciaFixa(
+modelo,
+data,
+data===modelo.d
+)
+)
+criadas++;
+
+
+p.setMonth(
+p.getMonth()+1
+);
+
+}
+
+});
+
+
+return criadas;
+
+}
+
+
+/*
+================================================
+ADICIONAR LANÇAMENTO PESSOAL
+================================================
+*/
 
 function add(){
 
-let pix=n('pix');
-let din=n('din');
+let v=n('va');
 
-if(pix+din<=0){
-alert('Informe o valor.');
+if(v<=0)
+return alert(
+'Digite um valor válido.'
+);
+
+
+let dataInicial=
+$('dt').value||hoje();
+
+let tipo=$('tp').value;
+
+let fixa=
+$('fixa').value==='sim';
+
+let repetir=
+$('rep').value==='sim';
+
+let periodo=
+$('periodo').value;
+
+let quantidade=
+repetir
+?
+Math.min(
+60,
+Math.max(
+1,
+parseInt(
+$('qtdrep').value
+)||1
+)
+)
+:
+1;
+
+
+/*
+ENTRADA
+*/
+
+if(tipo==='Entrada'){
+
+x.l.push({
+
+d:dataInicial,
+
+t:'Entrada',
+
+c:$('ca').value,
+
+v,
+
+z:$('de').value,
+
+p:$('pg').value,
+
+fixa:'nao',
+
+rep:'nao',
+
+periodo:'',
+
+origem:'pessoal'
+
+});
+
+save();
+
+$('va').value='';
+$('de').value='';
+
 return;
-}
-
-let data=$('ad').value||hoje();
-let tipo=$('at').value;
-let categoria=$('ca').value;
-let desc=$('desc').value;
-let status=$('status').value;
-let tipoDesp=$('dtipo').value;
-
-let qtd=tipoDesp==='Repetir'
-?Math.max(1,Math.min(60,n('qtdrep')))
-:1;
-
-let periodo=$('periodo').value;
-
-for(let i=0;i<qtd;i++){
-
-let d=new Date(data+'T12:00:00');
-
-if(i>0){
-
-if(periodo==='Diária')
-d.setDate(d.getDate()+i);
-
-if(periodo==='Semanal')
-d.setDate(d.getDate()+7*i);
-
-if(periodo==='Mensal')
-d.setMonth(d.getMonth()+i);
 
 }
 
-let ds=d.toISOString().slice(0,10);
 
-x.a.push({
+/*
+DESPESA FIXA
+*/
 
-d:ds,
-t:tipo,
-c:categoria,
-desc:desc,
+if(fixa){
 
-pix:pix,
-din:din,
-v:pix+din,
+let id=
+gerarId('FIXA-');
 
-status:status,
-tipo:tipoDesp
+
+/*
+MODELO DA DESPESA FIXA
+*/
+
+x.l.push({
+
+d:dataInicial,
+
+t:'Despesa',
+
+c:$('ca').value,
+
+v,
+
+z:$('de').value,
+
+p:$('pg').value,
+
+fixa:'sim',
+
+rep:'nao',
+
+periodo:'mensal',
+
+fixaId:id,
+
+origem:'fixa-modelo'
+
+});
+
+
+/*
+Cria a primeira ocorrência
+*/
+
+adicionarOcorrenciaFixa(
+
+{
+fixaId:id,
+d:dataInicial,
+c:$('ca').value,
+v,
+z:$('de').value,
+p:$('pg').value
+},
+
+dataInicial,
+
+true
+
+);
+
+
+garantirFixas();
+
+save();
+
+$('va').value='';
+$('de').value='';
+
+return;
+
+}
+
+
+/*
+DESPESA NORMAL / REPETIDA
+*/
+
+let repeticaoId=
+repetir?
+gerarId('REP-'):
+null;
+
+
+for(let i=0;i<quantidade;i++){
+
+let d=parse(dataInicial);
+
+if(i){
+
+if(periodo==='diaria')
+d.setDate(
+d.getDate()+i
+);
+
+else if(periodo==='semanal')
+d.setDate(
+d.getDate()+7*i
+);
+
+else
+d.setMonth(
+d.getMonth()+i
+);
+
+}
+
+
+x.l.push({
+
+d:
+d.toISOString()
+.slice(0,10),
+
+t:'Despesa',
+
+c:$('ca').value,
+
+v,
+
+z:$('de').value,
+
+p:
+i===0?
+$('pg').value:
+'Pendente',
+
+fixa:'nao',
+
+rep:
+repetir?
+'sim':
+'nao',
+
+periodo:
+repetir?
+periodo:
+'',
+
+origem:
+i===0?
+'pessoal':
+'recorrente',
+
+parcela:i+1,
+
+totalParcelas:quantidade,
+
+repeticaoId
 
 });
 
 }
 
+
 save();
 
-$('pix').value='';
-$('din').value='';
-$('desc').value='';
-
-render();
+$('va').value='';
+$('de').value='';
+$('qtdrep').value=1;
 
 }
 
 
-/* FUNÇÃO DO NOVO CAMPO DE DESPESAS UBER/99 */
+/*
+================================================
+UBER / 99
+================================================
+*/
 
 function adda(){
 
-let gp=n('agpix');
-let gd=n('agdin');
+let pix=n('agpix');
 
-let cp=n('acpix');
-let cd=n('acdin');
+let din=n('agdin');
 
-if(gp+gd<=0 && cp+cd<=0){
-alert('Informe um recebimento ou uma despesa.');
-return;
+let tipo=
+$('tipoDespesaUber').value;
+
+let valorDespesa=
+n('adespesa');
+
+let carteira=
+$('carteiraDespesaUber').value;
+
+
+let cp=0;
+let cd=0;
+
+
+if(valorDespesa>0){
+
+if(carteira==='PIX')
+cp=valorDespesa;
+else
+cd=valorDespesa;
+
 }
+
+
+let fp=n('afpix');
+let fd=n('afdin');
+
+let total=pix+din;
+
+
+if(total<=0)
+return alert(
+'Informe PIX e/ou dinheiro recebido.'
+);
+
+
+/*
+KM E HORAS SÃO SALVOS COMO NÚMEROS.
+*/
+
+let km=n('ak');
+
+let horas=n('ah');
+
 
 x.a.push({
 
-d:$('aud').value||hoje(),
+d:
+$('ad').value||hoje(),
 
-gpix:gp,
-gdin:gd,
-g:gp+gd,
+gpix:pix,
+
+gdin:din,
+
+g:total,
 
 cpix:cp,
+
 cdin:cd,
+
 c:cp+cd,
 
-mt:$('amtip').value,
+fpix:fp,
 
-k:n('ak'),
-h:n('ah')
+fdin:fd,
+
+f:fp+fd,
+
+tipoDespesaUber:tipo,
+
+k:km,
+
+h:horas
 
 });
 
+
 save();
+
 
 [
 'agpix',
 'agdin',
-'acpix',
-'acdin',
+'adespesa',
+'afpix',
+'afdin',
 'ak',
 'ah'
-].forEach(i=>$(i).value='');
+].forEach(
+i=>$(i).value=''
+);
 
-render();
+$('tipoDespesaUber').value='';
 
-}function addcard(){
+}
 
-let valor=Number(prompt('Valor da compra:')||0);
 
-if(valor<=0)return;
+/*
+================================================
+CARTÃO
+================================================
+*/
 
-let desc=prompt('Descrição da compra:')||'Compra';
+function addCartao(){
 
-let data=prompt(
-'Data da compra (AAAA-MM-DD):',
-hoje()
-)||hoje();
+let data=
+$('cdt').value||hoje();
 
-x.card.push({
-d:data,
-desc:desc,
-v:valor
+let desc=
+$('cdesc').value;
+
+let total=
+n('cvalor');
+
+let parcelas=
+Math.max(
+1,
+parseInt(
+$('cparc').value
+)||1
+);
+
+
+if(total<=0)
+return alert(
+'Digite o valor da compra.'
+);
+
+
+let vp=
+total/parcelas;
+
+let inicio=
+parse(data);
+
+let venc=
+x.config.vencimento;
+
+
+for(let i=0;i<parcelas;i++){
+
+let d=
+new Date(inicio);
+
+d.setMonth(
+d.getMonth()+i
+);
+
+
+let dt=
+new Date(
+d.getFullYear(),
+d.getMonth(),
+Math.min(
+venc,
+new Date(
+d.getFullYear(),
+d.getMonth()+1,
+0
+).getDate()
+),
+12
+);
+
+
+x.c.push({
+
+d:
+dt.toISOString()
+.slice(0,10),
+
+desc,
+
+total,
+
+parcela:i+1,
+
+parcelas,
+
+valor:vp,
+
+venc,
+
+p:'Pendente'
+
 });
 
+}
+
+
 save();
-render();
+
+$('cdesc').value='';
+$('cvalor').value='';
+$('cparc').value=1;
 
 }
 
 
-function addmeta(){
+/*
+================================================
+EXCLUSÃO / PAGAMENTO
+================================================
+*/
 
-let nome=$('mn').value.trim();
-let valor=n('mv');
+function dl(q,i){
 
-if(!nome || valor<=0){
-alert('Informe o nome e o valor da meta.');
-return;
+if(
+confirm(
+'Excluir este lançamento?'
+)
+){
+
+x[q].splice(i,1);
+
+save();
+
 }
 
-x.metas.push({
-n:nome,
-v:valor,
-p:0
+}
+
+
+function baixa(i){
+
+x.l[i].p=
+x.l[i].p==='Pago'
+?
+'Pendente':
+'Pago';
+
+save();
+
+}
+
+
+function baixaCartao(i){
+
+x.c[i].p=
+x.c[i].p==='Pago'
+?
+'Pendente':
+'Pago';
+
+save();
+
+}
+
+
+/*
+================================================
+RECORRÊNCIAS
+================================================
+*/
+
+function gerarRecorrencias(){
+
+let criadas=
+garantirFixas();
+
+
+let limite=
+new Date();
+
+limite.setMonth(
+limite.getMonth()+1
+);
+
+
+let modelos=
+x.l.filter(a=>
+a.t==='Despesa' &&
+a.rep==='sim' &&
+a.repeticaoId
+);
+
+
+/*
+Evita usar todas as parcelas
+como modelos duplicados.
+*/
+
+let ids=[];
+
+modelos=
+modelos.filter(a=>{
+
+if(ids.includes(a.repeticaoId))
+return false;
+
+ids.push(a.repeticaoId);
+
+return true;
+
 });
 
-save();
 
-$('mn').value='';
-$('mv').value='';
+modelos.forEach(modelo=>{
 
-render();
+let p=
+parse(modelo.d);
+
+
+while(p<=limite){
+
+let dt=
+p.toISOString()
+.slice(0,10);
+
+
+let existe=
+x.l.some(a=>
+a.repeticaoId===
+modelo.repeticaoId &&
+a.d===dt
+);
+
+
+if(!existe &&
+dt!==modelo.d){
+
+x.l.push({
+
+d:dt,
+
+t:'Despesa',
+
+c:modelo.c,
+
+v:modelo.v,
+
+z:modelo.z||'',
+
+p:'Pendente',
+
+fixa:'nao',
+
+rep:'nao',
+
+periodo:modelo.periodo,
+
+repeticaoId:
+modelo.repeticaoId,
+
+origem:'recorrente'
+
+});
+
+criadas++;
 
 }
 
 
-let editTipo='';
-let editIndex=-1;
+if(
+modelo.periodo==='diaria'
+){
+
+p.setDate(
+p.getDate()+1
+);
+
+}
+else if(
+modelo.periodo==='semanal'
+){
+
+p.setDate(
+p.getDate()+7
+);
+
+}
+else{
+
+p.setMonth(
+p.getMonth()+1
+);
+
+}
+
+}
+
+});
 
 
-function editarP(i){
+save();
 
-editTipo='p';
-editIndex=i;
+alert(
+criadas+
+' ocorrência(s) recorrente(s) atualizada(s).'
+);
 
-let a=x.a[i];
+}
 
-$('mform').innerHTML=`
 
-<label>Data</label>
-<input id="ed_d" type="date" value="${a.d||hoje()}">
+/*
+================================================
+FILTROS
+================================================
+*/
 
-<label>Tipo</label>
-<select id="ed_t">
-<option ${a.t==='Entrada'?'selected':''}>Entrada</option>
-<option ${a.t==='Despesa'?'selected':''}>Despesa</option>
-</select>
+function dentro(
+d,
+periodo,
+base
+){
 
-<label>Categoria</label>
-<select id="ed_c">
+let a=parse(d);
 
-<option ${a.c==='Salário'?'selected':''}>Salário</option>
-<option ${a.c==='Extra'?'selected':''}>Extra</option>
-<option ${a.c==='Empréstimo'?'selected':''}>Empréstimo</option>
-<option ${a.c==='Alimentação'?'selected':''}>Alimentação</option>
-<option ${a.c==='Casa'?'selected':''}>Casa</option>
-<option ${a.c==='Saúde'?'selected':''}>Saúde</option>
-<option ${a.c==='Transporte'?'selected':''}>Transporte</option>
-<option ${a.c==='Contas'?'selected':''}>Contas</option>
-<option ${a.c==='Outros'?'selected':''}>Outros</option>
+let b=
+parse(base||hoje());
 
-</select>
 
-<label>Descrição</label>
-<input id="ed_desc" value="${a.desc||''}">
+if(periodo==='todos')
+return true;
 
-<label>PIX</label>
-<input id="ed_pix" type="number" step="0.01" value="${a.pix||0}">
 
-<label>Dinheiro</label>
-<input id="ed_din" type="number" step="0.01" value="${a.din||0}">
+if(periodo==='dia')
+return d===(base||hoje());
 
-<label>Status</label>
-<select id="ed_status">
-<option ${a.status==='Pago'?'selected':''}>Pago</option>
-<option ${a.status==='Pendente'?'selected':''}>Pendente</option>
-</select>
+
+if(periodo==='semana'){
+
+let ini=
+new Date(b);
+
+let day=
+ini.getDay();
+
+ini.setDate(
+ini.getDate()-
+(day||7)+1
+);
+
+let fim=
+new Date(ini);
+
+fim.setDate(
+ini.getDate()+6
+);
+
+return a>=ini&&a<=fim;
+
+}
+
+
+return(
+a.getMonth()===
+b.getMonth() &&
+a.getFullYear()===
+b.getFullYear()
+);
+
+}
+
+
+/*
+================================================
+TOTAIS
+================================================
+*/
+
+function totais(
+periodo,
+base
+){
+
+let l=
+x.l.filter(
+a=>dentro(
+a.d,
+periodo,
+base
+)
+);
+
+let a=
+x.a.filter(
+a=>dentro(
+a.d,
+periodo,
+base
+)
+);
+
+
+let ep=
+l
+.filter(
+z=>z.t==='Entrada'
+)
+.reduce(
+(s,z)=>s+Number(z.v||0),
+0
+);
+
+
+let dp=
+l
+.filter(
+z=>z.t==='Despesa'
+)
+.reduce(
+(s,z)=>s+Number(z.v||0),
+0
+);
+
+
+let gu=
+a.reduce(
+(s,z)=>s+Number(z.g||0),
+0
+);
+
+
+let cu=
+a.reduce(
+(s,z)=>
+s+
+Number(z.c||0)+
+Number(z.f||0),
+0
+);
+
+
+let km=
+a.reduce(
+(s,z)=>s+Number(z.k||0),
+0
+);
+
+
+let horas=
+a.reduce(
+(s,z)=>s+Number(z.h||0),
+0
+);
+
+
+return{
+
+entradas:
+ep+gu,
+
+despesas:
+dp+cu,
+
+lucro:
+ep+gu-dp-cu,
+
+km,
+
+horas,
+
+porHora:
+horas?
+gu/horas:
+0,
+
+porKm:
+km?
+gu/km:
+0,
+
+reserva:
+Math.max(
+0,
+a.reduce(
+(s,z)=>
+s+
+Number(z.g||0)-
+Number(z.c||0)-
+Number(z.f||0),
+0
+)*.1
+)
+
+};
+
+}
+
+
+/*
+================================================
+GRÁFICO
+================================================
+*/
+
+function barras(){
+
+let vals=[];
+
+
+for(
+let i=6;
+i>=0;
+i--
+){
+
+let d=
+new Date();
+
+d.setDate(
+d.getDate()-i
+);
+
+
+let dt=
+d.toISOString()
+.slice(0,10);
+
+
+let t=
+totais(
+'dia',
+dt
+);
+
+
+vals.push({
+dt,
+t
+});
+
+}
+
+
+let max=
+Math.max(
+1,
+...vals.map(
+v=>Math.max(
+v.t.entradas,
+v.t.despesas,
+Math.abs(v.t.lucro)
+)
+)
+);
+
+
+$('dashChart').innerHTML=
+vals.map(v=>
+
+`<div
+class="bar"
+style="height:${Math.max(
+5,
+v.t.entradas/max*100
+)}%">
+<span>
+${m(v.t.entradas)}
+</span>
+</div>`
+
+).join('');
+
+}
+
+
+/*
+================================================
+ALERTAS
+================================================
+*/
+
+function alertas(){
+
+let hojeD=
+parse(hoje());
+
+
+let arr=
+x.l
+.filter(a=>
+a.t==='Despesa' &&
+a.p!=='Pago'
+)
+.sort(
+(a,b)=>
+parse(a.d)-parse(b.d)
+)
+.slice(0,8);
+
+
+$('alertas').innerHTML=
+arr.length?
+
+arr.map(a=>{
+
+let diff=
+Math.round(
+(
+parse(a.d)-hojeD
+)/86400000
+);
+
+
+let texto=
+diff<0?
+'Vencida':
+diff===0?
+'Vence hoje':
+'Vence em '+
+diff+
+' dia(s)';
+
+
+return `
+
+<div class="alert ${
+diff>=0?'':'danger'
+}">
+
+<b>
+${a.z||a.c}
+</b>
+
+<br>
+
+${a.d}
+·
+${m(a.v)}
+·
+${texto}
+
+</div>
 
 `;
 
-$('modal').classList.add('show');
+}).join('')
+
+:
+
+'<div class="alert ok">Nenhuma conta pendente próxima.</div>';
 
 }
+  /*
+================================================
+EDIÇÃO DE LANÇAMENTOS
+================================================
+*/
+
+let editTipo=null;
+let editIndice=null;
 
 
-function editarU(i){
+function abrirEdicao(tipo,i){
 
-let a=x.a[i];
+editTipo=tipo;
+editIndice=i;
 
-editTipo='u';
-editIndex=i;
 
-$('mform').innerHTML=`
+if(tipo==='l'){
 
-<label>Data</label>
-<input id="ed_d" type="date" value="${a.d||hoje()}">
+let a=x.l[i];
 
-<label>Recebido PIX</label>
-<input id="ed_gpix" type="number" step="0.01" value="${a.gpix||0}">
+$('editTitulo').textContent=
+'✏️ Editar lançamento pessoal';
 
-<label>Recebido dinheiro</label>
-<input id="ed_gdin" type="number" step="0.01" value="${a.gdin||0}">
+$('editForm').innerHTML=`
 
-<label>Tipo de despesa</label>
+<input
+id="edData"
+type="date"
+value="${a.d||''}">
 
-<select id="ed_mt">
+<select id="edTipo">
 
-<option ${a.mt==='Troca de óleo'?'selected':''}>
-Troca de óleo
+<option ${a.t==='Entrada'?'selected':''}>
+Entrada
 </option>
 
-<option ${a.mt==='Arrefecimento'?'selected':''}>
-Arrefecimento
+<option ${a.t==='Despesa'?'selected':''}>
+Despesa
 </option>
 
-<option ${a.mt==='Serviços mecânicos'?'selected':''}>
-Serviços mecânicos
+</select>
+
+<select id="edCat">
+
+<option ${a.c==='Salário'?'selected':''}>
+Salário
 </option>
 
-<option ${a.mt==='Alimentação'?'selected':''}>
+<option ${a.c==='Uber / 99'?'selected':''}>
+Uber / 99
+</option>
+
+<option ${a.c==='Alimentação'?'selected':''}>
 Alimentação
 </option>
 
-<option ${a.mt==='Combustível'?'selected':''}>
-Combustível
+<option ${a.c==='Moradia'?'selected':''}>
+Moradia
+</option>
+
+<option ${a.c==='Contas'?'selected':''}>
+Contas
+</option>
+
+<option ${a.c==='Carro'?'selected':''}>
+Carro
+</option>
+
+<option ${a.c==='Cartão de crédito'?'selected':''}>
+Cartão de crédito
+</option>
+
+<option ${a.c==='Saúde'?'selected':''}>
+Saúde
+</option>
+
+<option ${a.c==='Lazer'?'selected':''}>
+Lazer
+</option>
+
+<option ${a.c==='Outros'?'selected':''}>
+Outros
 </option>
 
 </select>
 
-<label>Despesa PIX</label>
-<input id="ed_cpix" type="number" step="0.01" value="${a.cpix||0}">
+<input
+id="edValor"
+type="number"
+step=".01"
+value="${Number(a.v)||0}">
 
-<label>Despesa dinheiro</label>
-<input id="ed_cdin" type="number" step="0.01" value="${a.cdin||0}">
+<input
+id="edDesc"
+placeholder="Descrição"
+value="${a.z||''}">
 
-<label>KM</label>
-<input id="ed_k" type="number" value="${a.k||0}">
+<select id="edPag">
 
-<label>Horas</label>
-<input id="ed_h" type="number" step="0.1" value="${a.h||0}">
+<option ${a.p==='Pendente'?'selected':''}>
+Pendente
+</option>
+
+<option ${a.p==='Pago'?'selected':''}>
+Pago
+</option>
+
+</select>
 
 `;
 
-$('modal').classList.add('show');
+}
+
+
+if(tipo==='a'){
+
+let a=x.a[i];
+
+$('editTitulo').textContent=
+'✏️ Editar Uber / 99';
+
+$('editForm').innerHTML=`
+
+<input
+id="edData"
+type="date"
+value="${a.d||''}">
+
+<input
+id="edGpix"
+type="number"
+step=".01"
+value="${Number(a.gpix)||0}"
+placeholder="PIX recebido">
+
+<input
+id="edGdin"
+type="number"
+step=".01"
+value="${Number(a.gdin)||0}"
+placeholder="Dinheiro recebido">
+
+<select id="edTipoDesp">
+
+<option value=""
+${!a.tipoDespesaUber?'selected':''}>
+Tipo de despesa
+</option>
+
+<option
+${a.tipoDespesaUber==='Manutenção'?'selected':''}>
+Manutenção
+</option>
+
+<option
+${a.tipoDespesaUber==='Lavagem do carro'?'selected':''}>
+Lavagem do carro
+</option>
+
+<option
+${a.tipoDespesaUber==='Troca de óleo'?'selected':''}>
+Troca de óleo
+</option>
+
+<option
+${a.tipoDespesaUber==='Arrefecimento'?'selected':''}>
+Arrefecimento
+</option>
+
+<option
+${a.tipoDespesaUber==='Serviços mecânicos'?'selected':''}>
+Serviços mecânicos
+</option>
+
+<option
+${a.tipoDespesaUber==='Alimentação'?'selected':''}>
+Alimentação
+</option>
+
+<option
+${a.tipoDespesaUber==='Pedágio'?'selected':''}>
+Pedágio
+</option>
+
+<option
+${a.tipoDespesaUber==='Estacionamento'?'selected':''}>
+Estacionamento
+</option>
+
+<option
+${a.tipoDespesaUber==='Outros'?'selected':''}>
+Outros
+</option>
+
+</select>
+
+<input
+id="edCpix"
+type="number"
+step=".01"
+value="${Number(a.cpix)||0}"
+placeholder="Despesas PIX">
+
+<input
+id="edCdin"
+type="number"
+step=".01"
+value="${Number(a.cdin)||0}"
+placeholder="Despesas dinheiro">
+
+<input
+id="edFpix"
+type="number"
+step=".01"
+value="${Number(a.fpix)||0}"
+placeholder="Combustível PIX">
+
+<input
+id="edFdin"
+type="number"
+step=".01"
+value="${Number(a.fdin)||0}"
+placeholder="Combustível dinheiro">
+
+<input
+id="edKm"
+type="number"
+step=".1"
+value="${Number(a.k)||0}"
+placeholder="KM">
+
+<input
+id="edHoras"
+type="number"
+step=".1"
+value="${Number(a.h)||0}"
+placeholder="Horas trabalhadas">
+
+`;
+
+}
+
+
+if(tipo==='c'){
+
+let a=x.c[i];
+
+$('editTitulo').textContent=
+'✏️ Editar compra do cartão';
+
+$('editForm').innerHTML=`
+
+<input
+id="edData"
+type="date"
+value="${a.d||''}">
+
+<input
+id="edDesc"
+placeholder="Descrição"
+value="${a.desc||''}">
+
+<input
+id="edValor"
+type="number"
+step=".01"
+value="${Number(a.valor)||0}">
+
+<select id="edPag">
+
+<option ${a.p==='Pendente'?'selected':''}>
+Pendente
+</option>
+
+<option ${a.p==='Pago'?'selected':''}>
+Pago
+</option>
+
+</select>
+
+`;
+
+}
+
+
+$('editModal').classList.add('show');
+
+}
+
+
+function fecharEdicao(){
+
+$('editModal').classList.remove('show');
+
+editTipo=null;
+editIndice=null;
 
 }
 
 
 function salvarEdicao(){
 
-if(editIndex<0)return;
+if(editTipo===null)
+return;
 
-let a=x.a[editIndex];
 
-if(editTipo==='p'){
+if(editTipo==='l'){
 
-a.d=$('ed_d').value;
-a.t=$('ed_t').value;
-a.c=$('ed_c').value;
-a.desc=$('ed_desc').value;
+let a=x.l[editIndice];
 
-a.pix=Number($('ed_pix').value||0);
-a.din=Number($('ed_din').value||0);
+a.d=$('edData').value||hoje();
 
-a.v=a.pix+a.din;
+a.t=$('edTipo').value;
 
-a.status=$('ed_status').value;
+a.c=$('edCat').value;
+
+a.v=
+Number($('edValor').value)||0;
+
+a.z=$('edDesc').value||'';
+
+a.p=$('edPag').value;
+
+}
+
+
+if(editTipo==='a'){
+
+let a=x.a[editIndice];
+
+a.d=$('edData').value||hoje();
+
+a.gpix=
+Number($('edGpix').value)||0;
+
+a.gdin=
+Number($('edGdin').value)||0;
+
+a.g=
+a.gpix+a.gdin;
+
+a.tipoDespesaUber=
+$('edTipoDesp').value||'';
+
+a.cpix=
+Number($('edCpix').value)||0;
+
+a.cdin=
+Number($('edCdin').value)||0;
+
+a.c=
+a.cpix+a.cdin;
+
+a.fpix=
+Number($('edFpix').value)||0;
+
+a.fdin=
+Number($('edFdin').value)||0;
+
+a.f=
+a.fpix+a.fdin;
+
+a.k=
+Number($('edKm').value)||0;
+
+a.h=
+Number($('edHoras').value)||0;
 
 }
 
-if(editTipo==='u'){
 
-a.d=$('ed_d').value;
+if(editTipo==='c'){
 
-a.gpix=Number($('ed_gpix').value||0);
-a.gdin=Number($('ed_gdin').value||0);
+let a=x.c[editIndice];
 
-a.g=a.gpix+a.gdin;
+a.d=
+$('edData').value||hoje();
 
-a.mt=$('ed_mt').value;
+a.desc=
+$('edDesc').value||'';
 
-a.cpix=Number($('ed_cpix').value||0);
-a.cdin=Number($('ed_cdin').value||0);
+a.valor=
+Number($('edValor').value)||0;
 
-a.c=a.cpix+a.cdin;
-
-a.k=Number($('ed_k').value||0);
-a.h=Number($('ed_h').value||0);
+a.p=
+$('edPag').value;
 
 }
+
 
 save();
 
-fecharModal();
-
-render();
+fecharEdicao();
 
 }
 
 
-function fecharModal(){
+/*
+================================================
+TOTAIS EXCLUSIVOS UBER / 99
+================================================
+*/
 
-$('modal').classList.remove('show');
+function totaisUber(periodo,base){
 
-editTipo='';
-editIndex=-1;
-
-}
-
-
-function excluirP(i){
-
-if(!confirm('Excluir este lançamento?'))return;
-
-x.a.splice(i,1);
-
-save();
-render();
-
-}
-
-
-function alternarStatus(i){
-
-let a=x.a[i];
-
-if(!a.status)
-a.status='Pago';
-
-else
-a.status=a.status==='Pago'
-?'Pendente'
-:'Pago';
-
-save();
-render();
-
-}
-
-
-function excluirCard(i){
-
-if(!confirm('Excluir esta compra?'))return;
-
-x.card.splice(i,1);
-
-save();
-render();
-
-}
-
-
-function excluirMeta(i){
-
-if(!confirm('Excluir esta meta?'))return;
-
-x.metas.splice(i,1);
-
-save();
-render();
-
-}
-
-
-function renderP(){
-
-let arr=x.a.filter(a=>
-!('gpix' in a) &&
-!('gdin' in a)
+let a=
+x.a.filter(z=>
+dentro(
+z.d,
+periodo,
+base
+)
 );
 
-if(!arr.length){
 
-$('ptabela').innerHTML=
-'<p class="muted">Nenhum lançamento pessoal.</p>';
-
-return;
-
-}
-
-let h=`
-
-<table>
-
-<tr>
-<th>Data</th>
-<th>Tipo</th>
-<th>Categoria</th>
-<th>Descrição</th>
-<th>PIX</th>
-<th>Dinheiro</th>
-<th>Total</th>
-<th>Status</th>
-<th>Ações</th>
-</tr>
-`;
-
-arr.forEach(a=>{
-
-let i=x.a.indexOf(a);
-
-h+=`
-
-<tr>
-
-<td>${a.d||''}</td>
-
-<td>${a.t||''}</td>
-
-<td>${a.c||''}</td>
-
-<td>${a.desc||''}</td>
-
-<td>${m(a.pix)}</td>
-
-<td>${m(a.din)}</td>
-
-<td><b>${m(a.v)}</b></td>
-
-<td>
-
-<span
-class="badge ${a.status==='Pago'?'pago':'pendente'}"
-onclick="alternarStatus(${i})">
-
-${a.status||'Pago'}
-
-</span>
-
-</td>
-
-<td>
-
-<button
-class="btn gray"
-onclick="editarP(${i})">
-✏️
-</button>
-
-<button
-class="btn danger"
-onclick="excluirP(${i})">
-🗑️
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-h+='</table>';
-
-$('ptabela').innerHTML=h;
-
-}
-
-
-function renderU(){
-
-let arr=x.a.filter(a=>
-('gpix' in a) ||
-('gdin' in a)
+let ganhos=
+a.reduce(
+(s,z)=>
+s+Number(z.g||0),
+0
 );
 
-if(!arr.length){
 
-$('utabela').innerHTML=
-'<p class="muted">Nenhum lançamento Uber/99.</p>';
+let despesas=
+a.reduce(
+(s,z)=>
+s+
+Number(z.c||0),
+0
+);
 
-return;
 
-}
+let combustivel=
+a.reduce(
+(s,z)=>
+s+
+Number(z.f||0),
+0
+);
 
-let h=`
 
-<table>
+let custos=
+despesas+combustivel;
 
-<tr>
-<th>Data</th>
-<th>Recebido</th>
-<th>Despesa</th>
-<th>Tipo</th>
-<th>Lucro</th>
-<th>KM</th>
-<th>Horas</th>
-<th>Ações</th>
-</tr>
-`;
 
-arr.forEach(a=>{
+let lucro=
+ganhos-custos;
 
-let i=x.a.indexOf(a);
 
-let recebido=
-Number(a.gpix||0)+
-Number(a.gdin||0);
+let km=
+a.reduce(
+(s,z)=>
+s+Number(z.k||0),
+0
+);
 
-let despesa=
-Number(a.cpix||0)+
-Number(a.cdin||0);
 
-let lucro=recebido-despesa;
+let horas=
+a.reduce(
+(s,z)=>
+s+Number(z.h||0),
+0
+);
 
-h+=`
 
-<tr>
+return{
 
-<td>${a.d||''}</td>
+ganhos,
 
-<td>
-${m(recebido)}
-<br>
-<small>PIX ${m(a.gpix)}</small>
-<br>
-<small>Din ${m(a.gdin)}</small>
-</td>
+despesas,
 
-<td>
-${m(despesa)}
-<br>
-<small>PIX ${m(a.cpix)}</small>
-<br>
-<small>Din ${m(a.cdin)}</small>
-</td>
+combustivel,
 
-<td>${a.mt||''}</td>
+custos,
 
-<td>
-<b>${m(lucro)}</b>
-</td>
+lucro,
 
-<td>${a.k||0}</td>
+km,
 
-<td>${a.h||0}</td>
+horas,
 
-<td>
+ganhoHora:
+horas?
+ganhos/horas:
+0,
 
-<button
-class="btn gray"
-onclick="editarU(${i})">
-✏️
-</button>
+ganhoKm:
+km?
+ganhos/km:
+0,
 
-<button
-class="btn danger"
-onclick="excluirP(${i})">
-🗑️
-</button>
+reserva:
+Math.max(
+0,
+lucro*.10
+)
 
-</td>
-
-</tr>
-
-`;
-
-});
-
-h+='</table>';
-
-$('utabela').innerHTML=h;
+};
 
 }
 
 
-function renderCard(){
+/*
+================================================
+RENDER UBER / 99
+================================================
+*/
 
-if(!x.card.length){
+function renderUber(){
 
-$('ctabela').innerHTML=
-'<p class="muted">Nenhuma compra no cartão.</p>';
+let periodo=
+$('periodoDash')?
+$('periodoDash').value:
+'mes';
 
-return;
+let base=
+$('dataDash')?
+$('dataDash').value:
+hoje();
 
-}
 
-let h=`
+let u=
+totaisUber(
+periodo,
+base
+);
 
-<table>
 
-<tr>
-<th>Data</th>
-<th>Descrição</th>
-<th>Valor</th>
-<th>Ação</th>
-</tr>
+$('ug').textContent=
+m(u.ganhos);
+
+$('uc').textContent=
+m(u.custos);
+
+$('ul').textContent=
+m(u.lucro);
+
+$('ur').textContent=
+m(u.reserva);
+
+
+$('uHoras').textContent=
+u.horas
+.toFixed(1)
+.replace('.',',')+
+' h';
+
+
+$('uKm').textContent=
+u.km
+.toFixed(1)
+.replace('.',',')+
+' km';
+
+
+$('uPorHora').textContent=
+m(u.ganhoHora);
+
+
+$('uPorKm').textContent=
+m(u.ganhoKm);
+
+
+$('uind').innerHTML=`
+
+<b>PIX:</b>
+${m(
+x.a
+.filter(z=>
+dentro(
+z.d,
+periodo,
+base
+)
+)
+.reduce(
+(s,z)=>
+s+Number(z.gpix||0),
+0
+)
+)}
+
+&nbsp;&nbsp;
+
+<b>Dinheiro:</b>
+${m(
+x.a
+.filter(z=>
+dentro(
+z.d,
+periodo,
+base
+)
+)
+.reduce(
+(s,z)=>
+s+Number(z.gdin||0),
+0
+)
+)}
+
+<br><br>
+
+<b>Despesas:</b>
+${m(u.despesas)}
+
+&nbsp;&nbsp;
+
+<b>Combustível:</b>
+${m(u.combustivel)}
+
+<br><br>
+
+<b>Custos totais:</b>
+${m(u.custos)}
+
+&nbsp;&nbsp;
+
+<b>Lucro real:</b>
+${m(u.lucro)}
+
+<br><br>
+
+<b>KM:</b>
+${u.km.toFixed(1).replace('.',',')}
+
+&nbsp;&nbsp;
+
+<b>Horas:</b>
+${u.horas.toFixed(1).replace('.',',')}
+
+<br><br>
+
+<b>R$/hora:</b>
+${m(u.ganhoHora)}
+
+&nbsp;&nbsp;
+
+<b>R$/km:</b>
+${m(u.ganhoKm)}
+
 `;
 
-x.card.forEach((a,i)=>{
 
-h+=`
+$('ta').innerHTML=
+x.a
+.map((a,i)=>{
+
+let lucro=
+Number(a.g||0)-
+Number(a.c||0)-
+Number(a.f||0);
+
+let ph=
+a.h?
+a.g/a.h:
+0;
+
+let pk=
+a.k?
+a.g/a.k:
+0;
+
+let reserva=
+Math.max(
+0,
+lucro*.10
+);
+
+
+return `
 
 <tr>
 
 <td>${a.d}</td>
 
-<td>${a.desc}</td>
+<td>${m(a.gpix)}</td>
 
-<td>${m(a.v)}</td>
+<td>${m(a.gdin)}</td>
+
+<td>
+
+${m(a.c)}
+
+<br>
+
+<span class="badge">
+${a.tipoDespesaUber||'Outros'}
+</span>
+
+</td>
+
+<td>
+${m(a.f)}
+</td>
+
+<td>
+${m(lucro)}
+</td>
+
+<td>
+${Number(a.k||0)
+.toFixed(1)
+.replace('.',',')}
+</td>
+
+<td>
+${Number(a.h||0)
+.toFixed(1)
+.replace('.',',')}
+</td>
+
+<td>
+${m(ph)}
+</td>
+
+<td>
+${m(pk)}
+</td>
+
+<td>
+${m(reserva)}
+</td>
 
 <td>
 
 <button
-class="btn danger"
-onclick="excluirCard(${i})">
+class="warning"
+onclick="abrirEdicao('a',${i})">
+✏️
+</button>
+
+<button
+class="danger"
+onclick="dl('a',${i})">
 🗑️
 </button>
 
@@ -1329,71 +3296,1680 @@ onclick="excluirCard(${i})">
 
 `;
 
+})
+.join('');
+
+}
+
+
+/*
+================================================
+RENDER PESSOAL
+================================================
+*/
+
+function renderPessoal(){
+
+$('tl').innerHTML=
+x.l
+.map((a,i)=>`
+
+<tr>
+
+<td>
+${a.d}
+</td>
+
+<td>
+<span class="badge">
+${a.t}
+</span>
+</td>
+
+<td>
+${a.c||''}
+</td>
+
+<td>
+${m(a.v)}
+</td>
+
+<td>
+${a.z||''}
+</td>
+
+<td>
+
+<button
+class="${a.p==='Pago'?'success':'warning'}"
+onclick="baixa(${i})">
+
+${a.p||'Pendente'}
+
+</button>
+
+</td>
+
+<td>
+
+${a.fixa==='sim'?'🔄':''}
+
+</td>
+
+<td>
+
+${
+a.rep==='sim'?
+'🔁 '+(a.periodo||''):
+''
+}
+
+</td>
+
+<td>
+
+<button
+class="warning"
+onclick="abrirEdicao('l',${i})">
+✏️
+</button>
+
+<button
+class="danger"
+onclick="dl('l',${i})">
+🗑️
+</button>
+
+</td>
+
+</tr>
+
+`)
+.join('');
+
+}
+
+
+/*
+================================================
+FATURA DO CARTÃO
+================================================
+*/
+
+function faturaAtual(){
+
+let hojeD=
+parse(hoje());
+
+let mes=
+hojeD.getMonth();
+
+let ano=
+hojeD.getFullYear();
+
+
+let compras=
+x.c.filter(a=>{
+
+let d=
+parse(a.d);
+
+return(
+d.getMonth()===mes &&
+d.getFullYear()===ano
+);
+
 });
 
-h+='</table>';
 
-$('ctabela').innerHTML=h;
+return compras.reduce(
+(s,a)=>
+s+Number(a.valor||0),
+0
+);
+
+}
+
+
+function renderCartao(){
+
+let total=
+faturaAtual();
+
+
+$('faturaAtual').textContent=
+m(total);
+
+
+$('faturaInfo').textContent=
+'Fechamento dia '+
+x.config.fechamento+
+' · vencimento dia '+
+x.config.vencimento;
+
+
+$('tc').innerHTML=
+x.c
+.map((a,i)=>`
+
+<tr>
+
+<td>${a.d}</td>
+
+<td>${a.desc||''}</td>
+
+<td>${m(a.total)}</td>
+
+<td>
+${a.parcela}/${a.parcelas}
+</td>
+
+<td>${m(a.valor)}</td>
+
+<td>
+${a.d}
+</td>
+
+<td>
+
+<button
+class="${a.p==='Pago'?'success':'warning'}"
+onclick="baixaCartao(${i})">
+
+${a.p||'Pendente'}
+
+</button>
+
+</td>
+
+<td>
+
+<button
+class="warning"
+onclick="abrirEdicao('c',${i})">
+✏️
+</button>
+
+<button
+class="danger"
+onclick="dl('c',${i})">
+🗑️
+</button>
+
+</td>
+
+</tr>
+
+`)
+.join('');
+
+
+let grupos={};
+
+
+x.c.forEach(a=>{
+
+let chave=
+a.d.slice(0,7);
+
+if(!grupos[chave])
+grupos[chave]=0;
+
+grupos[chave]+=
+Number(a.valor||0);
+
+});
+
+
+$('faturas').innerHTML=
+Object.keys(grupos)
+.sort()
+.reverse()
+.map(k=>`
+
+<div class="card">
+
+<b>
+Fatura ${k}
+</b>
+
+<div class="metric">
+${m(grupos[k])}
+</div>
+
+</div>
+
+`)
+.join('');
+
+
+$('fechamento').value=
+x.config.fechamento;
+
+$('vencimento').value=
+x.config.vencimento;
+
+}
+
+
+/*
+================================================
+METAS
+================================================
+*/
+
+function addMeta(){
+
+let nome=
+$('mn').value.trim();
+
+let valor=
+n('mv');
+
+let guardado=
+n('mj');
+
+let prazo=
+$('mp').value||'';
+
+
+if(!nome)
+return alert(
+'Informe o nome da meta.'
+);
+
+
+if(valor<=0)
+return alert(
+'Informe o valor da meta.'
+);
+
+
+x.m.push({
+
+id:gerarId('META-'),
+
+nome,
+
+valor,
+
+guardado,
+
+prazo
+
+});
+
+
+save();
+
+$('mn').value='';
+$('mv').value='';
+$('mj').value='';
+$('mp').value='';
+
+}
+
+
+function adicionarNaMeta(i){
+
+let valor=
+Number(
+prompt(
+'Quanto deseja adicionar à meta?'
+)
+)||0;
+
+
+if(valor<=0)
+return;
+
+
+x.m[i].guardado=
+Number(x.m[i].guardado||0)+valor;
+
+save();
 
 }
 
 
 function renderMetas(){
 
-if(!x.metas.length){
+$('metasLista').innerHTML=
+x.m
+.map((a,i)=>{
 
-$('mtabela').innerHTML=
-'<p class="muted">Nenhuma meta cadastrada.</p>';
+let percentual=
+a.valor?
+Math.min(
+100,
+a.guardado/a.valor*100
+):
+0;
+
+
+return `
+
+<div class="card">
+
+<h3>
+🎯 ${a.nome}
+</h3>
+
+<div class="metric">
+${m(a.guardado)}
+/
+${m(a.valor)}
+</div>
+
+<div class="progress">
+
+<div
+style="width:${percentual}%">
+</div>
+
+</div>
+
+<p>
+${percentual.toFixed(1)}%
+</p>
+
+<p class="muted">
+${
+a.prazo?
+'Prazo: '+a.prazo:
+'Sem prazo'
+}
+</p>
+
+<button
+class="success"
+onclick="adicionarNaMeta(${i})">
+
+💰 Adicionar dinheiro
+
+</button>
+
+<button
+class="danger"
+onclick="dl('m',${i})">
+
+🗑️ Excluir
+
+</button>
+
+</div>
+
+`;
+
+})
+.join('');
+
+}
+
+
+/*
+================================================
+RELATÓRIO UBER / 99
+================================================
+*/
+
+function relatorioUber(){
+
+let inicio=
+$('ri').value;
+
+let fim=
+$('rf').value;
+
+
+if(!inicio||!fim){
+
+$('relatorioUber').innerHTML=
+'<p class="muted">Informe o período acima.</p>';
 
 return;
 
 }
 
-let h=`
+
+let dados=
+x.a.filter(a=>
+a.d>=inicio &&
+a.d<=fim
+);
+
+
+if(!dados.length){
+
+$('relatorioUber').innerHTML=
+'<div class="alert">Nenhum lançamento Uber/99 no período.</div>';
+
+return;
+
+}
+
+
+let ganhos=
+dados.reduce(
+(s,a)=>
+s+Number(a.g||0),
+0
+);
+
+
+let despesas=
+dados.reduce(
+(s,a)=>
+s+Number(a.c||0),
+0
+);
+
+
+let combustivel=
+dados.reduce(
+(s,a)=>
+s+Number(a.f||0),
+0
+);
+
+
+let custos=
+despesas+combustivel;
+
+let lucro=
+ganhos-custos;
+
+
+let km=
+dados.reduce(
+(s,a)=>
+s+Number(a.k||0),
+0
+);
+
+
+let horas=
+dados.reduce(
+(s,a)=>
+s+Number(a.h||0),
+0
+);
+
+
+let ganhoHora=
+horas?
+ganhos/horas:
+0;
+
+
+let ganhoKm=
+km?
+ganhos/km:
+0;
+
+
+let reserva=
+Math.max(
+0,
+lucro*.10
+);
+
+
+let pix=
+dados.reduce(
+(s,a)=>
+s+Number(a.gpix||0),
+0
+);
+
+
+let dinheiro=
+dados.reduce(
+(s,a)=>
+s+Number(a.gdin||0),
+0
+);
+
+
+$('relatorioUber').innerHTML=`
+
+<div class="grid">
+
+<div class="card">
+
+Ganhos
+
+<div class="metric">
+${m(ganhos)}
+</div>
+
+</div>
+
+<div class="card">
+
+Custos
+
+<div class="metric">
+${m(custos)}
+</div>
+
+</div>
+
+<div class="card">
+
+Lucro real
+
+<div class="metric">
+${m(lucro)}
+</div>
+
+</div>
+
+<div class="card">
+
+Reserva 10%
+
+<div class="metric">
+${m(reserva)}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card">
+
+🛣️ KM trabalhados
+
+<div class="metric">
+${km.toFixed(1).replace('.',',')} km
+</div>
+
+</div>
+
+
+<div class="card">
+
+⏱️ Horas trabalhadas
+
+<div class="metric">
+${horas.toFixed(1).replace('.',',')} h
+</div>
+
+</div>
+
+
+<div class="card">
+
+💰 Ganho por hora
+
+<div class="metric">
+${m(ganhoHora)}
+</div>
+
+</div>
+
+
+<div class="card">
+
+🛣️ Ganho por KM
+
+<div class="metric">
+${m(ganhoKm)}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<b>PIX:</b>
+${m(pix)}
+
+&nbsp;&nbsp;
+
+<b>Dinheiro:</b>
+${m(dinheiro)}
+
+<br><br>
+
+<b>Despesas:</b>
+${m(despesas)}
+
+&nbsp;&nbsp;
+
+<b>Combustível:</b>
+${m(combustivel)}
+
+<br><br>
+
+<b>Período:</b>
+${inicio}
+até
+${fim}
+
+</div>
+
+`;
+
+}
+
+
+/*
+================================================
+RELATÓRIO GERAL
+================================================
+*/
+
+function relatorio(){
+
+let inicio=
+$('ri').value;
+
+let fim=
+$('rf').value;
+
+
+if(!inicio||!fim){
+
+alert(
+'Informe a data inicial e final.'
+);
+
+return;
+
+}
+
+
+let l=
+x.l.filter(a=>
+a.d>=inicio &&
+a.d<=fim
+);
+
+
+let a=
+x.a.filter(a=>
+a.d>=inicio &&
+a.d<=fim
+);
+
+
+let entradasP=
+l
+.filter(z=>z.t==='Entrada')
+.reduce(
+(s,z)=>s+Number(z.v||0),
+0
+);
+
+
+let despesasP=
+l
+.filter(z=>z.t==='Despesa')
+.reduce(
+(s,z)=>s+Number(z.v||0),
+0
+);
+
+
+let ganhosU=
+a.reduce(
+(s,z)=>s+Number(z.g||0),
+0
+);
+
+
+let despesasU=
+a.reduce(
+(s,z)=>
+s+
+Number(z.c||0)+
+Number(z.f||0),
+0
+);
+
+
+let km=
+a.reduce(
+(s,z)=>s+Number(z.k||0),
+0
+);
+
+
+let horas=
+a.reduce(
+(s,z)=>s+Number(z.h||0),
+0
+);
+
+
+let lucro=
+entradasP+
+ganhosU-
+despesasP-
+despesasU;
+
+
+let reserva=
+Math.max(
+0,
+(
+ganhosU-
+a.reduce(
+(s,z)=>
+s+
+Number(z.c||0)+
+Number(z.f||0),
+0
+)
+)*.10
+);
+
+
+$('relatorioBox').innerHTML=`
+
+<div class="grid">
+
+<div class="card">
+
+Entradas pessoais
+
+<div class="metric">
+${m(entradasP)}
+</div>
+
+</div>
+
+<div class="card">
+
+Ganhos Uber/99
+
+<div class="metric">
+${m(ganhosU)}
+</div>
+
+</div>
+
+<div class="card">
+
+Despesas
+
+<div class="metric">
+${m(despesasP+despesasU)}
+</div>
+
+</div>
+
+<div class="card">
+
+Lucro real
+
+<div class="metric">
+${m(lucro)}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card">
+
+🛣️ KM
+
+<div class="metric">
+${km.toFixed(1).replace('.',',')}
+</div>
+
+</div>
+
+<div class="card">
+
+⏱️ Horas
+
+<div class="metric">
+${horas.toFixed(1).replace('.',',')}
+</div>
+
+</div>
+
+<div class="card">
+
+💰 R$/hora
+
+<div class="metric">
+${m(
+horas?
+ganhosU/horas:
+0
+)}
+</div>
+
+</div>
+
+<div class="card">
+
+🛣️ R$/km
+
+<div class="metric">
+${m(
+km?
+ganhosU/km:
+0
+)}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<b>Reserva Uber/99:</b>
+${m(reserva)}
+
+<br><br>
+
+<b>Período:</b>
+${inicio}
+até
+${fim}
+
+</div>
+
+`;
+
+relatorioUber();
+
+}
+
+
+/*
+================================================
+RESUMO DIÁRIO / SEMANAL / MENSAL
+================================================
+*/
+
+function resumoPeriodos(){
+
+let hojeD=
+parse(hoje());
+
+
+let periodos=[];
+
+
+/*
+Últimos 7 dias
+*/
+
+for(let i=6;i>=0;i--){
+
+let d=
+new Date(hojeD);
+
+d.setDate(
+d.getDate()-i
+);
+
+let dt=
+d.toISOString()
+.slice(0,10);
+
+let u=
+totaisUber(
+'dia',
+dt
+);
+
+periodos.push({
+
+nome:
+dt,
+
+u
+
+});
+
+}
+
+
+$('resumoPeriodos').innerHTML=`
+
+<div class="table">
 
 <table>
 
+<thead>
+
 <tr>
-<th>Meta</th>
-<th>Objetivo</th>
-<th>Guardado</th>
-<th>Progresso</th>
-<th>Ação</th>
+
+<th>Período</th>
+<th>Ganhos</th>
+<th>Custos</th>
+<th>Lucro</th>
+<th>KM</th>
+<th>Horas</th>
+<th>R$/h</th>
+<th>R$/km</th>
+
 </tr>
-`;
 
-x.metas.forEach((a,i)=>{
+</thead>
 
-let pct=a.v>0
-?Math.min(100,(a.p/a.v)*100)
-:0;
+<tbody>
 
-h+=`
+${periodos.map(p=>`
 
 <tr>
-
-<td>${a.n}</td>
-
-<td>${m(a.v)}</td>
-
-<td>${m(a.p)}</td>
-
-<td>${pct.toFixed(1)}%</td>
 
 <td>
+${p.nome}
+</td>
 
-<button
-class="btn success"
-onclick="depositarMeta(${i})">
-💰
-</button>
+<td>
+${m(p.u.ganhos)}
+</td>
 
-<button
-class="btn danger"
-onclick="excluirMeta(${i})">
-🗑️
-</button>
+<td>
+${m(p.u.custos)}
+</td>
 
+<td>
+${m(p.u.lucro)}
+</td>
+
+<td>
+${p.u.km
+.toFixed(1)
+.replace('.',',')}
+</td>
+
+<td>
+${p.u.horas
+.toFixed(1)
+.replace('.',',')}
+</td>
+
+<td>
+${m(p.u.ganhoHora)}
+</td>
+
+<td>
+${m(p.u.ganhoKm)}
+</td>
+
+</tr>
+
+`).join('')}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+
+/*
+================================================
+RENDER PRINCIPAL
+================================================
+*/
+
+function render(){
+
+/*
+Garante as despesas fixas.
+*/
+
+garantirFixas();
+
+
+let periodo=
+$('periodoDash')?
+$('periodoDash').value:
+'mes';
+
+
+let base=
+$('dataDash')?
+$('dataDash').value:
+hoje();
+
+
+if(!$('dataDash').value)
+$('dataDash').value=
+hoje();
+
+
+let t=
+totais(
+periodo,
+base
+);
+
+
+$('e').textContent=
+m(t.entradas);
+
+
+$('d').textContent=
+m(t.despesas);
+
+
+$('s').textContent=
+m(t.lucro);
+
+
+$('r').textContent=
+m(t.reserva);
+
+
+barras();
+
+alertas();
+
+renderPessoal();
+
+renderUber();
+
+renderCartao();
+
+renderMetas();
+
+resumoPeriodos();
+
+
+if(
+$('ri') &&
+!$('ri').value
+){
+
+let d=
+new Date();
+
+d.setDate(1);
+
+$('ri').value=
+d.toISOString()
+.slice(0,10);
+
+}
+
+
+if(
+$('rf') &&
+!$('rf').value
+){
+
+$('rf').value=
+hoje();
+
+}
+
+}
+
+
+/*
+================================================
+INICIALIZAÇÃO
+================================================
+*/
+
+if(
+$('dataDash')
+)
+$('dataDash').value=
+hoje();
+
+
+if(
+$('dt')
+)
+$('dt').value=
+hoje();
+
+
+if(
+$('ad')
+)
+$('ad').value=
+hoje();
+
+
+if(
+$('cdt')
+)
+$('cdt').value=
+hoje();
+
+
+if(
+$('fechamento')
+)
+$('fechamento').value=
+x.config.fechamento;
+
+
+if(
+$('vencimento')
+)
+$('vencimento').value=
+x.config.vencimento;
+
+
+render();
+
+</script>
+</body>
+</html>
+render();
+
+
+/*
+================================================
+EXCLUSÃO INTELIGENTE
+================================================
+
+Se for uma despesa fixa, excluir o modelo
+também cancela todas as ocorrências futuras.
+As ocorrências já lançadas continuam registradas
+para preservar o histórico.
+*/
+
+function dl(q,i){
+
+if(q==='l'){
+
+let a=x.l[i];
+
+if(!a)
+return;
+
+
+/*
+Se for o modelo de uma despesa fixa,
+cancela as ocorrências futuras.
+*/
+
+if(
+a.fixa==='sim' &&
+a.origem==='fixa-modelo' &&
+a.fixaId
+){
+
+if(
+!confirm(
+'Excluir esta despesa fixa e cancelar as próximas ocorrências?'
+)
+)
+return;
+
+
+let hojeAtual=
+hoje();
+
+
+x.l=x.l.filter(z=>{
+
+if(z.fixaId!==a.fixaId)
+return true;
+
+
+/*
+Mantém ocorrências passadas.
+*/
+
+return z.d<hojeAtual;
+
+});
+
+
+save();
+
+return;
+
+}
+
+
+if(
+!confirm(
+'Excluir este lançamento?'
+)
+)
+return;
+
+
+x.l.splice(i,1);
+
+save();
+
+return;
+
+}
+
+
+if(q==='a'){
+
+if(
+!confirm(
+'Excluir este lançamento Uber/99?'
+)
+)
+return;
+
+
+x.a.splice(i,1);
+
+save();
+
+return;
+
+}
+
+
+if(q==='c'){
+
+if(
+!confirm(
+'Excluir esta compra do cartão?'
+)
+)
+return;
+
+
+x.c.splice(i,1);
+
+save();
+
+return;
+
+}
+
+
+if(q==='m'){
+
+if(
+!confirm(
+'Excluir esta meta?'
+)
+)
+return;
+
+
+x.m.splice(i,1);
+
+save();
+
+return;
+
+}
+
+}
+
+
+/*
+================================================
+CANCELAR DESPESA FIXA
+================================================
+*/
+
+function cancelarFixa(i){
+
+let a=x.l[i];
+
+if(
+!a ||
+!a.fixaId
+)
+return;
+
+
+if(
+!confirm(
+'Cancelar esta despesa fixa? As ocorrências futuras serão interrompidas.'
+)
+)
+return;
+
+
+let hojeAtual=
+hoje();
+
+
+x.l=x.l.filter(z=>{
+
+if(z.fixaId!==a.fixaId)
+return true;
+
+return z.d<hojeAtual;
+
+});
+
+
+save();
+
+}
+
+
+/*
+================================================
+GARANTIA FINAL DAS DESPESAS FIXAS
+================================================
+*/
+
+function atualizarFixas(){
+
+let criadas=
+garantirFixas();
+
+
+if(criadas>0)
+save();
+
+}
+
+
+/*
+================================================
+RESUMO DE DESPESAS UBER/99
+================================================
+*/
+
+function resumoDespesasUber(){
+
+let periodo=
+$('periodoDash')?
+$('periodoDash').value:
+'mes';
+
+let base=
+$('dataDash')?
+$('dataDash').value:
+hoje();
+
+
+let dados=
+x.a.filter(a=>
+dentro(
+a.d,
+periodo,
+base
+)
+);
+
+
+let categorias={};
+
+
+dados.forEach(a=>{
+
+let categoria=
+a.tipoDespesaUber||
+'Outros';
+
+
+let valor=
+Number(a.c||0);
+
+
+if(!categorias[categoria])
+categorias[categoria]=0;
+
+
+categorias[categoria]+=valor;
+
+});
+
+
+let lista=
+Object.entries(categorias)
+.sort(
+(a,b)=>b[1]-a[1]
+);
+
+
+return lista;
+
+}
+
+
+/*
+================================================
+MOSTRAR RESUMO DE DESPESAS UBER
+================================================
+*/
+
+function renderResumoDespesasUber(){
+
+let box=
+$('uind');
+
+if(!box)
+return;
+
+
+let lista=
+resumoDespesasUber();
+
+
+if(!lista.length)
+return;
+
+
+let html=
+'<br><hr><b>📋 Despesas por categoria:</b><br><br>';
+
+
+html+=
+lista
+.map(
+a=>
+`<div>
+${a[0]}:
+<b>${m(a[1])}</b>
+</div>`
+)
+.join('');
+
+
+box.innerHTML+=html;
+
+}
+
+
+/*
+================================================
+RELATÓRIO MENSAL UBER/99
+================================================
+*/
+
+function relatorioMensalUber(){
+
+let inicio=
+$('ri')?
+$('ri').value:
+'';
+
+
+let fim=
+$('rf')?
+$('rf').value:
+'';
+
+
+if(!inicio||!fim)
+return;
+
+
+let dados=
+x.a.filter(a=>
+a.d>=inicio &&
+a.d<=fim
+);
+
+
+let meses={};
+
+
+dados.forEach(a=>{
+
+let mes=
+(a.d||'').slice(0,7);
+
+
+if(!mes)
+return;
+
+
+if(!meses[mes]){
+
+meses[mes]={
+ganhos:0,
+custos:0,
+km:0,
+horas:0
+};
+
+}
+
+
+meses[mes].ganhos+=
+Number(a.g||0);
+
+
+meses[mes].custos+=
+Number(a.c||0)+
+Number(a.f||0);
+
+
+meses[mes].km+=
+Number(a.k||0);
+
+
+meses[mes].horas+=
+Number(a.h||0);
+
+});
+
+
+let chaves=
+Object.keys(meses)
+.sort()
+.reverse();
+
+
+if(!chaves.length)
+return;
+
+
+let html=`
+
+<div class="card">
+
+<h3>
+📅 Resultado mensal Uber/99
+</h3>
+
+<div class="table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Mês</th>
+<th>Ganhos</th>
+<th>Custos</th>
+<th>Lucro</th>
+<th>KM</th>
+<th>Horas</th>
+<th>R$/h</th>
+<th>R$/km</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+`;
+
+
+chaves.forEach(mes=>{
+
+let a=
+meses[mes];
+
+
+let lucro=
+a.ganhos-a.custos;
+
+
+let ph=
+a.horas?
+a.ganhos/a.horas:
+0;
+
+
+let pk=
+a.km?
+a.ganhos/a.km:
+0;
+
+
+html+=`
+
+<tr>
+
+<td>
+${mes}
+</td>
+
+<td>
+${m(a.ganhos)}
+</td>
+
+<td>
+${m(a.custos)}
+</td>
+
+<td>
+${m(lucro)}
+</td>
+
+<td>
+${a.km
+.toFixed(1)
+.replace('.',',')}
+</td>
+
+<td>
+${a.horas
+.toFixed(1)
+.replace('.',',')}
+</td>
+
+<td>
+${m(ph)}
+</td>
+
+<td>
+${m(pk)}
 </td>
 
 </tr>
@@ -1402,283 +4978,83 @@ onclick="excluirMeta(${i})">
 
 });
 
-h+='</table>';
-
-$('mtabela').innerHTML=h;
-
-}
-
-
-function depositarMeta(i){
-
-let v=Number(
-prompt('Quanto deseja adicionar à meta?')||0
-);
-
-if(v<=0)return;
-
-x.metas[i].p=
-Number(x.metas[i].p||0)+v;
-
-save();
-render();
-
-}
-
-
-function render(){
-
-renderP();
-renderU();
-renderCard();
-renderMetas();
-dashboard();
-relatorio();
-
-}
-  function dashboard(){
-
-let mes=$('mesDash').value||hoje().slice(0,7);
-
-let pessoais=x.a.filter(a=>
-!('gpix' in a) &&
-!('gdin' in a) &&
-(a.d||'').slice(0,7)===mes
-);
-
-let uber=x.a.filter(a=>
-('gpix' in a) ||
-('gdin' in a)
-);
-
-uber=uber.filter(a=>
-(a.d||'').slice(0,7)===mes
-);
-
-
-let entradas=pessoais
-.filter(a=>a.t==='Entrada')
-.reduce((s,a)=>s+Number(a.v||0),0);
-
-let despesas=pessoais
-.filter(a=>a.t==='Despesa')
-.reduce((s,a)=>s+Number(a.v||0),0);
-
-let recebidoUber=uber
-.reduce((s,a)=>
-s+Number(a.gpix||0)+Number(a.gdin||0),0);
-
-let despesasUber=uber
-.reduce((s,a)=>
-s+Number(a.cpix||0)+Number(a.cdin||0),0);
-
-let lucroUber=
-recebidoUber-despesasUber;
-
-let totalEntradas=
-entradas+recebidoUber;
-
-let totalDespesas=
-despesas+despesasUber;
-
-let lucroTotal=
-totalEntradas-totalDespesas;
-
-
-$('dE').textContent=m(totalEntradas);
-$('dD').textContent=m(totalDespesas);
-$('dL').textContent=m(lucroTotal);
-$('dU').textContent=m(lucroUber);
-
-$('dEP').textContent=m(entradas);
-$('dDP').textContent=m(despesas);
-$('dUG').textContent=m(recebidoUber);
-$('dUC').textContent=m(despesasUber);
-
-
-/* GRÁFICO */
-
-let valores=[
-entradas,
-despesas,
-recebidoUber,
-despesasUber
-];
-
-let nomes=[
-'Entradas',
-'Desp.',
-'Uber',
-'Desp.U'
-];
-
-let max=Math.max(...valores,1);
-
-let html='';
-
-valores.forEach((v,i)=>{
-
-let altura=
-Math.max(5,(v/max)*170);
 
 html+=`
 
-<div
-class="bar"
-style="height:${altura}px"
-title="${nomes[i]}: ${m(v)}">
+</tbody>
 
-<span>${nomes[i]}</span>
+</table>
+
+</div>
 
 </div>
 
 `;
 
-});
 
-$('grafico').innerHTML=html;
-
-}
-
-
-/* RELATÓRIO MENSAL */
-
-function relatorio(){
-
-let mes=$('mesRel').value||hoje().slice(0,7);
-
-let pessoais=x.a.filter(a=>
-!('gpix' in a) &&
-!('gdin' in a) &&
-(a.d||'').slice(0,7)===mes
-);
-
-let uber=x.a.filter(a=>
-('gpix' in a) ||
-('gdin' in a)
-);
-
-uber=uber.filter(a=>
-(a.d||'').slice(0,7)===mes
-);
-
-
-let entradas=pessoais
-.filter(a=>a.t==='Entrada')
-.reduce((s,a)=>s+Number(a.v||0),0);
-
-let despesas=pessoais
-.filter(a=>a.t==='Despesa')
-.reduce((s,a)=>s+Number(a.v||0),0);
-
-let recebidoUber=uber
-.reduce((s,a)=>
-s+Number(a.gpix||0)+Number(a.gdin||0),0);
-
-let despesasUber=uber
-.reduce((s,a)=>
-s+Number(a.cpix||0)+Number(a.cdin||0),0);
-
-let lucroUber=
-recebidoUber-despesasUber;
-
-let totalEntradas=
-entradas+recebidoUber;
-
-let totalDespesas=
-despesas+despesasUber;
-
-let lucro=
-totalEntradas-totalDespesas;
-
-
-$('relatorio').innerHTML=`
-
-<div class="grid">
-
-<div class="card">
-<span class="muted">Entradas pessoais</span>
-<h2>${m(entradas)}</h2>
-</div>
-
-<div class="card">
-<span class="muted">Despesas pessoais</span>
-<h2>${m(despesas)}</h2>
-</div>
-
-<div class="card">
-<span class="muted">Recebido Uber/99</span>
-<h2>${m(recebidoUber)}</h2>
-</div>
-
-<div class="card">
-<span class="muted">Despesas Uber/99</span>
-<h2>${m(despesasUber)}</h2>
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>🚗 Resultado Uber/99</h3>
-
-<p>
-Recebido:
-<b>${m(recebidoUber)}</b>
-</p>
-
-<p>
-Despesas:
-<b>${m(despesasUber)}</b>
-</p>
-
-<p>
-Lucro Uber/99:
-<b>${m(lucroUber)}</b>
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>💰 Resultado geral</h3>
-
-<p>
-Total de entradas:
-<b>${m(totalEntradas)}</b>
-</p>
-
-<p>
-Total de despesas:
-<b>${m(totalDespesas)}</b>
-</p>
-
-<p>
-Lucro real:
-<b>${m(lucro)}</b>
-</p>
-
-</div>
-
-`;
+$('relatorioUber').innerHTML+=html;
 
 }
 
 
-/* INICIALIZAÇÃO */
+/*
+================================================
+ATUALIZAÇÃO DO RELATÓRIO
+================================================
+*/
 
-$('fech').value=x.cfg.fech||5;
-$('venc').value=x.cfg.venc||10;
+const relatorioOriginal=
+relatorio;
 
+
+relatorio=function(){
+
+relatorioOriginal();
+
+setTimeout(
+()=>{
+relatorioMensalUber();
+},
+50
+);
+
+};
+
+
+/*
+================================================
+ATUALIZAÇÃO DO RENDER UBER
+================================================
+*/
+
+const renderUberOriginal=
+renderUber;
+
+
+renderUber=function(){
+
+renderUberOriginal();
+
+setTimeout(
+()=>{
+renderResumoDespesasUber();
+},
+0
+);
+
+};
+
+
+/*
+================================================
+INICIALIZAÇÃO FINAL
+================================================
+*/
+
+atualizarFixas();
 
 render();
 
-
 </script>
-
 </body>
 </html>
-  
-
-
-</script>
