@@ -38,6 +38,7 @@ button{border:0;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:b
 .acoes{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .pago{color:#166534;font-weight:bold}
 .pendente{color:#b45309;font-weight:bold}
+.fixa{background:#dbeafe;color:#1e40af;padding:3px 7px;border-radius:20px;font-size:11px;font-weight:bold}
 table{width:100%;border-collapse:collapse;background:#fff}
 th,td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:13px}
 th{background:#f9fafb}
@@ -47,9 +48,9 @@ th{background:#f9fafb}
 .ok{padding:12px;border-radius:10px;background:#dcfce7;color:#166534;margin-bottom:12px}
 .erro{padding:12px;border-radius:10px;background:#fee2e2;color:#991b1b}
 @media(max-width:600px){
- main{padding:9px}
- .grid{grid-template-columns:1fr 1fr}
- .item-top{flex-direction:column}
+main{padding:9px}
+.grid{grid-template-columns:1fr 1fr}
+.item-top{flex-direction:column}
 }
 </style>
 </head>
@@ -100,10 +101,12 @@ th{background:#f9fafb}
 </section>
 
 <section id="pessoal">
+
 <div class="card">
 <h2>Novo lançamento pessoal</h2>
 
 <div class="grid">
+
 <div class="campo">
 <label>Data</label>
 <input type="date" id="pData">
@@ -171,20 +174,37 @@ th{background:#f9fafb}
 <option value="mensal">Mensal</option>
 </select>
 </div>
+
+<div class="campo">
+<label>Despesa fixa?</label>
+<select id="pFixa">
+<option value="nao">Não</option>
+<option value="sim">Sim</option>
+</select>
+</div>
+
 </div>
 
 <button class="btn" onclick="addPessoal()">Adicionar lançamento</button>
 </div>
 
 <div class="card">
+<h3>Despesas fixas</h3>
+<div id="listaFixas"></div>
+</div>
+
+<div class="card">
 <h3>Lançamentos pessoais</h3>
 <div id="listaPessoal"></div>
 </div>
+
 </section>
 
 <section id="saldos">
+
 <div class="card">
 <h2>Saldos</h2>
+
 <div class="grid">
 <div class="kpi">Saldo PIX<b id="saldoPix">R$ 0,00</b></div>
 <div class="kpi">Saldo Dinheiro<b id="saldoDinheiro">R$ 0,00</b></div>
@@ -196,13 +216,16 @@ th{background:#f9fafb}
 <h3>Movimentações PIX e Dinheiro</h3>
 <div id="listaSaldos"></div>
 </div>
+
 </section>
 
 <section id="cartao">
+
 <div class="card">
 <h2>Cartão de crédito</h2>
 
 <div class="grid">
+
 <div class="campo">
 <label>Fechamento</label>
 <input type="number" id="fechamento" min="1" max="31">
@@ -212,9 +235,11 @@ th{background:#f9fafb}
 <label>Vencimento</label>
 <input type="number" id="vencimento" min="1" max="31">
 </div>
+
 </div>
 
 <button class="btn" onclick="salvarConfigCartao()">Salvar configuração</button>
+
 </div>
 
 <div class="card">
@@ -222,13 +247,16 @@ th{background:#f9fafb}
 <div class="total" id="faturaTotal">R$ 0,00</div>
 <div id="listaCartao"></div>
 </div>
+
 </section>
 
 <section id="uber">
+
 <div class="card">
 <h2>Uber / 99</h2>
 
 <div class="grid">
+
 <div class="campo">
 <label>Data</label>
 <input type="date" id="uData">
@@ -271,6 +299,7 @@ th{background:#f9fafb}
 <option>Outros</option>
 </select>
 </div>
+
 </div>
 
 <button class="btn" onclick="addUber()">Adicionar dia</button>
@@ -278,6 +307,7 @@ th{background:#f9fafb}
 
 <div class="card">
 <h3>Controle Uber / 99</h3>
+
 <div class="grid">
 <div class="kpi">Ganhos<b id="uTotalGanho">R$ 0,00</b></div>
 <div class="kpi">Despesas<b id="uTotalDespesa">R$ 0,00</b></div>
@@ -286,18 +316,22 @@ th{background:#f9fafb}
 <div class="kpi">KM<b id="uTotalKm">0</b></div>
 <div class="kpi">Horas<b id="uTotalHoras">0</b></div>
 </div>
+
 </div>
 
 <div class="card">
 <div id="listaUber"></div>
 </div>
+
 </section>
 
 <section id="relatorios">
+
 <div class="card">
 <h2>Relatórios</h2>
 
 <div class="grid">
+
 <div class="campo">
 <label>Data inicial</label>
 <input type="date" id="rInicio">
@@ -307,1023 +341,1180 @@ th{background:#f9fafb}
 <label>Data final</label>
 <input type="date" id="rFim">
 </div>
+
 </div>
 
 <button class="btn" onclick="gerarRelatorio()">Gerar relatório</button>
+
 </div>
 
 <div class="card" id="resultadoRelatorio"></div>
+
 </section>
 
 </main>
 
 <script>
-  const CHAVE='MF';
+
+const CHAVE='MF';
 
 let db={
-  l:[],
-  u:[],
-  c:[],
-  config:{
-    fechamento:5,
-    vencimento:10
-  }
+l:[],
+u:[],
+c:[],
+config:{
+fechamento:5,
+vencimento:10
+}
 };
 
 function hoje(){
-  const d=new Date();
-  return d.toISOString().slice(0,10);
+const d=new Date();
+return d.toISOString().slice(0,10);
 }
 
 function dinheiro(v){
-  return Number(v||0).toLocaleString('pt-BR',{
-    style:'currency',
-    currency:'BRL'
-  });
+return Number(v||0).toLocaleString('pt-BR',{
+style:'currency',
+currency:'BRL'
+});
+}
+
+function dinheiroBR(v){
+return Number(v||0).toLocaleString('pt-BR',{
+style:'currency',
+currency:'BRL'
+});
 }
 
 function escapeHtml(v){
-  return String(v??'')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-}
-
-/*
- NÃO APAGA DADOS EXISTENTES.
- Apenas lê o que estiver salvo em MF.
-*/
-function carregar(){
-  try{
-    const salvo=localStorage.getItem(CHAVE);
-
-    if(salvo){
-      const dados=JSON.parse(salvo);
-
-      if(dados && typeof dados==='object'){
-        db.l=Array.isArray(dados.l)?dados.l:[];
-        db.u=Array.isArray(dados.u)?dados.u:[];
-        db.c=Array.isArray(dados.c)?dados.c:[];
-
-        db.config={
-          fechamento:Number(dados.config?.fechamento||5),
-          vencimento:Number(dados.config?.vencimento||10)
-        };
-      }
-    }
-  }catch(e){
-    console.error('Erro ao carregar dados:',e);
-  }
-}
-
-function salvar(){
-  try{
-    localStorage.setItem(CHAVE,JSON.stringify(db));
-  }catch(e){
-    console.error('Erro ao salvar:',e);
-  }
-}
-
-function aba(nome,botao){
-  document.querySelectorAll('section').forEach(s=>{
-    s.classList.remove('ativa');
-  });
-
-  document.getElementById(nome).classList.add('ativa');
-
-  document.querySelectorAll('nav button').forEach(b=>{
-    b.classList.remove('ativo');
-  });
-
-  if(botao)botao.classList.add('ativo');
-
-  render();
-}
-
-function addPessoal(){
-
-  const data=document.getElementById('pData').value||hoje();
-  const desc=document.getElementById('pDesc').value.trim();
-  const valor=Number(document.getElementById('pValor').value||0);
-  const tipo=document.getElementById('pTipo').value;
-  const cat=document.getElementById('pCat').value;
-  const pag=document.getElementById('pPag').value;
-  const status=document.getElementById('pStatus').value;
-  const rep=document.getElementById('pRep').value;
-
-  if(!desc){
-    alert('Informe a descrição.');
-    return;
-  }
-
-  if(valor<=0){
-    alert('Informe um valor válido.');
-    return;
-  }
-
-  const item={
-    id:Date.now()+Math.random(),
-    d:data,
-    desc:desc,
-    v:valor,
-    tipo:tipo,
-    cat:cat,
-    pag:pag,
-    status:status,
-    rep:rep,
-    origem:'pessoal',
-    fixa:false,
-    fixaId:null,
-    excluidas:[],
-    excluirAPartir:null
-  };
-
-  db.l.push(item);
-
-  salvar();
-
-  document.getElementById('pDesc').value='';
-  document.getElementById('pValor').value='';
-
-  render();
-}
-
-function addUber(){
-
-  const data=document.getElementById('uData').value||hoje();
-  const ganho=Number(document.getElementById('uGanho').value||0);
-  const despesa=Number(document.getElementById('uDespesa').value||0);
-  const combustivel=Number(document.getElementById('uCombustivel').value||0);
-  const km=Number(document.getElementById('uKm').value||0);
-  const horas=Number(document.getElementById('uHoras').value||0);
-  const cat=document.getElementById('uCat').value;
-
-  if(ganho<=0 && despesa<=0 && combustivel<=0){
-    alert('Informe pelo menos um valor.');
-    return;
-  }
-
-  db.u.push({
-    id:Date.now()+Math.random(),
-    d:data,
-    ganho:ganho,
-    despesa:despesa,
-    combustivel:combustivel,
-    km:km,
-    horas:horas,
-    cat:cat
-  });
-
-  salvar();
-
-  document.getElementById('uGanho').value='';
-  document.getElementById('uDespesa').value='';
-  document.getElementById('uCombustivel').value='';
-  document.getElementById('uKm').value='';
-  document.getElementById('uHoras').value='';
-
-  render();
-}
-
-function excluirPessoal(id){
-
-  const item=db.l.find(x=>x.id==id);
-
-  if(!item)return;
-
-  if(item.rep && item.rep!=='unica'){
-
-    const escolha=prompt(
-      'Excluir lançamento recorrente:\n\n'+
-      '1 = Somente este lançamento\n'+
-      '2 = Este e os próximos\n'+
-      '3 = Todos os lançamentos desta recorrência'
-    );
-
-    if(escolha==='1'){
-      if(item.fixa){
-        const modelo=db.l.find(x=>x.id===item.fixaId);
-
-        if(modelo){
-          modelo.excluidas=modelo.excluidas||[];
-          if(!modelo.excluidas.includes(item.d)){
-            modelo.excluidas.push(item.d);
-          }
-        }
-      }
-
-      db.l=db.l.filter(x=>x.id!==id);
-    }
-
-    else if(escolha==='2'){
-
-      if(item.fixa){
-        const modelo=db.l.find(x=>x.id===item.fixaId);
-
-        if(modelo){
-          modelo.excluirAPartir=item.d;
-        }
-      }
-
-      db.l=db.l.filter(x=>{
-        if(x.fixaId===item.fixaId){
-          return x.d<item.d;
-        }
-
-        return x.id!==id;
-      });
-    }
-
-    else if(escolha==='3'){
-
-      const grupo=item.fixaId||item.id;
-
-      db.l=db.l.filter(x=>{
-        return x.fixaId!==grupo && x.id!==grupo;
-      });
-    }
-
-    else{
-      return;
-    }
-
-  }else{
-
-    if(!confirm('Excluir este lançamento?'))return;
-
-    db.l=db.l.filter(x=>x.id!==id);
-  }
-
-  salvar();
-  render();
-}
-
-function excluirUber(id){
-
-  if(!confirm('Excluir este lançamento Uber/99?'))return;
-
-  db.u=db.u.filter(x=>x.id!=id);
-
-  salvar();
-  render();
-}
-
-function excluirCartao(id){
-
-  if(!confirm('Excluir esta compra do cartão?'))return;
-
-  db.c=db.c.filter(x=>x.id!=id);
-
-  salvar();
-  render();
-}
-
-function alterarStatus(id){
-
-  const item=db.l.find(x=>x.id==id);
-
-  if(!item)return;
-
-  item.status=item.status==='pago'?'pendente':'pago';
-
-  salvar();
-  render();
-}
-
-function alterarPagamento(id){
-
-  const item=db.l.find(x=>x.id==id);
-
-  if(!item)return;
-
-  const novo=prompt(
-    'Pagamento:\n'+
-    'pix = PIX\n'+
-    'dinheiro = Dinheiro\n'+
-    'cartao = Cartão'
-  );
-
-  if(!['pix','dinheiro','cartao'].includes(novo))return;
-
-  item.pag=novo;
-
-  salvar();
-  render();
-}
-
-function salvarConfigCartao(){
-
-  const fechamento=Number(document.getElementById('fechamento').value);
-  const vencimento=Number(document.getElementById('vencimento').value);
-
-  if(fechamento<1||fechamento>31||vencimento<1||vencimento>31){
-    alert('Informe dias válidos.');
-    return;
-  }
-
-  db.config.fechamento=fechamento;
-  db.config.vencimento=vencimento;
-
-  salvar();
-  render();
-
-  alert('Configuração salva.');
-}
-
-function nomePagamento(p){
-  if(p==='pix')return 'PIX';
-  if(p==='dinheiro')return 'Dinheiro';
-  if(p==='cartao')return 'Cartão';
-  return p||'-';
+return String(v??'')
+.replace(/&/g,'&amp;')
+.replace(/</g,'&lt;')
+.replace(/>/g,'&gt;')
+.replace(/"/g,'&quot;')
+.replace(/'/g,'&#039;');
 }
 
 function dataBR(d){
-  if(!d)return '';
 
-  const partes=d.split('-');
+if(!d)return '';
 
-  if(partes.length!==3)return d;
+const partes=String(d).split('-');
 
-  return partes[2]+'/'+partes[1]+'/'+partes[0];
+if(partes.length!==3)return d;
+
+return partes[2]+'/'+partes[1]+'/'+partes[0];
 }
 
-function valorLancamento(x){
+/*
+ IMPORTANTE:
+ apenas LÊ os dados existentes.
+ NÃO apaga o localStorage.
+*/
+function carregar(){
 
-  if(x.tipo==='ganho')return Number(x.v||0);
+try{
 
-  return -Number(x.v||0);
+const salvo=localStorage.getItem(CHAVE);
+
+if(salvo){
+
+const dados=JSON.parse(salvo);
+
+if(dados&&typeof dados==='object'){
+
+if(Array.isArray(dados.l)){
+db.l=dados.l;
 }
 
-function adicionarOcorrenciaFixa(modelo,data){
-
-  modelo.excluidas=modelo.excluidas||[];
-
-  if(modelo.excluidas.includes(data)){
-    return;
-  }
-
-  if(modelo.excluirAPartir && data>=modelo.excluirAPartir){
-    return;
-  }
-
-  const existe=db.l.some(x=>
-    x.fixaId===modelo.id &&
-    x.d===data
-  );
-
-  if(existe)return;
-
-  db.l.push({
-    id:Date.now()+Math.random(),
-    d:data,
-    desc:modelo.desc,
-    v:modelo.v,
-    tipo:modelo.tipo,
-    cat:modelo.cat,
-    pag:modelo.pag,
-    status:'pendente',
-    rep:modelo.rep,
-    origem:'pessoal',
-    fixa:true,
-    fixaId:modelo.id,
-    excluidas:[],
-    excluirAPartir:null
-  });
+if(Array.isArray(dados.u)){
+db.u=dados.u;
 }
 
-function proximaData(data,rep){
-
-  const d=new Date(data+'T12:00:00');
-
-  if(rep==='diaria'){
-    d.setDate(d.getDate()+1);
-  }
-
-  if(rep==='semanal'){
-    d.setDate(d.getDate()+7);
-  }
-
-  if(rep==='mensal'){
-    d.setMonth(d.getMonth()+1);
-  }
-
-  return d.toISOString().slice(0,10);
+if(Array.isArray(dados.c)){
+db.c=dados.c;
 }
 
-function gerarRecorrencias(){
+if(dados.config&&typeof dados.config==='object'){
 
-  const hojeData=hoje();
+db.config={
+...db.config,
+...dados.config
+};
 
-  const modelos=db.l.filter(x=>
-    x.rep &&
-    x.rep!=='unica' &&
-    !x.fixa
-  );
+}
 
-  modelos.forEach(modelo=>{
+}
 
-    let data=modelo.d;
+}
 
-    let limite=0;
+}catch(e){
 
-    while(data<hojeData && limite<500){
+console.error('Erro ao carregar dados:',e);
 
-      data=proximaData(data,modelo.rep);
+}
 
-      if(data<=hojeData){
-        adicionarOcorrenciaFixa(modelo,data);
-      }
+}
 
-      limite++;
-    }
-  });
+function salvar(){
 
-  salvar();
+try{
+
+localStorage.setItem(
+CHAVE,
+JSON.stringify(db)
+);
+
+}catch(e){
+
+console.error('Erro ao salvar:',e);
+
+}
+
 }
 
 function normalizarDados(){
 
-  if(!Array.isArray(db.l))db.l=[];
-  if(!Array.isArray(db.u))db.u=[];
-  if(!Array.isArray(db.c))db.c=[];
+if(!Array.isArray(db.l))db.l=[];
+if(!Array.isArray(db.u))db.u=[];
+if(!Array.isArray(db.c))db.c=[];
 
-  if(!db.config)db.config={};
+if(!db.config)db.config={};
 
-  if(!db.config.fechamento)db.config.fechamento=5;
-  if(!db.config.vencimento)db.config.vencimento=10;
+if(!db.config.fechamento)
+db.config.fechamento=5;
 
-  db.l.forEach(x=>{
+if(!db.config.vencimento)
+db.config.vencimento=10;
 
-    if(!x.id)x.id=Date.now()+Math.random();
 
-    if(!x.d)x.d=hoje();
+/*
+ CORREÇÃO DAS CATEGORIAS
+ Reconhece tanto os nomes antigos
+ quanto os nomes usados atualmente.
+*/
+db.l.forEach(x=>{
 
-    if(x.rep===undefined)x.rep='unica';
+if(!x.id)
+x.id=Date.now()+Math.random();
 
-    if(x.tipo===undefined)x.tipo='despesa';
+if(!x.d)
+x.d=x.data||hoje();
 
-    if(x.pag===undefined)x.pag='dinheiro';
+if(!x.desc)
+x.desc=x.descricao||x.description||'Sem descrição';
 
-    if(x.status===undefined)x.status='pago';
+if(x.v===undefined||x.v===null)
+x.v=Number(x.valor||0);
 
-    if(x.fixa===undefined)x.fixa=false;
+if(!x.tipo){
 
-    if(x.excluidas===undefined)x.excluidas=[];
+if(x.t==='ganho'||x.tipoLancamento==='ganho')
+x.tipo='ganho';
+else
+x.tipo='despesa';
 
-    if(x.excluirAPartir===undefined)x.excluirAPartir=null;
-  });
+}
+
+if(!x.cat){
+
+x.cat=
+x.categoria||
+x.category||
+'Despesas';
+
+}
+
+if(!x.pag){
+
+const p=
+x.pagamento||
+x.formaPagamento||
+x.forma||
+'';
+
+if(
+String(p).toLowerCase().includes('pix')
+){
+x.pag='pix';
+}
+else if(
+String(p).toLowerCase().includes('dinheiro')
+){
+x.pag='dinheiro';
+}
+else if(
+String(p).toLowerCase().includes('cart')
+){
+x.pag='cartao';
+}
+else{
+x.pag='dinheiro';
+}
+
+}
+
+if(!x.status){
+
+const s=String(x.situacao||'').toLowerCase();
+
+if(s.includes('pend'))
+x.status='pendente';
+else
+x.status='pago';
+
+}
+
+if(x.rep===undefined){
+
+if(x.periodicidade)
+x.rep=x.periodicidade;
+else
+x.rep='unica';
+
+}
+
+if(x.fixa===undefined)
+x.fixa=false;
+
+if(x.fixaId===undefined)
+x.fixaId=null;
+
+if(!Array.isArray(x.excluidas))
+x.excluidas=[];
+
+if(x.excluirAPartir===undefined)
+x.excluirAPartir=null;
+
+});
+
+
+/*
+ Normalização Uber/99
+*/
+db.u.forEach(x=>{
+
+if(!x.id)
+x.id=Date.now()+Math.random();
+
+if(!x.d)
+x.d=x.data||hoje();
+
+if(x.ganho===undefined)
+x.ganho=Number(x.ganhos||0);
+
+if(x.despesa===undefined)
+x.despesa=Number(x.despesas||0);
+
+if(x.combustivel===undefined)
+x.combustivel=Number(x.combustível||0);
+
+if(x.km===undefined)
+x.km=Number(x.quilometros||0);
+
+if(x.horas===undefined)
+x.horas=Number(x.horasTrabalhadas||0);
+
+if(!x.cat)
+x.cat=x.categoria||'Despesas';
+
+});
+
+}
+
+function aba(nome,botao){
+
+document.querySelectorAll('section').forEach(s=>{
+s.classList.remove('ativa');
+});
+
+const sec=document.getElementById(nome);
+
+if(sec)
+sec.classList.add('ativa');
+
+document.querySelectorAll('nav button').forEach(b=>{
+b.classList.remove('ativo');
+});
+
+if(botao)
+botao.classList.add('ativo');
+
+render();
+
+}
+ function addPessoal(){
+ const data=document.getElementById('pData').value||hoje();
+ const desc=document.getElementById('pDesc').value.trim();
+ const valor=parseFloat(document.getElementById('pValor').value)||0;
+ const tipo=document.getElementById('pTipo').value;
+ const cat=document.getElementById('pCat').value;
+ const pag=document.getElementById('pPag').value;
+ const status=document.getElementById('pStatus').value;
+ let rep=document.getElementById('pRep').value;
+ const fixa=document.getElementById('pFixa').value==='sim';
+
+ if(!desc||valor<=0){
+  alert('Preencha a descrição e o valor.');
+  return;
+ }
+
+ if(fixa && rep==='unica'){
+  rep='mensal';
+ }
+
+ const id=Date.now()+Math.random();
+
+ const item={
+  id:id,
+  d:data,
+  desc:desc,
+  v:valor,
+  tipo:tipo,
+  cat:cat,
+  pag:pag,
+  status:status,
+  rep:rep,
+  origem:'pessoal',
+  fixa:fixa,
+  modeloFixa:fixa,
+  fixaId:fixa?id:null,
+  excluidas:[],
+  excluirAPartir:null
+ };
+
+ db.l.push(item);
+
+ if(fixa && rep!=='unica'){
+  let dataProxima=proximaData(data,rep);
+  let limite=0;
+
+  while(limite<12){
+   adicionarOcorrenciaFixa(item,dataProxima);
+   dataProxima=proximaData(dataProxima,rep);
+   limite++;
+  }
+ }
+
+ salvar();
+
+ document.getElementById('pDesc').value='';
+ document.getElementById('pValor').value='';
+ document.getElementById('pFixa').value='nao';
+ document.getElementById('pRep').value='unica';
+
+ render();
+}
+
+function adicionarOcorrenciaFixa(modelo,data){
+ modelo.excluidas=modelo.excluidas||[];
+
+ if(modelo.excluidas.includes(data)) return;
+
+ if(modelo.excluirAPartir && data>=modelo.excluirAPartir) return;
+
+ const existe=db.l.some(x=>
+  x.fixaId===modelo.id &&
+  x.d===data &&
+  x.id!==modelo.id
+ );
+
+ if(existe)return;
+
+ db.l.push({
+  id:Date.now()+Math.random(),
+  d:data,
+  desc:modelo.desc,
+  v:modelo.v,
+  tipo:modelo.tipo,
+  cat:modelo.cat,
+  pag:modelo.pag,
+  status:'pendente',
+  rep:modelo.rep,
+  origem:'pessoal',
+  fixa:true,
+  modeloFixa:false,
+  fixaId:modelo.id,
+  excluidas:[],
+  excluirAPartir:null
+ });
+}
+
+function proximaData(data,rep){
+ const d=new Date(data+'T12:00:00');
+
+ if(rep==='diaria'){
+  d.setDate(d.getDate()+1);
+ }else if(rep==='semanal'){
+  d.setDate(d.getDate()+7);
+ }else if(rep==='mensal'){
+  d.setMonth(d.getMonth()+1);
+ }
+
+ return d.toISOString().slice(0,10);
+}
+
+function gerarRecorrencias(){
+ const hojeData=hoje();
+
+ const modelos=db.l.filter(x=>
+  x.rep &&
+  x.rep!=='unica' &&
+  (
+   x.modeloFixa===true ||
+   (x.fixa!==true && !x.fixaId)
+  )
+ );
+
+ modelos.forEach(modelo=>{
+  let data=modelo.d;
+  let limite=0;
+
+  while(data<hojeData && limite<500){
+   data=proximaData(data,modelo.rep);
+
+   if(data<=hojeData){
+    adicionarOcorrenciaFixa(modelo,data);
+   }
+
+   limite++;
+  }
+
+  /* Gera também os próximos 12 lançamentos */
+  let ultima=data;
+
+  for(let i=0;i<12;i++){
+   ultima=proximaData(ultima,modelo.rep);
+   adicionarOcorrenciaFixa(modelo,ultima);
+  }
+ });
+}
+
+function excluirPessoal(id){
+ const item=db.l.find(x=>x.id==id);
+ if(!item)return;
+
+ const recorrente=
+  item.rep &&
+  item.rep!=='unica';
+
+ if(recorrente || item.fixaId){
+
+  const grupo=item.fixaId||item.id;
+
+  const modelo=db.l.find(x=>
+   x.id===grupo &&
+   (x.modeloFixa===true || x.id===grupo)
+  );
+
+  const escolha=prompt(
+   'Excluir despesa recorrente:\\n\\n'+
+   '1 = Somente este lançamento\\n'+
+   '2 = Este e os próximos\\n'+
+   '3 = Todos os lançamentos desta despesa\\n\\n'+
+   'Digite 1, 2 ou 3.'
+  );
+
+  if(!['1','2','3'].includes(escolha))return;
+
+  if(escolha==='1'){
+
+   if(modelo && item.id===modelo.id){
+    alert('Este é o lançamento principal da despesa fixa. Para excluir somente uma ocorrência, use a opção Excluir em uma das ocorrências geradas.');
+    return;
+   }
+
+   if(modelo){
+    modelo.excluidas=modelo.excluidas||[];
+
+    if(!modelo.excluidas.includes(item.d)){
+     modelo.excluidas.push(item.d);
+    }
+   }
+
+   db.l=db.l.filter(x=>x.id!==id);
+
+  }else if(escolha==='2'){
+
+   if(modelo){
+    modelo.excluirAPartir=item.d;
+   }
+
+   db.l=db.l.filter(x=>{
+    if(x.id===modelo?.id)return true;
+
+    if(x.fixaId===grupo && x.d>=item.d){
+     return false;
+    }
+
+    return x.id!==id;
+   });
+
+  }else if(escolha==='3'){
+
+   db.l=db.l.filter(x=>
+    x.id!==grupo &&
+    x.fixaId!==grupo
+   );
+  }
+
+ }else{
+
+  if(!confirm('Excluir este lançamento?'))return;
+
+  db.l=db.l.filter(x=>x.id!==id);
+ }
+
+ salvar();
+ render();
+}
+
+function excluirFixa(id){
+ const modelo=db.l.find(x=>x.id===id);
+ if(!modelo)return;
+
+ if(!confirm(
+  'Excluir esta despesa fixa e todos os seus lançamentos?'
+ ))return;
+
+ db.l=db.l.filter(x=>
+  x.id!==id &&
+  x.fixaId!==id
+ );
+
+ salvar();
+ render();
+}
+
+function alterarStatus(id){
+ const item=db.l.find(x=>x.id==id);
+ if(!item)return;
+
+ item.status=item.status==='pago'
+  ?'pendente'
+  :'pago';
+
+ salvar();
+ render();
+}
+
+function alterarPagamento(id){
+ const item=db.l.find(x=>x.id==id);
+ if(!item)return;
+
+ const atual=item.pag||'dinheiro';
+
+ const novo=prompt(
+  'Forma de pagamento:\\n\\n'+
+  '1 = PIX\\n'+
+  '2 = Dinheiro\\n'+
+  '3 = Cartão\\n\\n'+
+  'Atual: '+nomePagamento(atual)
+ );
+
+ if(novo==='1')item.pag='pix';
+ else if(novo==='2')item.pag='dinheiro';
+ else if(novo==='3')item.pag='cartao';
+ else return;
+
+ salvar();
+ render();
+}
+
+function addUber(){
+ const data=document.getElementById('uData').value||hoje();
+ const ganho=parseFloat(document.getElementById('uGanho').value)||0;
+ const despesa=parseFloat(document.getElementById('uDespesa').value)||0;
+ const combustivel=parseFloat(document.getElementById('uCombustivel').value)||0;
+ const km=parseFloat(document.getElementById('uKm').value)||0;
+ const horas=parseFloat(document.getElementById('uHoras').value)||0;
+ const cat=document.getElementById('uCat').value;
+
+ if(ganho<=0){
+  alert('Informe o ganho.');
+  return;
+ }
+
+ db.u.push({
+  id:Date.now()+Math.random(),
+  d:data,
+  ganho:ganho,
+  despesa:despesa,
+  combustivel:combustivel,
+  km:km,
+  horas:horas,
+  cat:cat
+ });
+
+ salvar();
+
+ document.getElementById('uGanho').value='';
+ document.getElementById('uDespesa').value='';
+ document.getElementById('uCombustivel').value='';
+ document.getElementById('uKm').value='';
+ document.getElementById('uHoras').value='';
+
+ render();
+}
+
+function excluirUber(id){
+ if(!confirm('Excluir este lançamento do Uber/99?'))return;
+
+ db.u=db.u.filter(x=>x.id!==id);
+
+ salvar();
+ render();
+}
+
+function excluirCartao(id){
+ if(!confirm('Excluir este lançamento do cartão?'))return;
+
+ db.c=db.c.filter(x=>x.id!==id);
+
+ salvar();
+ render();
+}
+
+function salvarConfigCartao(){
+ const fechamento=parseInt(
+  document.getElementById('fechamento').value
+ )||5;
+
+ const vencimento=parseInt(
+  document.getElementById('vencimento').value
+ )||10;
+
+ db.config.fechamento=fechamento;
+ db.config.vencimento=vencimento;
+
+ salvar();
+ alert('Configuração do cartão salva.');
+ render();
+}
+
+function nomePagamento(p){
+ if(p==='pix')return'PIX';
+ if(p==='cartao')return'Cartão';
+ return'Dinheiro';
+}
+
+function dataBR(d){
+ if(!d)return'';
+ const p=d.split('-');
+ if(p.length!==3)return d;
+ return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+function valorLancamento(x){
+ return Number(x.v||x.valor||0);
 }
 
 function periodoAtual(tipo){
+ const agora=new Date();
+ let inicio,fim;
 
-  const agora=new Date();
+ if(tipo==='dia'){
+  inicio=new Date(
+   agora.getFullYear(),
+   agora.getMonth(),
+   agora.getDate()
+  );
+  fim=new Date(
+   agora.getFullYear(),
+   agora.getMonth(),
+   agora.getDate()+1
+  );
+ }else if(tipo==='semana'){
+  const dia=agora.getDay();
+  inicio=new Date(
+   agora.getFullYear(),
+   agora.getMonth(),
+   agora.getDate()-(dia===0?6:dia-1)
+  );
+  inicio.setHours(0,0,0,0);
 
-  const ano=agora.getFullYear();
-  const mes=agora.getMonth();
-  const dia=agora.getDate();
+  fim=new Date(inicio);
+  fim.setDate(fim.getDate()+7);
+ }else{
+  inicio=new Date(
+   agora.getFullYear(),
+   agora.getMonth(),
+   1
+  );
 
-  let inicio;
-  let fim;
+  fim=new Date(
+   agora.getFullYear(),
+   agora.getMonth()+1,
+   1
+  );
+ }
 
-  if(tipo==='dia'){
-    inicio=new Date(ano,mes,dia);
-    fim=new Date(ano,mes,dia,23,59,59);
-  }
-
-  if(tipo==='semana'){
-    const d=new Date(ano,mes,dia);
-    const semana=d.getDay();
-
-    inicio=new Date(ano,mes,dia-semana);
-    fim=new Date(
-      ano,
-      mes,
-      dia+(6-semana),
-      23,59,59
-    );
-  }
-
-  if(tipo==='mes'){
-    inicio=new Date(ano,mes,1);
-    fim=new Date(ano,mes+1,0,23,59,59);
-  }
-
-  return {
-    inicio:inicio.toISOString().slice(0,10),
-    fim:fim.toISOString().slice(0,10)
-  };
+ return{
+  inicio:inicio.toISOString().slice(0,10),
+  fim:fim.toISOString().slice(0,10)
+ };
 }
-  function render(){
-  gerarRecorrencias();
-  renderDashboard();
-  renderPessoal();
-  renderSaldos();
-  renderCartao();
-  renderUber();
-  renderRelatorios();
-}
+ function render(){
+ gerarRecorrencias();
+ salvar();
 
-function renderDashboard(){
-
-  const p=periodoAtual('dia');
-
-  const pessoais=db.l.filter(x=>
-    x.d>=p.inicio &&
-    x.d<=p.fim
-  );
-
-  const ganhosP=pessoais
-    .filter(x=>x.tipo==='ganho')
-    .reduce((s,x)=>s+Number(x.v||0),0);
-
-  const despesasP=pessoais
-    .filter(x=>x.tipo==='despesa')
-    .reduce((s,x)=>s+Number(x.v||0),0);
-
-  const uber=db.u.filter(x=>
-    x.d>=p.inicio &&
-    x.d<=p.fim
-  );
-
-  const ganhosU=uber.reduce(
-    (s,x)=>s+Number(x.ganho||0),0
-  );
-
-  const despesasU=uber.reduce(
-    (s,x)=>s+Number(x.despesa||0)+Number(x.combustivel||0),0
-  );
-
-  const ganhos=ganhosP+ganhosU;
-  const despesas=despesasP+despesasU;
-  const lucro=ganhos-despesas;
-
-  /*
-   Reserva:
-   10% do valor que sobra depois de
-   despesas + combustível.
-  */
-  const baseReserva=Math.max(0,ganhos-despesas);
-  const reserva=baseReserva*0.10;
-
-  const pix=pessoais.reduce((s,x)=>{
-    if(x.pag==='pix'){
-      return s+(x.tipo==='ganho'?Number(x.v||0):-Number(x.v||0));
-    }
-    return s;
-  },0);
-
-  const dinheiro=pessoais.reduce((s,x)=>{
-    if(x.pag==='dinheiro'){
-      return s+(x.tipo==='ganho'?Number(x.v||0):-Number(x.v||0));
-    }
-    return s;
-  },0);
-
-  const cartao=pessoais
-    .filter(x=>x.pag==='cartao'&&x.tipo==='despesa')
-    .reduce((s,x)=>s+Number(x.v||0),0);
-
-  document.getElementById('dGanhos').textContent=dinheiroBR(ganhos);
-  document.getElementById('dDespesas').textContent=dinheiroBR(despesas);
-  document.getElementById('dLucro').textContent=dinheiroBR(lucro);
-  document.getElementById('dReserva').textContent=dinheiroBR(reserva);
-  document.getElementById('dPix').textContent=dinheiroBR(pix);
-  document.getElementById('dDinheiro').textContent=dinheiroBR(dinheiro);
-  document.getElementById('dCartao').textContent=dinheiroBR(cartao);
-  document.getElementById('dUber').textContent=dinheiroBR(ganhosU);
-
-  const recentes=[
-    ...pessoais.map(x=>({
-      d:x.d,
-      texto:x.desc,
-      valor:x.tipo==='ganho'?Number(x.v||0):-Number(x.v||0)
-    })),
-    ...uber.map(x=>({
-      d:x.d,
-      texto:'Uber/99',
-      valor:Number(x.ganho||0)
-    }))
-  ]
-  .sort((a,b)=>b.d.localeCompare(a.d))
-  .slice(0,10);
-
-  document.getElementById('dashLista').innerHTML=
-    recentes.length
-    ?
-    recentes.map(x=>`
-      <div class="item">
-        <div class="item-top">
-          <span>
-            <b>${escapeHtml(x.texto)}</b><br>
-            <small>${dataBR(x.d)}</small>
-          </span>
-          <strong>${dinheiroBR(x.valor)}</strong>
-        </div>
-      </div>
-    `).join('')
-    :
-    '<div class="alerta">Nenhum lançamento hoje.</div>';
+ renderDashboard();
+ renderPessoal();
+ renderSaldos();
+ renderFixas();
+ renderCartao();
+ renderUber();
+ renderRelatorios();
 }
 
 function dinheiroBR(v){
-  return Number(v||0).toLocaleString('pt-BR',{
-    style:'currency',
-    currency:'BRL'
-  });
+ return Number(v||0).toLocaleString('pt-BR',{
+  style:'currency',
+  currency:'BRL'
+ });
+}
+
+function renderDashboard(){
+ const hojeData=hoje();
+
+ let ganhos=0;
+ let despesas=0;
+ let combustivel=0;
+
+ db.u.forEach(x=>{
+  if(x.d===hojeData){
+   ganhos+=Number(x.ganho||0);
+   despesas+=Number(x.despesa||0);
+   combustivel+=Number(x.combustivel||0);
+  }
+ });
+
+ db.l.forEach(x=>{
+  if(x.d!==hojeData)return;
+
+  const v=valorLancamento(x);
+
+  if(x.tipo==='receita'){
+   ganhos+=v;
+  }else{
+   despesas+=v;
+
+   if(x.cat==='Combustível'){
+    combustivel+=v;
+   }
+  }
+ });
+
+ const lucro=ganhos-despesas;
+ const reserva=Math.max(0,(ganhos-despesas)*0.10);
+
+ const elGanhos=document.getElementById('dGanhos');
+ const elDespesas=document.getElementById('dDespesas');
+ const elLucro=document.getElementById('dLucro');
+ const elReserva=document.getElementById('dReserva');
+
+ if(elGanhos)elGanhos.textContent=dinheiroBR(ganhos);
+ if(elDespesas)elDespesas.textContent=dinheiroBR(despesas);
+ if(elLucro)elLucro.textContent=dinheiroBR(lucro);
+ if(elReserva)elReserva.textContent=dinheiroBR(reserva);
 }
 
 function renderPessoal(){
+ const el=document.getElementById('listaPessoal');
+ if(!el)return;
 
-  const lista=document.getElementById('listaPessoal');
+ const lista=db.l
+  .filter(x=>!x.modeloFixa)
+  .sort((a,b)=>b.d.localeCompare(a.d));
 
-  const dados=[...db.l]
-    .sort((a,b)=>b.d.localeCompare(a.d));
+ if(!lista.length){
+  el.innerHTML='<p>Nenhum lançamento pessoal.</p>';
+  return;
+ }
 
-  if(!dados.length){
-    lista.innerHTML='<div class="alerta">Nenhum lançamento pessoal.</div>';
-    return;
-  }
+ el.innerHTML=lista.map(x=>{
+  const valor=valorLancamento(x);
 
-  lista.innerHTML=dados.map(x=>{
+  const tipo=x.tipo==='receita'
+   ?'RECEITA'
+   :'DESPESA';
 
-    const sinal=x.tipo==='ganho'?'+':'-';
-    const classe=x.tipo==='ganho'?'verde':'vermelho';
+  const classe=x.tipo==='receita'
+   ?'receita'
+   :'despesa';
 
-    return `
-      <div class="item">
-        <div class="item-top">
-          <div>
-            <b>${escapeHtml(x.desc)}</b>
-            <br>
-            <small>
-              ${dataBR(x.d)}
-              • ${escapeHtml(x.cat||'Despesas')}
-              • ${nomePagamento(x.pag)}
-            </small>
-            <br>
-            <small>
-              ${x.rep!=='unica'?'Recorrente • '+escapeHtml(x.rep):'Lançamento único'}
-              ${x.fixa?' • automático':''}
-            </small>
-          </div>
+  const fixa=x.fixaId
+   ?'<span class="tag">FIXA</span>'
+   :'';
 
-          <strong class="${classe}">
-            ${sinal} ${dinheiroBR(x.v)}
-          </strong>
-        </div>
+  const repeticao=x.rep&&x.rep!=='unica'
+   ?' • '+x.rep
+   :'';
 
-        <div class="acoes">
+  return `
+   <div class="item">
+    <div>
+     <strong>${escapeHTML(x.desc||'Sem descrição')}</strong>
+     ${fixa}
+     <br>
+     <small>
+      ${dataBR(x.d)}
+      • ${escapeHTML(x.cat||'Despesas')}
+      ${repeticao}
+      • ${nomePagamento(x.pag)}
+     </small>
+    </div>
 
-          <button
-            class="${x.status==='pago'?'verde':'amarelo'}"
-            onclick="alterarStatus('${x.id}')">
-            ${x.status==='pago'?'Pago':'Pendente'}
-          </button>
+    <div style="text-align:right">
+     <strong class="${classe}">
+      ${dinheiroBR(valor)}
+     </strong>
+     <br>
 
-          <button
-            class="btn2"
-            onclick="alterarPagamento('${x.id}')">
-            ${nomePagamento(x.pag)}
-          </button>
+     <button onclick="alterarStatus(${x.id})">
+      ${x.status==='pago'?'Pago':'Pendente'}
+     </button>
 
-          <button
-            class="vermelho"
-            onclick="excluirPessoal('${x.id}')">
-            Excluir
-          </button>
+     <button onclick="alterarPagamento(${x.id})">
+      Pagamento
+     </button>
 
-        </div>
-      </div>
-    `;
-  }).join('');
+     <button onclick="excluirPessoal(${x.id})">
+      Excluir
+     </button>
+    </div>
+   </div>
+  `;
+ }).join('');
+}
+
+function renderFixas(){
+ const el=document.getElementById('listaFixas');
+ if(!el)return;
+
+ const fixas=db.l.filter(x=>
+  x.modeloFixa===true
+ );
+
+ if(!fixas.length){
+  el.innerHTML='<p>Nenhuma despesa fixa cadastrada.</p>';
+  return;
+ }
+
+ el.innerHTML=fixas.map(x=>`
+  <div class="item">
+   <div>
+    <strong>${escapeHTML(x.desc||'Sem descrição')}</strong>
+    <br>
+    <small>
+     ${dinheiroBR(x.v)}
+     • ${escapeHTML(x.cat||'Despesas')}
+     • ${x.rep}
+     • início ${dataBR(x.d)}
+    </small>
+   </div>
+
+   <button onclick="excluirFixa(${x.id})">
+    Excluir fixa
+   </button>
+  </div>
+ `).join('');
 }
 
 function renderSaldos(){
+ const el=document.getElementById('listaSaldos');
+ if(!el)return;
 
-  const pessoais=db.l;
+ let receitas=0;
+ let despesas=0;
 
-  const pix=pessoais.reduce((s,x)=>{
-    if(x.pag==='pix'){
-      return s+(x.tipo==='ganho'
-        ?Number(x.v||0)
-        :-Number(x.v||0));
-    }
-    return s;
-  },0);
+ db.l.forEach(x=>{
+  const v=valorLancamento(x);
 
-  const dinheiro=pessoais.reduce((s,x)=>{
-    if(x.pag==='dinheiro'){
-      return s+(x.tipo==='ganho'
-        ?Number(x.v||0)
-        :-Number(x.v||0));
-    }
-    return s;
-  },0);
+  if(x.tipo==='receita'){
+   receitas+=v;
+  }else{
+   despesas+=v;
+  }
+ });
 
-  const geral=pix+dinheiro;
+ db.u.forEach(x=>{
+  receitas+=Number(x.ganho||0);
+  despesas+=Number(x.despesa||0);
+  despesas+=Number(x.combustivel||0);
+ });
 
-  document.getElementById('saldoPix').textContent=dinheiroBR(pix);
-  document.getElementById('saldoDinheiro').textContent=dinheiroBR(dinheiro);
-  document.getElementById('saldoGeral').textContent=dinheiroBR(geral);
+ const saldo=receitas-despesas;
 
-  const lista=pessoais
-    .filter(x=>x.pag==='pix'||x.pag==='dinheiro')
-    .sort((a,b)=>b.d.localeCompare(a.d));
+ el.innerHTML=`
+  <div class="cards">
+   <div class="card">
+    <small>Receitas</small>
+    <strong>${dinheiroBR(receitas)}</strong>
+   </div>
 
-  document.getElementById('listaSaldos').innerHTML=
-    lista.length
-    ?
-    lista.map(x=>{
-      const valor=x.tipo==='ganho'
-        ?Number(x.v||0)
-        :-Number(x.v||0);
+   <div class="card">
+    <small>Despesas</small>
+    <strong>${dinheiroBR(despesas)}</strong>
+   </div>
 
-      return `
-        <div class="item">
-          <div class="item-top">
-            <span>
-              <b>${escapeHtml(x.desc)}</b><br>
-              <small>${dataBR(x.d)} • ${nomePagamento(x.pag)}</small>
-            </span>
-            <strong>${dinheiroBR(valor)}</strong>
-          </div>
-        </div>
-      `;
-    }).join('')
-    :
-    '<div class="alerta">Nenhuma movimentação PIX ou Dinheiro.</div>';
+   <div class="card">
+    <small>Saldo</small>
+    <strong>${dinheiroBR(saldo)}</strong>
+   </div>
+  </div>
+ `;
 }
 
 function renderCartao(){
+ const el=document.getElementById('listaCartao');
+ if(!el)return;
 
-  document.getElementById('fechamento').value=
-    db.config.fechamento||5;
+ const lista=db.l.filter(x=>
+  x.pag==='cartao'
+ );
 
-  document.getElementById('vencimento').value=
-    db.config.vencimento||10;
+ if(!lista.length){
+  el.innerHTML='<p>Nenhuma compra no cartão.</p>';
+  return;
+ }
 
-  const compras=db.l
-    .filter(x=>x.pag==='cartao'&&x.tipo==='despesa')
-    .sort((a,b)=>b.d.localeCompare(a.d));
+ const total=lista.reduce((s,x)=>
+  s+(x.tipo==='receita'?-valorLancamento(x):valorLancamento(x)),0
+ );
 
-  const total=compras.reduce(
-    (s,x)=>s+Number(x.v||0),0
-  );
+ el.innerHTML=`
+  <div class="card">
+   <strong>Total no cartão: ${dinheiroBR(total)}</strong>
+  </div>
 
-  document.getElementById('faturaTotal').textContent=
-    dinheiroBR(total);
+  ${lista.sort((a,b)=>b.d.localeCompare(a.d)).map(x=>`
+   <div class="item">
+    <div>
+     <strong>${escapeHTML(x.desc||'Sem descrição')}</strong>
+     <br>
+     <small>
+      ${dataBR(x.d)}
+      • ${escapeHTML(x.cat||'Despesas')}
+     </small>
+    </div>
 
-  document.getElementById('listaCartao').innerHTML=
-    compras.length
-    ?
-    compras.map(x=>`
-      <div class="item">
-        <div class="item-top">
-          <span>
-            <b>${escapeHtml(x.desc)}</b><br>
-            <small>${dataBR(x.d)} • ${escapeHtml(x.cat||'Despesas')}</small>
-          </span>
-
-          <strong class="vermelho">
-            ${dinheiroBR(x.v)}
-          </strong>
-        </div>
-
-        <div class="acoes">
-          <button
-            class="vermelho"
-            onclick="excluirPessoal('${x.id}')">
-            Excluir
-          </button>
-        </div>
-      </div>
-    `).join('')
-    :
-    '<div class="alerta">Nenhuma compra no cartão.</div>';
+    <div>
+     <strong>${dinheiroBR(valorLancamento(x))}</strong>
+     <br>
+     <button onclick="excluirCartao(${x.id})">
+      Excluir
+     </button>
+    </div>
+   </div>
+  `).join('')}
+ `;
 }
 
 function renderUber(){
+ const el=document.getElementById('listaUber');
+ if(!el)return;
 
-  const totalGanho=db.u.reduce(
-    (s,x)=>s+Number(x.ganho||0),0
-  );
+ const lista=db.u
+  .slice()
+  .sort((a,b)=>b.d.localeCompare(a.d));
 
-  const totalDespesa=db.u.reduce(
-    (s,x)=>s+Number(x.despesa||0),0
-  );
+ if(!lista.length){
+  el.innerHTML='<p>Nenhum lançamento Uber/99.</p>';
+  return;
+ }
 
-  const totalComb=db.u.reduce(
-    (s,x)=>s+Number(x.combustivel||0),0
-  );
+ el.innerHTML=lista.map(x=>{
+  const ganho=Number(x.ganho||0);
+  const despesa=Number(x.despesa||0);
+  const combustivel=Number(x.combustivel||0);
+  const lucro=ganho-despesa-combustivel;
 
-  const totalKm=db.u.reduce(
-    (s,x)=>s+Number(x.km||0),0
-  );
+  return `
+   <div class="item">
+    <div>
+     <strong>${dataBR(x.d)}</strong>
+     <br>
+     <small>
+      ${escapeHTML(x.cat||'Uber/99')}
+      • ${Number(x.km||0)} km
+      • ${Number(x.horas||0)} h
+     </small>
+    </div>
 
-  const totalHoras=db.u.reduce(
-    (s,x)=>s+Number(x.horas||0),0
-  );
-
-  const lucro=
-    totalGanho-totalDespesa-totalComb;
-
-  document.getElementById('uTotalGanho').textContent=
-    dinheiroBR(totalGanho);
-
-  document.getElementById('uTotalDespesa').textContent=
-    dinheiroBR(totalDespesa);
-
-  document.getElementById('uTotalComb').textContent=
-    dinheiroBR(totalComb);
-
-  document.getElementById('uLucro').textContent=
-    dinheiroBR(lucro);
-
-  document.getElementById('uTotalKm').textContent=
-    totalKm.toLocaleString('pt-BR');
-
-  document.getElementById('uTotalHoras').textContent=
-    totalHoras.toLocaleString('pt-BR');
-
-  const lista=[...db.u]
-    .sort((a,b)=>b.d.localeCompare(a.d));
-
-  document.getElementById('listaUber').innerHTML=
-    lista.length
-    ?
-    lista.map(x=>{
-
-      const lucroDia=
-        Number(x.ganho||0)-
-        Number(x.despesa||0)-
-        Number(x.combustivel||0);
-
-      return `
-        <div class="item">
-          <div class="item-top">
-            <span>
-              <b>Uber/99</b><br>
-              <small>
-                ${dataBR(x.d)}
-                • ${escapeHtml(x.cat||'Despesas')}
-              </small>
-            </span>
-
-            <strong>
-              ${dinheiroBR(lucroDia)}
-            </strong>
-          </div>
-
-          <div style="margin-top:8px;font-size:13px">
-            Ganhos: ${dinheiroBR(x.ganho)}
-            • Despesas: ${dinheiroBR(x.despesa)}
-            • Combustível: ${dinheiroBR(x.combustivel)}
-            <br>
-            KM: ${x.km||0}
-            • Horas: ${x.horas||0}
-          </div>
-
-          <div class="acoes">
-            <button
-              class="vermelho"
-              onclick="excluirUber('${x.id}')">
-              Excluir
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('')
-    :
-    '<div class="alerta">Nenhum lançamento Uber/99.</div>';
+    <div style="text-align:right">
+     <strong>${dinheiroBR(ganho)}</strong>
+     <br>
+     <small>
+      Despesas: ${dinheiroBR(despesa)}
+      <br>
+      Combustível: ${dinheiroBR(combustivel)}
+      <br>
+      Lucro: ${dinheiroBR(lucro)}
+     </small>
+     <br>
+     <button onclick="excluirUber(${x.id})">
+      Excluir
+     </button>
+    </div>
+   </div>
+  `;
+ }).join('');
 }
 
-function gerarRelatorio(){
+function renderRelatorios(){
+ const el=document.getElementById('relatorio');
+ if(!el)return;
 
-  const inicio=document.getElementById('rInicio').value;
-  const fim=document.getElementById('rFim').value;
+ const p=periodoAtual('mes');
 
-  if(!inicio||!fim){
-    alert('Informe as duas datas.');
-    return;
+ let ganhos=0;
+ let despesas=0;
+ let combustivel=0;
+ let km=0;
+ let horas=0;
+
+ db.l.forEach(x=>{
+  if(x.d<p.inicio||x.d>=p.fim)return;
+
+  const v=valorLancamento(x);
+
+  if(x.tipo==='receita'){
+   ganhos+=v;
+  }else{
+   despesas+=v;
+
+   if(x.cat==='Combustível'){
+    combustivel+=v;
+   }
   }
+ });
 
-  const pessoais=db.l.filter(x=>
-    x.d>=inicio &&
-    x.d<=fim
-  );
+ db.u.forEach(x=>{
+  if(x.d<p.inicio||x.d>=p.fim)return;
 
-  const uber=db.u.filter(x=>
-    x.d>=inicio &&
-    x.d<=fim
-  );
+  ganhos+=Number(x.ganho||0);
+  despesas+=Number(x.despesa||0);
+  combustivel+=Number(x.combustivel||0);
+  km+=Number(x.km||0);
+  horas+=Number(x.horas||0);
+ });
 
-  const ganhosP=pessoais
-    .filter(x=>x.tipo==='ganho')
-    .reduce((s,x)=>s+Number(x.v||0),0);
+ const lucro=ganhos-despesas;
+ const baseReserva=Math.max(0,ganhos-despesas);
+ const reserva=baseReserva*0.10;
 
-  const despesasP=pessoais
-    .filter(x=>x.tipo==='despesa')
-    .reduce((s,x)=>s+Number(x.v||0),0);
+ const custoTotal=despesas+combustivel;
+ const lucroReal=ganhos-custoTotal;
 
-  const ganhosU=uber.reduce(
-    (s,x)=>s+Number(x.ganho||0),0
-  );
+ let porKm=0;
+ if(km>0){
+  porKm=custoTotal/km;
+ }
 
-  const despesasU=uber.reduce(
-    (s,x)=>s+
-      Number(x.despesa||0)+
-      Number(x.combustivel||0),0
-  );
+ let porHora=0;
+ if(horas>0){
+  porHora=lucroReal/horas;
+ }
 
-  const ganhos=ganhosP+ganhosU;
-  const despesas=despesasP+despesasU;
-  const lucro=ganhos-despesas;
+ el.innerHTML=`
+  <div class="cards">
+   <div class="card">
+    <small>Ganhos</small>
+    <strong>${dinheiroBR(ganhos)}</strong>
+   </div>
 
-  const km=uber.reduce(
-    (s,x)=>s+Number(x.km||0),0
-  );
+   <div class="card">
+    <small>Despesas</small>
+    <strong>${dinheiroBR(despesas)}</strong>
+   </div>
 
-  const horas=uber.reduce(
-    (s,x)=>s+Number(x.horas||0),0
-  );
+   <div class="card">
+    <small>Combustível</small>
+    <strong>${dinheiroBR(combustivel)}</strong>
+   </div>
 
-  const custoKm=km>0?despesasU/km:0;
-  const ganhoHora=horas>0?ganhosU/horas:0;
+   <div class="card">
+    <small>Lucro</small>
+    <strong>${dinheiroBR(lucro)}</strong>
+   </div>
 
-  document.getElementById('resultadoRelatorio').innerHTML=`
-    <h3>Relatório</h3>
+   <div class="card">
+    <small>Reserva 10%</small>
+    <strong>${dinheiroBR(reserva)}</strong>
+   </div>
 
-    <div class="grid">
+   <div class="card">
+    <small>Lucro real</small>
+    <strong>${dinheiroBR(lucroReal)}</strong>
+   </div>
 
-      <div class="kpi">
-        Ganhos
-        <b>${dinheiroBR(ganhos)}</b>
-      </div>
+   <div class="card">
+    <small>Custo por KM</small>
+    <strong>${dinheiroBR(porKm)}</strong>
+   </div>
 
-      <div class="kpi">
-        Despesas
-        <b>${dinheiroBR(despesas)}</b>
-      </div>
+   <div class="card">
+    <small>Lucro por hora</small>
+    <strong>${dinheiroBR(porHora)}</strong>
+   </div>
+  </div>
 
-      <div class="kpi">
-        Lucro
-        <b>${dinheiroBR(lucro)}</b>
-      </div>
+  <p>
+   <strong>Período:</strong>
+   ${dataBR(p.inicio)} até ${dataBR(
+    new Date(new Date(p.fim+'T12:00:00').getTime()-86400000)
+    .toISOString().slice(0,10)
+   )}
+  </p>
 
-      <div class="kpi">
-        KM
-        <b>${km.toLocaleString('pt-BR')}</b>
-      </div>
+  <p>
+   <strong>KM trabalhados:</strong> ${km.toLocaleString('pt-BR')}
+   <br>
+   <strong>Horas trabalhadas:</strong> ${horas}
+  </p>
+ `;
+}
 
-      <div class="kpi">
-        Horas
-        <b>${horas.toLocaleString('pt-BR')}</b>
-      </div>
-
-      <div class="kpi">
-        Custo por KM
-        <b>${dinheiroBR(custoKm)}</b>
-      </div>
-
-      <div class="kpi">
-        Ganho por hora
-        <b>${dinheiroBR(ganhoHora)}</b>
-      </div>
-
-    </div>
-  `;
+function escapeHTML(valor){
+ return String(valor??'')
+  .replace(/&/g,'&amp;')
+  .replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;')
+  .replace(/'/g,'&#039;');
 }
 
 function iniciar(){
+ carregar();
 
-  carregar();
+ normalizarDados();
 
-  /*
-   IMPORTANTE:
-   normalizar apenas ajusta campos ausentes.
-   Não remove lançamentos.
-  */
-  normalizarDados();
-
-  gerarRecorrencias();
-
-  salvar();
-
+ if(!document.getElementById('pData').value){
   document.getElementById('pData').value=hoje();
+ }
+
+ if(document.getElementById('uData') &&
+    !document.getElementById('uData').value){
   document.getElementById('uData').value=hoje();
+ }
 
-  const periodo=periodoAtual('mes');
+ if(document.getElementById('fechamento')){
+  document.getElementById('fechamento').value=
+   db.config.fechamento||5;
+ }
 
-  document.getElementById('rInicio').value=periodo.inicio;
-  document.getElementById('rFim').value=periodo.fim;
+ if(document.getElementById('vencimento')){
+  document.getElementById('vencimento').value=
+   db.config.vencimento||10;
+ }
 
-  render();
+ gerarRecorrencias();
+
+ salvar();
+
+ render();
 }
 
 iniciar();
-
-</script>
-</body>
-</html>
