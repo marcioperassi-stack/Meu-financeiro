@@ -36,14 +36,22 @@ position:sticky;
 top:76px;
 z-index:9
 }
+
 .nav button{
 white-space:nowrap;
 background:#e5e7eb;
-color:#111827
+color:#111827;
+border:1px solid #cbd5e1;
+font-weight:bold;
+box-shadow:0 2px 5px #0002
 }
+
 .nav button.active{
 background:#2563eb;
-color:#fff
+color:#fff;
+border-color:#1d4ed8;
+box-shadow:0 3px 8px #2563eb55;
+transform:translateY(-1px)
 }
 
 main{
@@ -234,6 +242,18 @@ gap:8px;
 margin-top:12px
 }
 
+.saldo-pix{
+border-left:5px solid #2563eb
+}
+
+.saldo-dinheiro{
+border-left:5px solid #16a34a
+}
+
+.saldo-total{
+border-left:5px solid #7c3aed
+}
+
 @media(max-width:700px){
 .grid{grid-template-columns:1fr 1fr}
 .form{grid-template-columns:1fr 1fr}
@@ -264,6 +284,10 @@ onclick="aba('dashboard',this)">
 
 <button onclick="aba('pessoal',this)">
 📋 Pessoal
+</button>
+
+<button onclick="aba('saldos',this)">
+💰 Saldos
 </button>
 
 <button onclick="aba('cartao',this)">
@@ -560,6 +584,19 @@ Pago
 </select>
 
 
+<select id="fp">
+
+<option value="PIX">
+💠 PIX
+</option>
+
+<option value="Dinheiro">
+💵 Dinheiro
+</option>
+
+</select>
+
+
 <select id="fixa">
 
 <option value="nao">
@@ -641,6 +678,7 @@ Adicionar
 <th>Valor</th>
 <th>Descrição</th>
 <th>Status</th>
+<th>Pagamento</th>
 <th>Fixa</th>
 <th>Repetição</th>
 <th></th>
@@ -668,6 +706,137 @@ onclick="gerarRecorrencias()">
 🔄 Atualizar recorrências
 
 </button>
+
+</div>
+
+</section>
+
+
+<!-- SALDOS -->
+
+<section id="saldos" class="page">
+
+<div class="card">
+
+<h3>
+💰 Saldos por forma de pagamento
+</h3>
+
+<div class="form">
+
+<select id="periodoSaldo"
+onchange="renderSaldo()">
+
+<option value="dia">
+Hoje
+</option>
+
+<option value="semana">
+Esta semana
+</option>
+
+<option value="mes" selected>
+Este mês
+</option>
+
+<option value="todos">
+Todos os dados
+</option>
+
+</select>
+
+<input
+id="dataSaldo"
+type="date"
+onchange="renderSaldo()">
+
+<div></div>
+<div></div>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card saldo-pix">
+
+💠 Saldo PIX
+
+<div
+class="metric"
+id="saldoPix">
+R$ 0,00
+</div>
+
+<p class="muted small">
+Entradas PIX − despesas PIX
+</p>
+
+</div>
+
+
+<div class="card saldo-dinheiro">
+
+💵 Saldo Dinheiro
+
+<div
+class="metric"
+id="saldoDinheiro">
+R$ 0,00
+</div>
+
+<p class="muted small">
+Entradas em dinheiro − despesas em dinheiro
+</p>
+
+</div>
+
+
+<div class="card saldo-total">
+
+💰 Saldo total
+
+<div
+class="metric"
+id="saldoTotal">
+R$ 0,00
+</div>
+
+<p class="muted small">
+PIX + Dinheiro
+</p>
+
+</div>
+
+
+<div class="card">
+
+📊 Movimentação
+
+<div
+class="metric"
+id="saldoMovimento">
+R$ 0,00
+</div>
+
+<p class="muted small">
+Total de entradas e despesas
+</p>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📋 Detalhamento
+</h3>
+
+<div id="saldoDetalhes"></div>
 
 </div>
 
@@ -938,875 +1107,7 @@ placeholder="KM trabalhados">
 
 <input
 id="ah"
-type="number"
-step=".1"
-placeholder="Horas trabalhadas">
-
-
-<button onclick="adda()">
-Adicionar
-</button>
-
-</div>
-
-
-<p class="muted small">
-
-As despesas podem ser classificadas por categoria.
-O combustível permanece separado.
-
-</p>
-
-</div>
-
-
-<div class="grid">
-
-
-<div class="card">
-
-Ganhos
-
-<div
-class="metric"
-id="ug">
-R$ 0,00
-</div>
-
-</div>
-
-
-<div class="card">
-
-Custos
-
-<div
-class="metric"
-id="uc">
-R$ 0,00
-</div>
-
-</div>
-
-
-<div class="card">
-
-Lucro líquido
-
-<div
-class="metric"
-id="ul">
-R$ 0,00
-</div>
-
-</div>
-
-
-<div class="card">
-
-Reserva
-
-<div
-class="metric"
-id="ur">
-R$ 0,00
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-📊 Indicadores Uber / 99
-</h3>
-
-<div id="uind"></div>
-
-</div>
-
-
-<div class="grid">
-
-
-<div class="card">
-
-⏱️ Horas trabalhadas
-
-<div
-class="metric"
-id="uHoras">
-0,0 h
-</div>
-
-</div>
-
-
-<div class="card">
-
-🛣️ KM trabalhados
-
-<div
-class="metric"
-id="uKm">
-0,0 km
-</div>
-
-</div>
-
-
-<div class="card">
-
-💰 Ganho por hora
-
-<div
-class="metric"
-id="uPorHora">
-R$ 0,00
-</div>
-
-</div>
-
-
-<div class="card">
-
-🛣️ Ganho por KM
-
-<div
-class="metric"
-id="uPorKm">
-R$ 0,00
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-🚗 Lançamentos Uber / 99
-</h3>
-
-<div class="table">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Data</th>
-<th>PIX</th>
-<th>Dinheiro</th>
-<th>Despesas</th>
-<th>Combustível</th>
-<th>Lucro</th>
-<th>KM</th>
-<th>Horas</th>
-<th>R$/h</th>
-<th>R$/km</th>
-<th>Reserva</th>
-<th></th>
-
-</tr>
-
-</thead>
-
-<tbody id="ta">
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-
-</section>
-
-
-<!-- METAS -->
-
-<section id="metas" class="page">
-
-<div class="card">
-
-<h3>
-🎯 Nova meta de economia
-</h3>
-
-<div class="form">
-
-<input
-id="mn"
-placeholder="Nome da meta">
-
-<input
-id="mv"
-type="number"
-step=".01"
-placeholder="Valor da meta">
-
-<input
-id="mj"
-type="number"
-step=".01"
-placeholder="Já guardado">
-
-<input
-id="mp"
-type="date">
-
-<button onclick="addMeta()">
-Criar meta
-</button>
-
-</div>
-
-</div>
-
-<div id="metasLista"></div>
-
-</section>
-
-
-<!-- RELATÓRIOS -->
-
-<section id="relatorios" class="page">
-
-<div class="card">
-
-<h3>
-📈 Relatório de lucro real
-</h3>
-
-<div class="form">
-
-<input
-id="ri"
-type="date">
-
-<input
-id="rf"
-type="date">
-
-<button onclick="relatorio()">
-Calcular
-</button>
-
-</div>
-
-<div id="relatorioBox"></div>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-🚗 Relatório Uber / 99
-</h3>
-
-<div id="relatorioUber"></div>
-
-</div>
-
-
-<div class="card">
-
-<h3>
-📅 Resumo por período
-</h3>
-
-<div id="resumoPeriodos"></div>
-
-</div>
-
-
-<div class="card">
-
-<button
-class="danger"
-onclick="limparDados()">
-
-Apagar todos os dados
-
-</button>
-
-</div>
-
-</section>
-
-</main>
-
-
-<script>
-
-let x=JSON.parse(
-localStorage.getItem('MF')||
-'{"l":[],"a":[],"c":[],"m":[],"config":{"fechamento":5,"vencimento":10}}'
-);
-
-x.l=x.l||[];
-x.a=x.a||[];
-x.c=x.c||[];
-x.m=x.m||[];
-
-x.config=x.config||{
-fechamento:5,
-vencimento:10
-};
-
-
-/*
-CONVERSÃO DOS DADOS ANTIGOS
-*/
-
-x.a.forEach(a=>{
-
-a.gpix=Number(a.gpix)||0;
-a.gdin=Number(a.gdin)||0;
-
-if(!a.gpix&&!a.gdin&&a.g)
-a.gdin=Number(a.g)||0;
-
-a.g=a.gpix+a.gdin;
-
-
-if(a.cpix===undefined &&
-a.cdin===undefined){
-
-a.cdin=Number(a.c)||0;
-a.cpix=0;
-
-}
-
-a.cpix=Number(a.cpix)||0;
-a.cdin=Number(a.cdin)||0;
-
-a.c=a.cpix+a.cdin;
-
-
-if(a.fpix===undefined &&
-a.fdin===undefined){
-
-a.fdin=Number(a.f)||0;
-a.fpix=0;
-
-}
-
-a.fpix=Number(a.fpix)||0;
-a.fdin=Number(a.fdin)||0;
-
-a.f=a.fpix+a.fdin;
-
-
-/*
-CORREÇÃO IMPORTANTE:
-KM E HORAS SEMPRE COMO NÚMERO
-*/
-
-a.k=Number(a.k)||0;
-a.h=Number(a.h)||0;
-
-});
-
-
-const $=i=>document.getElementById(i);
-
-const n=i=>+$(i).value||0;
-
-const m=v=>
-new Intl.NumberFormat(
-'pt-BR',
-{
-style:'currency',
-currency:'BRL'
-}
-).format(v);
-
-const hoje=()=>
-new Date()
-.toISOString()
-.slice(0,10);
-
-const parse=d=>
-new Date(d+'T12:00:00');
-
-
-function save(){
-
-localStorage.setItem(
-'MF',
-JSON.stringify(x)
-);
-
-render();
-
-}
-
-
-function saveConfig(){
-
-x.config.fechamento=
-Math.min(
-31,
-Math.max(
-1,
-+$('fechamento').value||5
-)
-);
-
-x.config.vencimento=
-Math.min(
-31,
-Math.max(
-1,
-+$('vencimento').value||10
-)
-);
-
-save();
-
-}
-
-
-function aba(id,b){
-
-document
-.querySelectorAll('.page')
-.forEach(
-p=>p.classList.remove('active')
-);
-
-$(id).classList.add('active');
-
-document
-.querySelectorAll('.nav button')
-.forEach(
-x=>x.classList.remove('active')
-);
-
-b.classList.add('active');
-
-render();
-
-}
-
-
-/*
-ID ÚNICO
-*/
-
-function gerarId(prefixo){
-
-return prefixo+
-Date.now()+
-Math.random()
-.toString(36)
-.slice(2,8);
-
-}
-
-
-/*
-================================================
-DESPESAS FIXAS
-================================================
-*/
-
-function adicionarOcorrenciaFixa(
-modelo,
-data,
-primeira=false
-){
-
-let existe=x.l.some(a=>
-a.fixa==='sim' &&
-a.fixaId===modelo.fixaId &&
-a.d===data
-);
-
-if(existe)
-return false;
-
-
-x.l.push({
-
-d:data,
-
-t:'Despesa',
-
-c:modelo.c,
-
-v:Number(modelo.v)||0,
-
-z:modelo.z||'',
-
-p:primeira?
-(modelo.p||'Pendente'):
-'Pendente',
-
-fixa:'sim',
-
-rep:'nao',
-
-periodo:'mensal',
-
-fixaId:modelo.fixaId,
-
-origem:'fixa'
-
-});
-
-return true;
-
-}
-
-
-/*
-Gera as despesas fixas mensalmente.
-*/
-
-function garantirFixas(){
-
-let hojeData=parse(hoje());
-
-let limite=new Date(
-hojeData.getFullYear(),
-hojeData.getMonth()+12,
-1,
-12
-);
-
-let modelos=x.l.filter(a=>
-a.t==='Despesa' &&
-a.fixa==='sim' &&
-a.fixaId &&
-a.origem==='fixa-modelo'
-);
-
-let criadas=0;
-
-
-modelos.forEach(modelo=>{
-
-let dia=parse(modelo.d).getDate();
-
-let p=new Date(
-hojeData.getFullYear(),
-hojeData.getMonth(),
-1,
-12
-);
-
-
-while(p<=limite){
-
-let ultimo=
-new Date(
-p.getFullYear(),
-p.getMonth()+1,
-0
-).getDate();
-
-let diaReal=
-Math.min(
-dia,
-ultimo
-);
-
-let data=
-new Date(
-p.getFullYear(),
-p.getMonth(),
-diaReal,
-12
-)
-.toISOString()
-.slice(0,10);
-
-
-if(
-adicionarOcorrenciaFixa(
-modelo,
-data,
-data===modelo.d
-)
-)
-criadas++;
-
-
-p.setMonth(
-p.getMonth()+1
-);
-
-}
-
-});
-
-
-return criadas;
-
-}
-
-
-/*
-================================================
-ADICIONAR LANÇAMENTO PESSOAL
-================================================
-*/
-
-function add(){
-
-let v=n('va');
-
-if(v<=0)
-return alert(
-'Digite um valor válido.'
-);
-
-
-let dataInicial=
-$('dt').value||hoje();
-
-let tipo=$('tp').value;
-
-let fixa=
-$('fixa').value==='sim';
-
-let repetir=
-$('rep').value==='sim';
-
-let periodo=
-$('periodo').value;
-
-let quantidade=
-repetir
-?
-Math.min(
-60,
-Math.max(
-1,
-parseInt(
-$('qtdrep').value
-)||1
-)
-)
-:
-1;
-
-
-/*
-ENTRADA
-*/
-
-if(tipo==='Entrada'){
-
-x.l.push({
-
-d:dataInicial,
-
-t:'Entrada',
-
-c:$('ca').value,
-
-v,
-
-z:$('de').value,
-
-p:$('pg').value,
-
-fixa:'nao',
-
-rep:'nao',
-
-periodo:'',
-
-origem:'pessoal'
-
-});
-
-save();
-
-$('va').value='';
-$('de').value='';
-
-return;
-
-}
-
-
-/*
-DESPESA FIXA
-*/
-
-if(fixa){
-
-let id=
-gerarId('FIXA-');
-
-
-/*
-MODELO DA DESPESA FIXA
-*/
-
-x.l.push({
-
-d:dataInicial,
-
-t:'Despesa',
-
-c:$('ca').value,
-
-v,
-
-z:$('de').value,
-
-p:$('pg').value,
-
-fixa:'sim',
-
-rep:'nao',
-
-periodo:'mensal',
-
-fixaId:id,
-
-origem:'fixa-modelo'
-
-});
-
-
-/*
-Cria a primeira ocorrência
-*/
-
-adicionarOcorrenciaFixa(
-
-{
-fixaId:id,
-d:dataInicial,
-c:$('ca').value,
-v,
-z:$('de').value,
-p:$('pg').value
-},
-
-dataInicial,
-
-true
-
-);
-
-
-garantirFixas();
-
-save();
-
-$('va').value='';
-$('de').value='';
-
-return;
-
-}
-
-
-/*
-DESPESA NORMAL / REPETIDA
-*/
-
-let repeticaoId=
-repetir?
-gerarId('REP-'):
-null;
-
-
-for(let i=0;i<quantidade;i++){
-
-let d=parse(dataInicial);
-
-if(i){
-
-if(periodo==='diaria')
-d.setDate(
-d.getDate()+i
-);
-
-else if(periodo==='semanal')
-d.setDate(
-d.getDate()+7*i
-);
-
-else
-d.setMonth(
-d.getMonth()+i
-);
-
-}
-
-
-x.l.push({
-
-d:
-d.toISOString()
-.slice(0,10),
-
-t:'Despesa',
-
-c:$('ca').value,
-
-v,
-
-z:$('de').value,
-
-p:
-i===0?
-$('pg').value:
-'Pendente',
-
-fixa:'nao',
-
-rep:
-repetir?
-'sim':
-'nao',
-
-periodo:
-repetir?
-periodo:
-'',
-
-origem:
-i===0?
-'pessoal':
-'recorrente',
-
-parcela:i+1,
-
-totalParcelas:quantidade,
-
-repeticaoId
-
-});
-
-}
-
-
-save();
-
-$('va').value='';
-$('de').value='';
-$('qtdrep').value=1;
-
-}
-
-
-/*
+  /*
 ================================================
 UBER / 99
 ================================================
@@ -1853,10 +1154,6 @@ return alert(
 'Informe PIX e/ou dinheiro recebido.'
 );
 
-
-/*
-KM E HORAS SÃO SALVOS COMO NÚMEROS.
-*/
 
 let km=n('ak');
 
@@ -2094,11 +1391,6 @@ a.repeticaoId
 );
 
 
-/*
-Evita usar todas as parcelas
-como modelos duplicados.
-*/
-
 let ids=[];
 
 modelos=
@@ -2151,6 +1443,8 @@ v:modelo.v,
 z:modelo.z||'',
 
 p:'Pendente',
+
+fp:modelo.fp||'Não informado',
 
 fixa:'nao',
 
@@ -2551,7 +1845,10 @@ ${texto}
 
 '<div class="alert ok">Nenhuma conta pendente próxima.</div>';
 
-}/*
+}
+
+
+/*
 ================================================
 EDIÇÃO DE LANÇAMENTOS
 ================================================
@@ -2656,6 +1953,25 @@ Pendente
 
 <option ${a.p==='Pago'?'selected':''}>
 Pago
+</option>
+
+</select>
+
+<select id="edFp">
+
+<option value="PIX"
+${a.fp==='PIX'?'selected':''}>
+💠 PIX
+</option>
+
+<option value="Dinheiro"
+${a.fp==='Dinheiro'?'selected':''}>
+💵 Dinheiro
+</option>
+
+<option value="Não informado"
+${(!a.fp||a.fp==='Não informado')?'selected':''}>
+Não informado
 </option>
 
 </select>
@@ -2873,6 +2189,8 @@ Number($('edValor').value)||0;
 a.z=$('edDesc').value||'';
 
 a.p=$('edPag').value;
+
+a.fp=$('edFp').value||'Não informado';
 
 }
 
@@ -3114,19 +2432,21 @@ $('uPorKm').textContent=
 m(u.ganhoKm);
 
 
-$('uind').innerHTML=`
-
-<b>PIX:</b>
-${m(
-x.a
-.filter(z=>
+let dadosUber=
+x.a.filter(z=>
 dentro(
 z.d,
 periodo,
 base
 )
-)
-.reduce(
+);
+
+
+$('uind').innerHTML=`
+
+<b>PIX:</b>
+${m(
+dadosUber.reduce(
 (s,z)=>
 s+Number(z.gpix||0),
 0
@@ -3137,15 +2457,7 @@ s+Number(z.gpix||0),
 
 <b>Dinheiro:</b>
 ${m(
-x.a
-.filter(z=>
-dentro(
-z.d,
-periodo,
-base
-)
-)
-.reduce(
+dadosUber.reduce(
 (s,z)=>
 s+Number(z.gdin||0),
 0
@@ -3196,8 +2508,10 @@ ${m(u.ganhoKm)}
 
 
 $('ta').innerHTML=
-x.a
-.map((a,i)=>{
+dadosUber
+.map(a=>{
+
+let i=x.a.indexOf(a);
 
 let lucro=
 Number(a.g||0)-
@@ -3351,6 +2665,22 @@ ${a.p||'Pendente'}
 
 <td>
 
+<span class="badge">
+
+${
+a.fp==='PIX'?
+'💠 PIX':
+a.fp==='Dinheiro'?
+'💵 Dinheiro':
+'Não informado'
+}
+
+</span>
+
+</td>
+
+<td>
+
 ${a.fixa==='sim'?'🔄':''}
 
 </td>
@@ -3385,6 +2715,247 @@ onclick="dl('l',${i})">
 
 `)
 .join('');
+
+}
+
+
+/*
+================================================
+SALDOS PIX / DINHEIRO
+================================================
+*/
+
+function renderSaldo(){
+
+if(!$('saldoPix'))
+return;
+
+
+let periodo=
+$('periodoSaldo')?
+$('periodoSaldo').value:
+'mes';
+
+let base=
+$('dataSaldo')?
+$('dataSaldo').value:
+hoje();
+
+
+if(!$('dataSaldo').value)
+$('dataSaldo').value=hoje();
+
+
+let dados=
+x.l.filter(a=>
+dentro(
+a.d,
+periodo,
+base
+)
+);
+
+
+let entradasPix=
+dados
+.filter(a=>
+a.t==='Entrada' &&
+a.fp==='PIX'
+)
+.reduce(
+(s,a)=>s+Number(a.v||0),
+0
+);
+
+
+let entradasDin=
+dados
+.filter(a=>
+a.t==='Entrada' &&
+a.fp==='Dinheiro'
+)
+.reduce(
+(s,a)=>s+Number(a.v||0),
+0
+);
+
+
+let despesasPix=
+dados
+.filter(a=>
+a.t==='Despesa' &&
+a.fp==='PIX'
+)
+.reduce(
+(s,a)=>s+Number(a.v||0),
+0
+);
+
+
+let despesasDin=
+dados
+.filter(a=>
+a.t==='Despesa' &&
+a.fp==='Dinheiro'
+)
+.reduce(
+(s,a)=>s+Number(a.v||0),
+0
+);
+
+
+let saldoPix=
+entradasPix-despesasPix;
+
+let saldoDin=
+entradasDin-despesasDin;
+
+let total=
+saldoPix+saldoDin;
+
+let movimento=
+entradasPix+
+entradasDin+
+despesasPix+
+despesasDin;
+
+
+$('saldoPix').textContent=
+m(saldoPix);
+
+$('saldoDinheiro').textContent=
+m(saldoDin);
+
+$('saldoTotal').textContent=
+m(total);
+
+$('saldoMovimento').textContent=
+m(movimento);
+
+
+$('saldoDetalhes').innerHTML=`
+
+<div class="grid">
+
+<div class="card">
+
+<b>💠 PIX</b>
+
+<p>
+Entradas:
+<strong>${m(entradasPix)}</strong>
+</p>
+
+<p>
+Despesas:
+<strong>${m(despesasPix)}</strong>
+</p>
+
+<p>
+Saldo:
+<strong>${m(saldoPix)}</strong>
+</p>
+
+</div>
+
+
+<div class="card">
+
+<b>💵 Dinheiro</b>
+
+<p>
+Entradas:
+<strong>${m(entradasDin)}</strong>
+</p>
+
+<p>
+Despesas:
+<strong>${m(despesasDin)}</strong>
+</p>
+
+<p>
+Saldo:
+<strong>${m(saldoDin)}</strong>
+</p>
+
+</div>
+
+</div>
+
+
+<div class="table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Data</th>
+<th>Tipo</th>
+<th>Descrição</th>
+<th>Forma</th>
+<th>Valor</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+dados
+.filter(a=>
+a.fp==='PIX' ||
+a.fp==='Dinheiro'
+)
+.sort(
+(a,b)=>
+parse(b.d)-parse(a.d)
+)
+.map(a=>`
+
+<tr>
+
+<td>${a.d}</td>
+
+<td>${a.t}</td>
+
+<td>${a.z||a.c||''}</td>
+
+<td>
+
+${
+a.fp==='PIX'?
+'💠 PIX':
+'💵 Dinheiro'
+}
+
+</td>
+
+<td>
+
+${m(
+a.t==='Entrada'?
+a.v:
+-a.v
+)}
+
+</td>
+
+</tr>
+
+`)
+.join('')
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
 
 }
 
@@ -3704,774 +3275,96 @@ onclick="dl('m',${i})">
 .join('');
 
 }
+  function renderSaldo(){
+  const box=$('saldos');
+  if(!box) return;
 
+  const periodo=$('periodoSaldo')?.value || 'mes';
+  const base=$('dataSaldo')?.value || hoje();
 
-/*
-================================================
-RELATÓRIO UBER / 99
-================================================
-*/
+  let pixEntrada=0;
+  let pixDespesa=0;
+  let dinEntrada=0;
+  let dinDespesa=0;
+  let semInformacao=0;
 
-function relatorioUber(){
+  (db.l||[]).forEach(a=>{
+    if(!dentro(a.d,periodo,base)) return;
 
-let inicio=
-$('ri').value;
+    const valor=Number(a.v)||0;
+    const forma=a.fp||'';
 
-let fim=
-$('rf').value;
+    if(forma==='PIX'){
+      if(a.t==='Entrada') pixEntrada+=valor;
+      if(a.t==='Despesa') pixDespesa+=valor;
+    }else if(forma==='Dinheiro'){
+      if(a.t==='Entrada') dinEntrada+=valor;
+      if(a.t==='Despesa') dinDespesa+=valor;
+    }else{
+      semInformacao+=valor;
+    }
+  });
 
+  const saldoPix=pixEntrada-pixDespesa;
+  const saldoDin=dinEntrada-dinDespesa;
+  const saldoTotal=saldoPix+saldoDin;
 
-if(!inicio||!fim){
+  box.innerHTML=`
+    <div class="card">
+      <h2>💰 Saldos</h2>
 
-$('relatorioUber').innerHTML=
-'<p class="muted">Informe o período acima.</p>';
+      <div class="grid">
+        <div>
+          <label>Período</label>
+          <select id="periodoSaldo" onchange="renderSaldo()">
+            <option value="dia" ${periodo==='dia'?'selected':''}>Dia</option>
+            <option value="semana" ${periodo==='semana'?'selected':''}>Semana</option>
+            <option value="mes" ${periodo==='mes'?'selected':''}>Mês</option>
+            <option value="todos" ${periodo==='todos'?'selected':''}>Todos</option>
+          </select>
+        </div>
 
-return;
+        <div>
+          <label>Data</label>
+          <input type="date" id="dataSaldo" value="${base}" onchange="renderSaldo()">
+        </div>
+      </div>
+    </div>
 
+    <div class="grid">
+
+      <div class="card" style="border-left:6px solid #2563eb">
+        <h3>💠 PIX</h3>
+        <p><b>Entradas:</b> R$ ${moeda(pixEntrada)}</p>
+        <p><b>Despesas:</b> R$ ${moeda(pixDespesa)}</p>
+        <hr>
+        <h2>Saldo: R$ ${moeda(saldoPix)}</h2>
+      </div>
+
+      <div class="card" style="border-left:6px solid #16a34a">
+        <h3>💵 Dinheiro</h3>
+        <p><b>Entradas:</b> R$ ${moeda(dinEntrada)}</p>
+        <p><b>Despesas:</b> R$ ${moeda(dinDespesa)}</p>
+        <hr>
+        <h2>Saldo: R$ ${moeda(saldoDin)}</h2>
+      </div>
+
+      <div class="card" style="border-left:6px solid #7c3aed">
+        <h3>💰 Saldo Total</h3>
+        <p><b>PIX:</b> R$ ${moeda(saldoPix)}</p>
+        <p><b>Dinheiro:</b> R$ ${moeda(saldoDin)}</p>
+        <hr>
+        <h2>R$ ${moeda(saldoTotal)}</h2>
+      </div>
+
+    </div>
+
+    ${semInformacao>0 ? `
+      <div class="alert">
+        ⚠️ Existem R$ ${moeda(semInformacao)}
+        em lançamentos antigos sem forma de pagamento
+        (PIX/Dinheiro).
+      </div>
+    ` : ''}
+  `;
 }
-
-
-let dados=
-x.a.filter(a=>
-a.d>=inicio &&
-a.d<=fim
-);
-
-
-if(!dados.length){
-
-$('relatorioUber').innerHTML=
-'<div class="alert">Nenhum lançamento Uber/99 no período.</div>';
-
-return;
-
-}
-
-
-let ganhos=
-dados.reduce(
-(s,a)=>
-s+Number(a.g||0),
-0
-);
-
-
-let despesas=
-dados.reduce(
-(s,a)=>
-s+Number(a.c||0),
-0
-);
-
-
-let combustivel=
-dados.reduce(
-(s,a)=>
-s+Number(a.f||0),
-0
-);
-
-
-let custos=
-despesas+combustivel;
-
-let lucro=
-ganhos-custos;
-
-
-let km=
-dados.reduce(
-(s,a)=>
-s+Number(a.k||0),
-0
-);
-
-
-let horas=
-dados.reduce(
-(s,a)=>
-s+Number(a.h||0),
-0
-);
-
-
-let ganhoHora=
-horas?
-ganhos/horas:
-0;
-
-
-let ganhoKm=
-km?
-ganhos/km:
-0;
-
-
-let reserva=
-Math.max(
-0,
-lucro*.10
-);
-
-
-let pix=
-dados.reduce(
-(s,a)=>
-s+Number(a.gpix||0),
-0
-);
-
-
-let dinheiro=
-dados.reduce(
-(s,a)=>
-s+Number(a.gdin||0),
-0
-);
-
-
-$('relatorioUber').innerHTML=`
-
-<div class="grid">
-
-<div class="card">
-
-Ganhos
-
-<div class="metric">
-${m(ganhos)}
-</div>
-
-</div>
-
-<div class="card">
-
-Custos
-
-<div class="metric">
-${m(custos)}
-</div>
-
-</div>
-
-<div class="card">
-
-Lucro real
-
-<div class="metric">
-${m(lucro)}
-</div>
-
-</div>
-
-<div class="card">
-
-Reserva 10%
-
-<div class="metric">
-${m(reserva)}
-</div>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="card">
-
-🛣️ KM trabalhados
-
-<div class="metric">
-${km.toFixed(1).replace('.',',')} km
-</div>
-
-</div>
-
-
-<div class="card">
-
-⏱️ Horas trabalhadas
-
-<div class="metric">
-${horas.toFixed(1).replace('.',',')} h
-</div>
-
-</div>
-
-
-<div class="card">
-
-💰 Ganho por hora
-
-<div class="metric">
-${m(ganhoHora)}
-</div>
-
-</div>
-
-
-<div class="card">
-
-🛣️ Ganho por KM
-
-<div class="metric">
-${m(ganhoKm)}
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<b>PIX:</b>
-${m(pix)}
-
-&nbsp;&nbsp;
-
-<b>Dinheiro:</b>
-${m(dinheiro)}
-
-<br><br>
-
-<b>Despesas:</b>
-${m(despesas)}
-
-&nbsp;&nbsp;
-
-<b>Combustível:</b>
-${m(combustivel)}
-
-<br><br>
-
-<b>Período:</b>
-${inicio}
-até
-${fim}
-
-</div>
-
-`;
-
-}
-
-
-/*
-================================================
-RELATÓRIO GERAL
-================================================
-*/
-
-function relatorio(){
-
-let inicio=
-$('ri').value;
-
-let fim=
-$('rf').value;
-
-
-if(!inicio||!fim){
-
-alert(
-'Informe a data inicial e final.'
-);
-
-return;
-
-}
-
-
-let l=
-x.l.filter(a=>
-a.d>=inicio &&
-a.d<=fim
-);
-
-
-let a=
-x.a.filter(a=>
-a.d>=inicio &&
-a.d<=fim
-);
-
-
-let entradasP=
-l
-.filter(z=>z.t==='Entrada')
-.reduce(
-(s,z)=>s+Number(z.v||0),
-0
-);
-
-
-let despesasP=
-l
-.filter(z=>z.t==='Despesa')
-.reduce(
-(s,z)=>s+Number(z.v||0),
-0
-);
-
-
-let ganhosU=
-a.reduce(
-(s,z)=>s+Number(z.g||0),
-0
-);
-
-
-let despesasU=
-a.reduce(
-(s,z)=>
-s+
-Number(z.c||0)+
-Number(z.f||0),
-0
-);
-
-
-let km=
-a.reduce(
-(s,z)=>s+Number(z.k||0),
-0
-);
-
-
-let horas=
-a.reduce(
-(s,z)=>s+Number(z.h||0),
-0
-);
-
-
-let lucro=
-entradasP+
-ganhosU-
-despesasP-
-despesasU;
-
-
-let reserva=
-Math.max(
-0,
-(
-ganhosU-
-a.reduce(
-(s,z)=>
-s+
-Number(z.c||0)+
-Number(z.f||0),
-0
-)
-)*.10
-);
-
-
-$('relatorioBox').innerHTML=`
-
-<div class="grid">
-
-<div class="card">
-
-Entradas pessoais
-
-<div class="metric">
-${m(entradasP)}
-</div>
-
-</div>
-
-<div class="card">
-
-Ganhos Uber/99
-
-<div class="metric">
-${m(ganhosU)}
-</div>
-
-</div>
-
-<div class="card">
-
-Despesas
-
-<div class="metric">
-${m(despesasP+despesasU)}
-</div>
-
-</div>
-
-<div class="card">
-
-Lucro real
-
-<div class="metric">
-${m(lucro)}
-</div>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="card">
-
-🛣️ KM
-
-<div class="metric">
-${km.toFixed(1).replace('.',',')}
-</div>
-
-</div>
-
-<div class="card">
-
-⏱️ Horas
-
-<div class="metric">
-${horas.toFixed(1).replace('.',',')}
-</div>
-
-</div>
-
-<div class="card">
-
-💰 R$/hora
-
-<div class="metric">
-${m(
-horas?
-ganhosU/horas:
-0
-)}
-</div>
-
-</div>
-
-<div class="card">
-
-🛣️ R$/km
-
-<div class="metric">
-${m(
-km?
-ganhosU/km:
-0
-)}
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<b>Reserva Uber/99:</b>
-${m(reserva)}
-
-<br><br>
-
-<b>Período:</b>
-${inicio}
-até
-${fim}
-
-</div>
-
-`;
-
-relatorioUber();
-
-}
-
-
-/*
-================================================
-RESUMO DIÁRIO / SEMANAL / MENSAL
-================================================
-*/
-
-function resumoPeriodos(){
-
-let hojeD=
-parse(hoje());
-
-
-let periodos=[];
-
-
-/*
-Últimos 7 dias
-*/
-
-for(let i=6;i>=0;i--){
-
-let d=
-new Date(hojeD);
-
-d.setDate(
-d.getDate()-i
-);
-
-let dt=
-d.toISOString()
-.slice(0,10);
-
-let u=
-totaisUber(
-'dia',
-dt
-);
-
-periodos.push({
-
-nome:
-dt,
-
-u
-
-});
-
-}
-
-
-$('resumoPeriodos').innerHTML=`
-
-<div class="table">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Período</th>
-<th>Ganhos</th>
-<th>Custos</th>
-<th>Lucro</th>
-<th>KM</th>
-<th>Horas</th>
-<th>R$/h</th>
-<th>R$/km</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-${periodos.map(p=>`
-
-<tr>
-
-<td>
-${p.nome}
-</td>
-
-<td>
-${m(p.u.ganhos)}
-</td>
-
-<td>
-${m(p.u.custos)}
-</td>
-
-<td>
-${m(p.u.lucro)}
-</td>
-
-<td>
-${p.u.km
-.toFixed(1)
-.replace('.',',')}
-</td>
-
-<td>
-${p.u.horas
-.toFixed(1)
-.replace('.',',')}
-</td>
-
-<td>
-${m(p.u.ganhoHora)}
-</td>
-
-<td>
-${m(p.u.ganhoKm)}
-</td>
-
-</tr>
-
-`).join('')}
-
-</tbody>
-
-</table>
-
-</div>
-
-`;
-
-}
-
-
-/*
-================================================
-RENDER PRINCIPAL
-================================================
-*/
-
-function render(){
-
-/*
-Garante as despesas fixas.
-*/
-
-garantirFixas();
-
-
-let periodo=
-$('periodoDash')?
-$('periodoDash').value:
-'mes';
-
-
-let base=
-$('dataDash')?
-$('dataDash').value:
-hoje();
-
-
-if(!$('dataDash').value)
-$('dataDash').value=
-hoje();
-
-
-let t=
-totais(
-periodo,
-base
-);
-
-
-$('e').textContent=
-m(t.entradas);
-
-
-$('d').textContent=
-m(t.despesas);
-
-
-$('s').textContent=
-m(t.lucro);
-
-
-$('r').textContent=
-m(t.reserva);
-
-
-barras();
-
-alertas();
-
-renderPessoal();
-
-renderUber();
-
-renderCartao();
-
-renderMetas();
-
-resumoPeriodos();
-
-
-if(
-$('ri') &&
-!$('ri').value
-){
-
-let d=
-new Date();
-
-d.setDate(1);
-
-$('ri').value=
-d.toISOString()
-.slice(0,10);
-
-}
-
-
-if(
-$('rf') &&
-!$('rf').value
-){
-
-$('rf').value=
-hoje();
-
-}
-
-}
-
-
-/*
-================================================
-INICIALIZAÇÃO
-================================================
-*/
-
-if(
-$('dataDash')
-)
-$('dataDash').value=
-hoje();
-
-
-if(
-$('dt')
-)
-$('dt').value=
-hoje();
-
-
-if(
-$('ad')
-)
-$('ad').value=
-hoje();
-
-
-if(
-$('cdt')
-)
-$('cdt').value=
-hoje();
-
-
-if(
-$('fechamento')
-)
-$('fechamento').value=
-x.config.fechamento;
-
-
-if(
-$('vencimento')
-)
-$('vencimento').value=
-x.config.vencimento;
-
-
-render();
-
-</script>
-</body>
-</html>
