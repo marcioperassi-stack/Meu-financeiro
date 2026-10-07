@@ -1,70 +1,236 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111827">
-<title>Meu Financeiro Pro</title>
-<style>
-*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111827}header{background:#111827;color:#fff;padding:18px;position:sticky;top:0;z-index:10}header h2{margin:0 0 4px}header small{opacity:.8}.nav{display:flex;gap:6px;overflow:auto;padding:10px;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:76px;z-index:9}.nav button{white-space:nowrap;background:#e5e7eb;color:#111827}.nav button.active{background:#2563eb;color:#fff}main{max-width:1150px;margin:auto;padding:12px}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{background:#fff;padding:14px;border-radius:16px;margin:10px 0;border:1px solid #e5e7eb;box-shadow:0 2px 8px #00000008}.metric{font-size:22px;font-weight:700;margin-top:6px}.muted{color:#6b7280}.form{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}input,select,button{padding:10px;border-radius:9px;border:1px solid #d1d5db;width:100%}button{background:#2563eb;color:white;border:0;font-weight:bold;cursor:pointer}.secondary{background:#4b5563}.success{background:#16a34a}.warning{background:#d97706}.danger{background:#dc2626}.purple{background:#7c3aed}.table{overflow:auto}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:12px;white-space:nowrap}.pago{color:#16a34a;font-weight:bold}.pendente{color:#dc2626;font-weight:bold}.badge{display:inline-block;padding:4px 7px;border-radius:999px;font-size:11px;font-weight:bold;background:#e5e7eb}.progress{height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:#2563eb}.chart{height:230px;display:flex;align-items:flex-end;gap:7px;padding:15px 5px;border-bottom:1px solid #ddd}.bar{flex:1;min-width:12px;background:#2563eb;border-radius:5px 5px 0 0;position:relative}.bar span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;background:#2563eb}.dot.red{background:#dc2626}.dot.green{background:#16a34a}.alert{padding:10px;border-radius:10px;margin:6px 0;background:#fff7ed;border:1px solid #fed7aa}.ok{background:#f0fdf4;border-color:#bbf7d0}.small{font-size:12px}.hidden{display:none}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:100}.modal.show{display:flex}.modalbox{background:#fff;width:min(620px,100%);max-height:90vh;overflow:auto;border-radius:18px;padding:18px;box-shadow:0 10px 40px #0005}.modalbox h3{margin-top:0}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr 1fr}.nav{top:76px}}@media(max-width:430px){.form{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.metric{font-size:18px}}
-</style>
-</head>
-<body>
-<header><h2>💰 Meu Financeiro Pro</h2><small>Controle pessoal + Uber/99 + cartão + metas</small></header>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><title>Meu Financeiro Pro</title><style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111827}header{background:#111827;color:#fff;padding:18px;position:sticky;top:0;z-index:10}header h2{margin:0 0 4px}.nav{display:flex;gap:6px;overflow:auto;padding:10px;background:#fff;position:sticky;top:75px;z-index:9}.nav button{border:0;padding:10px 13px;border-radius:10px;background:#e5e7eb;white-space:nowrap}.nav button.on{background:#111827;color:#fff}main{max-width:1100px;margin:auto;padding:12px}.tab{display:none}.tab.on{display:block}.card{background:#fff;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #0001}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}label{font-size:12px;font-weight:bold;display:block;margin-bottom:4px}input,select,button{font:inherit}input,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:9px;background:#fff}button{cursor:pointer}.btn{border:0;border-radius:9px;padding:10px 14px;background:#111827;color:#fff}.btn2{border:0;border-radius:9px;padding:9px 12px;background:#e5e7eb}.danger{background:#b91c1c;color:#fff}.ok{background:#15803d;color:#fff}.muted{color:#6b7280;font-size:13px}.big{font-size:24px;font-weight:bold}.tablewrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;font-size:13px}.tbl th,.tbl td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;white-space:nowrap}.pill{padding:4px 8px;border-radius:20px;background:#e5e7eb;font-size:11px}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:30;padding:20px;overflow:auto}.modal.on{display:block}.modalbox{max-width:600px;margin:30px auto;background:#fff;border-radius:15px;padding:18px}.close{float:right;border:0;background:#eee;border-radius:8px;padding:7px}.sep{height:1px;background:#e5e7eb;margin:14px 0}
+</style></head><body>
+<header><h2>💰 Meu Financeiro Pro</h2><small>Controle pessoal e Uber/99</small></header>
 <div class="nav">
-<button class="active" onclick="aba('dashboard',this)">📊 Dashboard</button><button onclick="aba('pessoal',this)">📋 Pessoal</button><button onclick="aba('cartao',this)">💳 Cartão</button><button onclick="aba('uber',this)">🚗 Uber/99</button><button onclick="aba('metas',this)">🎯 Metas</button><button onclick="aba('relatorios',this)">📈 Relatórios</button>
+<button class="on" onclick="tab('dash',this)">📊 Dashboard</button>
+<button onclick="tab('pes',this)">👤 Pessoal</button>
+<button onclick="tab('uber',this)">🚗 Uber/99</button>
+<button onclick="tab('cart',this)">💳 Cartão</button>
+<button onclick="tab('met',this)">🎯 Metas</button>
+<button onclick="tab('rel',this)">📈 Relatórios</button>
 </div>
-<div id="editModal" class="modal"><div class="modalbox"><h3 id="editTitulo">✏️ Editar lançamento</h3><div id="editForm" class="form"></div><div class="modal-actions"><button class="secondary" onclick="fecharEdicao()">Cancelar</button><button class="success" onclick="salvarEdicao()">💾 Salvar alterações</button></div></div></div>
 <main>
-<section id="dashboard" class="page active">
-<div class="card"><h3>📊 Visão geral</h3><div class="form"><select id="periodoDash" onchange="render()"><option value="dia">Hoje</option><option value="semana">Esta semana</option><option value="mes" selected>Este mês</option><option value="todos">Todos os dados</option></select><input id="dataDash" type="date" onchange="render()"><div></div><div></div></div></div>
-<div class="grid"><div class="card">Entradas<div class="metric" id="e">R$ 0,00</div></div><div class="card">Despesas<div class="metric" id="d">R$ 0,00</div></div><div class="card">Lucro real<div class="metric" id="s">R$ 0,00</div></div><div class="card">Reserva 10%<div class="metric" id="r">R$ 0,00</div></div></div>
-<div class="card"><h3>📈 Ganhos, despesas e lucro</h3><div id="dashChart" class="chart"></div><div class="legend"><span><i class="dot"></i>Ganhos</span><span><i class="dot red"></i>Despesas</span><span><i class="dot green"></i>Lucro</span></div></div>
-<div class="grid"><div class="card"><h3>🔔 Contas a vencer</h3><div id="alertas"></div></div><div class="card"><h3>💳 Fatura atual</h3><div class="metric" id="faturaAtual">R$ 0,00</div><p id="faturaInfo" class="muted small"></p></div></div>
+<section id="dash" class="tab on">
+<div class="grid">
+<div class="card"><div class="muted">Entradas</div><div id="dE" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Despesas</div><div id="dD" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Combustível</div><div id="dF" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Lucro real</div><div id="dL" class="big">R$ 0,00</div></div>
+</div>
+<div class="card"><h3>📅 Resumo do mês</h3><div id="dashMes"></div></div>
 </section>
 
-<section id="pessoal" class="page"><div class="card"><h3>📋 Lançamento pessoal</h3><div class="form"><input id="dt" type="date"><select id="tp"><option>Entrada</option><option>Despesa</option></select><select id="ca"><option>Salário</option><option>Uber / 99</option><option>Alimentação</option><option>Moradia</option><option>Contas</option><option>Carro</option><option>Cartão de crédito</option><option>Saúde</option><option>Lazer</option><option>Outros</option></select><input id="va" type="number" step=".01" placeholder="Valor"><input id="de" placeholder="Descrição"><select id="pg"><option>Pendente</option><option>Pago</option></select><select id="fixa"><option value="nao">Despesa normal</option><option value="sim">Despesa fixa</option></select><select id="rep"><option value="nao">Não repetir</option><option value="sim">Repetir despesa</option></select><select id="periodo"><option value="diaria">Diária</option><option value="semanal">Semanal</option><option value="mensal">Mensal</option></select><input id="qtdrep" type="number" min="1" max="60" value="1" placeholder="Quantidade (1 a 60)"><button onclick="add()">Adicionar</button></div></div><div class="card"><h3>📋 Lançamentos</h3><div class="table"><table><thead><tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Valor</th><th>Descrição</th><th>Status</th><th>Fixa</th><th>Repetição</th><th></th></tr></thead><tbody id="tl"></tbody></table></div></div><div class="card"><button class="warning" onclick="gerarRecorrencias()">🔄 Gerar próximas recorrências</button></div></section>
+<section id="pes" class="tab">
+<div class="card"><h3>👤 Lançamento pessoal</h3>
+<div class="grid">
+<div><label>Data</label><input id="dt" type="date"></div>
+<div><label>Tipo</label><select id="tp"><option>Entrada</option><option>Despesa</option></select></div>
+<div><label>Categoria</label><select id="ca"><option>Salário</option><option>Extra</option><option>Alimentação</option><option>Casa</option><option>Saúde</option><option>Transporte</option><option>Contas</option><option>Outros</option></select></div>
+<div><label>PIX</label><input id="vPix" type="number" step=".01" placeholder="0,00"></div>
+<div><label>Dinheiro</label><input id="vDin" type="number" step=".01" placeholder="0,00"></div>
+<div><label>Total</label><input id="va" readonly></div>
+<div><label>Descrição</label><input id="de" placeholder="Descrição"></div>
+<div><label>Pagamento</label><select id="pg"><option>Pendente</option><option>Pago</option></select></div>
+<div><label>Despesa</label><select id="fixa"><option>Despesa normal</option><option>Despesa fixa</option></select></div>
+<div><label>Repetir</label><select id="rep"><option value="nao">Não repetir</option><option value="sim">Repetir despesa</option></select></div>
+<div><label>Periodicidade</label><select id="periodo"><option value="diaria">Diária</option><option value="semanal">Semanal</option><option value="mensal">Mensal</option></select></div>
+<div><label>Quantidade 1 a 60</label><input id="qtdrep" type="number" min="1" max="60" value="1"></div>
+</div><br><button class="btn" onclick="add()">Adicionar lançamento</button></div>
+<div class="card"><h3>📋 Lançamentos pessoais</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>Data</th><th>Tipo</th><th>Total</th><th>PIX</th><th>Dinheiro</th><th>Descrição</th><th>Status</th><th>Ação</th></tr></thead><tbody id="lt"></tbody></table></div></div>
+</section>
 
-<section id="cartao" class="page"><div class="card"><h3>💳 Configuração da fatura</h3><div class="form"><label>Dia de fechamento<input id="fechamento" type="number" min="1" max="31" value="5" onchange="saveConfig()"></label><label>Dia de vencimento<input id="vencimento" type="number" min="1" max="31" value="10" onchange="saveConfig()"></label><div></div><div></div></div><p class="muted small">Compras até o fechamento entram na fatura correspondente. O aplicativo organiza as parcelas pelas datas.</p></div><div class="card"><h3>💳 Nova compra</h3><div class="form"><input id="cdt" type="date"><input id="cdesc" placeholder="Compra / descrição"><input id="cvalor" type="number" step=".01" placeholder="Valor total"><input id="cparc" type="number" min="1" value="1" placeholder="Parcelas"><button onclick="addCartao()">Adicionar compra</button></div></div><div class="card"><h3>🧾 Faturas</h3><div id="faturas"></div></div><div class="card"><h3>🛒 Compras no cartão</h3><div class="table"><table><thead><tr><th>Data</th><th>Descrição</th><th>Total</th><th>Parcela</th><th>Valor</th><th>Vencimento</th><th>Status</th><th></th></tr></thead><tbody id="tc"></tbody></table></div></div></section>
+<section id="uber" class="tab">
+<div class="card"><h3>🚗 Uber/99</h3>
+<div class="grid">
+<div><label>Data</label><input id="ad" type="date"></div>
+<div><label>Recebido PIX</label><input id="agpix" type="number" step=".01"></div>
+<div><label>Recebido dinheiro</label><input id="agdin" type="number" step=".01"></div>
+<div><label>Despesas PIX</label><input id="acpix" type="number" step=".01"></div>
+<div><label>Despesas dinheiro</label><input id="acdin" type="number" step=".01"></div>
+<div><label>Combustível PIX</label><input id="afpix" type="number" step=".01"></div>
+<div><label>Combustível dinheiro</label><input id="afdin" type="number" step=".01"></div>
+<div><label>KM</label><input id="ak" type="number" step=".1"></div>
+<div><label>Horas</label><input id="ah" type="number" step=".1"></div>
+</div><br><button class="btn" onclick="adda()">Adicionar Uber/99</button></div>
+<div class="grid">
+<div class="card"><div class="muted">Total recebido</div><div id="uG" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Despesas + combustível</div><div id="uC" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Lucro Uber/99</div><div id="uL" class="big">R$ 0,00</div></div>
+<div class="card"><div class="muted">Total KM</div><div id="uK" class="big">0</div></div>
+<div class="card"><div class="muted">Total horas</div><div id="uH" class="big">0</div></div>
+</div>
+<div class="card"><h3>📋 Lançamentos Uber/99</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>Data</th><th>PIX</th><th>Dinheiro</th><th>Despesas</th><th>Combustível</th><th>KM</th><th>Horas</th><th>Ação</th></tr></thead><tbody id="at"></tbody></table></div></div>
+</section>
 
-<section id="uber" class="page"><div class="card"><h3>🚗 Controle Uber / 99</h3><div class="form"><input id="ad" type="date"><input id="agpix" type="number" step=".01" placeholder="PIX recebido"><input id="agdin" type="number" step=".01" placeholder="Dinheiro recebido"><input id="ac" type="number" step=".01" placeholder="Despesas"><input id="af" type="number" step=".01" placeholder="Combustível"><input id="ak" type="number" step=".1" placeholder="KM"><input id="ah" type="number" step=".1" placeholder="Horas"><button onclick="adda()">Adicionar</button></div></div><div class="grid"><div class="card">Ganhos<div class="metric" id="ug">R$ 0,00</div></div><div class="card">Custos<div class="metric" id="uc">R$ 0,00</div></div><div class="card">Lucro líquido<div class="metric" id="ul">R$ 0,00</div></div><div class="card">Reserva<div class="metric" id="ur">R$ 0,00</div></div></div><div class="card"><h3>📊 Indicadores</h3><div id="uind"></div></div><div class="grid"><div class="card">⏱️ Total de horas<div class="metric" id="uHoras">0,0 h</div></div><div class="card">🛣️ Total de KM<div class="metric" id="uKm">0,0 km</div></div></div><div class="card"><h3>🚗 Lançamentos Uber / 99</h3><div class="table"><table><thead><tr><th>Data</th><th>PIX</th><th>Dinheiro</th><th>Despesas</th><th>Comb.</th><th>Lucro real</th><th>KM</th><th>Horas</th><th>R$/h</th><th>R$/km</th><th>Reserva</th><th></th></tr></thead><tbody id="ta"></tbody></table></div></div></section>
+<section id="cart" class="tab">
+<div class="card"><h3>💳 Cartão de crédito</h3>
+<div class="grid">
+<div><label>Fechamento</label><input id="cf" type="number" min="1" max="31" value="5"></div>
+<div><label>Vencimento</label><input id="cv" type="number" min="1" max="31" value="10"></div>
+<div><label>Data</label><input id="cd" type="date"></div>
+<div><label>Valor</label><input id="ccv" type="number" step=".01"></div>
+<div><label>Descrição</label><input id="ccz"></div>
+</div><br><button class="btn" onclick="addc()">Adicionar compra</button></div>
+<div class="card"><h3>Fatura</h3><div id="cardbox"></div></div>
+</section>
 
-<section id="metas" class="page"><div class="card"><h3>🎯 Nova meta de economia</h3><div class="form"><input id="mn" placeholder="Nome da meta"><input id="mv" type="number" step=".01" placeholder="Valor da meta"><input id="mj" type="number" step=".01" placeholder="Já guardado"><input id="mp" type="date"><button onclick="addMeta()">Criar meta</button></div></div><div id="metasLista"></div></section>
+<section id="met" class="tab">
+<div class="card"><h3>🎯 Meta de economia</h3>
+<div class="grid"><div><label>Nome</label><input id="mn"></div><div><label>Valor da meta</label><input id="mv" type="number" step=".01"></div><div><label>Guardado</label><input id="mg" type="number" step=".01"></div></div><br><button class="btn" onclick="addm()">Adicionar meta</button></div>
+<div id="metas"></div>
+</section>
 
-<section id="relatorios" class="page"><div class="card"><h3>📈 Relatório de lucro real</h3><div class="form"><input id="ri" type="date"><input id="rf" type="date"><button onclick="relatorio()">Calcular</button></div><div id="relatorioBox"></div></div><div class="card"><h3>📅 Resumo por período</h3><div id="resumoPeriodos"></div></div><div class="card"><button class="danger" onclick="limparDados()">Apagar todos os dados</button></div></section>
+<section id="rel" class="tab">
+<div class="card"><h3>📈 Relatório mensal</h3>
+<div class="grid"><div><label>Data inicial</label><input id="ri" type="date"></div><div><label>Data final</label><input id="rf" type="date"></div></div><br><button class="btn" onclick="relatorio()">Gerar relatório</button></div>
+<div id="relatorioBox"></div>
+</section>
 </main>
+
+<div id="modal" class="modal"><div class="modalbox"><button class="close" onclick="fechar()">✕</button><h3 id="mtitulo">Editar</h3><div id="mform"></div></div></div>
 <script>
-let x=JSON.parse(localStorage.getItem('MF')||'{"l":[],"a":[],"c":[],"m":[],"config":{"fechamento":5,"vencimento":10}}');
-x.l=x.l||[];x.a=x.a||[];x.c=x.c||[];x.m=x.m||[];x.config=x.config||{fechamento:5,vencimento:10};
-x.a.forEach(a=>{a.gpix=Number(a.gpix)||0;a.gdin=Number(a.gdin)||0;if(!a.gpix&&!a.gdin&&a.g)a.gdin=Number(a.g);a.g=a.gpix+a.gdin});
 const $=i=>document.getElementById(i),n=i=>+$(i).value||0,m=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v),hoje=()=>new Date().toISOString().slice(0,10),parse=d=>new Date(d+'T12:00:00');
+let x=JSON.parse(localStorage.getItem('MF')||'{"l":[],"a":[],"c":[],"m":[],"config":{"fech":5,"venc":10}}');
+x.l=x.l||[];x.a=x.a||[];x.c=x.c||[];x.m=x.m||[];x.config=x.config||{fech:5,venc:10};
+x.l.forEach(a=>{a.ppix=Number(a.ppix)||0;a.pdin=Number(a.pdin)||0;if(!a.ppix&&!a.pdin&&a.v)a.pdin=Number(a.v)||0;a.v=a.ppix+a.pdin});
+x.a.forEach(a=>{a.gpix=Number(a.gpix)||0;a.gdin=Number(a.gdin)||0;if(!a.gpix&&!a.gdin&&a.g)a.gdin=Number(a.g)||0;a.g=a.gpix+a.gdin;a.cpix=Number(a.cpix)||0;a.cdin=Number(a.cdin)||0;if(!a.cpix&&!a.cdin&&a.c)a.cdin=Number(a.c)||0;a.c=a.cpix+a.cdin;a.fpix=Number(a.fpix)||0;a.fdin=Number(a.fdin)||0;if(!a.fpix&&!a.fdin&&a.f)a.fdin=Number(a.f)||0;a.f=a.fpix+a.fdin});
 function save(){localStorage.setItem('MF',JSON.stringify(x));render()}
-function saveConfig(){x.config.fechamento=Math.min(31,Math.max(1,+$('fechamento').value||5));x.config.vencimento=Math.min(31,Math.max(1,+$('vencimento').value||10));save()}
-function aba(id,b){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()}
-function add(){let v=n('va');if(v<=0)return alert('Digite um valor válido.');let qtd=$('rep').value==='sim'?Math.min(60,Math.max(1,parseInt($('qtdrep').value)||1)):1;let base=parse($('dt').value||hoje());for(let i=0;i<qtd;i++){let d=new Date(base);if(i){if($('periodo').value==='diaria')d.setDate(d.getDate()+i);else if($('periodo').value==='semanal')d.setDate(d.getDate()+7*i);else d.setMonth(d.getMonth()+i)}x.l.push({d:d.toISOString().slice(0,10),t:$('tp').value,c:$('ca').value,v,z:$('de').value,p:i? 'Pendente':$('pg').value,fixa:$('fixa').value,rep:$('rep').value,periodo:$('periodo').value,origem:i?'recorrente':'pessoal',parcela:i+1,totalParcelas:qtd})}save();$('va').value='';$('de').value='';$('qtdrep').value=1}
-function adda(){let pix=n('agpix'),din=n('agdin'),total=pix+din;if(total<=0)return alert('Informe PIX e/ou dinheiro.');x.a.push({d:$('ad').value||hoje(),gpix:pix,gdin:din,g:total,c:n('ac'),f:n('af'),k:n('ak'),h:n('ah')});save();['agpix','agdin','ac','af','ak','ah'].forEach(i=>$(i).value='')}
-function addCartao(){let data=$('cdt').value||hoje(),desc=$('cdesc').value,total=n('cvalor'),parcelas=Math.max(1,parseInt($('cparc').value)||1);if(total<=0)return alert('Digite o valor da compra.');let vp=total/parcelas,inicio=parse(data),venc=x.config.vencimento;for(let i=0;i<parcelas;i++){let d=new Date(inicio);d.setMonth(d.getMonth()+i);let dt=new Date(d.getFullYear(),d.getMonth(),Math.min(venc,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()),12);x.c.push({d:dt.toISOString().slice(0,10),desc,total,parcela:i+1,parcelas,valor:vp,venc,p:'Pendente'})}save();$('cdesc').value='';$('cvalor').value='';$('cparc').value=1}
-function dl(q,i){if(confirm('Excluir este lançamento?')){x[q].splice(i,1);save()}}
-function baixa(i){x.l[i].p=x.l[i].p==='Pago'?'Pendente':'Pago';save()}function baixaCartao(i){x.c[i].p=x.c[i].p==='Pago'?'Pendente':'Pago';save()}
-function ed(q,i,v){x[q][i].d=v;save()}
-function editL(i,field,value){let a=x.l[i];if(field==='v')a.v=Number(value)||0;else a[field]=value;save()}
-function editA(i,field,value){let a=x.a[i];if(['gpix','gdin','c','f','k','h'].includes(field))a[field]=Number(value)||0;if(field==='d')a.d=value;a.g=(Number(a.gpix)||0)+(Number(a.gdin)||0);save()}
-function gerarRecorrencias(){let limite=new Date();limite.setMonth(limite.getMonth()+1);let criadas=0;x.l.filter(a=>a.rep==='sim'&&a.t==='Despesa').forEach(modelo=>{if(!modelo.id)modelo.id='R'+Date.now()+Math.random();let p=parse(modelo.d);while(p<=limite){let dt=p.toISOString().slice(0,10),ex=x.l.some(a=>a.recorrenteId===modelo.id&&a.d===dt);if(!ex&&dt!==modelo.d){x.l.push({d:dt,t:'Despesa',c:modelo.c,v:modelo.v,z:modelo.z,p:'Pendente',fixa:modelo.fixa,rep:'nao',periodo:modelo.periodo,recorrenteId:modelo.id,origem:'recorrente'});criadas++}if(modelo.periodo==='diaria')p.setDate(p.getDate()+1);else if(modelo.periodo==='semanal')p.setDate(p.getDate()+7);else p.setMonth(p.getMonth()+1)}});save();alert(criadas+' despesa(s) recorrente(s) gerada(s).')}
-function dentro(d,periodo,base){let a=parse(d),b=parse(base||hoje());if(periodo==='todos')return true;if(periodo==='dia')return d===(base||hoje());if(periodo==='semana'){let ini=new Date(b);let day=ini.getDay();ini.setDate(ini.getDate()-(day||7)+1);let fim=new Date(ini);fim.setDate(ini.getDate()+6);return a>=ini&&a<=fim}return a.getMonth()===b.getMonth()&&a.getFullYear()===b.getFullYear()}
-function totais(periodo,base){let l=x.l.filter(a=>dentro(a.d,periodo,base)),a=x.a.filter(a=>dentro(a.d,periodo,base));let ep=l.filter(z=>z.t==='Entrada').reduce((s,z)=>s+z.v,0),dp=l.filter(z=>z.t==='Despesa').reduce((s,z)=>s+z.v,0),gu=a.reduce((s,z)=>s+z.g,0),cu=a.reduce((s,z)=>s+z.c+z.f,0);return {entradas:ep+gu,despesas:dp+cu,lucro:ep+gu-dp-cu,reserva:Math.max(0,a.reduce((s,z)=>s+z.g-z.c-z.f,0)*.1)}}
-function barras(){let vals=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let dt=d.toISOString().slice(0,10),t=totais('dia',dt);vals.push({dt,t})}let max=Math.max(1,...vals.map(v=>Math.max(v.t.entradas,v.t.despesas,Math.abs(v.t.lucro))));$('dashChart').innerHTML=vals.map(v=>`<div class="bar" style="height:${Math.max(5,v.t.entradas/max*100)}%"><span>${m(v.t.entradas)}</span></div>`).join('')}
-function alertas(){let hojeD=parse(hoje()),arr=x.l.filter(a=>a.t==='Despesa'&&a.p!=='Pago').sort((a,b)=>parse(a.d)-parse(b.d)).slice(0,8);$('alertas').innerHTML=arr.length?arr.map(a=>{let diff=Math.round((parse(a.d)-hojeD)/86400000);let texto=diff<0?'Vencida':diff===0?'Vence hoje':'Vence em '+diff+' dia(s)';return `<div class="alert ${diff>=0?'':'danger'}"><b>${a.z||a.c}</b><br>${a.d} · ${m(a.v)} · ${texto}</div>`}).join(''):'<div class="alert ok">Nenhuma conta pendente próxima.</div>'}
-function faturaAtual(){let hojeD=parse(hoje()),fech=x.config.fechamento,venc=x.config.vencimento,ano=hojeD.getFullYear(),mes=hojeD.getMonth();let dataFech=new Date(ano,mes,fech,12);if(hojeD<=dataFech)dataFech.setMonth(dataFech.getMonth()-1);let proxVenc=new Date(dataFech.getFullYear(),dataFech.getMonth()+1,venc,12);let total=x.c.filter(a=>{let d=parse(a.d);return d>dataFech&&d<=proxVenc}).reduce((s,a)=>s+a.valor,0);$('faturaAtual').textContent=m(total);$('faturaInfo').textContent=`Fechamento: dia ${fech} · Vencimento: dia ${venc}`}
+function tab(id,b){document.querySelectorAll('.tab').forEach(a=>a.classList.remove('on'));$(id).classList.add('on');document.querySelectorAll('.nav button').forEach(a=>a.classList.remove('on'));b.classList.add('on');render()}
+function atualizarTotalPessoal(){let v=n('vPix')+n('vDin');$('va').value=v?v.toFixed(2):''}
+$('vPix').addEventListener('input',atualizarTotalPessoal);$('vDin').addEventListener('input',atualizarTotalPessoal);
+function add(){
+let pix=n('vPix'),din=n('vDin'),v=pix+din;if(v<=0)return alert('Digite um valor válido.');
+let qtd=$('rep').value==='sim'?Math.min(60,Math.max(1,parseInt($('qtdrep').value)||1)):1,base=parse($('dt').value||hoje());
+for(let i=0;i<qtd;i++){let d=new Date(base);if(i){if($('periodo').value==='diaria')d.setDate(d.getDate()+i);else if($('periodo').value==='semanal')d.setDate(d.getDate()+7*i);else d.setMonth(d.getMonth()+i)}
+x.l.push({d:d.toISOString().slice(0,10),t:$('tp').value,c:$('ca').value,v,ppix:pix,pdin:din,z:$('de').value,p:i?'Pendente':$('pg').value,fixa:$('fixa').value,rep:$('rep').value,periodo:$('periodo').value,origem:i?'recorrente':'pessoal',parcela:i+1,totalParcelas:qtd})}
+save();$('va').value='';$('vPix').value='';$('vDin').value='';$('de').value='';$('qtdrep').value=1}
+function adda(){
+let pix=n('agpix'),din=n('agdin'),cp=n('acpix'),cd=n('acdin'),fp=n('afpix'),fd=n('afdin'),total=pix+din;
+if(total<=0)return alert('Informe PIX e/ou dinheiro recebido.');
+x.a.push({d:$('ad').value||hoje(),gpix:pix,gdin:din,g:total,cpix:cp,cdin:cd,c:cp+cd,fpix:fp,fdin:fd,f:fp+fd,k:n('ak'),h:n('ah')});
+save();['agpix','agdin','acpix','acdin','afpix','afdin','ak','ah'].forEach(i=>$(i).value='')
+}function addc(){
+let v=n('ccv');if(v<=0)return alert('Informe o valor.');
+x.c.push({d:$('cd').value||hoje(),v,z:$('ccz').value});
+x.config.fech=n('cf')||5;x.config.venc=n('cv')||10;save();
+$('ccv').value='';$('ccz').value=''
+}
+function addm(){
+let nome=$('mn').value,valor=n('mv'),guardado=n('mg');
+if(!nome||valor<=0)return alert('Preencha a meta.');
+x.m.push({n:nome,v:valor,g:guardado});save();
+$('mn').value='';$('mv').value='';$('mg').value=''
+}
 let editTipo='',editIndex=-1;
-function abrirEdicao(tipo,i){editTipo=tipo;editIndex=i;let a=tipo==='pessoal'?x.l[i]:x.a[i];$('editTitulo').textContent=tipo==='pessoal'?'✏️ Editar lançamento pessoal':'✏️ Editar lançamento Uber / 99';if(tipo==='pessoal'){$('editForm').innerHTML=`<input id="ed_d" type="date" value="${a.d||''}"><select id="ed_t"><option ${a.t==='Entrada'?'selected':''}>Entrada</option><option ${a.t==='Despesa'?'selected':''}>Despesa</option></select><select id="ed_c"><option>Salário</option><option>Uber / 99</option><option>Alimentação</option><option>Moradia</option><option>Contas</option><option>Carro</option><option>Cartão de crédito</option><option>Saúde</option><option>Lazer</option><option>Outros</option></select><input id="ed_v" type="number" step=".01" value="${a.v||0}" placeholder="Valor"><input id="ed_z" value="${a.z||''}" placeholder="Descrição"><select id="ed_p"><option ${a.p==='Pendente'?'selected':''}>Pendente</option><option ${a.p==='Pago'?'selected':''}>Pago</option></select><select id="ed_f"><option value="nao" ${a.fixa!=='sim'?'selected':''}>Despesa normal</option><option value="sim" ${a.fixa==='sim'?'selected':''}>Despesa fixa</option></select><select id="ed_r"><option value="nao" ${a.rep!=='sim'?'selected':''}>Não repetir</option><option value="sim" ${a.rep==='sim'?'selected':''}>Repetir despesa</option></select><select id="ed_periodo"><option value="diaria" ${a.periodo==='diaria'?'selected':''}>Diária</option><option value="semanal" ${a.periodo==='semanal'?'selected':''}>Semanal</option><option value="mensal" ${a.periodo==='mensal'?'selected':''}>Mensal</option></select>`;$('ed_c').value=a.c||'Outros'}else{$('editForm').innerHTML=`<input id="ed_d" type="date" value="${a.d||''}"><input id="ed_gpix" type="number" step=".01" value="${a.gpix||0}" placeholder="PIX recebido"><input id="ed_gdin" type="number" step=".01" value="${a.gdin||0}" placeholder="Dinheiro recebido"><input id="ed_c" type="number" step=".01" value="${a.c||0}" placeholder="Despesas"><input id="ed_f" type="number" step=".01" value="${a.f||0}" placeholder="Combustível"><input id="ed_k" type="number" step=".1" value="${a.k||0}" placeholder="KM rodados"><input id="ed_h" type="number" step=".1" value="${a.h||0}" placeholder="Horas trabalhadas">`}$('editModal').classList.add('show')}
-function fecharEdicao(){$('editModal').classList.remove('show');editIndex=-1}
-function salvarEdicao(){if(editIndex<0)return;let a=editTipo==='pessoal'?x.l[editIndex]:x.a[editIndex];a.d=$('ed_d').value||hoje();if(editTipo==='pessoal'){a.t=$('ed_t').value;a.c=$('ed_c').value;a.v=Number($('ed_v').value)||0;a.z=$('ed_z').value;a.p=$('ed_p').value;a.fixa=$('ed_f').value;a.rep=$('ed_r').value;a.periodo=$('ed_periodo').value}else{a.gpix=Number($('ed_gpix').value)||0;a.gdin=Number($('ed_gdin').value)||0;a.c=Number($('ed_c').value)||0;a.f=Number($('ed_f').value)||0;a.k=Number($('ed_k').value)||0;a.h=Number($('ed_h').value)||0;a.g=a.gpix+a.gdin}fecharEdicao();save()}
-function render(){let per=$('periodoDash')?.value||'mes',base=$('dataDash')?.value||hoje(),t=totais(per,base);$('e').textContent=m(t.entradas);$('d').textContent=m(t.despesas);$('s').textContent=m(t.lucro);$('r').textContent=m(t.reserva);barras();alertas();faturaAtual();$('fechamento').value=x.config.fechamento;$('vencimento').value=x.config.vencimento;$('tl').innerHTML=x.l.map((a,i)=>`<tr><td>${a.d}</td><td>${a.t}</td><td>${a.c}</td><td>${m(a.v)}</td><td>${a.z||''}</td><td><span class="badge">${a.p||'Pendente'}</span></td><td>${a.fixa==='sim'?'Sim':'Não'}</td><td>${a.rep==='sim'?a.periodo:'Não'}</td><td><button class="purple" onclick="abrirEdicao('pessoal',${i})">✏️ Editar</button> <button class="danger" onclick="dl('l',${i})">×</button></td></tr>`).join('');$('tc').innerHTML=x.c.map((a,i)=>`<tr><td>${a.d}</td><td>${a.desc}</td><td>${m(a.total)}</td><td>${a.parcela}/${a.parcelas}</td><td>${m(a.valor)}</td><td>Dia ${a.venc}</td><td><button class="${a.p==='Pago'?'success':'warning'}" onclick="baixaCartao(${i})">${a.p}</button></td><td><button class="danger" onclick="dl('c',${i})">×</button></td></tr>`).join('');let ug=x.a.reduce((s,a)=>s+a.g,0),up=x.a.reduce((s,a)=>s+a.gpix,0),ud=x.a.reduce((s,a)=>s+a.gdin,0),uc=x.a.reduce((s,a)=>s+a.c+a.f,0),ul=ug-uc,uk=x.a.reduce((s,a)=>s+a.k,0),uh=x.a.reduce((s,a)=>s+a.h,0);$('ug').textContent=m(ug);$('uc').textContent=m(uc);$('ul').textContent=m(ul);$('ur').textContent=m(Math.max(0,(ug-uc)*.1));$('uHoras').textContent=uh.toFixed(1).replace('.',',')+' h';$('uKm').textContent=uk.toFixed(1).replace('.',',')+' km';$('uind').innerHTML=`<b>PIX:</b> ${m(up)} &nbsp; <b>Dinheiro:</b> ${m(ud)} &nbsp; <b>Total:</b> ${m(ug)}<br><b>Despesas + combustível:</b> ${m(uc)} &nbsp; <b>Lucro real:</b> ${m(ul)}<br><b>Ganho por hora:</b> ${m(uh?ug/uh:0)} &nbsp; <b>Ganho por KM:</b> ${m(uk?ug/uk:0)}`;$('ta').innerHTML=x.a.map((a,i)=>{let l=a.g-a.c-a.f;return `<tr><td>${a.d}</td><td>${m(a.gpix)}</td><td>${m(a.gdin)}</td><td>${m(a.c)}</td><td>${m(a.f)}</td><td>${m(l)}</td><td>${a.k}</td><td>${a.h}</td><td>${m(a.h?a.g/a.h:0)}</td><td>${m(a.k?a.g/a.k:0)}</td><td>${m(Math.max(0,l*.1))}</td><td><button class="purple" onclick="abrirEdicao('uber',${i})">✏️ Editar</button> <button class="danger" onclick="dl('a',${i})">×</button></td></tr>`}).join('');$('metasLista').innerHTML=x.m.map((a,i)=>{let p=Math.min(100,a.v?a.j/a.v*100:0);return `<div class="card"><h3>🎯 ${a.n}</h3><b>${m(a.j)} de ${m(a.v)}</b><div class="progress"><div style="width:${p}%"></div></div><p>${p.toFixed(1)}% · Falta ${m(Math.max(0,a.v-a.j))}</p><button class="danger" onclick="x.m.splice(${i},1);save()">Excluir meta</button></div>`}).join('');montarFaturas();resumoPeriodos()}
-function montarFaturas(){let grupos={};x.c.forEach(a=>{let k=a.d.slice(0,7);(grupos[k]??=[]).push(a)});$('faturas').innerHTML=Object.keys(grupos).sort().map(k=>{let arr=grupos[k],total=arr.reduce((s,a)=>s+a.valor,0),pend=arr.filter(a=>a.p!=='Pago').reduce((s,a)=>s+a.valor,0);return `<div class="card"><b>Fatura ${k}</b><br>Total: ${m(total)} · Pendente: ${m(pend)}<br><span class="badge">Fechamento dia ${x.config.fechamento}</span> <span class="badge">Vencimento dia ${x.config.vencimento}</span></div>`}).join('')||'<p class="muted">Nenhuma compra cadastrada.</p>'}
-function addMeta(){let v=n('mv');if(!$('mn').value||v<=0)return alert('Informe o nome e o valor da meta.');x.m.push({n:$('mn').value,v,j:n('mj'),p:$('mp').value});save();$('mn').value='';$('mv').value='';$('mj').value='';$('mp').value=''}
-function relatorio(){let i=$('ri').value||hoje(),f=$('rf').value||i;let l=x.l.filter(a=>a.d>=i&&a.d<=f),u=x.a.filter(a=>a.d>=i&&a.d<=f);let meses={};[...l.map(a=>a.d),...u.map(a=>a.d)].forEach(d=>{let k=d.slice(0,7);meses[k]=true});let keys=Object.keys(meses).sort();$('relatorioBox').innerHTML=keys.length?keys.map(k=>{let lm=l.filter(a=>a.d.slice(0,7)===k),um=u.filter(a=>a.d.slice(0,7)===k),e=lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0)+um.reduce((s,a)=>s+a.g,0),p=lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0),cd=um.reduce((s,a)=>s+a.c+a.f,0),lr=e-p-cd;return `<div class="card"><h3>📅 ${k}</h3><div class="grid"><div>Receitas<div class="metric">${m(e)}</div></div><div>Despesas pessoais<div class="metric">${m(p)}</div></div><div>Uber/99 + combustível<div class="metric">${m(cd)}</div></div><div>Lucro real<div class="metric">${m(lr)}</div></div></div><p><b>Lucro real do mês: ${m(lr)}</b></p></div>`}).join(''):'<p class="muted">Nenhum lançamento no período.</p>'}
-function resumoPeriodos(){let h=['dia','semana','mes'];$('resumoPeriodos').innerHTML=h.map(p=>{let t=totais(p,hoje()),nome=p==='dia'?'Hoje':p==='semana'?'Semana':'Mês';return `<div class="card"><b>${nome}</b><br>Entradas: ${m(t.entradas)} · Despesas: ${m(t.despesas)} · Lucro: ${m(t.lucro)} · Reserva: ${m(t.reserva)}</div>`}).join('')}
-function limparDados(){if(confirm('ATENÇÃO: isso apagará todos os lançamentos, metas e configurações. Continuar?')){localStorage.removeItem('MF');location.reload()}}
-$('dt').value=hoje();$('ad').value=hoje();$('cdt').value=hoje();$('dataDash').value=hoje();render();
-</script>
-</body></html>
+function abrirEdit(tipo,i){
+editTipo=tipo;editIndex=i;
+let a=tipo==='p'?x.l[i]:x.a[i];
+$('mtitulo').textContent=tipo==='p'?'✏️ Editar lançamento pessoal':'✏️ Editar Uber/99';
+if(tipo==='p'){
+$('mform').innerHTML=`
+<div class="grid">
+<div><label>Data</label><input id="ed_d" type="date" value="${a.d}"></div>
+<div><label>Tipo</label><select id="ed_t"><option ${a.t==='Entrada'?'selected':''}>Entrada</option><option ${a.t==='Despesa'?'selected':''}>Despesa</option></select></div>
+<div><label>PIX</label><input id="ed_ppix" type="number" step=".01" value="${a.ppix||0}"></div>
+<div><label>Dinheiro</label><input id="ed_pdin" type="number" step=".01" value="${a.pdin||0}"></div>
+<div><label>Descrição</label><input id="ed_z" value="${(a.z||'').replace(/"/g,'&quot;')}"></div>
+<div><label>Status</label><select id="ed_p"><option ${a.p==='Pendente'?'selected':''}>Pendente</option><option ${a.p==='Pago'?'selected':''}>Pago</option></select></div>
+</div><br><button class="btn" onclick="salvarEdit()">💾 Salvar</button>
+<button class="btn2" onclick="fechar()">Cancelar</button>`;
+}else{
+$('mform').innerHTML=`
+<div class="grid">
+<div><label>Data</label><input id="ed_d" type="date" value="${a.d}"></div>
+<div><label>Recebido PIX</label><input id="ed_gpix" type="number" step=".01" value="${a.gpix||0}"></div>
+<div><label>Recebido dinheiro</label><input id="ed_gdin" type="number" step=".01" value="${a.gdin||0}"></div>
+<div><label>Despesas PIX</label><input id="ed_cpix" type="number" step=".01" value="${a.cpix||0}"></div>
+<div><label>Despesas dinheiro</label><input id="ed_cdin" type="number" step=".01" value="${a.cdin||0}"></div>
+<div><label>Combustível PIX</label><input id="ed_fpix" type="number" step=".01" value="${a.fpix||0}"></div>
+<div><label>Combustível dinheiro</label><input id="ed_fdin" type="number" step=".01" value="${a.fdin||0}"></div>
+<div><label>KM</label><input id="ed_k" type="number" step=".1" value="${a.k||0}"></div>
+<div><label>Horas</label><input id="ed_h" type="number" step=".1" value="${a.h||0}"></div>
+</div><br><button class="btn" onclick="salvarEdit()">💾 Salvar</button>
+<button class="btn2" onclick="fechar()">Cancelar</button>`;
+}
+$('modal').classList.add('on')
+}
+function salvarEdit(){
+if(editTipo==='p'){
+let a=x.l[editIndex];a.d=$('ed_d').value||hoje();a.t=$('ed_t').value;a.ppix=n('ed_ppix');a.pdin=n('ed_pdin');a.v=a.ppix+a.pdin;a.z=$('ed_z').value;a.p=$('ed_p').value
+}else{
+let a=x.a[editIndex];a.d=$('ed_d').value||hoje();a.gpix=n('ed_gpix');a.gdin=n('ed_gdin');a.g=a.gpix+a.gdin;a.cpix=n('ed_cpix');a.cdin=n('ed_cdin');a.c=a.cpix+a.cdin;a.fpix=n('ed_fpix');a.fdin=n('ed_fdin');a.f=a.fpix+a.fdin;a.k=n('ed_k');a.h=n('ed_h')
+}
+fechar();save()
+}
+function fechar(){$('modal').classList.remove('on');editTipo='';editIndex=-1}
+function del(tipo,i){
+if(!confirm('Excluir este lançamento?'))return;
+if(tipo==='p')x.l.splice(i,1);else x.a.splice(i,1);save()
+}
+function baixa(i){
+x.l[i].p=x.l[i].p==='Pago'?'Pendente':'Pago';save()
+}
+function gerarRecorrencias(){
+let hojeD=parse(hoje()),limite=new Date(hojeD);limite.setMonth(limite.getMonth()+1);
+let modelos=x.l.filter(a=>a.rep==='sim'&&a.d<=hoje());
+modelos.forEach(a=>{
+let existe=x.l.some(b=>b.d>a.d&&b.z===a.z&&b.v===a.v&&b.origem==='recorrente');
+if(existe)return;
+let d=parse(a.d);
+if(a.periodo==='diaria')d.setDate(d.getDate()+1);
+else if(a.periodo==='semanal')d.setDate(d.getDate()+7);
+else d.setMonth(d.getMonth()+1);
+if(d<=limite)x.l.push({...a,d:d.toISOString().slice(0,10),p:'Pendente',origem:'recorrente'})
+})
+save()
+}
+function renderPessoal(){
+$('lt').innerHTML=x.l.slice().sort((a,b)=>b.d.localeCompare(a.d)).map((a,i)=>{
+let real=x.l.indexOf(a);
+return `<tr><td>${a.d}</td><td>${a.t}</td><td>${m(a.v)}</td><td>${m(a.ppix||0)}</td><td>${m(a.pdin||0)}</td><td>${a.z||''}</td><td><button class="btn2" onclick="baixa(${real})">${a.p||'Pendente'}</button></td><td><button class="btn2" onclick="abrirEdit('p',${real})">✏️ Editar</button> <button class="btn2 danger" onclick="del('p',${real})">Excluir</button></td></tr>`
+}).join('')||'<tr><td colspan="8" class="muted">Nenhum lançamento.</td></tr>'
+}
+function renderUber(){
+let g=x.a.reduce((s,a)=>s+a.g,0),c=x.a.reduce((s,a)=>s+a.c+a.f,0),k=x.a.reduce((s,a)=>s+(Number(a.k)||0),0),h=x.a.reduce((s,a)=>s+(Number(a.h)||0),0);
+$('uG').textContent=m(g);$('uC').textContent=m(c);$('uL').textContent=m(g-c);$('uK').textContent=k.toFixed(1);$('uH').textContent=h.toFixed(1);
+$('at').innerHTML=x.a.slice().sort((a,b)=>b.d.localeCompare(a.d)).map((a,i)=>{
+let real=x.a.indexOf(a);
+return `<tr><td>${a.d}</td><td>${m(a.gpix||0)}</td><td>${m(a.gdin||0)}</td><td>${m(a.c)}</td><td>${m(a.f)}</td><td>${a.k||0}</td><td>${a.h||0}</td><td><button class="btn2" onclick="abrirEdit('u',${real})">✏️ Editar</button> <button class="btn2 danger" onclick="del('u',${real})">Excluir</button></td></tr>`
+}).join('')||'<tr><td colspan="8" class="muted">Nenhum lançamento.</td></tr>'
+}function renderDash(){
+let mes=hoje().slice(0,7),l=x.l.filter(a=>a.d.slice(0,7)===mes),u=x.a.filter(a=>a.d.slice(0,7)===mes);
+let ep=l.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=l.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0),ug=u.reduce((s,a)=>s+a.g,0),uc=u.reduce((s,a)=>s+a.c+a.f,0);
+let e=ep+ug,d=dp+uc;
+$('dE').textContent=m(e);$('dD').textContent=m(d);$('dF').textContent=m(u.reduce((s,a)=>s+a.f,0));$('dL').textContent=m(e-d);
+$('dashMes').innerHTML=`<p>Entradas pessoais: <b>${m(ep)}</b></p><p>Uber/99 recebido: <b>${m(ug)}</b></p><p>Despesas pessoais: <b>${m(dp)}</b></p><p>Custos Uber/99: <b>${m(uc)}</b></p><p><b>Lucro real: ${m(e-d)}</b></p>`
+}
+function renderCartao(){
+let fech=Number(x.config.fech)||5,venc=Number(x.config.venc)||10;
+$('cf').value=fech;$('cv').value=venc;
+let total=x.c.reduce((s,a)=>s+a.v,0);
+$('cardbox').innerHTML=`<p>Fechamento: dia <b>${fech}</b> · Vencimento: dia <b>${venc}</b></p><h3>Total das compras: ${m(total)}</h3>`+
+(x.c.length?`<div class="tablewrap"><table class="tbl"><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Ação</th></tr>`+x.c.map((a,i)=>`<tr><td>${a.d}</td><td>${a.z||''}</td><td>${m(a.v)}</td><td><button class="btn2 danger" onclick="x.c.splice(${i},1);save()">Excluir</button></td></tr>`).join('')+'</table></div>':'<p class="muted">Nenhuma compra.</p>')
+}
+function renderMetas(){
+$('metas').innerHTML=x.m.map((a,i)=>{let pct=a.v?Math.min(100,a.g/a.v*100):0;return `<div class="card"><h3>🎯 ${a.n}</h3><p>${m(a.g)} de ${m(a.v)} — ${pct.toFixed(0)}%</p><progress value="${pct}" max="100" style="width:100%"></progress><br><br><button class="btn2" onclick="x.m[${i}].g=+prompt('Novo valor guardado',x.m[${i}].g)||0;save()">Atualizar</button> <button class="btn2 danger" onclick="x.m.splice(${i},1);save()">Excluir</button></div>`}).join('')||'<div class="card"><p class="muted">Nenhuma meta cadastrada.</p></div>'
+}
+function relatorio(){
+let i=$('ri').value||hoje(),f=$('rf').value||i,l=x.l.filter(a=>a.d>=i&&a.d<=f),u=x.a.filter(a=>a.d>=i&&a.d<=f),meses={};
+[...l.map(a=>a.d),...u.map(a=>a.d)].forEach(d=>meses[d.slice(0,7)]=1);
+let keys=Object.keys(meses).sort();
+$('relatorioBox').innerHTML=keys.length?keys.map(k=>{
+let lm=l.filter(a=>a.d.slice(0,7)===k),um=u.filter(a=>a.d.slice(0,7)===k);
+let ep=lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+a.v,0),dp=lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+a.v,0);
+let pix=um.reduce((s,a)=>s+(a.gpix||0),0),din=um.reduce((s,a)=>s+(a.gdin||0),0),cp=um.reduce((s,a)=>s+(a.cpix||0),0),cd=um.reduce((s,a)=>s+(a.cdin||0),0),fp=um.reduce((s,a)=>s+(a.fpix||0),0),fd=um.reduce((s,a)=>s+(a.fdin||0),0);
+let recebido=pix+din+ep,custos=cp+cd+fp+fd+dp,lucro=recebido-custos;
+return `<div class="card"><h3>📅 ${k}</h3><div class="grid"><div>Uber PIX<br><b>${m(pix)}</b></div><div>Uber dinheiro<br><b>${m(din)}</b></div><div>Entrada pessoal PIX<br><b>${m(lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+(a.ppix||0),0))}</b></div><div>Entrada pessoal dinheiro<br><b>${m(lm.filter(a=>a.t==='Entrada').reduce((s,a)=>s+(a.pdin||0),0))}</b></div><div>Despesas PIX<br><b>${m(cp+lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+(a.ppix||0),0))}</b></div><div>Despesas dinheiro<br><b>${m(cd+lm.filter(a=>a.t==='Despesa').reduce((s,a)=>s+(a.pdin||0),0))}</b></div><div>Combustível PIX<br><b>${m(fp)}</b></div><div>Combustível dinheiro<br><b>${m(fd)}</b></div><div>Total recebido<br><b>${m(recebido)}</b></div><div>Custos totais<br><b>${m(custos)}</b></div><div>Lucro real<br><b>${m(lucro)}</b></div></div></div>`
+}).join(''):'<div class="card"><p class="muted">Nenhum lançamento no período.</p></div>'
+}
+function render(){
+renderPessoal();renderUber();renderDash();renderCartao();renderMetas();
+}
+$('dt').value=hoje();$('ad').value=hoje();$('cd').value=hoje();$('ri').value=hoje().slice(0,8)+'01';$('rf').value=hoje();
+$('cf').value=x.config.fech;$('cv').value=x.config.venc;
+render();gerarRecorrencias();
+</script></body></html>
