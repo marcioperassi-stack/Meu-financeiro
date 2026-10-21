@@ -3,475 +3,447 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Meu Financeiro Pro</title>
+<title>Meu Financeiro Pro 2.0</title>
 <style>
-:root{--azul:#1769e0;--azul2:#0d47a1;--fundo:#f3f6fc;--branco:#fff;--texto:#1d2939;--verde:#168653;--vermelho:#d92d20;--borda:#e1e8f2}
+:root{--blue:#1769e0;--dark:#1048a0;--bg:#f3f6fc;--white:#fff;--text:#202b3c;--muted:#697586;--line:#e2e8f0;--green:#168653;--red:#d92d20}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fundo);color:var(--texto)}
-header{background:linear-gradient(135deg,#1769e0,#0d47a1);color:white;padding:20px 16px}
-header h1{font-size:23px;margin:0 0 6px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{padding:21px 16px;color:white;background:linear-gradient(135deg,var(--blue),var(--dark))}
+header h1{margin:0 0 6px;font-size:23px}
 header p{margin:0;font-size:13px;opacity:.9}
-nav{display:flex;gap:7px;overflow-x:auto;padding:10px;background:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #10264b12}
-nav button{flex:0 0 auto;border:0;border-radius:9px;background:#edf3fc;color:#24518e;padding:11px 13px;font-weight:bold;cursor:pointer}
-nav button.ativo{background:var(--azul);color:white}
+nav{position:sticky;top:0;z-index:10;display:flex;gap:7px;overflow-x:auto;padding:10px;background:white;box-shadow:0 2px 8px #10264b12}
+nav button{flex:none;padding:11px 13px;border:0;border-radius:10px;background:#edf3fc;color:#174b99;font-weight:bold}
+nav button.on{background:var(--blue);color:white}
 main{max-width:1100px;margin:auto;padding:14px}
-.secao{display:none}
-.secao.ativa{display:block}
-h2{font-size:20px;margin:8px 0 14px}
-h3{font-size:16px;margin:0 0 12px}
-.painel{background:#fff;border:1px solid var(--borda);border-radius:15px;padding:16px;margin-bottom:14px;box-shadow:0 3px 12px #12345a08}
-.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.cartao{padding:15px;border-radius:13px;background:white;border:1px solid var(--borda);min-width:0}
-.cartao small{display:block;color:#667085;font-size:12px;margin-bottom:8px}
-.cartao strong{font-size:20px;overflow-wrap:anywhere}
-.azul{color:var(--azul)}.verde{color:var(--verde)}.vermelho{color:var(--vermelho)}
+.page{display:none}.page.on{display:block}
+h2{font-size:20px;margin:8px 0 15px}h3{font-size:16px;margin:0 0 13px}
+.panel,.card{background:white;border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:14px;box-shadow:0 3px 12px #12345a08}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card small{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
+.card strong{font-size:20px;overflow-wrap:anywhere}
+.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}
 form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.campo{min-width:0}
-.campo.largo{grid-column:1/-1}
+.field{min-width:0}.wide{grid-column:1/-1}
 label{display:block;font-size:12px;font-weight:bold;color:#475467;margin-bottom:5px}
-input,select,textarea{width:100%;min-width:0;border:1px solid #cfd8e6;border-radius:9px;padding:11px;background:#fff;color:#172b4d;font-size:14px}
-input[type=checkbox]{width:auto}
-button{font-family:inherit}
-.btn{border:0;border-radius:9px;padding:12px 14px;background:var(--azul);color:white;font-weight:bold;cursor:pointer}
-.btn.sec{background:#eaf1fc;color:#174b99}
-.btn.perigo{background:#fff0ef;color:var(--vermelho)}
-.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.lista{display:grid;gap:9px}
-.item{background:#fff;border:1px solid var(--borda);border-radius:11px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.item .detalhe{min-width:0;overflow-wrap:anywhere}
-.item small{display:block;color:#667085;margin-top:4px}
-.item .valor{font-weight:bold;text-align:right;white-space:nowrap}
-.tag{display:inline-block;font-size:11px;padding:4px 7px;border-radius:20px;background:#eaf1fc;color:#174b99;margin-top:5px}
-.vazio{padding:18px;text-align:center;color:#667085;background:#fff;border:1px dashed #cbd5e1;border-radius:10px}
-.resumo{font-size:13px;color:#667085;line-height:1.7}
-.barra{height:10px;background:#e7edf6;border-radius:10px;overflow:hidden;margin:8px 0}
-.barra span{display:block;height:100%;background:var(--azul);width:0}
+input,select{width:100%;min-width:0;padding:11px;border:1px solid #cfd8e6;border-radius:9px;background:white;font-size:14px;color:#172b4d}
+button{cursor:pointer;font-family:inherit}
+.btn{border:0;border-radius:9px;padding:11px 14px;background:var(--blue);color:white;font-weight:bold}
+.btn.light{background:#eaf1fc;color:#174b99}.btn.danger{background:#fff0ef;color:var(--red)}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.list{display:grid;gap:9px}
+.item{background:white;border:1px solid var(--line);border-radius:11px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.item .detail{min-width:0;overflow-wrap:anywhere}.item small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
+.item .amount{text-align:right;font-weight:bold;white-space:nowrap}
+.tag{display:inline-block;margin-top:5px;padding:4px 7px;border-radius:20px;background:#eaf1fc;color:#174b99;font-size:11px}
+.muted{font-size:13px;color:var(--muted);line-height:1.6}
+.empty{padding:18px;text-align:center;color:var(--muted);background:white;border:1px dashed #cbd5e1;border-radius:10px}
+.bar{height:9px;background:#e7edf6;border-radius:9px;overflow:hidden;margin:9px 0}
+.bar span{display:block;height:100%;background:var(--blue)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:10px 7px;border-bottom:1px solid var(--borda)}
-th{color:#475467}
-.tabela{overflow-x:auto}
-hr{border:0;border-top:1px solid var(--borda);margin:15px 0}
-@media(min-width:700px){.grade{grid-template-columns:repeat(3,minmax(0,1fr))}main{padding:22px}.cartao strong{font-size:23px}}
-@media(max-width:420px){header h1{font-size:21px}main{padding:10px}.painel{padding:12px}form{gap:9px}.cartao{padding:12px}.cartao strong{font-size:18px}}
+th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
+.tablewrap{overflow-x:auto}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}main{padding:22px}}
+@media(max-width:400px){main{padding:9px}.panel,.card{padding:11px}.card strong{font-size:18px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Meu Financeiro Pro</h1>
-  <p>Suas finanças pessoais e Uber/99 em um só lugar</p>
+<h1>Meu Financeiro Pro</h1>
+<p>Controle seu dinheiro, cartões e trabalho Uber/99</p>
 </header>
 <nav>
-  <button class="ativo" onclick="ir('dashboard',this)">Dashboard</button>
-  <button onclick="ir('pessoal',this)">Pessoal</button>
-  <button onclick="ir('saldos',this)">Saldos</button>
-  <button onclick="ir('cartao',this)">Cartão</button>
-  <button onclick="ir('uber',this)">Uber/99</button>
-  <button onclick="ir('metas',this)">Metas</button>
-  <button onclick="ir('relatorios',this)">Relatórios</button>
+<button class="on" onclick="go('dashboard',this)">Dashboard</button>
+<button onclick="go('pessoal',this)">Pessoal</button>
+<button onclick="go('saldos',this)">Saldos</button>
+<button onclick="go('cartoes',this)">Cartões</button>
+<button onclick="go('uber',this)">Uber/99</button>
+<button onclick="go('metas',this)">Metas</button>
+<button onclick="go('relatorios',this)">Relatórios</button>
 </nav>
 <main>
-<section id="dashboard" class="secao ativa">
-  <h2>Visão geral</h2>
-  <div class="grade">
-    <div class="cartao"><small>Entradas pessoais</small><strong id="dEntradas" class="verde">R$ 0,00</strong></div>
-    <div class="cartao"><small>Despesas pessoais</small><strong id="dDespesas" class="vermelho">R$ 0,00</strong></div>
-    <div class="cartao"><small>Resultado pessoal</small><strong id="dPessoal">R$ 0,00</strong></div>
-    <div class="cartao"><small>Ganhos Uber/99</small><strong id="dUber" class="verde">R$ 0,00</strong></div>
-    <div class="cartao"><small>Custos Uber/99</small><strong id="dCustos" class="vermelho">R$ 0,00</strong></div>
-    <div class="cartao"><small>Lucro real Uber/99</small><strong id="dLucro">R$ 0,00</strong></div>
-    <div class="cartao"><small>Reserva sugerida (10%)</small><strong id="dReserva" class="azul">R$ 0,00</strong></div>
-  </div>
-  <div class="painel" style="margin-top:14px">
-    <h3>Resumo do mês atual</h3>
-    <div id="resumoMes" class="resumo"></div>
-    <hr>
-    <h3>Despesas pessoais pendentes</h3>
-    <div id="pendencias"></div>
-  </div>
+<section id="dashboard" class="page on">
+<h2>Visão geral</h2>
+<div class="grid">
+<div class="card"><small>Entradas pessoais pagas</small><strong id="dashIn" class="green">R$ 0,00</strong></div>
+<div class="card"><small>Despesas pessoais pagas</small><strong id="dashOut" class="red">R$ 0,00</strong></div>
+<div class="card"><small>Saldo do mês pessoal</small><strong id="dashBalance">R$ 0,00</strong></div>
+<div class="card"><small>Ganhos Uber/99</small><strong id="dashUber" class="green">R$ 0,00</strong></div>
+<div class="card"><small>Custos Uber/99</small><strong id="dashCosts" class="red">R$ 0,00</strong></div>
+<div class="card"><small>Lucro real Uber/99</small><strong id="dashProfit">R$ 0,00</strong></div>
+<div class="card"><small>Reserva sugerida de 10%</small><strong id="dashReserve" class="blue">R$ 0,00</strong></div>
+</div>
+<div class="panel" style="margin-top:14px">
+<h3>Resumo do mês</h3>
+<div id="dashSummary" class="muted"></div>
+<hr>
+<h3>Contas pessoais pendentes</h3>
+<div id="dashPending" class="list"></div>
+</div>
+</section>
+<section id="pessoal" class="page">
+<h2>Finanças pessoais</h2>
+<div class="panel">
+<h3>Novo lançamento</h3>
+<form id="personalForm">
+<div class="field"><label>Data</label><input type="date" id="pDate" required></div>
+<div class="field"><label>Tipo</label><select id="pType"><option value="in">Entrada</option><option value="out">Despesa</option></select></div>
+<div class="field"><label>Categoria</label><select id="pCat"><option>Salário</option><option>Serviços</option><option>Moradia</option><option>Mercado</option><option>Alimentação</option><option>Água</option><option>Luz</option><option>Internet</option><option>Telefone</option><option>Transporte</option><option>Saúde</option><option>Lazer</option><option>Outros</option></select></div>
+<div class="field"><label>Valor (R$)</label><input type="number" id="pValue" min=".01" step=".01" required></div>
+<div class="field wide"><label>Descrição</label><input id="pDesc" required placeholder="Ex.: conta de luz"></div>
+<div class="field"><label>Forma</label><select id="pMethod"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Débito</option><option>Transferência</option><option>Outro</option></select></div>
+<div class="field"><label>Status</label><select id="pStatus"><option value="paid">Pago/Recebido</option><option value="pending">Pendente</option></select></div>
+<div class="field"><label>Recorrência</label><select id="pRepeat" onchange="repeatFields()"><option value="once">Uma vez</option><option value="fixed">Fixa mensal (12 meses)</option><option value="repeat">Repetir por período</option></select></div>
+<div class="field" id="periodField" style="display:none"><label>Repetir a cada</label><select id="pPeriod"><option value="day">Dia</option><option value="week">Semana</option><option value="month">Mês</option></select></div>
+<div class="field" id="qtyField" style="display:none"><label>Quantidade</label><input type="number" id="pQty" min="1" max="60" value="3"></div>
+<div class="field wide"><button class="btn" type="submit">Salvar lançamento</button></div>
+</form>
+</div>
+<div class="panel"><h3>Histórico pessoal</h3><div class="field"><label>Filtrar por mês</label><input type="month" id="pFilter" onchange="renderAll()"></div><div class="actions"><button class="btn light" onclick="$('pFilter').value='';renderAll()">Mostrar todos</button></div><div id="pList" class="list" style="margin-top:12px"></div></div>
 </section>
 
-<section id="pessoal" class="secao">
-  <h2>Finanças pessoais</h2>
-  <div class="painel">
-    <h3>Adicionar lançamento</h3>
-    <form id="formPessoal">
-      <div class="campo"><label>Data</label><input type="date" id="pData" required></div>
-      <div class="campo"><label>Tipo</label><select id="pTipo"><option value="despesa">Despesa</option><option value="entrada">Entrada</option></select></div>
-      <div class="campo"><label>Categoria</label><select id="pCategoria"><option>Alimentação</option><option>Moradia</option><option>Mercado</option><option>Água</option><option>Luz</option><option>Internet</option><option>Telefone</option><option>Transporte</option><option>Saúde</option><option>Lazer</option><option>Salário</option><option>Serviços</option><option>Outros</option></select></div>
-      <div class="campo"><label>Valor (R$)</label><input type="number" id="pValor" min="0.01" step="0.01" required placeholder="0,00"></div>
-      <div class="campo largo"><label>Descrição</label><input id="pDescricao" required placeholder="Ex.: conta de luz"></div>
-      <div class="campo"><label>Forma de pagamento/recebimento</label><select id="pPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Débito</option><option>Transferência</option><option>Outro</option></select></div>
-      <div class="campo"><label>Status</label><select id="pStatus"><option value="Pago">Pago/Recebido</option><option value="Pendente">Pendente</option></select></div>
-      <div class="campo"><label>Recorrência</label><select id="pRecorrencia" onchange="mostrarQtd()"><option value="normal">Normal (uma vez)</option><option value="fixa">Fixa mensal</option><option value="repetir">Repetir por período</option></select></div>
-      <div class="campo" id="campoPeriodo" style="display:none"><label>Repetir a cada</label><select id="pPeriodo"><option value="diaria">Dia</option><option value="semanal">Semana</option><option value="mensal">Mês</option></select></div>
-      <div class="campo" id="campoQtd" style="display:none"><label>Quantidade de lançamentos</label><input id="pQtd" type="number" min="1" max="60" value="3"></div>
-      <div class="campo largo"><button class="btn" type="submit">Salvar lançamento</button></div>
-    </form>
-  </div>
-  <div class="painel">
-    <h3>Seus lançamentos</h3>
-    <div class="campo"><label>Filtrar por mês</label><input type="month" id="filtroPessoal" onchange="renderTudo()"></div>
-    <div class="acoes"><button class="btn sec" onclick="limparFiltro()">Mostrar todos</button></div>
-    <div id="listaPessoal" class="lista" style="margin-top:12px"></div>
-  </div>
-</section>
-<section id="saldos" class="secao">
-  <h2>Meus saldos</h2>
-  <div class="grade">
-    <div class="cartao"><small>Saldo Pix pessoal</small><strong id="saldoPix" class="azul">R$ 0,00</strong></div>
-    <div class="cartao"><small>Saldo em dinheiro pessoal</small><strong id="saldoDinheiro" class="verde">R$ 0,00</strong></div>
-    <div class="cartao"><small>Saldo pessoal total</small><strong id="saldoTotal">R$ 0,00</strong></div>
-  </div>
-  <div class="painel" style="margin-top:14px">
-    <h3>Como os saldos são calculados</h3>
-    <p class="resumo">Entradas pagas aumentam o saldo. Despesas pagas diminuem o saldo. Lançamentos pendentes não entram no saldo disponível. Os valores do Uber/99 ficam separados dos saldos pessoais.</p>
-  </div>
+<section id="saldos" class="page">
+<h2>Meus saldos</h2>
+<div class="grid">
+<div class="card"><small>Saldo Pix pessoal</small><strong id="pixBalance" class="blue">R$ 0,00</strong></div>
+<div class="card"><small>Saldo em dinheiro</small><strong id="cashBalance" class="green">R$ 0,00</strong></div>
+<div class="card"><small>Saldo pessoal total</small><strong id="totalBalance">R$ 0,00</strong></div>
+</div>
+<div class="panel"><p class="muted">Somente lançamentos pessoais pagos por Pix ou dinheiro entram nesses saldos. Cartão, pendências e ganhos do Uber/99 ficam separados.</p></div>
 </section>
 
-<section id="cartao" class="secao">
-  <h2>Cartão de crédito</h2>
-  <div class="painel">
-    <h3>Configurar fatura</h3>
-    <form id="formConfigCartao">
-      <div class="campo"><label>Dia de fechamento</label><input type="number" id="fechamento" min="1" max="28" value="5" required></div>
-      <div class="campo"><label>Dia de vencimento</label><input type="number" id="vencimento" min="1" max="28" value="10" required></div>
-      <div class="campo largo"><button class="btn sec" type="submit">Salvar configuração</button></div>
-    </form>
-  </div>
-  <div class="painel">
-    <h3>Adicionar compra</h3>
-    <form id="formCartao">
-      <div class="campo"><label>Data da compra</label><input type="date" id="cData" required></div>
-      <div class="campo"><label>Valor total (R$)</label><input type="number" id="cValor" min="0.01" step="0.01" required></div>
-      <div class="campo largo"><label>Descrição</label><input id="cDescricao" required placeholder="Ex.: compra no mercado"></div>
-      <div class="campo"><label>Categoria</label><select id="cCategoria"><option>Mercado</option><option>Alimentação</option><option>Combustível</option><option>Casa</option><option>Saúde</option><option>Compras</option><option>Outros</option></select></div>
-      <div class="campo"><label>Parcelas</label><input type="number" id="cParcelas" min="1" max="48" value="1" required></div>
-      <div class="campo largo"><button class="btn" type="submit">Registrar compra</button></div>
-    </form>
-  </div>
-  <div class="painel">
-    <h3>Fatura por mês</h3>
-    <div class="campo"><label>Mês da fatura</label><input type="month" id="faturaMes" onchange="renderTudo()"></div>
-    <div id="resumoFatura" style="margin:12px 0"></div>
-    <div id="listaCartao" class="lista"></div>
-  </div>
+<section id="cartoes" class="page">
+<h2>Cartões de crédito</h2>
+<div class="panel">
+<h3>Cadastrar cartão</h3>
+<form id="cardForm">
+<div class="field wide"><label>Nome do cartão</label><input id="cardName" required placeholder="Ex.: Nubank, Itaú, Inter"></div>
+<div class="field"><label>Limite total (R$)</label><input id="cardLimit" type="number" min="0" step=".01" required></div>
+<div class="field"><label>Dia de fechamento</label><input id="cardClose" type="number" min="1" max="28" value="5" required></div>
+<div class="field"><label>Dia de vencimento</label><input id="cardDue" type="number" min="1" max="28" value="10" required></div>
+<div class="field wide"><button class="btn" type="submit">Cadastrar cartão</button></div>
+</form>
+</div>
+<div class="panel"><h3>Meus cartões</h3><div id="cardList" class="list"></div></div>
+<div class="panel">
+<h3>Registrar compra</h3>
+<form id="purchaseForm">
+<div class="field wide"><label>Cartão</label><select id="purchaseCard" required></select></div>
+<div class="field"><label>Data da compra</label><input id="cDate" type="date" required></div>
+<div class="field"><label>Valor total (R$)</label><input id="cValue" type="number" min=".01" step=".01" required></div>
+<div class="field wide"><label>Descrição</label><input id="cDesc" required placeholder="Ex.: mercado"></div>
+<div class="field"><label>Categoria</label><select id="cCat"><option>Mercado</option><option>Alimentação</option><option>Combustível</option><option>Casa</option><option>Saúde</option><option>Compras</option><option>Outros</option></select></div>
+<div class="field"><label>Número de parcelas</label><input id="cParts" type="number" min="1" max="48" value="1" required></div>
+<div class="field wide"><button class="btn" type="submit">Registrar compra</button></div>
+</form>
+</div>
+<div class="panel">
+<h3>Faturas</h3>
+<div class="field"><label>Cartão</label><select id="invoiceCard" onchange="renderInvoices()"></select></div>
+<div class="field" style="margin-top:10px"><label>Mês da fatura</label><input type="month" id="invoiceMonth" onchange="renderInvoices()"></div>
+<div id="invoiceSummary" style="margin-top:12px"></div>
+<div id="invoiceList" class="list"></div>
+</div>
 </section>
 
-<section id="uber" class="secao">
-  <h2>Controle Uber/99</h2>
-  <div class="painel">
-    <h3>Registrar um dia de trabalho</h3>
-    <form id="formUber">
-      <div class="campo"><label>Data</label><input type="date" id="uData" required></div>
-      <div class="campo"><label>Ganhos recebidos por Pix (R$)</label><input type="number" id="uPix" min="0" step="0.01" value="0"></div>
-      <div class="campo"><label>Ganhos recebidos em dinheiro (R$)</label><input type="number" id="uDinheiro" min="0" step="0.01" value="0"></div>
-      <div class="campo"><label>Quilômetros trabalhados</label><input type="number" id="uKm" min="0" step="0.1" value="0"></div>
-      <div class="campo"><label>Horas trabalhadas</label><input type="number" id="uHoras" min="0" step="0.25" value="0"></div>
-      <div class="campo"><label>Categoria da despesa</label><select id="uCategoria"><option>Manutenção</option><option>Lavagem do carro</option><option>Troca de óleo</option><option>Arrefecimento</option><option>Serviços mecânicos</option><option>Alimentação</option><option>Pedágio</option><option>Estacionamento</option><option>Outros</option></select></div>
-      <div class="campo"><label>Despesa paga por Pix (R$)</label><input type="number" id="uDespPix" min="0" step="0.01" value="0"></div>
-      <div class="campo"><label>Despesa paga em dinheiro (R$)</label><input type="number" id="uDespDinheiro" min="0" step="0.01" value="0"></div>
-      <div class="campo"><label>Combustível total (R$)</label><input type="number" id="uCombustivel" min="0" step="0.01" value="0"></div>
-      <div class="campo"><label>Combustível pago por Pix (R$)</label><input type="number" id="uCombPix" min="0" step="0.01" value="0"></div>
-      <div class="campo"><label>Combustível pago em dinheiro (R$)</label><input type="number" id="uCombDinheiro" min="0" step="0.01" value="0"></div>
-      <div class="campo largo"><p class="resumo">Informe os gastos do dia. Para o combustível, o total deve corresponder à soma dos pagamentos por Pix e dinheiro. A reserva sugerida será 10% do lucro após os custos registrados.</p></div>
-      <div class="campo largo"><button class="btn" type="submit">Salvar dia de trabalho</button></div>
-    </form>
-  </div>
-  <div class="grade">
-    <div class="cartao"><small>Ganhos Uber/99</small><strong id="uTotalGanhos" class="verde">R$ 0,00</strong></div>
-    <div class="cartao"><small>Despesas e combustível</small><strong id="uTotalCustos" class="vermelho">R$ 0,00</strong></div>
-    <div class="cartao"><small>Lucro real</small><strong id="uTotalLucro">R$ 0,00</strong></div>
-    <div class="cartao"><small>Reserva sugerida (10%)</small><strong id="uTotalReserva" class="azul">R$ 0,00</strong></div>
-    <div class="cartao"><small>Km trabalhados</small><strong id="uTotalKm">0 km</strong></div>
-    <div class="cartao"><small>Horas trabalhadas</small><strong id="uTotalHoras">0 h</strong></div>
-    <div class="cartao"><small>Lucro por hora</small><strong id="uPorHora">R$ 0,00</strong></div>
-    <div class="cartao"><small>Lucro por km</small><strong id="uPorKm">R$ 0,00</strong></div>
-  </div>
-  <div class="painel" style="margin-top:14px">
-    <h3>Histórico Uber/99</h3>
-    <div class="campo"><label>Filtrar por mês</label><input type="month" id="filtroUber" onchange="renderTudo()"></div>
-    <div id="listaUber" class="lista" style="margin-top:12px"></div>
-  </div>
+<section id="uber" class="page">
+<h2>Controle Uber/99</h2>
+<div class="panel">
+<h3>Registrar dia de trabalho</h3>
+<form id="uberForm">
+<div class="field"><label>Data</label><input type="date" id="uDate" required></div>
+<div class="field"><label>Km trabalhados</label><input type="number" id="uKm" min="0" step=".1" value="0"></div>
+<div class="field"><label>Horas trabalhadas</label><input type="number" id="uHours" min="0" step=".25" value="0"></div>
+<div class="field"><label>Ganhos por Pix (R$)</label><input type="number" id="uPix" min="0" step=".01" value="0"></div>
+<div class="field"><label>Ganhos em dinheiro (R$)</label><input type="number" id="uCash" min="0" step=".01" value="0"></div>
+<div class="field"><label>Categoria da despesa</label><select id="uCat"><option>Manutenção</option><option>Lavagem do carro</option><option>Troca de óleo</option><option>Arrefecimento</option><option>Serviços mecânicos</option><option>Alimentação</option><option>Pedágio</option><option>Estacionamento</option><option>Outros</option></select></div>
+<div class="field"><label>Despesa por Pix (R$)</label><input type="number" id="uEPix" min="0" step=".01" value="0"></div>
+<div class="field"><label>Despesa em dinheiro (R$)</label><input type="number" id="uECash" min="0" step=".01" value="0"></div>
+<div class="field"><label>Combustível total (R$)</label><input type="number" id="uFuel" min="0" step=".01" value="0"></div>
+<div class="field"><label>Combustível por Pix (R$)</label><input type="number" id="uFPix" min="0" step=".01" value="0"></div>
+<div class="field"><label>Combustível em dinheiro (R$)</label><input type="number" id="uFCash" min="0" step=".01" value="0"></div>
+<div class="field wide"><p class="muted">A soma do combustível por Pix e dinheiro precisa corresponder ao combustível total.</p><button class="btn" type="submit">Salvar dia de trabalho</button></div>
+</form>
+</div>
+<div class="grid">
+<div class="card"><small>Ganhos</small><strong id="uGains" class="green">R$ 0,00</strong></div>
+<div class="card"><small>Custos</small><strong id="uCosts" class="red">R$ 0,00</strong></div>
+<div class="card"><small>Lucro real</small><strong id="uProfit">R$ 0,00</strong></div>
+<div class="card"><small>Reserva sugerida (10%)</small><strong id="uReserve" class="blue">R$ 0,00</strong></div>
+<div class="card"><small>Km trabalhados</small><strong id="uKmTotal">0 km</strong></div>
+<div class="card"><small>Horas trabalhadas</small><strong id="uHoursTotal">0 h</strong></div>
+<div class="card"><small>Lucro por hora</small><strong id="uHourRate">R$ 0,00</strong></div>
+<div class="card"><small>Lucro por km</small><strong id="uKmRate">R$ 0,00</strong></div>
+</div>
+<div class="panel" style="margin-top:14px"><h3>Histórico Uber/99</h3><div class="field"><label>Filtrar por mês</label><input type="month" id="uFilter" onchange="renderAll()"></div><div id="uList" class="list" style="margin-top:12px"></div></div>
 </section>
 
-<section id="metas" class="secao">
-  <h2>Metas financeiras</h2>
-  <div class="painel">
-    <h3>Criar uma meta</h3>
-    <form id="formMeta">
-      <div class="campo largo"><label>Nome da meta</label><input id="mNome" required placeholder="Ex.: reserva de emergência"></div>
-      <div class="campo"><label>Valor desejado (R$)</label><input type="number" id="mValor" min="0.01" step="0.01" required></div>
-      <div class="campo"><label>Quanto já guardou (R$)</label><input type="number" id="mAtual" min="0" step="0.01" value="0"></div>
-      <div class="campo largo"><button class="btn" type="submit">Salvar meta</button></div>
-    </form>
-  </div>
-  <div id="listaMetas" class="lista"></div>
+<section id="metas" class="page">
+<h2>Metas financeiras</h2>
+<div class="panel"><h3>Nova meta</h3>
+<form id="goalForm">
+<div class="field wide"><label>Nome da meta</label><input id="gName" required placeholder="Ex.: reserva de emergência"></div>
+<div class="field"><label>Valor desejado (R$)</label><input id="gTarget" type="number" min=".01" step=".01" required></div>
+<div class="field"><label>Valor já guardado (R$)</label><input id="gSaved" type="number" min="0" step=".01" value="0"></div>
+<div class="field wide"><button class="btn" type="submit">Salvar meta</button></div>
+</form></div>
+<div id="goalList" class="list"></div>
 </section>
 
-<section id="relatorios" class="secao">
-  <h2>Relatórios financeiros</h2>
-  <div class="painel">
-    <div class="campo"><label>Escolha o mês</label><input type="month" id="relMes" onchange="renderTudo()"></div>
-    <div id="relResumo" style="margin-top:14px"></div>
-    <hr>
-    <h3>Despesas pessoais por categoria</h3>
-    <div id="relCategorias"></div>
-    <hr>
-    <h3>Resumo diário Uber/99</h3>
-    <div id="relUber"></div>
-  </div>
+<section id="relatorios" class="page">
+<h2>Relatórios</h2>
+<div class="panel">
+<div class="field"><label>Mês do relatório</label><input type="month" id="reportMonth" onchange="renderAll()"></div>
+<div id="reportSummary" style="margin-top:14px"></div>
+<h3 style="margin-top:18px">Despesas por categoria</h3><div id="reportCats" class="list"></div>
+<h3 style="margin-top:18px">Dias Uber/99</h3><div id="reportUber"></div>
+</div>
 </section>
-
 <script>
- const $=id=>document.getElementById(id);
-const hoje=()=>new Date().toISOString().slice(0,10);
-const mesAtual=()=>hoje().slice(0,7);
-const dinheiro=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const num=id=>Math.max(0,Number($(id).value)||0);
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const dataMes=(data,mes)=>String(data||'').slice(0,7)===mes;
-function dataAdd(data,periodo,n){
- let d=new Date(data+'T12:00:00');
- if(periodo==='diaria')d.setDate(d.getDate()+n);
- if(periodo==='semanal')d.setDate(d.getDate()+7*n);
- if(periodo==='mensal')d.setMonth(d.getMonth()+n);
+  const $=id=>document.getElementById(id);
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const thisMonth=()=>today().slice(0,7);
+const money=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const val=id=>Math.max(0,Number($(id).value)||0);
+const idnew=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isMonth=(date,m)=>String(date||'').slice(0,7)===m;
+const blankDB=()=>({personal:[],uber:[],cards:[],purchases:[],goals:[]});
+
+/* Armazenamento novo: não importa os lançamentos antigos. */
+let db;
+try{
+ const saved=localStorage.getItem('MFP_V2');
+ db=saved?JSON.parse(saved):blankDB();
+ if(!db||!Array.isArray(db.personal)||!Array.isArray(db.uber)||!Array.isArray(db.cards)||!Array.isArray(db.purchases)||!Array.isArray(db.goals))db=blankDB();
+}catch(e){db=blankDB()}
+function save(){localStorage.setItem('MFP_V2',JSON.stringify(db))}
+function go(id,button){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+ $(id).classList.add('on');
+ document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
+ if(button)button.classList.add('on');
+ renderAll();
+}
+function showList(id,html,msg='Nenhum registro encontrado.'){
+ $(id).innerHTML=html||`<div class="empty">${msg}</div>`;
+}
+function addDate(date,period,n){
+ const d=new Date(date+'T12:00:00');
+ if(period==='day')d.setDate(d.getDate()+n);
+ if(period==='week')d.setDate(d.getDate()+7*n);
+ if(period==='month')d.setMonth(d.getMonth()+n);
  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-function carregar(){
- try{
-  const x=JSON.parse(localStorage.getItem('MF')||'{}');
-  return {
-   l:Array.isArray(x.l)?x.l.map(a=>({
-    id:a.id||uid(),date:a.date||a.data||hoje(),
-    type:a.type||a.tipo||'despesa',cat:a.cat||a.categoria||'Outros',
-    val:Number(a.val??a.valor??a.v??0),desc:a.desc||a.descricao||a.nome||'Lançamento',
-    pay:a.pay||a.pagamento||a.forma||'Pix',status:a.status||'Pago',
-    fixed:!!a.fixed,series:a.series||a.repeticaoId||''
-   })):[],
-   u:Array.isArray(x.u)?x.u.map(a=>({
-    ...a,id:a.id||uid(),date:a.date||a.data||hoje(),
-    pix:Number(a.pix??a.p??0),cash:Number(a.cash??a.dinheiro??a.d??0),
-    ecat:a.ecat||a.categoria||'Outros',
-    epix:Number(a.epix??a.despPix??0),ecash:Number(a.ecash??a.despDinheiro??0),
-    fuel:Number(a.fuel??a.combustivel??0),
-    fuelpix:Number(a.fuelpix??a.combPix??0),fuelcash:Number(a.fuelcash??a.combDinheiro??0),
-    km:Number(a.km??0),hours:Number(a.hours??a.horas??0)
-   })):[],
-   c:Array.isArray(x.c)?x.c:[],
-   metas:Array.isArray(x.metas)?x.metas:[],
-   config:{fechamento:Number(x.config?.fechamento)||5,vencimento:Number(x.config?.vencimento)||10}
-  };
- }catch(e){return {l:[],u:[],c:[],metas:[],config:{fechamento:5,vencimento:10}}}
+function repeatFields(){
+ const r=$('pRepeat').value;
+ $('periodField').style.display=r==='repeat'?'block':'none';
+ $('qtyField').style.display=r==='repeat'?'block':'none';
 }
-let db=carregar();
-function salvar(){localStorage.setItem('MF',JSON.stringify(db))}
-function ir(id,botao){
- document.querySelectorAll('.secao').forEach(s=>s.classList.remove('ativa'));
- $(id).classList.add('ativa');
- document.querySelectorAll('nav button').forEach(b=>b.classList.remove('ativo'));
- if(botao)botao.classList.add('ativo');
- renderTudo();
+function personalSum(m,type,status){
+ return db.personal.filter(a=>(!m||isMonth(a.date,m))&&(!type||a.type===type)&&(!status||a.status===status)).reduce((s,a)=>s+a.value,0);
 }
-function mostrarQtd(){
- const r=$('pRecorrencia').value;
- $('campoPeriodo').style.display=r==='repetir'?'block':'none';
- $('campoQtd').style.display=r==='repetir'?'block':'none';
-}
-function limparFiltro(){
- $('filtroPessoal').value='';
- renderTudo();
-}
-function totalPessoal(mes,tipo,status){
- return db.l.filter(a=>(!mes||dataMes(a.date,mes))&&(!tipo||a.type===tipo)&&(!status||a.status===status)).reduce((s,a)=>s+a.val,0);
-}
-function uCustos(a){return a.epix+a.ecash+a.fuel}
-function uGanhos(a){return a.pix+a.cash}
-function uMes(mes){return db.u.filter(a=>!mes||dataMes(a.date,mes))}
-function uSoma(mes){
- const arr=uMes(mes);
- const ganhos=arr.reduce((s,a)=>s+uGanhos(a),0);
- const custos=arr.reduce((s,a)=>s+uCustos(a),0);
- const lucro=ganhos-custos;
- const km=arr.reduce((s,a)=>s+a.km,0);
- const horas=arr.reduce((s,a)=>s+a.hours,0);
- return {arr,ganhos,custos,lucro,reserva:Math.max(0,lucro)*.1,km,horas};
-}
-function mostrarLista(id,html,vazio='Nenhum lançamento encontrado.'){
- $(id).innerHTML=html||`<div class="vazio">${vazio}</div>`;
+function uberG(a){return a.pix+a.cash}
+function uberC(a){return a.epix+a.ecash+a.fuel}
+function uberStats(m){
+ const rows=db.uber.filter(a=>!m||isMonth(a.date,m));
+ const gains=rows.reduce((s,a)=>s+uberG(a),0);
+ const costs=rows.reduce((s,a)=>s+uberC(a),0);
+ const km=rows.reduce((s,a)=>s+a.km,0);
+ const hours=rows.reduce((s,a)=>s+a.hours,0);
+ return {rows,gains,costs,profit:gains-costs,reserve:Math.max(0,gains-costs)*.1,km,hours};
 }
 function renderDashboard(){
- const m=mesAtual(),entradas=totalPessoal(m,'entrada','Pago'),despesas=totalPessoal(m,'despesa','Pago');
- const u=uSoma(m);
- $('dEntradas').textContent=dinheiro(entradas);
- $('dDespesas').textContent=dinheiro(despesas);
- $('dPessoal').textContent=dinheiro(entradas-despesas);
- $('dUber').textContent=dinheiro(u.ganhos);
- $('dCustos').textContent=dinheiro(u.custos);
- $('dLucro').textContent=dinheiro(u.lucro);
- $('dReserva').textContent=dinheiro(u.reserva);
- $('resumoMes').innerHTML=`Mês: <b>${m}</b><br>Resultado pessoal: <b>${dinheiro(entradas-despesas)}</b><br>Lucro Uber/99 após custos registrados: <b>${dinheiro(u.lucro)}</b><br>Trabalho: <b>${u.km.toLocaleString('pt-BR')} km</b> em <b>${u.horas.toLocaleString('pt-BR')} horas</b>`;
- const pend=db.l.filter(a=>a.type==='despesa'&&a.status==='Pendente'&&dataMes(a.date,m));
- mostrarLista('pendencias',pend.map(a=>`<div class="item"><div class="detalhe"><b>${escapeHTML(a.desc)}</b><small>${a.date} · ${escapeHTML(a.cat)}</small></div><div class="valor vermelho">${dinheiro(a.val)}</div></div>`).join(''),'Nenhuma despesa pendente neste mês.');
+ const m=thisMonth(),income=personalSum(m,'in','paid'),expenses=personalSum(m,'out','paid'),u=uberStats(m);
+ $('dashIn').textContent=money(income);
+ $('dashOut').textContent=money(expenses);
+ $('dashBalance').textContent=money(income-expenses);
+ $('dashUber').textContent=money(u.gains);
+ $('dashCosts').textContent=money(u.costs);
+ $('dashProfit').textContent=money(u.profit);
+ $('dashReserve').textContent=money(u.reserve);
+ $('dashSummary').innerHTML=`Pessoal: <b>${money(income-expenses)}</b><br>Uber/99: <b>${money(u.profit)}</b> de lucro após os custos cadastrados<br>Trabalho: <b>${u.km} km</b> · <b>${u.hours} horas</b>`;
+ const pending=db.personal.filter(a=>a.type==='out'&&a.status==='pending'&&isMonth(a.date,m));
+ showList('dashPending',pending.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)}</small></div><div class="amount red">${money(a.value)}</div></div>`).join(''),'Nenhuma despesa pendente neste mês.');
 }
-function renderPessoal(){
- const m=$('filtroPessoal').value;
- const arr=db.l.filter(a=>!m||dataMes(a.date,m)).slice().sort((a,b)=>b.date.localeCompare(a.date));
- mostrarLista('listaPessoal',arr.map(a=>`<div class="item"><div class="detalhe"><b>${escapeHTML(a.desc)}</b><small>${a.date} · ${escapeHTML(a.cat)} · ${escapeHTML(a.pay)}</small><span class="tag">${a.status==='Pendente'?'Pendente':'Pago/Recebido'}${a.fixed?' · Fixa':''}</span></div><div class="valor ${a.type==='entrada'?'verde':'vermelho'}">${a.type==='entrada'?'+':'−'}${dinheiro(a.val)}<div class="acoes"><button class="btn sec" onclick="alternarStatus('${a.id}')">${a.status==='Pendente'?'Dar baixa':'Pendente'}</button><button class="btn sec" onclick="editarLancamento('${a.id}')">Editar</button><button class="btn perigo" onclick="excluirLancamento('${a.id}')">Excluir</button></div></div></div>`).join(''));
+function renderPersonal(){
+ const m=$('pFilter').value;
+ const rows=db.personal.filter(a=>!m||isMonth(a.date,m)).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ showList('pList',rows.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)} · ${esc(a.method)}</small><span class="tag">${a.status==='paid'?'Pago/Recebido':'Pendente'}${a.seriesType==='fixed'?' · Fixa':''}</span></div><div class="amount ${a.type==='in'?'green':'red'}">${a.type==='in'?'+':'−'}${money(a.value)}<div class="actions"><button class="btn light" onclick="togglePersonal('${a.id}')">${a.status==='paid'?'Marcar pendente':'Dar baixa'}</button><button class="btn light" onclick="editPersonal('${a.id}')">Editar</button><button class="btn danger" onclick="deletePersonal('${a.id}')">Excluir</button></div></div></div>`).join(''));
 }
-function alternarStatus(id){
- const a=db.l.find(x=>x.id===id);if(!a)return;
- a.status=a.status==='Pendente'?'Pago':'Pendente';salvar();renderTudo();
-}
-function editarLancamento(id){
- const a=db.l.find(x=>x.id===id);if(!a)return;
- const data=prompt('Data (AAAA-MM-DD):',a.date);if(data===null)return;
- if(!/^\d{4}-\d{2}-\d{2}$/.test(data)){alert('Data inválida. Use AAAA-MM-DD.');return}
- const desc=prompt('Descrição:',a.desc);if(desc===null)return;
- const valor=prompt('Valor em reais:',String(a.val));if(valor===null)return;
- if(!(Number(valor)>0)){alert('Informe um valor maior que zero.');return}
- a.date=data;a.desc=desc.trim()||a.desc;a.val=Number(valor);salvar();renderTudo();
-}
-function excluirLancamento(id){
- const a=db.l.find(x=>x.id===id);if(!a)return;
- if(!confirm('Excluir este lançamento?'))return;
- if(a.series&&confirm('Excluir também os lançamentos da mesma série?')){
-  db.l=db.l.filter(x=>x.id!==id&&x.series!==a.series);
- }else db.l=db.l.filter(x=>x.id!==id);
- salvar();renderTudo();
-}
-$('formPessoal').addEventListener('submit',e=>{
+$('personalForm').addEventListener('submit',e=>{
  e.preventDefault();
- const tipo=$('pTipo').value,rec=$('pRecorrencia').value;
- const data=$('pData').value,valor=num('pValor');
- if(!data||valor<=0){alert('Confira a data e o valor.');return}
- const serie=rec==='normal'?'':uid();
- const qtd=rec==='fixa'?12:rec==='repetir'?Math.min(60,Math.max(1,parseInt($('pQtd').value)||1)):1;
- const periodo=rec==='fixa'?'mensal':$('pPeriodo').value;
- for(let i=0;i<qtd;i++){
-  db.l.push({id:uid(),date:rec==='normal'?data:dataAdd(data,periodo,i),type:tipo,cat:$('pCategoria').value,val:valor,desc:$('pDescricao').value.trim(),pay:$('pPagamento').value,status:$('pStatus').value,fixed:rec==='fixa',series});
+ const date=$('pDate').value,amount=val('pValue'),repeat=$('pRepeat').value;
+ if(!date||amount<=0){alert('Confira a data e o valor.');return}
+ const series=repeat==='once'?'':idnew();
+ const count=repeat==='fixed'?12:repeat==='repeat'?Math.min(60,Math.max(1,parseInt($('pQty').value)||1)):1;
+ const period=repeat==='fixed'?'month':$('pPeriod').value;
+ for(let i=0;i<count;i++){
+  db.personal.push({id:idnew(),date:repeat==='once'?date:addDate(date,period,i),type:$('pType').value,category:$('pCat').value,value:amount,desc:$('pDesc').value.trim(),method:$('pMethod').value,status:$('pStatus').value,series,seriesType:repeat});
  }
- salvar();e.target.reset();$('pData').value=hoje();$('pQtd').value=3;mostrarQtd();renderTudo();
- alert(rec==='fixa'?'Despesa fixa cadastrada para os próximos 12 meses. Para continuar depois desse período, cadastre novamente.':'Lançamento salvo!');
+ save();e.target.reset();$('pDate').value=today();$('pQty').value=3;repeatFields();renderAll();
+ alert(repeat==='fixed'?'Despesa fixa cadastrada para 12 meses.':'Lançamento salvo.');
 });
-function dataFatura(data){
- const d=new Date(data+'T12:00:00');
- const dia=d.getDate();
- if(dia>db.config.fechamento)d.setMonth(d.getMonth()+1);
+function togglePersonal(id){
+ const a=db.personal.find(x=>x.id===id);if(!a)return;
+ a.status=a.status==='paid'?'pending':'paid';save();renderAll();
+}
+function editPersonal(id){
+ const a=db.personal.find(x=>x.id===id);if(!a)return;
+ const d=prompt('Data (AAAA-MM-DD):',a.date);if(d===null)return;
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data inválida.');return}
+ const desc=prompt('Descrição:',a.desc);if(desc===null)return;
+ const amount=prompt('Valor em reais:',String(a.value));if(amount===null)return;
+ if(!Number.isFinite(Number(amount))||Number(amount)<=0){alert('Valor inválido.');return}
+ a.date=d;a.desc=desc.trim()||a.desc;a.value=Number(amount);
+ save();renderAll();
+}
+function deletePersonal(id){
+ const a=db.personal.find(x=>x.id===id);if(!a)return;
+ if(!confirm('Excluir este lançamento?'))return;
+ if(a.series&&confirm('Excluir também os outros lançamentos desta série?'))db.personal=db.personal.filter(x=>x.id!==id&&x.series!==a.series);
+ else db.personal=db.personal.filter(x=>x.id!==id);
+ save();renderAll();
+}
+function renderBalances(){
+ const rows=db.personal.filter(a=>a.status==='paid');
+ const calc=method=>rows.reduce((s,a)=>a.method===method?s+(a.type==='in'?a.value:-a.value):s,0);
+ $('pixBalance').textContent=money(calc('Pix'));
+ $('cashBalance').textContent=money(calc('Dinheiro'));
+ $('totalBalance').textContent=money(calc('Pix')+calc('Dinheiro'));
+}
+
+/* Cartões e faturas mensais */
+function invoiceMonth(date,close){
+ const d=new Date(date+'T12:00:00');
+ if(d.getDate()>close)d.setMonth(d.getMonth()+1);
  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
 }
-function renderCartao(){
- const m=$('faturaMes').value||mesAtual();
- const arr=db.c.filter(a=>(a.mes||dataFatura(a.date))===m);
- const total=arr.reduce((s,a)=>s+Number(a.val||a.valor||0),0);
- $('resumoFatura').innerHTML=`<div class="cartao"><small>Total previsto da fatura · ${m}</small><strong>${dinheiro(total)}</strong><p class="resumo">Fechamento dia ${db.config.fechamento} · Vencimento dia ${db.config.vencimento}</p></div>`;
- mostrarLista('listaCartao',arr.map(a=>`<div class="item"><div class="detalhe"><b>${escapeHTML(a.desc||a.descricao||'Compra')}</b><small>${a.date||''} · ${escapeHTML(a.cat||a.categoria||'Outros')} · Parcela ${a.parcela||1}/${a.totalParcelas||1}</small><span class="tag">${a.status||'Pendente'}</span></div><div class="valor">${dinheiro(a.val??a.valor)}<div class="acoes"><button class="btn sec" onclick="alternarCartao('${a.id}')">${a.status==='Pago'?'Pendente':'Pagar'}</button><button class="btn perigo" onclick="excluirCartao('${a.id}')">Excluir</button></div></div></div>`).join(''));
+function cardOutstanding(cardId){
+ return db.purchases.filter(p=>p.cardId===cardId&&p.status!=='paid').reduce((s,p)=>s+p.value,0);
 }
-$('formConfigCartao').addEventListener('submit',e=>{
- e.preventDefault();db.config.fechamento=Math.min(28,Math.max(1,num('fechamento')));
- db.config.vencimento=Math.min(28,Math.max(1,num('vencimento')));
- salvar();renderTudo();alert('Configuração do cartão salva.');
-});
-$('formCartao').addEventListener('submit',e=>{
+function renderCardOptions(){
+ const old=$('purchaseCard').value,old2=$('invoiceCard').value;
+ const options=db.cards.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+ $('purchaseCard').innerHTML=options||'<option value="">Cadastre um cartão primeiro</option>';
+ $('invoiceCard').innerHTML=options||'<option value="">Nenhum cartão cadastrado</option>';
+ if(db.cards.some(c=>c.id===old))$('purchaseCard').value=old;
+ if(db.cards.some(c=>c.id===old2))$('invoiceCard').value=old2;
+}
+function renderCards(){
+ renderCardOptions();
+ showList('cardList',db.cards.map(c=>{
+  const spent=cardOutstanding(c.id),available=Math.max(0,c.limit-spent);
+  return `<div class="panel"><b>${esc(c.name)}</b><p class="muted">Limite: ${money(c.limit)}<br>Compras ainda não pagas: ${money(spent)}<br>Limite disponível estimado: ${money(available)}<br>Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</p><div class="bar"><span style="width:${c.limit?Math.min(100,spent/c.limit*100):0}%"></span></div><div class="actions"><button class="btn danger" onclick="deleteCard('${c.id}')">Excluir cartão</button></div></div>`;
+ }).join(''),'Cadastre seu primeiro cartão acima.');
+}
+$('cardForm').addEventListener('submit',e=>{
  e.preventDefault();
- const data=$('cData').value,valor=num('cValor'),parcelas=Math.min(48,Math.max(1,parseInt($('cParcelas').value)||1));
- if(!data||valor<=0){alert('Confira a data e o valor.');return}
- const id=uid(),centavos=Math.round(valor*100),base=Math.floor(centavos/parcelas),resto=centavos-base*parcelas;
- let primeiro=dataFatura(data);
- for(let i=0;i<parcelas;i++){
-  let mes=dataAdd(primeiro+'-01','mensal',i).slice(0,7);
-  db.c.push({id:uid(),compraId:id,date:data,mes,desc:$('cDescricao').value.trim(),cat:$('cCategoria').value,val:(base+(i<resto?1:0))/100,parcela:i+1,totalParcelas:parcelas,status:'Pendente'});
+ const name=$('cardName').value.trim(),limit=val('cardLimit'),close=Number($('cardClose').value),due=Number($('cardDue').value);
+ if(!name||close<1||close>28||due<1||due>28){alert('Confira o nome e os dias do cartão.');return}
+ db.cards.push({id:idnew(),name,limit,close,due});
+ save();e.target.reset();$('cardClose').value=5;$('cardDue').value=10;renderAll();alert('Cartão cadastrado.');
+});
+function deleteCard(id){
+ if(db.purchases.some(p=>p.cardId===id)&&!confirm('Este cartão tem compras. Excluir o cartão e todas as parcelas dele?'))return;
+ if(!db.purchases.some(p=>p.cardId===id)&&!confirm('Excluir este cartão?'))return;
+ db.cards=db.cards.filter(c=>c.id!==id);db.purchases=db.purchases.filter(p=>p.cardId!==id);save();renderAll();
+}
+$('purchaseForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const card=db.cards.find(c=>c.id===$('purchaseCard').value);
+ const date=$('cDate').value,amount=val('cValue'),parts=Math.min(48,Math.max(1,parseInt($('cParts').value)||1));
+ if(!card){alert('Cadastre e selecione um cartão primeiro.');return}
+ if(!date||amount<=0){alert('Confira a data e o valor.');return}
+ const cents=Math.round(amount*100),base=Math.floor(cents/parts),extra=cents%parts;
+ const first=invoiceMonth(date,card.close);
+ for(let i=0;i<parts;i++){
+  const month=addDate(first+'-01','month',i).slice(0,7);
+  db.purchases.push({id:idnew(),purchaseId:idnew(),cardId:card.id,date,month,desc:$('cDesc').value.trim(),category:$('cCat').value,value:(base+(i<extra?1:0))/100,part:i+1,parts,status:'pending'});
  }
- salvar();e.target.reset();$('cData').value=hoje();$('cParcelas').value=1;renderTudo();alert('Compra registrada e distribuída pelas faturas mensais.');
+ save();e.target.reset();$('cDate').value=today();$('cParts').value=1;renderAll();alert('Compra registrada nas faturas mensais.');
 });
-function alternarCartao(id){
- const a=db.c.find(x=>x.id===id);if(!a)return;
- a.status=a.status==='Pago'?'Pendente':'Pago';salvar();renderTudo();
+function renderInvoices(){
+ const card=db.cards.find(c=>c.id===$('invoiceCard').value),month=$('invoiceMonth').value||thisMonth();
+ if(!card){$('invoiceSummary').innerHTML='<p class="muted">Cadastre um cartão para visualizar faturas.</p>';showList('invoiceList','');return}
+ const rows=db.purchases.filter(p=>p.cardId===card.id&&p.month===month);
+ const total=rows.reduce((s,p)=>s+p.value,0),pending=rows.filter(p=>p.status!=='paid').reduce((s,p)=>s+p.value,0);
+ $('invoiceSummary').innerHTML=`<div class="card"><small>${esc(card.name)} · Fatura ${month}</small><strong>${money(total)}</strong><p class="muted">Pendente: ${money(pending)} · Fechamento dia ${card.close} · Vencimento dia ${card.due}</p></div>`;
+ showList('invoiceList',rows.map(p=>`<div class="item"><div class="detail"><b>${esc(p.desc)}</b><small>${esc(p.category)} · Parcela ${p.part}/${p.parts}<br>${p.date}</small><span class="tag">${p.status==='paid'?'Paga':'Pendente'}</span></div><div class="amount">${money(p.value)}<div class="actions"><button class="btn light" onclick="togglePurchase('${p.id}')">${p.status==='paid'?'Reabrir':'Marcar paga'}</button></div></div></div>`).join(''),'Nenhuma compra nesta fatura.');
 }
-function excluirCartao(id){
- const a=db.c.find(x=>x.id===id);if(!a)return;
- if(!confirm('Excluir esta parcela?'))return;
- db.c=db.c.filter(x=>x.id!==id);salvar();renderTudo();
+function togglePurchase(id){
+ const p=db.purchases.find(x=>x.id===id);if(!p)return;
+ p.status=p.status==='paid'?'pending':'paid';save();renderAll();
 }
-$('formUber').addEventListener('submit',e=>{
+
+/* Uber/99 */
+$('uberForm').addEventListener('submit',e=>{
  e.preventDefault();
- const fuel=num('uCombustivel'),fp=num('uCombPix'),fc=num('uCombDinheiro');
- if(Math.abs(fuel-fp-fc)>.02){alert('A soma do combustível pago por Pix e dinheiro precisa ser igual ao total do combustível.');return}
- db.u.push({id:uid(),date:$('uData').value,pix:num('uPix'),cash:num('uDinheiro'),km:num('uKm'),hours:num('uHoras'),ecat:$('uCategoria').value,epix:num('uDespPix'),ecash:num('uDespDinheiro'),fuel,fuelpix:fp,fuelcash:fc});
- salvar();e.target.reset();$('uData').value=hoje();
- ['uPix','uDinheiro','uKm','uHoras','uDespPix','uDespDinheiro','uCombustivel','uCombPix','uCombDinheiro'].forEach(id=>$(id).value=0);
- renderTudo();alert('Dia de trabalho salvo!');
+ const fuel=val('uFuel'),fp=val('uFPix'),fc=val('uFCash');
+ if(Math.abs(fuel-fp-fc)>.02){alert('A soma do combustível por Pix e dinheiro precisa igualar o total.');return}
+ if(!$('uDate').value){alert('Informe a data.');return}
+ db.uber.push({id:idnew(),date:$('uDate').value,km:val('uKm'),hours:val('uHours'),pix:val('uPix'),cash:val('uCash'),category:$('uCat').value,epix:val('uEPix'),ecash:val('uECash'),fuel});
+ save();e.target.reset();$('uDate').value=today();
+ ['uKm','uHours','uPix','uCash','uEPix','uECash','uFuel','uFPix','uFCash'].forEach(id=>$(id).value=0);
+ renderAll();alert('Dia de trabalho salvo.');
 });
-function excluirUber(id){
+function deleteUber(id){
  if(!confirm('Excluir este registro Uber/99?'))return;
- db.u=db.u.filter(a=>a.id!==id);salvar();renderTudo();
+ db.uber=db.uber.filter(a=>a.id!==id);save();renderAll();
 }
 function renderUber(){
- const m=$('filtroUber').value||mesAtual(),s=uSoma(m);
- $('uTotalGanhos').textContent=dinheiro(s.ganhos);
- $('uTotalCustos').textContent=dinheiro(s.custos);
- $('uTotalLucro').textContent=dinheiro(s.lucro);
- $('uTotalReserva').textContent=dinheiro(s.reserva);
- $('uTotalKm').textContent=s.km.toLocaleString('pt-BR')+' km';
- $('uTotalHoras').textContent=s.horas.toLocaleString('pt-BR')+' h';
- $('uPorHora').textContent=dinheiro(s.horas?s.lucro/s.horas:0);
- $('uPorKm').textContent=dinheiro(s.km?s.lucro/s.km:0);
- mostrarLista('listaUber',s.arr.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(a=>`<div class="item"><div class="detalhe"><b>${a.date}</b><small>Pix: ${dinheiro(a.pix)} · Dinheiro: ${dinheiro(a.cash)}<br>Custos: ${dinheiro(uCustos(a))} · ${a.km} km · ${a.hours} h</small><span class="tag">${escapeHTML(a.ecat)}</span></div><div class="valor">${dinheiro(uGanhos(a)-uCustos(a))}<div class="acoes"><button class="btn perigo" onclick="excluirUber('${a.id}')">Excluir</button></div></div></div>`).join(''));
+ const m=$('uFilter').value||thisMonth(),s=uberStats(m);
+ $('uGains').textContent=money(s.gains);$('uCosts').textContent=money(s.costs);
+ $('uProfit').textContent=money(s.profit);$('uReserve').textContent=money(s.reserve);
+ $('uKmTotal').textContent=s.km+' km';$('uHoursTotal').textContent=s.hours+' h';
+ $('uHourRate').textContent=money(s.hours?s.profit/s.hours:0);
+ $('uKmRate').textContent=money(s.km?s.profit/s.km:0);
+ showList('uList',s.rows.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(a=>`<div class="item"><div class="detail"><b>${a.date}</b><small>Ganhos: ${money(uberG(a))}<br>Custos: ${money(uberC(a))}<br>${a.km} km · ${a.hours} h · ${esc(a.category)}</small></div><div class="amount">${money(uberG(a)-uberC(a))}<div class="actions"><button class="btn danger" onclick="deleteUber('${a.id}')">Excluir</button></div></div></div>`).join(''));
 }
-function renderSaldos(){
- const arr=db.l.filter(a=>a.status!=='Pendente');
- const saldo=pay=>arr.reduce((s,a)=>{
-  if(a.pay!==pay)return s;
-  return s+(a.type==='entrada'?a.val:-a.val);
- },0);
- $('saldoPix').textContent=dinheiro(saldo('Pix'));
- $('saldoDinheiro').textContent=dinheiro(saldo('Dinheiro'));
- $('saldoTotal').textContent=dinheiro(saldo('Pix')+saldo('Dinheiro'));
-}
-$('formMeta').addEventListener('submit',e=>{
+
+/* Metas */
+$('goalForm').addEventListener('submit',e=>{
  e.preventDefault();
- db.metas.push({id:uid(),nome:$('mNome').value.trim(),valor:num('mValor'),atual:num('mAtual')});
- salvar();e.target.reset();$('mAtual').value=0;renderTudo();
+ const target=val('gTarget');
+ if(!target){alert('Informe o valor desejado.');return}
+ db.goals.push({id:idnew(),name:$('gName').value.trim(),target,saved:val('gSaved')});
+ save();e.target.reset();$('gSaved').value=0;renderAll();
 });
-function atualizarMeta(id){
- const a=db.metas.find(x=>x.id===id);if(!a)return;
- const v=prompt('Quanto já guardou nesta meta?',String(a.atual));if(v===null)return;
- if(Number(v)<0||!Number.isFinite(Number(v))){alert('Informe um valor válido.');return}
- a.atual=Number(v);salvar();renderTudo();
+function updateGoal(id){
+ const g=db.goals.find(x=>x.id===id);if(!g)return;
+ const n=prompt('Quanto já guardou?',String(g.saved));if(n===null)return;
+ if(!Number.isFinite(Number(n))||Number(n)<0){alert('Valor inválido.');return}
+ g.saved=Number(n);save();renderAll();
 }
-function excluirMeta(id){
+function deleteGoal(id){
  if(!confirm('Excluir esta meta?'))return;
- db.metas=db.metas.filter(a=>a.id!==id);salvar();renderTudo();
+ db.goals=db.goals.filter(g=>g.id!==id);save();renderAll();
 }
-function renderMetas(){
- mostrarLista('listaMetas',db.metas.map(a=>{
-  const pct=a.valor>0?Math.min(100,Math.max(0,a.atual/a.valor*100)):0;
-  return `<div class="painel"><b>${escapeHTML(a.nome)}</b><p class="resumo">${dinheiro(a.atual)} de ${dinheiro(a.valor)} · ${pct.toFixed(0)}%</p><div class="barra"><span style="width:${pct}%"></span></div><div class="acoes"><button class="btn sec" onclick="atualizarMeta('${a.id}')">Atualizar valor</button><button class="btn perigo" onclick="excluirMeta('${a.id}')">Excluir</button></div></div>`;
- }).join(''),'Você ainda não cadastrou metas.');
+function renderGoals(){
+ showList('goalList',db.goals.map(g=>{
+  const pct=Math.min(100,g.saved/g.target*100);
+  return `<div class="panel"><b>${esc(g.name)}</b><p class="muted">${money(g.saved)} de ${money(g.target)} · ${pct.toFixed(0)}%</p><div class="bar"><span style="width:${pct}%"></span></div><div class="actions"><button class="btn light" onclick="updateGoal('${g.id}')">Atualizar</button><button class="btn danger" onclick="deleteGoal('${g.id}')">Excluir</button></div></div>`;
+ }).join(''),'Nenhuma meta cadastrada.');
 }
-function renderRelatorios(){
- const m=$('relMes').value||mesAtual();
- const entradas=totalPessoal(m,'entrada','Pago'),despesas=totalPessoal(m,'despesa','Pago'),u=uSoma(m);
- $('relResumo').innerHTML=`<div class="grade"><div class="cartao"><small>Entradas pessoais</small><strong class="verde">${dinheiro(entradas)}</strong></div><div class="cartao"><small>Despesas pessoais</small><strong class="vermelho">${dinheiro(despesas)}</strong></div><div class="cartao"><small>Resultado pessoal</small><strong>${dinheiro(entradas-despesas)}</strong></div><div class="cartao"><small>Ganhos Uber/99</small><strong>${dinheiro(u.ganhos)}</strong></div><div class="cartao"><small>Custos Uber/99</small><strong>${dinheiro(u.custos)}</strong></div><div class="cartao"><small>Lucro real Uber/99</small><strong>${dinheiro(u.lucro)}</strong></div></div><p class="resumo">Reserva sugerida: ${dinheiro(u.reserva)} · ${u.km} km · ${u.horas} horas · ${dinheiro(u.horas?u.lucro/u.horas:0)}/hora · ${dinheiro(u.km?u.lucro/u.km:0)}/km</p>`;
+
+/* Relatórios */
+function renderReports(){
+ const m=$('reportMonth').value||thisMonth(),inc=personalSum(m,'in','paid'),out=personalSum(m,'out','paid'),u=uberStats(m);
+ $('reportSummary').innerHTML=`<div class="grid"><div class="card"><small>Entradas pessoais</small><strong class="green">${money(inc)}</strong></div><div class="card"><small>Despesas pessoais</small><strong class="red">${money(out)}</strong></div><div class="card"><small>Resultado pessoal</small><strong>${money(inc-out)}</strong></div><div class="card"><small>Ganhos Uber/99</small><strong>${money(u.gains)}</strong></div><div class="card"><small>Custos Uber/99</small><strong>${money(u.costs)}</strong></div><div class="card"><small>Lucro real Uber/99</small><strong>${money(u.profit)}</strong></div></div><p class="muted">Reserva sugerida: ${money(u.reserve)} · ${u.km} km · ${u.hours} horas</p>`;
  const cats={};
- db.l.filter(a=>dataMes(a.date,m)&&a.type==='despesa'&&a.status!=='Pendente').forEach(a=>cats[a.cat]=(cats[a.cat]||0)+a.val);
- const rows=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div class="item"><div class="detalhe">${escapeHTML(c)}</div><div class="valor">${dinheiro(v)}</div></div>`).join('');
- mostrarLista('relCategorias',rows,'Nenhuma despesa pessoal paga neste mês.');
- const ur=u.arr.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(a=>`<tr><td>${a.date}</td><td>${dinheiro(uGanhos(a))}</td><td>${dinheiro(uCustos(a))}</td><td>${dinheiro(uGanhos(a)-uCustos(a))}</td><td>${a.km}</td><td>${a.hours}</td></tr>`).join('');
- $('relUber').innerHTML=ur?`<div class="tabela"><table><thead><tr><th>Data</th><th>Ganhos</th><th>Custos</th><th>Lucro</th><th>Km</th><th>Horas</th></tr></thead><tbody>${ur}</tbody></table></div>`:'<div class="vazio">Nenhum registro Uber/99 neste mês.</div>';
+ db.personal.filter(a=>isMonth(a.date,m)&&a.type==='out'&&a.status==='paid').forEach(a=>cats[a.category]=(cats[a.category]||0)+a.value);
+ showList('reportCats',Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([name,total])=>`<div class="item"><span>${esc(name)}</span><b>${money(total)}</b></div>`).join(''),'Nenhuma despesa paga neste mês.');
+ const rows=u.rows.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(a=>`<tr><td>${a.date}</td><td>${money(uberG(a))}</td><td>${money(uberC(a))}</td><td>${money(uberG(a)-uberC(a))}</td><td>${a.km}</td><td>${a.hours}</td></tr>`).join('');
+ $('reportUber').innerHTML=rows?`<div class="tablewrap"><table><thead><tr><th>Data</th><th>Ganhos</th><th>Custos</th><th>Lucro</th><th>Km</th><th>Horas</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty">Nenhum dia de trabalho neste mês.</div>';
 }
-function renderTudo(){
- renderDashboard();renderPessoal();renderSaldos();renderCartao();renderUber();renderMetas();renderRelatorios();
+function renderAll(){
+ renderDashboard();renderPersonal();renderBalances();renderCards();renderInvoices();renderUber();renderGoals();renderReports();
 }
-function inicializar(){
- const data=hoje();
- ['pData','cData','uData'].forEach(id=>$(id).value=data);
- ['filtroPessoal','filtroUber','faturaMes','relMes'].forEach(id=>$(id).value=mesAtual());
- $('fechamento').value=db.config.fechamento;
- $('vencimento').value=db.config.vencimento;
- salvar();renderTudo();
+function init(){
+ ['pDate','cDate','uDate'].forEach(id=>$(id).value=today());
+ ['pFilter','uFilter','invoiceMonth','reportMonth'].forEach(id=>$(id).value=thisMonth());
+ repeatFields();renderAll();
 }
-window.addEventListener('load',inicializar);
+window.addEventListener('load',init);
 </script>
 </main>
 </body>
