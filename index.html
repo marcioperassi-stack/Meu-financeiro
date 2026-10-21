@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,6 +12,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-seri
 header{padding:21px 16px;color:white;background:linear-gradient(135deg,var(--blue),var(--dark))}
 header h1{margin:0 0 6px;font-size:23px}
 header p{margin:0;font-size:13px;opacity:.9}
+.backup-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.backup-buttons button{border:0;border-radius:9px;padding:11px;background:white;color:#1048a0;font-weight:bold}
 nav{position:sticky;top:0;z-index:10;display:flex;gap:7px;overflow-x:auto;padding:10px;background:white;box-shadow:0 2px 8px #10264b12}
 nav button{flex:none;padding:11px 13px;border:0;border-radius:10px;background:#edf3fc;color:#174b99;font-weight:bold}
 nav button.on{background:var(--blue);color:white}
@@ -48,8 +51,13 @@ th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
 </head>
 <body>
 <header>
-<h1>Meu Financeiro Pro</h1>
+<h1>Meu Financeiro Pro 2.0</h1>
 <p>Controle seu dinheiro, cartões e trabalho Uber/99</p>
+<div class="backup-buttons">
+<button type="button" onclick="exportLocalBackup()">Baixar backup</button>
+<button type="button" onclick="$('restoreFile').click()">Restaurar backup</button>
+<input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="importLocalBackup(event)">
+</div>
 </header>
 <nav>
 <button class="on" onclick="go('dashboard',this)">Dashboard</button>
@@ -80,14 +88,15 @@ th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
 <div id="dashPending" class="list"></div>
 </div>
 </section>
+
 <section id="pessoal" class="page">
 <h2>Finanças pessoais</h2>
 <div class="panel">
 <h3>Novo lançamento</h3>
 <form id="personalForm">
 <div class="field"><label>Data</label><input type="date" id="pDate" required></div>
-<div class="field"><label>Tipo</label><select id="pType"><option value="in">Entrada</option><option value="out">Despesa</option></select></div>
-<div class="field"><label>Categoria</label><select id="pCat"><option>Salário</option><option>Serviços</option><option>Moradia</option><option>Mercado</option><option>Alimentação</option><option>Água</option><option>Luz</option><option>Internet</option><option>Telefone</option><option>Transporte</option><option>Saúde</option><option>Lazer</option><option>Outros</option></select></div>
+<div class="field"><label>Tipo</label><select id="pType" onchange="updatePersonalCategories()"><option value="in">Entrada</option><option value="out">Despesa</option></select></div>
+<div class="field"><label>Categoria</label><select id="pCat"></select></div>
 <div class="field"><label>Valor (R$)</label><input type="number" id="pValue" min=".01" step=".01" required></div>
 <div class="field wide"><label>Descrição</label><input id="pDesc" required placeholder="Ex.: conta de luz"></div>
 <div class="field"><label>Forma</label><select id="pMethod"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Débito</option><option>Transferência</option><option>Outro</option></select></div>
@@ -108,7 +117,7 @@ th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
 <div class="card"><small>Saldo em dinheiro</small><strong id="cashBalance" class="green">R$ 0,00</strong></div>
 <div class="card"><small>Saldo pessoal total</small><strong id="totalBalance">R$ 0,00</strong></div>
 </div>
-<div class="panel"><p class="muted">Somente lançamentos pessoais pagos por Pix ou dinheiro entram nesses saldos. Cartão, pendências e ganhos do Uber/99 ficam separados.</p></div>
+<div class="panel"><p class="muted">Somente lançamentos pessoais pagos por Pix ou dinheiro entram nesses saldos. Cartão, pendências e ganhos Uber/99 ficam separados.</p></div>
 </section>
 
 <section id="cartoes" class="page">
@@ -199,7 +208,7 @@ th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
 </div>
 </section>
 <script>
-  const $=id=>document.getElementById(id);
+const $=id=>document.getElementById(id);
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const thisMonth=()=>today().slice(0,7);
 const money=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
@@ -209,239 +218,284 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const isMonth=(date,m)=>String(date||'').slice(0,7)===m;
 const blankDB=()=>({personal:[],uber:[],cards:[],purchases:[],goals:[]});
 
-/* Armazenamento novo: não importa os lançamentos antigos. */
 let db;
 try{
- const saved=localStorage.getItem('MFP_V2');
- db=saved?JSON.parse(saved):blankDB();
- if(!db||!Array.isArray(db.personal)||!Array.isArray(db.uber)||!Array.isArray(db.cards)||!Array.isArray(db.purchases)||!Array.isArray(db.goals))db=blankDB();
+const saved=localStorage.getItem('MFP_V2');
+db=saved?JSON.parse(saved):blankDB();
+if(!db||!Array.isArray(db.personal)||!Array.isArray(db.uber)||!Array.isArray(db.cards)||!Array.isArray(db.purchases)||!Array.isArray(db.goals))db=blankDB();
 }catch(e){db=blankDB()}
+
 function save(){localStorage.setItem('MFP_V2',JSON.stringify(db))}
 function go(id,button){
- document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
- $(id).classList.add('on');
- document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
- if(button)button.classList.add('on');
- renderAll();
+document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+$(id).classList.add('on');
+document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
+if(button)button.classList.add('on');
+renderAll();
 }
 function showList(id,html,msg='Nenhum registro encontrado.'){
- $(id).innerHTML=html||`<div class="empty">${msg}</div>`;
+$(id).innerHTML=html||`<div class="empty">${msg}</div>`;
 }
 function addDate(date,period,n){
- const d=new Date(date+'T12:00:00');
- if(period==='day')d.setDate(d.getDate()+n);
- if(period==='week')d.setDate(d.getDate()+7*n);
- if(period==='month')d.setMonth(d.getMonth()+n);
- return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const d=new Date(date+'T12:00:00');
+if(period==='day')d.setDate(d.getDate()+n);
+if(period==='week')d.setDate(d.getDate()+7*n);
+if(period==='month')d.setMonth(d.getMonth()+n);
+return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 function repeatFields(){
- const r=$('pRepeat').value;
- $('periodField').style.display=r==='repeat'?'block':'none';
- $('qtyField').style.display=r==='repeat'?'block':'none';
+const r=$('pRepeat').value;
+$('periodField').style.display=r==='repeat'?'block':'none';
+$('qtyField').style.display=r==='repeat'?'block':'none';
+}
+function updatePersonalCategories(){
+const type=$('pType').value;
+const cats=type==='in'
+?['Salário','Serviços','Empréstimo','Outros']
+:['Moradia','Mercado','Alimentação','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Outros'];
+const current=$('pCat').value;
+$('pCat').innerHTML=cats.map(c=>`<option>${esc(c)}</option>`).join('');
+if(cats.includes(current))$('pCat').value=current;
 }
 function personalSum(m,type,status){
- return db.personal.filter(a=>(!m||isMonth(a.date,m))&&(!type||a.type===type)&&(!status||a.status===status)).reduce((s,a)=>s+a.value,0);
+return db.personal.filter(a=>(!m||isMonth(a.date,m))&&(!type||a.type===type)&&(!status||a.status===status)).reduce((s,a)=>s+a.value,0);
 }
 function uberG(a){return a.pix+a.cash}
 function uberC(a){return a.epix+a.ecash+a.fuel}
 function uberStats(m){
- const rows=db.uber.filter(a=>!m||isMonth(a.date,m));
- const gains=rows.reduce((s,a)=>s+uberG(a),0);
- const costs=rows.reduce((s,a)=>s+uberC(a),0);
- const km=rows.reduce((s,a)=>s+a.km,0);
- const hours=rows.reduce((s,a)=>s+a.hours,0);
- return {rows,gains,costs,profit:gains-costs,reserve:Math.max(0,gains-costs)*.1,km,hours};
+const rows=db.uber.filter(a=>!m||isMonth(a.date,m));
+const gains=rows.reduce((s,a)=>s+Number(a.pix||0)+Number(a.cash||0),0);
+const costs=rows.reduce((s,a)=>s+Number(a.epix||0)+Number(a.ecash||0)+Number(a.fuel||0),0);
+const km=rows.reduce((s,a)=>s+Number(a.km||0),0);
+const hours=rows.reduce((s,a)=>s+Number(a.hours||0),0);
+return {rows,gains,costs,profit:gains-costs,reserve:Math.max(0,gains-costs)*.1,km,hours};
 }
+
 function renderDashboard(){
- const m=thisMonth(),income=personalSum(m,'in','paid'),expenses=personalSum(m,'out','paid'),u=uberStats(m);
- $('dashIn').textContent=money(income);
- $('dashOut').textContent=money(expenses);
- $('dashBalance').textContent=money(income-expenses);
- $('dashUber').textContent=money(u.gains);
- $('dashCosts').textContent=money(u.costs);
- $('dashProfit').textContent=money(u.profit);
- $('dashReserve').textContent=money(u.reserve);
- $('dashSummary').innerHTML=`Pessoal: <b>${money(income-expenses)}</b><br>Uber/99: <b>${money(u.profit)}</b> de lucro após os custos cadastrados<br>Trabalho: <b>${u.km} km</b> · <b>${u.hours} horas</b>`;
- const pending=db.personal.filter(a=>a.type==='out'&&a.status==='pending'&&isMonth(a.date,m));
- showList('dashPending',pending.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)}</small></div><div class="amount red">${money(a.value)}</div></div>`).join(''),'Nenhuma despesa pendente neste mês.');
+const m=thisMonth(),income=personalSum(m,'in','paid'),expenses=personalSum(m,'out','paid'),u=uberStats(m);
+$('dashIn').textContent=money(income);
+$('dashOut').textContent=money(expenses);
+$('dashBalance').textContent=money(income-expenses);
+$('dashUber').textContent=money(u.gains);
+$('dashCosts').textContent=money(u.costs);
+$('dashProfit').textContent=money(u.profit);
+$('dashReserve').textContent=money(u.reserve);
+$('dashSummary').innerHTML=`Pessoal: <b>${money(income-expenses)}</b><br>Uber/99: <b>${money(u.profit)}</b> de lucro após os custos cadastrados<br>Trabalho: <b>${u.km} km</b> · <b>${u.hours} horas</b>`;
+const pending=db.personal.filter(a=>a.type==='out'&&a.status==='pending'&&isMonth(a.date,m));
+showList('dashPending',pending.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)}</small></div><div class="amount red">${money(a.value)}</div></div>`).join(''),'Nenhuma despesa pendente neste mês.');
 }
 function renderPersonal(){
- const m=$('pFilter').value;
- const rows=db.personal.filter(a=>!m||isMonth(a.date,m)).slice().sort((a,b)=>b.date.localeCompare(a.date));
- showList('pList',rows.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)} · ${esc(a.method)}</small><span class="tag">${a.status==='paid'?'Pago/Recebido':'Pendente'}${a.seriesType==='fixed'?' · Fixa':''}</span></div><div class="amount ${a.type==='in'?'green':'red'}">${a.type==='in'?'+':'−'}${money(a.value)}<div class="actions"><button class="btn light" onclick="togglePersonal('${a.id}')">${a.status==='paid'?'Marcar pendente':'Dar baixa'}</button><button class="btn light" onclick="editPersonal('${a.id}')">Editar</button><button class="btn danger" onclick="deletePersonal('${a.id}')">Excluir</button></div></div></div>`).join(''));
+const m=$('pFilter').value;
+const rows=db.personal.filter(a=>!m||isMonth(a.date,m)).slice().sort((a,b)=>b.date.localeCompare(a.date));
+showList('pList',rows.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)} · ${esc(a.method)}</small><span class="tag">${a.status==='paid'?'Pago/Recebido':'Pendente'}${a.seriesType==='fixed'?' · Fixa':''}</span></div><div class="amount ${a.type==='in'?'green':'red'}">${a.type==='in'?'+':'−'}${money(a.value)}<div class="actions"><button class="btn light" onclick="togglePersonal('${a.id}')">${a.status==='paid'?'Marcar pendente':'Dar baixa'}</button><button class="btn light" onclick="editPersonal('${a.id}')">Editar</button><button class="btn danger" onclick="deletePersonal('${a.id}')">Excluir</button></div></div></div>`).join(''));
 }
 $('personalForm').addEventListener('submit',e=>{
- e.preventDefault();
- const date=$('pDate').value,amount=val('pValue'),repeat=$('pRepeat').value;
- if(!date||amount<=0){alert('Confira a data e o valor.');return}
- const series=repeat==='once'?'':idnew();
- const count=repeat==='fixed'?12:repeat==='repeat'?Math.min(60,Math.max(1,parseInt($('pQty').value)||1)):1;
- const period=repeat==='fixed'?'month':$('pPeriod').value;
- for(let i=0;i<count;i++){
-  db.personal.push({id:idnew(),date:repeat==='once'?date:addDate(date,period,i),type:$('pType').value,category:$('pCat').value,value:amount,desc:$('pDesc').value.trim(),method:$('pMethod').value,status:$('pStatus').value,series,seriesType:repeat});
- }
- save();e.target.reset();$('pDate').value=today();$('pQty').value=3;repeatFields();renderAll();
- alert(repeat==='fixed'?'Despesa fixa cadastrada para 12 meses.':'Lançamento salvo.');
+e.preventDefault();
+const date=$('pDate').value,amount=val('pValue'),repeat=$('pRepeat').value;
+if(!date||amount<=0){alert('Confira a data e o valor.');return}
+const series=repeat==='once'?'':idnew();
+const count=repeat==='fixed'?12:repeat==='repeat'?Math.min(60,Math.max(1,parseInt($('pQty').value)||1)):1;
+const period=repeat==='fixed'?'month':$('pPeriod').value;
+for(let i=0;i<count;i++){
+db.personal.push({id:idnew(),date:repeat==='once'?date:addDate(date,period,i),type:$('pType').value,category:$('pCat').value,value:amount,desc:$('pDesc').value.trim(),method:$('pMethod').value,status:$('pStatus').value,series,seriesType:repeat});
+}
+save();e.target.reset();$('pDate').value=today();$('pQty').value=3;updatePersonalCategories();repeatFields();renderAll();
+alert(repeat==='fixed'?'Despesa fixa cadastrada para 12 meses.':'Lançamento salvo.');
 });
 function togglePersonal(id){
- const a=db.personal.find(x=>x.id===id);if(!a)return;
- a.status=a.status==='paid'?'pending':'paid';save();renderAll();
+const a=db.personal.find(x=>x.id===id);if(!a)return;
+a.status=a.status==='paid'?'pending':'paid';save();renderAll();
 }
 function editPersonal(id){
- const a=db.personal.find(x=>x.id===id);if(!a)return;
- const d=prompt('Data (AAAA-MM-DD):',a.date);if(d===null)return;
- if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data inválida.');return}
- const desc=prompt('Descrição:',a.desc);if(desc===null)return;
- const amount=prompt('Valor em reais:',String(a.value));if(amount===null)return;
- if(!Number.isFinite(Number(amount))||Number(amount)<=0){alert('Valor inválido.');return}
- a.date=d;a.desc=desc.trim()||a.desc;a.value=Number(amount);
- save();renderAll();
+const a=db.personal.find(x=>x.id===id);if(!a)return;
+const d=prompt('Data (AAAA-MM-DD):',a.date);if(d===null)return;
+if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data inválida.');return}
+const desc=prompt('Descrição:',a.desc);if(desc===null)return;
+const amount=prompt('Valor em reais:',String(a.value));if(amount===null)return;
+if(!Number.isFinite(Number(amount))||Number(amount)<=0){alert('Valor inválido.');return}
+a.date=d;a.desc=desc.trim()||a.desc;a.value=Number(amount);
+save();renderAll();
 }
 function deletePersonal(id){
- const a=db.personal.find(x=>x.id===id);if(!a)return;
- if(!confirm('Excluir este lançamento?'))return;
- if(a.series&&confirm('Excluir também os outros lançamentos desta série?'))db.personal=db.personal.filter(x=>x.id!==id&&x.series!==a.series);
- else db.personal=db.personal.filter(x=>x.id!==id);
- save();renderAll();
+const a=db.personal.find(x=>x.id===id);if(!a)return;
+if(!confirm('Excluir este lançamento?'))return;
+if(a.series&&confirm('Excluir também os outros lançamentos desta série?'))db.personal=db.personal.filter(x=>x.id!==id&&x.series!==a.series);
+else db.personal=db.personal.filter(x=>x.id!==id);
+save();renderAll();
 }
 function renderBalances(){
- const rows=db.personal.filter(a=>a.status==='paid');
- const calc=method=>rows.reduce((s,a)=>a.method===method?s+(a.type==='in'?a.value:-a.value):s,0);
- $('pixBalance').textContent=money(calc('Pix'));
- $('cashBalance').textContent=money(calc('Dinheiro'));
- $('totalBalance').textContent=money(calc('Pix')+calc('Dinheiro'));
+const rows=db.personal.filter(a=>a.status==='paid');
+const calc=method=>rows.reduce((s,a)=>a.method===method?s+(a.type==='in'?a.value:-a.value):s,0);
+$('pixBalance').textContent=money(calc('Pix'));
+$('cashBalance').textContent=money(calc('Dinheiro'));
+$('totalBalance').textContent=money(calc('Pix')+calc('Dinheiro'));
 }
-
-/* Cartões e faturas mensais */
 function invoiceMonth(date,close){
- const d=new Date(date+'T12:00:00');
- if(d.getDate()>close)d.setMonth(d.getMonth()+1);
- return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+const d=new Date(date+'T12:00:00');
+if(d.getDate()>close)d.setMonth(d.getMonth()+1);
+return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
 }
 function cardOutstanding(cardId){
- return db.purchases.filter(p=>p.cardId===cardId&&p.status!=='paid').reduce((s,p)=>s+p.value,0);
+return db.purchases.filter(p=>p.cardId===cardId&&p.status!=='paid').reduce((s,p)=>s+p.value,0);
 }
 function renderCardOptions(){
- const old=$('purchaseCard').value,old2=$('invoiceCard').value;
- const options=db.cards.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
- $('purchaseCard').innerHTML=options||'<option value="">Cadastre um cartão primeiro</option>';
- $('invoiceCard').innerHTML=options||'<option value="">Nenhum cartão cadastrado</option>';
- if(db.cards.some(c=>c.id===old))$('purchaseCard').value=old;
- if(db.cards.some(c=>c.id===old2))$('invoiceCard').value=old2;
+const old=$('purchaseCard').value,old2=$('invoiceCard').value;
+const options=db.cards.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+$('purchaseCard').innerHTML=options||'<option value="">Cadastre um cartão primeiro</option>';
+$('invoiceCard').innerHTML=options||'<option value="">Nenhum cartão cadastrado</option>';
+if(db.cards.some(c=>c.id===old))$('purchaseCard').value=old;
+if(db.cards.some(c=>c.id===old2))$('invoiceCard').value=old2;
 }
 function renderCards(){
- renderCardOptions();
- showList('cardList',db.cards.map(c=>{
-  const spent=cardOutstanding(c.id),available=Math.max(0,c.limit-spent);
-  return `<div class="panel"><b>${esc(c.name)}</b><p class="muted">Limite: ${money(c.limit)}<br>Compras ainda não pagas: ${money(spent)}<br>Limite disponível estimado: ${money(available)}<br>Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</p><div class="bar"><span style="width:${c.limit?Math.min(100,spent/c.limit*100):0}%"></span></div><div class="actions"><button class="btn danger" onclick="deleteCard('${c.id}')">Excluir cartão</button></div></div>`;
- }).join(''),'Cadastre seu primeiro cartão acima.');
+renderCardOptions();
+showList('cardList',db.cards.map(c=>{
+const spent=cardOutstanding(c.id),available=Math.max(0,c.limit-spent);
+return `<div class="panel"><b>${esc(c.name)}</b><p class="muted">Limite: ${money(c.limit)}<br>Compras ainda não pagas: ${money(spent)}<br>Limite disponível estimado: ${money(available)}<br>Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</p><div class="bar"><span style="width:${c.limit?Math.min(100,spent/c.limit*100):0}%"></span></div><div class="actions"><button class="btn danger" onclick="deleteCard('${c.id}')">Excluir cartão</button></div></div>`;
+}).join(''),'Cadastre seu primeiro cartão acima.');
 }
 $('cardForm').addEventListener('submit',e=>{
- e.preventDefault();
- const name=$('cardName').value.trim(),limit=val('cardLimit'),close=Number($('cardClose').value),due=Number($('cardDue').value);
- if(!name||close<1||close>28||due<1||due>28){alert('Confira o nome e os dias do cartão.');return}
- db.cards.push({id:idnew(),name,limit,close,due});
- save();e.target.reset();$('cardClose').value=5;$('cardDue').value=10;renderAll();alert('Cartão cadastrado.');
+e.preventDefault();
+const name=$('cardName').value.trim(),limit=val('cardLimit'),close=Number($('cardClose').value),due=Number($('cardDue').value);
+if(!name||close<1||close>28||due<1||due>28){alert('Confira o nome e os dias do cartão.');return}
+db.cards.push({id:idnew(),name,limit,close,due});
+save();e.target.reset();$('cardClose').value=5;$('cardDue').value=10;renderAll();alert('Cartão cadastrado.');
 });
 function deleteCard(id){
- if(db.purchases.some(p=>p.cardId===id)&&!confirm('Este cartão tem compras. Excluir o cartão e todas as parcelas dele?'))return;
- if(!db.purchases.some(p=>p.cardId===id)&&!confirm('Excluir este cartão?'))return;
- db.cards=db.cards.filter(c=>c.id!==id);db.purchases=db.purchases.filter(p=>p.cardId!==id);save();renderAll();
+if(db.purchases.some(p=>p.cardId===id)&&!confirm('Este cartão tem compras. Excluir o cartão e todas as parcelas dele?'))return;
+if(!db.purchases.some(p=>p.cardId===id)&&!confirm('Excluir este cartão?'))return;
+db.cards=db.cards.filter(c=>c.id!==id);db.purchases=db.purchases.filter(p=>p.cardId!==id);save();renderAll();
 }
 $('purchaseForm').addEventListener('submit',e=>{
- e.preventDefault();
- const card=db.cards.find(c=>c.id===$('purchaseCard').value);
- const date=$('cDate').value,amount=val('cValue'),parts=Math.min(48,Math.max(1,parseInt($('cParts').value)||1));
- if(!card){alert('Cadastre e selecione um cartão primeiro.');return}
- if(!date||amount<=0){alert('Confira a data e o valor.');return}
- const cents=Math.round(amount*100),base=Math.floor(cents/parts),extra=cents%parts;
- const first=invoiceMonth(date,card.close);
- for(let i=0;i<parts;i++){
-  const month=addDate(first+'-01','month',i).slice(0,7);
-  db.purchases.push({id:idnew(),purchaseId:idnew(),cardId:card.id,date,month,desc:$('cDesc').value.trim(),category:$('cCat').value,value:(base+(i<extra?1:0))/100,part:i+1,parts,status:'pending'});
- }
- save();e.target.reset();$('cDate').value=today();$('cParts').value=1;renderAll();alert('Compra registrada nas faturas mensais.');
+e.preventDefault();
+const card=db.cards.find(c=>c.id===$('purchaseCard').value);
+const date=$('cDate').value,amount=val('cValue'),parts=Math.min(48,Math.max(1,parseInt($('cParts').value)||1));
+if(!card){alert('Cadastre e selecione um cartão primeiro.');return}
+if(!date||amount<=0){alert('Confira a data e o valor.');return}
+const cents=Math.round(amount*100),base=Math.floor(cents/parts),extra=cents%parts;
+const first=invoiceMonth(date,card.close);
+for(let i=0;i<parts;i++){
+const month=addDate(first+'-01','month',i).slice(0,7);
+db.purchases.push({id:idnew(),purchaseId:idnew(),cardId:card.id,date,month,desc:$('cDesc').value.trim(),category:$('cCat').value,value:(base+(i<extra?1:0))/100,part:i+1,parts,status:'pending'});
+}
+save();e.target.reset();$('cDate').value=today();$('cParts').value=1;renderAll();alert('Compra registrada nas faturas mensais.');
 });
 function renderInvoices(){
- const card=db.cards.find(c=>c.id===$('invoiceCard').value),month=$('invoiceMonth').value||thisMonth();
- if(!card){$('invoiceSummary').innerHTML='<p class="muted">Cadastre um cartão para visualizar faturas.</p>';showList('invoiceList','');return}
- const rows=db.purchases.filter(p=>p.cardId===card.id&&p.month===month);
- const total=rows.reduce((s,p)=>s+p.value,0),pending=rows.filter(p=>p.status!=='paid').reduce((s,p)=>s+p.value,0);
- $('invoiceSummary').innerHTML=`<div class="card"><small>${esc(card.name)} · Fatura ${month}</small><strong>${money(total)}</strong><p class="muted">Pendente: ${money(pending)} · Fechamento dia ${card.close} · Vencimento dia ${card.due}</p></div>`;
- showList('invoiceList',rows.map(p=>`<div class="item"><div class="detail"><b>${esc(p.desc)}</b><small>${esc(p.category)} · Parcela ${p.part}/${p.parts}<br>${p.date}</small><span class="tag">${p.status==='paid'?'Paga':'Pendente'}</span></div><div class="amount">${money(p.value)}<div class="actions"><button class="btn light" onclick="togglePurchase('${p.id}')">${p.status==='paid'?'Reabrir':'Marcar paga'}</button></div></div></div>`).join(''),'Nenhuma compra nesta fatura.');
+const card=db.cards.find(c=>c.id===$('invoiceCard').value),month=$('invoiceMonth').value||thisMonth();
+if(!card){$('invoiceSummary').innerHTML='<p class="muted">Cadastre um cartão para visualizar faturas.</p>';showList('invoiceList','');return}
+const rows=db.purchases.filter(p=>p.cardId===card.id&&p.month===month);
+const total=rows.reduce((s,p)=>s+p.value,0),pending=rows.filter(p=>p.status!=='paid').reduce((s,p)=>s+p.value,0);
+$('invoiceSummary').innerHTML=`<div class="card"><small>${esc(card.name)} · Fatura ${month}</small><strong>${money(total)}</strong><p class="muted">Pendente: ${money(pending)} · Fechamento dia ${card.close} · Vencimento dia ${card.due}</p></div>`;
+showList('invoiceList',rows.map(p=>`<div class="item"><div class="detail"><b>${esc(p.desc)}</b><small>${esc(p.category)} · Parcela ${p.part}/${p.parts}<br>${p.date}</small><span class="tag">${p.status==='paid'?'Paga':'Pendente'}</span></div><div class="amount">${money(p.value)}<div class="actions"><button class="btn light" onclick="togglePurchase('${p.id}')">${p.status==='paid'?'Reabrir':'Marcar paga'}</button></div></div></div>`).join(''),'Nenhuma compra nesta fatura.');
 }
 function togglePurchase(id){
- const p=db.purchases.find(x=>x.id===id);if(!p)return;
- p.status=p.status==='paid'?'pending':'paid';save();renderAll();
+const p=db.purchases.find(x=>x.id===id);if(!p)return;
+p.status=p.status==='paid'?'pending':'paid';save();renderAll();
 }
-
-/* Uber/99 */
 $('uberForm').addEventListener('submit',e=>{
- e.preventDefault();
- const fuel=val('uFuel'),fp=val('uFPix'),fc=val('uFCash');
- if(Math.abs(fuel-fp-fc)>.02){alert('A soma do combustível por Pix e dinheiro precisa igualar o total.');return}
- if(!$('uDate').value){alert('Informe a data.');return}
- db.uber.push({id:idnew(),date:$('uDate').value,km:val('uKm'),hours:val('uHours'),pix:val('uPix'),cash:val('uCash'),category:$('uCat').value,epix:val('uEPix'),ecash:val('uECash'),fuel});
- save();e.target.reset();$('uDate').value=today();
- ['uKm','uHours','uPix','uCash','uEPix','uECash','uFuel','uFPix','uFCash'].forEach(id=>$(id).value=0);
- renderAll();alert('Dia de trabalho salvo.');
+e.preventDefault();
+const fuel=val('uFuel'),fp=val('uFPix'),fc=val('uFCash');
+if(Math.abs(fuel-fp-fc)>.02){alert('A soma do combustível por Pix e dinheiro precisa igualar o total.');return}
+if(!$('uDate').value){alert('Informe a data.');return}
+db.uber.push({id:idnew(),date:$('uDate').value,km:val('uKm'),hours:val('uHours'),pix:val('uPix'),cash:val('uCash'),category:$('uCat').value,epix:val('uEPix'),ecash:val('uECash'),fuel});
+save();e.target.reset();$('uDate').value=today();
+['uKm','uHours','uPix','uCash','uEPix','uECash','uFuel','uFPix','uFCash'].forEach(id=>$(id).value=0);
+renderAll();alert('Dia de trabalho salvo.');
 });
 function deleteUber(id){
- if(!confirm('Excluir este registro Uber/99?'))return;
- db.uber=db.uber.filter(a=>a.id!==id);save();renderAll();
+if(!confirm('Excluir este registro Uber/99?'))return;
+db.uber=db.uber.filter(a=>a.id!==id);save();renderAll();
 }
 function renderUber(){
- const m=$('uFilter').value||thisMonth(),s=uberStats(m);
- $('uGains').textContent=money(s.gains);$('uCosts').textContent=money(s.costs);
- $('uProfit').textContent=money(s.profit);$('uReserve').textContent=money(s.reserve);
- $('uKmTotal').textContent=s.km+' km';$('uHoursTotal').textContent=s.hours+' h';
- $('uHourRate').textContent=money(s.hours?s.profit/s.hours:0);
- $('uKmRate').textContent=money(s.km?s.profit/s.km:0);
- showList('uList',s.rows.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(a=>`<div class="item"><div class="detail"><b>${a.date}</b><small>Ganhos: ${money(uberG(a))}<br>Custos: ${money(uberC(a))}<br>${a.km} km · ${a.hours} h · ${esc(a.category)}</small></div><div class="amount">${money(uberG(a)-uberC(a))}<div class="actions"><button class="btn danger" onclick="deleteUber('${a.id}')">Excluir</button></div></div></div>`).join(''));
+const m=$('uFilter').value||thisMonth(),s=uberStats(m);
+$('uGains').textContent=money(s.gains);$('uCosts').textContent=money(s.costs);
+$('uProfit').textContent=money(s.profit);$('uReserve').textContent=money(s.reserve);
+$('uKmTotal').textContent=s.km+' km';$('uHoursTotal').textContent=s.hours+' h';
+$('uHourRate').textContent=money(s.hours?s.profit/s.hours:0);
+$('uKmRate').textContent=money(s.km?s.profit/s.km:0);
+showList('uList',s.rows.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(a=>`<div class="item"><div class="detail"><b>${a.date}</b><small>Ganhos: ${money(uberG(a))}<br>Custos: ${money(uberC(a))}<br>${a.km} km · ${a.hours} h · ${esc(a.category)}</small></div><div class="amount">${money(uberG(a)-uberC(a))}<div class="actions"><button class="btn danger" onclick="deleteUber('${a.id}')">Excluir</button></div></div></div>`).join(''));
 }
-
-/* Metas */
 $('goalForm').addEventListener('submit',e=>{
- e.preventDefault();
- const target=val('gTarget');
- if(!target){alert('Informe o valor desejado.');return}
- db.goals.push({id:idnew(),name:$('gName').value.trim(),target,saved:val('gSaved')});
- save();e.target.reset();$('gSaved').value=0;renderAll();
+e.preventDefault();
+const target=val('gTarget');
+if(!target){alert('Informe o valor desejado.');return}
+db.goals.push({id:idnew(),name:$('gName').value.trim(),target,saved:val('gSaved')});
+save();e.target.reset();$('gSaved').value=0;renderAll();
 });
 function updateGoal(id){
- const g=db.goals.find(x=>x.id===id);if(!g)return;
- const n=prompt('Quanto já guardou?',String(g.saved));if(n===null)return;
- if(!Number.isFinite(Number(n))||Number(n)<0){alert('Valor inválido.');return}
- g.saved=Number(n);save();renderAll();
+const g=db.goals.find(x=>x.id===id);if(!g)return;
+const n=prompt('Quanto já guardou?',String(g.saved));if(n===null)return;
+if(!Number.isFinite(Number(n))||Number(n)<0){alert('Valor inválido.');return}
+g.saved=Number(n);save();renderAll();
 }
 function deleteGoal(id){
- if(!confirm('Excluir esta meta?'))return;
- db.goals=db.goals.filter(g=>g.id!==id);save();renderAll();
+if(!confirm('Excluir esta meta?'))return;
+db.goals=db.goals.filter(g=>g.id!==id);save();renderAll();
 }
 function renderGoals(){
- showList('goalList',db.goals.map(g=>{
-  const pct=Math.min(100,g.saved/g.target*100);
-  return `<div class="panel"><b>${esc(g.name)}</b><p class="muted">${money(g.saved)} de ${money(g.target)} · ${pct.toFixed(0)}%</p><div class="bar"><span style="width:${pct}%"></span></div><div class="actions"><button class="btn light" onclick="updateGoal('${g.id}')">Atualizar</button><button class="btn danger" onclick="deleteGoal('${g.id}')">Excluir</button></div></div>`;
- }).join(''),'Nenhuma meta cadastrada.');
+showList('goalList',db.goals.map(g=>{
+const pct=Math.min(100,g.saved/g.target*100);
+return `<div class="panel"><b>${esc(g.name)}</b><p class="muted">${money(g.saved)} de ${money(g.target)} · ${pct.toFixed(0)}%</p><div class="bar"><span style="width:${pct}%"></span></div><div class="actions"><button class="btn light" onclick="updateGoal('${g.id}')">Atualizar</button><button class="btn danger" onclick="deleteGoal('${g.id}')">Excluir</button></div></div>`;
+}).join(''),'Nenhuma meta cadastrada.');
 }
-
-/* Relatórios */
 function renderReports(){
- const m=$('reportMonth').value||thisMonth(),inc=personalSum(m,'in','paid'),out=personalSum(m,'out','paid'),u=uberStats(m);
- $('reportSummary').innerHTML=`<div class="grid"><div class="card"><small>Entradas pessoais</small><strong class="green">${money(inc)}</strong></div><div class="card"><small>Despesas pessoais</small><strong class="red">${money(out)}</strong></div><div class="card"><small>Resultado pessoal</small><strong>${money(inc-out)}</strong></div><div class="card"><small>Ganhos Uber/99</small><strong>${money(u.gains)}</strong></div><div class="card"><small>Custos Uber/99</small><strong>${money(u.costs)}</strong></div><div class="card"><small>Lucro real Uber/99</small><strong>${money(u.profit)}</strong></div></div><p class="muted">Reserva sugerida: ${money(u.reserve)} · ${u.km} km · ${u.hours} horas</p>`;
- const cats={};
- db.personal.filter(a=>isMonth(a.date,m)&&a.type==='out'&&a.status==='paid').forEach(a=>cats[a.category]=(cats[a.category]||0)+a.value);
- showList('reportCats',Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([name,total])=>`<div class="item"><span>${esc(name)}</span><b>${money(total)}</b></div>`).join(''),'Nenhuma despesa paga neste mês.');
- const rows=u.rows.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(a=>`<tr><td>${a.date}</td><td>${money(uberG(a))}</td><td>${money(uberC(a))}</td><td>${money(uberG(a)-uberC(a))}</td><td>${a.km}</td><td>${a.hours}</td></tr>`).join('');
- $('reportUber').innerHTML=rows?`<div class="tablewrap"><table><thead><tr><th>Data</th><th>Ganhos</th><th>Custos</th><th>Lucro</th><th>Km</th><th>Horas</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty">Nenhum dia de trabalho neste mês.</div>';
+const m=$('reportMonth').value||thisMonth(),inc=personalSum(m,'in','paid'),out=personalSum(m,'out','paid'),u=uberStats(m);
+$('reportSummary').innerHTML=`<div class="grid"><div class="card"><small>Entradas pessoais</small><strong class="green">${money(inc)}</strong></div><div class="card"><small>Despesas pessoais</small><strong class="red">${money(out)}</strong></div><div class="card"><small>Resultado pessoal</small><strong>${money(inc-out)}</strong></div><div class="card"><small>Ganhos Uber/99</small><strong>${money(u.gains)}</strong></div><div class="card"><small>Custos Uber/99</small><strong>${money(u.costs)}</strong></div><div class="card"><small>Lucro real Uber/99</small><strong>${money(u.profit)}</strong></div></div><p class="muted">Reserva sugerida: ${money(u.reserve)} · ${u.km} km · ${u.hours} horas</p>`;
+const cats={};
+db.personal.filter(a=>isMonth(a.date,m)&&a.type==='out'&&a.status==='paid').forEach(a=>cats[a.category]=(cats[a.category]||0)+a.value);
+showList('reportCats',Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([name,total])=>`<div class="item"><span>${esc(name)}</span><b>${money(total)}</b></div>`).join(''),'Nenhuma despesa paga neste mês.');
+const rows=u.rows.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(a=>`<tr><td>${a.date}</td><td>${money(uberG(a))}</td><td>${money(uberC(a))}</td><td>${money(uberG(a)-uberC(a))}</td><td>${a.km}</td><td>${a.hours}</td></tr>`).join('');
+$('reportUber').innerHTML=rows?`<div class="tablewrap"><table><thead><tr><th>Data</th><th>Ganhos</th><th>Custos</th><th>Lucro</th><th>Km</th><th>Horas</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty">Nenhum dia de trabalho neste mês.</div>';
 }
 function renderAll(){
- renderDashboard();renderPersonal();renderBalances();renderCards();renderInvoices();renderUber();renderGoals();renderReports();
+renderDashboard();renderPersonal();renderBalances();renderCards();renderInvoices();renderUber();renderGoals();renderReports();
+}
+function exportLocalBackup(){
+const backup={app:'Meu Financeiro Pro 2.0',version:2,exportedAt:new Date().toISOString(),localStorage:{}};
+['MFP_V2','MF'].forEach(k=>{
+const v=localStorage.getItem(k);
+if(v!==null)backup.localStorage[k]=v;
+});
+if(!Object.keys(backup.localStorage).length){
+backup.localStorage.MFP_V2=JSON.stringify(db);
+}
+const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;a.download='backup-meu-financeiro.json';
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+alert('Backup baixado. Guarde o arquivo em local seguro.');
+}
+function importLocalBackup(event){
+const file=event.target.files&&event.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=()=>{
+try{
+const backup=JSON.parse(reader.result);
+if(!backup||!backup.localStorage||typeof backup.localStorage!=='object')throw new Error('Arquivo inválido');
+const raw=backup.localStorage.MFP_V2;
+if(!raw)throw new Error('O backup não contém os dados MFP_V2');
+const parsed=JSON.parse(raw);
+if(!parsed||!Array.isArray(parsed.personal)||!Array.isArray(parsed.uber)||!Array.isArray(parsed.cards)||!Array.isArray(parsed.purchases)||!Array.isArray(parsed.goals))throw new Error('Estrutura de dados inválida');
+if(!confirm('Restaurar este backup substituirá os dados atuais deste aparelho. Deseja continuar?'))return;
+localStorage.setItem('MFP_V2',JSON.stringify(parsed));
+if(backup.localStorage.MF)localStorage.setItem('MF',backup.localStorage.MF);
+db=parsed;
+alert('Backup restaurado. O aplicativo será recarregado.');
+location.reload();
+}catch(err){
+alert('Não foi possível restaurar: '+err.message);
+}finally{
+event.target.value='';
+}
+};
+reader.readAsText(file);
 }
 function init(){
- ['pDate','cDate','uDate'].forEach(id=>$(id).value=today());
- ['pFilter','uFilter','invoiceMonth','reportMonth'].forEach(id=>$(id).value=thisMonth());
- repeatFields();renderAll();
+['pDate','cDate','uDate'].forEach(id=>$(id).value=today());
+['pFilter','uFilter','invoiceMonth','reportMonth'].forEach(id=>$(id).value=thisMonth());
+updatePersonalCategories();repeatFields();renderAll();
 }
 window.addEventListener('load',init);
 </script>
