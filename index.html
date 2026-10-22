@@ -6,499 +6,1139 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Meu Financeiro Pro 2.0</title>
 <style>
-:root{--blue:#1769e0;--dark:#1048a0;--bg:#f3f6fc;--white:#fff;--text:#202b3c;--muted:#697586;--line:#e2e8f0;--green:#168653;--red:#d92d20}
+:root{
+  --blue:#1769e0;
+  --dark:#1048a0;
+  --bg:#f3f6fc;
+  --white:#fff;
+  --text:#202b3c;
+  --muted:#697586;
+  --green:#14804a;
+  --red:#c62828;
+  --border:#dce4f0;
+  --shadow:0 3px 12px rgba(30,60,100,.08)
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
-header{padding:21px 16px;color:white;background:linear-gradient(135deg,var(--blue),var(--dark))}
-header h1{margin:0 0 6px;font-size:23px}
-header p{margin:0;font-size:13px;opacity:.9}
-.backup-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.backup-buttons button{border:0;border-radius:9px;padding:11px;background:white;color:#1048a0;font-weight:bold}
-nav{position:sticky;top:0;z-index:10;display:flex;gap:7px;overflow-x:auto;padding:10px;background:white;box-shadow:0 2px 8px #10264b12}
-nav button{flex:none;padding:11px 13px;border:0;border-radius:10px;background:#edf3fc;color:#174b99;font-weight:bold}
-nav button.on{background:var(--blue);color:white}
-main{max-width:1100px;margin:auto;padding:14px}
-.page{display:none}.page.on{display:block}
-h2{font-size:20px;margin:8px 0 15px}h3{font-size:16px;margin:0 0 13px}
-.panel,.card{background:white;border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:14px;box-shadow:0 3px 12px #12345a08}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.card small{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
-.card strong{font-size:20px;overflow-wrap:anywhere}
-.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}
-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-.field{min-width:0}.wide{grid-column:1/-1}
-label{display:block;font-size:12px;font-weight:bold;color:#475467;margin-bottom:5px}
-input,select{width:100%;min-width:0;padding:11px;border:1px solid #cfd8e6;border-radius:9px;background:white;font-size:14px;color:#172b4d}
-button{cursor:pointer;font-family:inherit}
-.btn{border:0;border-radius:9px;padding:11px 14px;background:var(--blue);color:white;font-weight:bold}
-.btn.light{background:#eaf1fc;color:#174b99}.btn.danger{background:#fff0ef;color:var(--red)}
-.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
-.list{display:grid;gap:9px}
-.item{background:white;border:1px solid var(--line);border-radius:11px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.item .detail{min-width:0;overflow-wrap:anywhere}.item small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
-.item .amount{text-align:right;font-weight:bold;white-space:nowrap}
-.tag{display:inline-block;margin-top:5px;padding:4px 7px;border-radius:20px;background:#eaf1fc;color:#174b99;font-size:11px}
-.muted{font-size:13px;color:var(--muted);line-height:1.6}
-.empty{padding:18px;text-align:center;color:var(--muted);background:white;border:1px dashed #cbd5e1;border-radius:10px}
-.bar{height:9px;background:#e7edf6;border-radius:9px;overflow:hidden;margin:9px 0}
-.bar span{display:block;height:100%;background:var(--blue)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
-.tablewrap{overflow-x:auto}
-@media(min-width:700px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}main{padding:22px}}
-@media(max-width:400px){main{padding:9px}.panel,.card{padding:11px}.card strong{font-size:18px}}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text)
+}
+header{
+  background:linear-gradient(135deg,var(--blue),var(--dark));
+  color:white;
+  padding:22px 16px;
+  text-align:center
+}
+header h1{margin:0 0 7px;font-size:25px}
+header p{margin:0;font-size:14px;opacity:.92}
+main{max-width:1050px;margin:auto;padding:14px}
+nav{
+  display:flex;gap:7px;flex-wrap:wrap;
+  margin:0 0 16px
+}
+nav button{
+  flex:1 1 auto;
+  border:1px solid var(--border);
+  background:white;color:var(--text);
+  border-radius:10px;padding:12px 10px;
+  font-weight:bold;cursor:pointer
+}
+nav button.active{
+  background:var(--blue);
+  border-color:var(--blue);color:white
+}
+.page{display:none}
+.page.active{display:block}
+h2{font-size:21px;margin:5px 0 15px}
+h3{font-size:16px;margin:8px 0 12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:12px;margin-bottom:16px
+}
+.card{
+  background:white;border:1px solid var(--border);
+  border-radius:14px;padding:15px;
+  box-shadow:var(--shadow);min-width:0
+}
+.card .label{font-size:13px;color:var(--muted);margin-bottom:8px}
+.card .value{font-size:21px;font-weight:bold;overflow-wrap:anywhere}
+.card .small{font-size:12px;color:var(--muted);margin-top:7px}
+.green{color:var(--green)!important}
+.red{color:var(--red)!important}
+.blue{color:var(--blue)!important}
+.panel{
+  background:white;border:1px solid var(--border);
+  border-radius:14px;padding:16px;margin-bottom:15px;
+  box-shadow:var(--shadow)
+}
+.formgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px
+}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+label{font-size:13px;font-weight:bold;color:#435168}
+input,select,textarea{
+  width:100%;min-width:0;
+  padding:11px;border:1px solid #ccd7e6;
+  border-radius:9px;background:white;
+  color:var(--text);font-size:15px
+}
+input:focus,select:focus,textarea:focus{
+  outline:2px solid #b9d4ff;border-color:var(--blue)
+}
+button{font-family:inherit}
+.btn{
+  border:0;border-radius:9px;padding:12px 15px;
+  font-size:14px;font-weight:bold;cursor:pointer
+}
+.btn-primary{background:var(--blue);color:white}
+.btn-secondary{background:#eaf1fc;color:var(--dark)}
+.btn-danger{background:#ffeded;color:var(--red)}
+.btn-success{background:#e4f7ec;color:var(--green)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.actions .btn{flex:1 1 auto}
+.list{display:flex;flex-direction:column;gap:9px}
+.item{
+  background:white;border:1px solid var(--border);
+  border-radius:11px;padding:12px;
+  display:flex;align-items:flex-start;
+  justify-content:space-between;gap:10px
+}
+.item-main{flex:1;min-width:0}
+.item-title{font-weight:bold;overflow-wrap:anywhere}
+.item-meta{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
+.item-value{font-weight:bold;white-space:nowrap}
+.item-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.item-actions button{padding:7px 9px;font-size:12px}
+.tag{
+  display:inline-block;border-radius:20px;
+  padding:4px 8px;font-size:11px;font-weight:bold;
+  background:#edf2fa;color:#435168
+}
+.tag-paid{background:#e4f7ec;color:var(--green)}
+.tag-pending{background:#fff3d8;color:#8b5d00}
+.empty{
+  padding:20px;text-align:center;color:var(--muted);
+  border:1px dashed var(--border);border-radius:10px
+}
+.muted{color:var(--muted);font-size:13px;line-height:1.5}
+hr{border:0;border-top:1px solid var(--border);margin:16px 0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+@media(max-width:480px){
+  main{padding:10px}
+  header h1{font-size:22px}
+  .card{padding:12px}
+  .card .value{font-size:19px}
+  .panel{padding:12px}
+  .item{gap:7px}
+}
 </style>
 </head>
 <body>
 <header>
-<h1>Meu Financeiro Pro 2.0</h1>
-<p>Controle seu dinheiro, cartões e trabalho Uber/99</p>
-<div class="backup-buttons">
-<button type="button" onclick="exportLocalBackup()">Baixar backup</button>
-<button type="button" onclick="$('restoreFile').click()">Restaurar backup</button>
-<input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="importLocalBackup(event)">
-</div>
+  <h1>Meu Financeiro Pro 2.0</h1>
+  <p>Controle seu dinheiro, contas, cartões e metas</p>
 </header>
-<nav>
-<button class="on" onclick="go('dashboard',this)">Dashboard</button>
-<button onclick="go('pessoal',this)">Pessoal</button>
-<button onclick="go('saldos',this)">Saldos</button>
-<button onclick="go('cartoes',this)">Cartões</button>
-<button onclick="go('uber',this)">Uber/99</button>
-<button onclick="go('metas',this)">Metas</button>
-<button onclick="go('relatorios',this)">Relatórios</button>
-</nav>
+
 <main>
-<section id="dashboard" class="page on">
-<h2>Visão geral</h2>
-<div class="grid">
-<div class="card"><small>Entradas pessoais pagas</small><strong id="dashIn" class="green">R$ 0,00</strong></div>
-<div class="card"><small>Despesas pessoais pagas</small><strong id="dashOut" class="red">R$ 0,00</strong></div>
-<div class="card"><small>Saldo do mês pessoal</small><strong id="dashBalance">R$ 0,00</strong></div>
-<div class="card"><small>Ganhos Uber/99</small><strong id="dashUber" class="green">R$ 0,00</strong></div>
-<div class="card"><small>Custos Uber/99</small><strong id="dashCosts" class="red">R$ 0,00</strong></div>
-<div class="card"><small>Lucro real Uber/99</small><strong id="dashProfit">R$ 0,00</strong></div>
-<div class="card"><small>Reserva sugerida de 10%</small><strong id="dashReserve" class="blue">R$ 0,00</strong></div>
-</div>
-<div class="panel" style="margin-top:14px">
-<h3>Resumo do mês</h3>
-<div id="dashSummary" class="muted"></div>
-<hr>
-<h3>Contas pessoais pendentes</h3>
-<div id="dashPending" class="list"></div>
-</div>
+<nav id="mainNav">
+  <button class="active" onclick="go('dashboard',this)">Dashboard</button>
+  <button onclick="go('pessoal',this)">Pessoal</button>
+  <button onclick="go('saldos',this)">Saldos</button>
+  <button onclick="go('cartao',this)">Cartão</button>
+  <button onclick="go('metas',this)">Metas</button>
+  <button onclick="go('relatorios',this)">Relatórios</button>
+</nav>
+
+<section id="dashboard" class="page active">
+  <h2>Meu resumo financeiro</h2>
+  <div class="panel">
+    <div class="field">
+      <label for="dashMonth">Mês do resumo</label>
+      <input type="month" id="dashMonth" onchange="renderDashboard()">
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Entradas recebidas</div>
+      <div class="value green" id="dashIncome">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="label">Despesas pagas</div>
+      <div class="value red" id="dashExpenses">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="label">Lucro real</div>
+      <div class="value blue" id="dashProfit">R$ 0,00</div>
+      <div class="small">Entradas recebidas menos despesas pagas</div>
+    </div>
+    <div class="card">
+      <div class="label">Saldo disponível</div>
+      <div class="value" id="dashBalance">R$ 0,00</div>
+      <div class="small">Pix + dinheiro registrados</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Contas pendentes</h3>
+    <div class="grid">
+      <div class="card">
+        <div class="label">Despesas a pagar</div>
+        <div class="value red" id="dashPendingExpenses">R$ 0,00</div>
+      </div>
+      <div class="card">
+        <div class="label">Valores a receber</div>
+        <div class="value green" id="dashPendingIncome">R$ 0,00</div>
+      </div>
+      <div class="card">
+        <div class="label">Fatura atual</div>
+        <div class="value" id="dashInvoice">R$ 0,00</div>
+      </div>
+    </div>
+    <div id="dashDueList" class="list"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Entradas e despesas do mês</h3>
+    <div id="dashSummary" class="list"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Backup dos seus dados</h3>
+    <p class="muted">Guarde uma cópia dos seus lançamentos em um lugar seguro. O backup permite transferir dados manualmente entre aparelhos.</p>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="exportLocalBackup()">Baixar backup</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('backupFile').click()">Restaurar backup</button>
+      <input id="backupFile" type="file" accept=".json,application/json" style="display:none" onchange="importLocalBackup(event)">
+    </div>
+  </div>
 </section>
 
 <section id="pessoal" class="page">
-<h2>Finanças pessoais</h2>
-<div class="panel">
-<h3>Novo lançamento</h3>
-<form id="personalForm">
-<div class="field"><label>Data</label><input type="date" id="pDate" required></div>
-<div class="field"><label>Tipo</label><select id="pType" onchange="updatePersonalCategories()"><option value="in">Entrada</option><option value="out">Despesa</option></select></div>
-<div class="field"><label>Categoria</label><select id="pCat"></select></div>
-<div class="field"><label>Valor (R$)</label><input type="number" id="pValue" min=".01" step=".01" required></div>
-<div class="field wide"><label>Descrição</label><input id="pDesc" required placeholder="Ex.: conta de luz"></div>
-<div class="field"><label>Forma</label><select id="pMethod"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Débito</option><option>Transferência</option><option>Outro</option></select></div>
-<div class="field"><label>Status</label><select id="pStatus"><option value="paid">Pago/Recebido</option><option value="pending">Pendente</option></select></div>
-<div class="field"><label>Recorrência</label><select id="pRepeat" onchange="repeatFields()"><option value="once">Uma vez</option><option value="fixed">Fixa mensal (12 meses)</option><option value="repeat">Repetir por período</option></select></div>
-<div class="field" id="periodField" style="display:none"><label>Repetir a cada</label><select id="pPeriod"><option value="day">Dia</option><option value="week">Semana</option><option value="month">Mês</option></select></div>
-<div class="field" id="qtyField" style="display:none"><label>Quantidade</label><input type="number" id="pQty" min="1" max="60" value="3"></div>
-<div class="field wide"><button class="btn" type="submit">Salvar lançamento</button></div>
-</form>
-</div>
-<div class="panel"><h3>Histórico pessoal</h3><div class="field"><label>Filtrar por mês</label><input type="month" id="pFilter" onchange="renderAll()"></div><div class="actions"><button class="btn light" onclick="$('pFilter').value='';renderAll()">Mostrar todos</button></div><div id="pList" class="list" style="margin-top:12px"></div></div>
-</section>
+  <h2>Finanças pessoais</h2>
+  <div class="panel">
+    <h3 id="personalFormTitle">Novo lançamento</h3>
+    <form id="personalForm">
+      <input type="hidden" id="pId">
+      <div class="formgrid">
+        <div class="field">
+          <label for="pDate">Data</label>
+          <input type="date" id="pDate" required>
+        </div>
+        <div class="field">
+          <label for="pType">Tipo</label>
+          <select id="pType" required onchange="updatePersonalCategories()">
+            <option value="entrada">Entrada</option>
+            <option value="despesa">Despesa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pCategory">Categoria</label>
+          <select id="pCategory" required></select>
+        </div>
+        <div class="field">
+          <label for="pValue">Valor (R$)</label>
+          <input type="number" id="pValue" min="0.01" step="0.01" placeholder="0,00" required>
+        </div>
+        <div class="field">
+          <label for="pDesc">Descrição</label>
+          <input type="text" id="pDesc" maxlength="100" placeholder="Ex.: conta de luz">
+        </div>
+        <div class="field">
+          <label for="pMethod">Forma de pagamento/recebimento</label>
+          <select id="pMethod" required>
+            <option value="Pix">Pix</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão">Cartão</option>
+            <option value="Transferência">Transferência</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pStatus">Situação</label>
+          <select id="pStatus" required>
+            <option value="pago">Pago/Recebido</option>
+            <option value="pendente">Pendente</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pRepeat">Recorrência</label>
+          <select id="pRepeat" onchange="repeatFields()">
+            <option value="once">Uma vez</option>
+            <option value="fixed">Fixa mensal, sem prazo final</option>
+            <option value="repeat">Repetir por período</option>
+          </select>
+        </div>
+        <div class="field" id="repeatPeriodBox" style="display:none">
+          <label for="pPeriod">Periodicidade</label>
+          <select id="pPeriod">
+            <option value="day">Diária</option>
+            <option value="week">Semanal</option>
+            <option value="month">Mensal</option>
+          </select>
+        </div>
+        <div class="field" id="repeatCountBox" style="display:none">
+          <label for="pRepeatCount">Quantidade de lançamentos</label>
+          <input type="number" id="pRepeatCount" min="1" max="60" value="2">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" type="submit" id="pSaveBtn">Salvar lançamento</button>
+        <button class="btn btn-secondary" type="button" onclick="resetPersonalForm()">Limpar</button>
+      </div>
+      <p class="muted">Uma despesa fixa mensal continuará sendo gerada até você cancelar ou excluir a série. A opção “Repetir por período” permite definir uma quantidade de lançamentos.</p>
+    </form>
+  </div>
 
+  <div class="panel">
+    <h3>Histórico pessoal</h3>
+    <div class="formgrid">
+      <div class="field">
+        <label for="pFilter">Filtrar por mês</label>
+        <input type="month" id="pFilter" onchange="renderPersonal()">
+      </div>
+      <div class="field">
+        <label for="pFilterType">Tipo de lançamento</label>
+        <select id="pFilterType" onchange="renderPersonal()">
+          <option value="todos">Todos</option>
+          <option value="entrada">Entradas</option>
+          <option value="despesa">Despesas</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pFilterStatus">Situação</label>
+        <select id="pFilterStatus" onchange="renderPersonal()">
+          <option value="todos">Todas</option>
+          <option value="pago">Pago/Recebido</option>
+          <option value="pendente">Pendente</option>
+        </select>
+      </div>
+    </div>
+    <hr>
+    <div id="personalList" class="list"></div>
+  </div>
+</section>
+  
 <section id="saldos" class="page">
-<h2>Meus saldos</h2>
-<div class="grid">
-<div class="card"><small>Saldo Pix pessoal</small><strong id="pixBalance" class="blue">R$ 0,00</strong></div>
-<div class="card"><small>Saldo em dinheiro</small><strong id="cashBalance" class="green">R$ 0,00</strong></div>
-<div class="card"><small>Saldo pessoal total</small><strong id="totalBalance">R$ 0,00</strong></div>
-</div>
-<div class="panel"><p class="muted">Somente lançamentos pessoais pagos por Pix ou dinheiro entram nesses saldos. Cartão, pendências e ganhos Uber/99 ficam separados.</p></div>
+  <h2>Meus saldos</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Saldo Pix</div>
+      <div class="value blue" id="balancePix">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="label">Saldo em dinheiro</div>
+      <div class="value green" id="balanceCash">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="label">Saldo total</div>
+      <div class="value" id="balanceTotal">R$ 0,00</div>
+    </div>
+  </div>
+  <div class="panel">
+    <p class="muted">Os saldos são calculados com base nas entradas recebidas e despesas pagas registradas por forma de pagamento. Lançamentos pendentes não alteram os saldos.</p>
+  </div>
 </section>
 
-<section id="cartoes" class="page">
-<h2>Cartões de crédito</h2>
-<div class="panel">
-<h3>Cadastrar cartão</h3>
-<form id="cardForm">
-<div class="field wide"><label>Nome do cartão</label><input id="cardName" required placeholder="Ex.: Nubank, Itaú, Inter"></div>
-<div class="field"><label>Limite total (R$)</label><input id="cardLimit" type="number" min="0" step=".01" required></div>
-<div class="field"><label>Dia de fechamento</label><input id="cardClose" type="number" min="1" max="28" value="5" required></div>
-<div class="field"><label>Dia de vencimento</label><input id="cardDue" type="number" min="1" max="28" value="10" required></div>
-<div class="field wide"><button class="btn" type="submit">Cadastrar cartão</button></div>
-</form>
-</div>
-<div class="panel"><h3>Meus cartões</h3><div id="cardList" class="list"></div></div>
-<div class="panel">
-<h3>Registrar compra</h3>
-<form id="purchaseForm">
-<div class="field wide"><label>Cartão</label><select id="purchaseCard" required></select></div>
-<div class="field"><label>Data da compra</label><input id="cDate" type="date" required></div>
-<div class="field"><label>Valor total (R$)</label><input id="cValue" type="number" min=".01" step=".01" required></div>
-<div class="field wide"><label>Descrição</label><input id="cDesc" required placeholder="Ex.: mercado"></div>
-<div class="field"><label>Categoria</label><select id="cCat"><option>Mercado</option><option>Alimentação</option><option>Combustível</option><option>Casa</option><option>Saúde</option><option>Compras</option><option>Outros</option></select></div>
-<div class="field"><label>Número de parcelas</label><input id="cParts" type="number" min="1" max="48" value="1" required></div>
-<div class="field wide"><button class="btn" type="submit">Registrar compra</button></div>
-</form>
-</div>
-<div class="panel">
-<h3>Faturas</h3>
-<div class="field"><label>Cartão</label><select id="invoiceCard" onchange="renderInvoices()"></select></div>
-<div class="field" style="margin-top:10px"><label>Mês da fatura</label><input type="month" id="invoiceMonth" onchange="renderInvoices()"></div>
-<div id="invoiceSummary" style="margin-top:12px"></div>
-<div id="invoiceList" class="list"></div>
-</div>
-</section>
+<section id="cartao" class="page">
+  <h2>Cartões de crédito</h2>
+  <div class="panel">
+    <h3>Cadastrar cartão</h3>
+    <form id="cardForm">
+      <div class="formgrid">
+        <div class="field">
+          <label for="cName">Nome do cartão</label>
+          <input id="cName" required maxlength="50" placeholder="Ex.: Cartão principal">
+        </div>
+        <div class="field">
+          <label for="cClose">Dia de fechamento</label>
+          <input id="cClose" type="number" min="1" max="31" value="5" required>
+        </div>
+        <div class="field">
+          <label for="cDue">Dia de vencimento</label>
+          <input id="cDue" type="number" min="1" max="31" value="10" required>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Salvar cartão</button>
+      </div>
+    </form>
+  </div>
 
-<section id="uber" class="page">
-<h2>Controle Uber/99</h2>
-<div class="panel">
-<h3>Registrar dia de trabalho</h3>
-<form id="uberForm">
-<div class="field"><label>Data</label><input type="date" id="uDate" required></div>
-<div class="field"><label>Km trabalhados</label><input type="number" id="uKm" min="0" step=".1" value="0"></div>
-<div class="field"><label>Horas trabalhadas</label><input type="number" id="uHours" min="0" step=".25" value="0"></div>
-<div class="field"><label>Ganhos por Pix (R$)</label><input type="number" id="uPix" min="0" step=".01" value="0"></div>
-<div class="field"><label>Ganhos em dinheiro (R$)</label><input type="number" id="uCash" min="0" step=".01" value="0"></div>
-<div class="field"><label>Categoria da despesa</label><select id="uCat"><option>Manutenção</option><option>Lavagem do carro</option><option>Troca de óleo</option><option>Arrefecimento</option><option>Serviços mecânicos</option><option>Alimentação</option><option>Pedágio</option><option>Estacionamento</option><option>Outros</option></select></div>
-<div class="field"><label>Despesa por Pix (R$)</label><input type="number" id="uEPix" min="0" step=".01" value="0"></div>
-<div class="field"><label>Despesa em dinheiro (R$)</label><input type="number" id="uECash" min="0" step=".01" value="0"></div>
-<div class="field"><label>Combustível total (R$)</label><input type="number" id="uFuel" min="0" step=".01" value="0"></div>
-<div class="field"><label>Combustível por Pix (R$)</label><input type="number" id="uFPix" min="0" step=".01" value="0"></div>
-<div class="field"><label>Combustível em dinheiro (R$)</label><input type="number" id="uFCash" min="0" step=".01" value="0"></div>
-<div class="field wide"><p class="muted">A soma do combustível por Pix e dinheiro precisa corresponder ao combustível total.</p><button class="btn" type="submit">Salvar dia de trabalho</button></div>
-</form>
-</div>
-<div class="grid">
-<div class="card"><small>Ganhos</small><strong id="uGains" class="green">R$ 0,00</strong></div>
-<div class="card"><small>Custos</small><strong id="uCosts" class="red">R$ 0,00</strong></div>
-<div class="card"><small>Lucro real</small><strong id="uProfit">R$ 0,00</strong></div>
-<div class="card"><small>Reserva sugerida (10%)</small><strong id="uReserve" class="blue">R$ 0,00</strong></div>
-<div class="card"><small>Km trabalhados</small><strong id="uKmTotal">0 km</strong></div>
-<div class="card"><small>Horas trabalhadas</small><strong id="uHoursTotal">0 h</strong></div>
-<div class="card"><small>Lucro por hora</small><strong id="uHourRate">R$ 0,00</strong></div>
-<div class="card"><small>Lucro por km</small><strong id="uKmRate">R$ 0,00</strong></div>
-</div>
-<div class="panel" style="margin-top:14px"><h3>Histórico Uber/99</h3><div class="field"><label>Filtrar por mês</label><input type="month" id="uFilter" onchange="renderAll()"></div><div id="uList" class="list" style="margin-top:12px"></div></div>
+  <div class="panel">
+    <h3>Meus cartões</h3>
+    <div id="cardsList" class="list"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Registrar compra no cartão</h3>
+    <form id="purchaseForm">
+      <div class="formgrid">
+        <div class="field">
+          <label for="purchaseCard">Cartão</label>
+          <select id="purchaseCard" required></select>
+        </div>
+        <div class="field">
+          <label for="purchaseDate">Data da compra</label>
+          <input type="date" id="purchaseDate" required>
+        </div>
+        <div class="field">
+          <label for="purchaseDesc">Descrição</label>
+          <input id="purchaseDesc" maxlength="100" required placeholder="Ex.: compra no mercado">
+        </div>
+        <div class="field">
+          <label for="purchaseValue">Valor total (R$)</label>
+          <input id="purchaseValue" type="number" min="0.01" step="0.01" required>
+        </div>
+        <div class="field">
+          <label for="purchaseParts">Número de parcelas</label>
+          <input id="purchaseParts" type="number" min="1" max="60" value="1" required>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Registrar compra</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3>Faturas</h3>
+    <div class="formgrid">
+      <div class="field">
+        <label for="invoiceMonth">Mês da fatura</label>
+        <input type="month" id="invoiceMonth" onchange="renderInvoices()">
+      </div>
+    </div>
+    <hr>
+    <div id="invoiceList" class="list"></div>
+  </div>
 </section>
 
 <section id="metas" class="page">
-<h2>Metas financeiras</h2>
-<div class="panel"><h3>Nova meta</h3>
-<form id="goalForm">
-<div class="field wide"><label>Nome da meta</label><input id="gName" required placeholder="Ex.: reserva de emergência"></div>
-<div class="field"><label>Valor desejado (R$)</label><input id="gTarget" type="number" min=".01" step=".01" required></div>
-<div class="field"><label>Valor já guardado (R$)</label><input id="gSaved" type="number" min="0" step=".01" value="0"></div>
-<div class="field wide"><button class="btn" type="submit">Salvar meta</button></div>
-</form></div>
-<div id="goalList" class="list"></div>
+  <h2>Metas financeiras</h2>
+  <div class="panel">
+    <h3>Criar meta</h3>
+    <form id="goalForm">
+      <div class="formgrid">
+        <div class="field">
+          <label for="gName">Nome da meta</label>
+          <input id="gName" maxlength="70" required placeholder="Ex.: Reserva de emergência">
+        </div>
+        <div class="field">
+          <label for="gTarget">Valor desejado (R$)</label>
+          <input id="gTarget" type="number" min="0.01" step="0.01" required>
+        </div>
+        <div class="field">
+          <label for="gSaved">Valor já guardado (R$)</label>
+          <input id="gSaved" type="number" min="0" step="0.01" value="0" required>
+        </div>
+        <div class="field">
+          <label for="gDate">Data desejada (opcional)</label>
+          <input id="gDate" type="date">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Salvar meta</button>
+      </div>
+    </form>
+  </div>
+  <div class="panel">
+    <h3>Minhas metas</h3>
+    <div id="goalsList" class="list"></div>
+  </div>
 </section>
 
 <section id="relatorios" class="page">
-<h2>Relatórios</h2>
-<div class="panel">
-<div class="field"><label>Mês do relatório</label><input type="month" id="reportMonth" onchange="renderAll()"></div>
-<div id="reportSummary" style="margin-top:14px"></div>
-<h3 style="margin-top:18px">Despesas por categoria</h3><div id="reportCats" class="list"></div>
-<h3 style="margin-top:18px">Dias Uber/99</h3><div id="reportUber"></div>
-</div>
+  <h2>Relatórios pessoais</h2>
+  <div class="panel">
+    <div class="field">
+      <label for="reportMonth">Mês do relatório</label>
+      <input type="month" id="reportMonth" onchange="renderReports()">
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Entradas recebidas</div>
+      <div class="value green" id="reportIncome">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="label">Despesas pagas</div>
+      <div class="value red" id="reportExpenses">R$ 0,00</div>
+    </div>
+    <div class="card">
+      <div class="label">Resultado do mês</div>
+      <div class="value blue" id="reportProfit">R$ 0,00</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Resumo por categoria</h3>
+    <div id="reportCategories" class="list"></div>
+  </div>
+  <div class="panel">
+    <h3>Resumo por forma de pagamento</h3>
+    <div id="reportMethods" class="list"></div>
+  </div>
 </section>
+
+<footer>Meu Financeiro Pro 2.0 — controle pessoal do seu dinheiro</footer>
+</main>
+
 <script>
-const $=id=>document.getElementById(id);
-const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const thisMonth=()=>today().slice(0,7);
-const money=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const val=id=>Math.max(0,Number($(id).value)||0);
-const idnew=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const isMonth=(date,m)=>String(date||'').slice(0,7)===m;
-const blankDB=()=>({personal:[],uber:[],cards:[],purchases:[],goals:[]});
+const $ = id => document.getElementById(id);
+const money = n => (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const idnew = () => Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const today = () => {
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+};
+const thisMonth = () => today().slice(0,7);
+const monthOf = date => String(date||'').slice(0,7);
+const monthName = month => {
+  if(!month) return '';
+  const [y,m]=month.split('-').map(Number);
+  return new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+};
+const escapeHTML = value => String(value??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+const blankDB = () => ({
+  personal:[],uber:[],cards:[],purchases:[],goals:[]
+});
 
 let db;
-try{
-const saved=localStorage.getItem('MFP_V2');
-db=saved?JSON.parse(saved):blankDB();
-if(!db||!Array.isArray(db.personal)||!Array.isArray(db.uber)||!Array.isArray(db.cards)||!Array.isArray(db.purchases)||!Array.isArray(db.goals))db=blankDB();
-}catch(e){db=blankDB()}
+try {
+  db=JSON.parse(localStorage.getItem('MFP_V2')||'null')||blankDB();
+} catch(e) {
+  db=blankDB();
+}
+for(const key of ['personal','uber','cards','purchases','goals']){
+  if(!Array.isArray(db[key])) db[key]=[];
+}
 
-function save(){localStorage.setItem('MFP_V2',JSON.stringify(db))}
-function go(id,button){
-document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
-$(id).classList.add('on');
-document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
-if(button)button.classList.add('on');
-renderAll();
+/* Migração: remove os registros Uber/99 da área pessoal.
+   O arquivo de backup baixado anteriormente não é alterado. */
+if(localStorage.getItem('MFP_PERSONAL_ONLY_V1')!=='1'){
+  db.uber=[];
+  localStorage.setItem('MFP_PERSONAL_ONLY_V1','1');
+  localStorage.setItem('MFP_V2',JSON.stringify(db));
 }
-function showList(id,html,msg='Nenhum registro encontrado.'){
-$(id).innerHTML=html||`<div class="empty">${msg}</div>`;
+function save(){
+  localStorage.setItem('MFP_V2',JSON.stringify(db));
 }
+</script>
+
+<script>
+function go(page,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $(page)?.classList.add('active');
+  document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderAll();
+}
+
 function addDate(date,period,n){
-const d=new Date(date+'T12:00:00');
-if(period==='day')d.setDate(d.getDate()+n);
-if(period==='week')d.setDate(d.getDate()+7*n);
-if(period==='month')d.setMonth(d.getMonth()+n);
-return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const [y,m,d]=String(date).split('-').map(Number);
+  if(period==='day'){
+    const x=new Date(y,m-1,d+n);
+    return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
+  }
+  if(period==='week') return addDate(date,'day',n*7);
+  const index=(m-1)+n;
+  const ny=y+Math.floor(index/12);
+  const nm=((index%12)+12)%12;
+  const last=new Date(ny,nm+1,0).getDate();
+  return `${ny}-${String(nm+1).padStart(2,'0')}-${String(Math.min(d,last)).padStart(2,'0')}`;
 }
-function repeatFields(){
-const r=$('pRepeat').value;
-$('periodField').style.display=r==='repeat'?'block':'none';
-$('qtyField').style.display=r==='repeat'?'block':'none';
-}
+
 function updatePersonalCategories(){
-const type=$('pType').value;
-const cats=type==='in'
-?['Salário','Serviços','Empréstimo','Outros']
-:['Moradia','Mercado','Alimentação','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Outros'];
-const current=$('pCat').value;
-$('pCat').innerHTML=cats.map(c=>`<option>${esc(c)}</option>`).join('');
-if(cats.includes(current))$('pCat').value=current;
+  const type=$('pType').value;
+  const old=$('pCategory').value;
+  const categories=type==='entrada'
+    ? ['Salário','Serviços','Uber/99','Recebimentos','Investimento','Empréstimo','Outros']
+    : ['Moradia','Mercado','Alimentação','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Uber/99 pagamentos','Outros'];
+  $('pCategory').innerHTML=categories.map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+  if(categories.includes(old)) $('pCategory').value=old;
 }
-function personalSum(m,type,status){
-return db.personal.filter(a=>(!m||isMonth(a.date,m))&&(!type||a.type===type)&&(!status||a.status===status)).reduce((s,a)=>s+a.value,0);
+
+function repeatFields(){
+  const mode=$('pRepeat').value;
+  $('repeatPeriodBox').style.display=mode==='repeat'?'flex':'none';
+  $('repeatCountBox').style.display=mode==='repeat'?'flex':'none';
 }
-function uberG(a){return a.pix+a.cash}
-function uberC(a){return a.epix+a.ecash+a.fuel}
-function uberStats(m){
-const rows=db.uber.filter(a=>!m||isMonth(a.date,m));
-const gains=rows.reduce((s,a)=>s+Number(a.pix||0)+Number(a.cash||0),0);
-const costs=rows.reduce((s,a)=>s+Number(a.epix||0)+Number(a.ecash||0)+Number(a.fuel||0),0);
-const km=rows.reduce((s,a)=>s+Number(a.km||0),0);
-const hours=rows.reduce((s,a)=>s+Number(a.hours||0),0);
-return {rows,gains,costs,profit:gains-costs,reserve:Math.max(0,gains-costs)*.1,km,hours};
+
+function resetPersonalForm(){
+  $('personalForm').reset();
+  $('pId').value='';
+  $('pDate').value=today();
+  $('pRepeat').value='once';
+  $('pRepeatCount').value='2';
+  $('pStatus').value='pago';
+  $('pMethod').value='Pix';
+  $('personalFormTitle').textContent='Novo lançamento';
+  $('pSaveBtn').textContent='Salvar lançamento';
+  updatePersonalCategories();
+  repeatFields();
+}
+
+function personalSum(month,type,status){
+  return db.personal.filter(a=>
+    (!month||monthOf(a.date)===month)&&
+    (!type||a.type===type)&&
+    (!status||a.status===status)
+  ).reduce((s,a)=>s+(Number(a.value)||0),0);
+}
+
+/* Gera mensalmente as ocorrências das despesas fixas até o mês atual.
+   A série não possui prazo final e pode ser cancelada excluindo a série. */
+function ensureFixedOccurrences(){
+  let changed=false;
+  const groups={};
+  db.personal.filter(a=>a.seriesType==='fixed'&&a.series).forEach(a=>{
+    if(!groups[a.series]) groups[a.series]=[];
+    groups[a.series].push(a);
+  });
+  const now=thisMonth();
+  Object.values(groups).forEach(items=>{
+    items.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+    const base=items[0];
+    if(!base||!base.date) return;
+    const [sy,sm]=base.date.split('-').map(Number);
+    const [ny,nm]=now.split('-').map(Number);
+    const months=(ny-sy)*12+(nm-sm);
+    if(months<0) return;
+    for(let i=1;i<=months;i++){
+      const date=addDate(base.date,'month',i);
+      const exists=db.personal.some(a=>a.series===base.series&&monthOf(a.date)===monthOf(date));
+      if(!exists){
+        db.personal.push({
+          ...base,id:idnew(),date,
+          status:'pendente',
+          seriesIndex:i+1
+        });
+        changed=true;
+      }
+    }
+  });
+  if(changed) save();
+}
+
+$('personalForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const editId=$('pId').value;
+  const type=$('pType').value;
+  const date=$('pDate').value;
+  const value=Number($('pValue').value);
+  if(!date||!Number.isFinite(value)||value<=0){
+    alert('Informe uma data e um valor válido.');
+    return;
+  }
+  const mode=$('pRepeat').value;
+  const base={
+    date,type,
+    category:$('pCategory').value,
+    value,
+    desc:$('pDesc').value.trim(),
+    method:$('pMethod').value,
+    status:$('pStatus').value
+  };
+
+  if(editId){
+    const index=db.personal.findIndex(a=>a.id===editId);
+    if(index<0){alert('Lançamento não encontrado.');return;}
+    db.personal[index]={...db.personal[index],...base};
+    save();
+    resetPersonalForm();
+    renderAll();
+    alert('Lançamento atualizado!');
+    return;
+  }
+
+  if(mode==='repeat'){
+    const count=Math.max(1,Math.min(60,Number($('pRepeatCount').value)||1));
+    const period=$('pPeriod').value;
+    const series=idnew();
+    for(let i=0;i<count;i++){
+      db.personal.push({
+        ...base,
+        id:idnew(),
+        date:addDate(date,period,i),
+        series,seriesType:'repeat',
+        part:i+1,parts:count
+      });
+    }
+  }else if(mode==='fixed'){
+    const series=idnew();
+    db.personal.push({
+      ...base,id:idnew(),series,seriesType:'fixed',
+      seriesIndex:1,seriesStart:date
+    });
+  }else{
+    db.personal.push({...base,id:idnew()});
+  }
+
+  save();
+  resetPersonalForm();
+  renderAll();
+  if(mode==='fixed'){
+    alert('Despesa fixa cadastrada. Ela continuará mensalmente até você excluir a série.');
+  }else if(mode==='repeat'){
+    alert('Lançamentos repetidos cadastrados.');
+  }else{
+    alert('Lançamento salvo!');
+  }
+});
+
+function renderPersonal(){
+  const month=$('pFilter').value;
+  const type=$('pFilterType').value;
+  const status=$('pFilterStatus').value;
+  const list=db.personal.filter(a=>
+    (!month||monthOf(a.date)===month)&&
+    (type==='todos'||a.type===type)&&
+    (status==='todos'||a.status===status)
+  ).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+
+  if(!list.length){
+    $('personalList').innerHTML='<div class="empty">Nenhum lançamento encontrado.</div>';
+    return;
+  }
+
+  $('personalList').innerHTML=list.map(a=>{
+    const isIn=a.type==='entrada';
+    const extra=a.seriesType==='repeat'&&a.part&&a.parts
+      ? ` · ${a.part}/${a.parts}`
+      : a.seriesType==='fixed'?' · Fixa mensal':'';
+    return `<div class="item">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(a.desc||a.category||'Lançamento')}</div>
+        <div class="item-meta">${escapeHTML(a.date)} · ${escapeHTML(a.category||'Outros')} · ${escapeHTML(a.method||'Não informado')}${extra}</div>
+        <div class="item-meta">
+          <span class="tag ${a.status==='pago'?'tag-paid':'tag-pending'}">${a.status==='pago'?(isIn?'Recebido':'Pago'):'Pendente'}</span>
+          <span class="tag">${isIn?'Entrada':'Despesa'}</span>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-secondary" onclick="editPersonal('${a.id}')">Editar</button>
+          <button class="btn btn-success" onclick="togglePersonal('${a.id}')">${a.status==='pago'?'Marcar pendente':'Dar baixa'}</button>
+          <button class="btn btn-danger" onclick="deletePersonal('${a.id}')">Excluir</button>
+        </div>
+      </div>
+      <div class="item-value ${isIn?'green':'red'}">${isIn?'+':'−'} ${money(a.value)}</div>
+    </div>`;
+  }).join('');
+}
+
+function editPersonal(id){
+  const a=db.personal.find(x=>x.id===id);
+  if(!a)return;
+  $('pId').value=a.id;
+  $('pDate').value=a.date;
+  $('pType').value=a.type;
+  updatePersonalCategories();
+  $('pCategory').value=a.category;
+  $('pValue').value=a.value;
+  $('pDesc').value=a.desc||'';
+  $('pMethod').value=a.method||'Pix';
+  $('pStatus').value=a.status||'pago';
+  $('pRepeat').value='once';
+  repeatFields();
+  $('personalFormTitle').textContent='Editar lançamento';
+  $('pSaveBtn').textContent='Salvar alterações';
+  $('pessoal').scrollIntoView({behavior:'smooth'});
+}
+
+function togglePersonal(id){
+  const a=db.personal.find(x=>x.id===id);
+  if(!a)return;
+  a.status=a.status==='pago'?'pendente':'pago';
+  save();renderAll();
+}
+
+function deletePersonal(id){
+  const a=db.personal.find(x=>x.id===id);
+  if(!a)return;
+  if(a.seriesType==='fixed'&&a.series){
+    if(!confirm('Excluir esta despesa fixa e cancelar todos os lançamentos desta série?'))return;
+    db.personal=db.personal.filter(x=>x.series!==a.series);
+  }else if(a.seriesType==='repeat'&&a.series){
+    if(confirm('Excluir também os outros lançamentos desta série?')){
+      db.personal=db.personal.filter(x=>x.series!==a.series);
+    }else{
+      db.personal=db.personal.filter(x=>x.id!==id);
+    }
+  }else{
+    if(!confirm('Deseja excluir este lançamento?'))return;
+    db.personal=db.personal.filter(x=>x.id!==id);
+  }
+  save();renderAll();
+}
+
+function renderBalances(){
+  const paid=db.personal.filter(a=>a.status==='pago');
+  const pix=paid.reduce((s,a)=>s+(a.method==='Pix'?(a.type==='entrada'?1:-1)*(Number(a.value)||0):0),0);
+  const cash=paid.reduce((s,a)=>s+(a.method==='Dinheiro'?(a.type==='entrada'?1:-1)*(Number(a.value)||0):0),0);
+  $('balancePix').textContent=money(pix);
+  $('balanceCash').textContent=money(cash);
+  $('balanceTotal').textContent=money(pix+cash);
+}
+
+function renderCardOptions(){
+  const current=$('purchaseCard').value;
+  $('purchaseCard').innerHTML=db.cards.length
+    ?db.cards.map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('')
+    :'<option value="">Cadastre um cartão primeiro</option>';
+  if(db.cards.some(c=>c.id===current))$('purchaseCard').value=current;
+}
+
+$('cardForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=$('cName').value.trim();
+  const close=Number($('cClose').value);
+  const due=Number($('cDue').value);
+  if(!name||close<1||close>31||due<1||due>31){
+    alert('Confira o nome e os dias do cartão.');return;
+  }
+  db.cards.push({id:idnew(),name,close,due});
+  save();$('cardForm').reset();
+  $('cClose').value=5;$('cDue').value=10;
+  renderAll();alert('Cartão cadastrado!');
+});
+
+function deleteCard(id){
+  if(db.purchases.some(p=>p.cardId===id)){
+    alert('Este cartão possui compras registradas. Exclua primeiro as compras relacionadas.');
+    return;
+  }
+  if(!confirm('Excluir este cartão?'))return;
+  db.cards=db.cards.filter(c=>c.id!==id);
+  save();renderAll();
+}
+
+function renderCards(){
+  renderCardOptions();
+  if(!db.cards.length){
+    $('cardsList').innerHTML='<div class="empty">Nenhum cartão cadastrado.</div>';
+    return;
+  }
+  $('cardsList').innerHTML=db.cards.map(c=>`
+    <div class="item">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(c.name)}</div>
+        <div class="item-meta">Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</div>
+        <div class="item-actions">
+          <button class="btn btn-danger" onclick="deleteCard('${c.id}')">Excluir cartão</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+$('purchaseForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const cardId=$('purchaseCard').value;
+  const card=db.cards.find(c=>c.id===cardId);
+  if(!card){alert('Cadastre ou selecione um cartão.');return;}
+  const value=Number($('purchaseValue').value);
+  const parts=Number($('purchaseParts').value);
+  if(value<=0||parts<1||parts>60){alert('Confira o valor e o número de parcelas.');return;}
+  db.purchases.push({
+    id:idnew(),cardId,
+    date:$('purchaseDate').value,
+    desc:$('purchaseDesc').value.trim(),
+    value,parts,
+    paidParts:[]
+  });
+  save();$('purchaseForm').reset();
+  $('purchaseDate').value=today();
+  $('purchaseParts').value=1;
+  renderAll();alert('Compra registrada!');
+});
+
+function installmentDate(p,i){
+  const card=db.cards.find(c=>c.id===p.cardId);
+  const close=card?Number(card.close)||1:1;
+  const d=new Date(p.date+'T12:00:00');
+  if(d.getDate()>=close)d.setMonth(d.getMonth()+1);
+  d.setDate(1);
+  d.setMonth(d.getMonth()+i);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+
+function cardOutstanding(month){
+  return db.purchases.reduce((sum,p)=>{
+    const partValue=(Number(p.value)||0)/(Number(p.parts)||1);
+    for(let i=0;i<(Number(p.parts)||1);i++){
+      if(installmentDate(p,i)===month&&!(p.paidParts||[]).includes(i)){
+        sum+=partValue;
+      }
+    }
+    return sum;
+  },0);
+}
+
+function renderInvoices(){
+  const month=$('invoiceMonth').value||thisMonth();
+  const rows=[];
+  db.cards.forEach(card=>{
+    const purchases=db.purchases.filter(p=>p.cardId===card.id);
+    let total=0,paid=0;
+    purchases.forEach(p=>{
+      for(let i=0;i<(Number(p.parts)||1);i++){
+        if(installmentDate(p,i)===month){
+          const amount=(Number(p.value)||0)/(Number(p.parts)||1);
+          if((p.paidParts||[]).includes(i))paid+=amount;
+          else total+=amount;
+        }
+      }
+    });
+    rows.push(`<div class="item">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(card.name)}</div>
+        <div class="item-meta">Fatura de ${escapeHTML(monthName(month))} · Vencimento dia ${card.due}</div>
+        <div class="item-meta">Em aberto: ${money(total)} · Já pago: ${money(paid)}</div>
+      </div>
+      <div class="item-value">${money(total+paid)}</div>
+    </div>`);
+  });
+
+  const items=[];
+  db.purchases.forEach(p=>{
+    const card=db.cards.find(c=>c.id===p.cardId);
+    for(let i=0;i<(Number(p.parts)||1);i++){
+      if(installmentDate(p,i)!==month)continue;
+      const amount=(Number(p.value)||0)/(Number(p.parts)||1);
+      const paid=(p.paidParts||[]).includes(i);
+      items.push(`<div class="item">
+        <div class="item-main">
+          <div class="item-title">${escapeHTML(p.desc)}</div>
+          <div class="item-meta">${escapeHTML(card?.name||'Cartão')} · Parcela ${i+1}/${p.parts} · ${escapeHTML(monthName(month))}</div>
+          <div class="item-meta"><span class="tag ${paid?'tag-paid':'tag-pending'}">${paid?'Pago':'Pendente'}</span></div>
+          <div class="item-actions">
+            <button class="btn ${paid?'btn-secondary':'btn-success'}" onclick="togglePurchase('${p.id}',${i})">${paid?'Marcar pendente':'Dar baixa'}</button>
+            <button class="btn btn-danger" onclick="deletePurchase('${p.id}')">Excluir compra</button>
+          </div>
+        </div>
+        <div class="item-value">${money(amount)}</div>
+      </div>`);
+    }
+  });
+  $('invoiceList').innerHTML=(rows.length?rows.join(''):'')+(items.length?items.join(''):'')||'<div class="empty">Nenhuma fatura ou compra neste mês.</div>';
+}
+
+function togglePurchase(id,index){
+  const p=db.purchases.find(x=>x.id===id);
+  if(!p)return;
+  if(!Array.isArray(p.paidParts))p.paidParts=[];
+  if(p.paidParts.includes(index))p.paidParts=p.paidParts.filter(i=>i!==index);
+  else p.paidParts.push(index);
+  save();renderAll();
+}
+
+function deletePurchase(id){
+  if(!confirm('Excluir esta compra e todas as suas parcelas?'))return;
+  db.purchases=db.purchases.filter(p=>p.id!==id);
+  save();renderAll();
+}
+
+$('goalForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const target=Number($('gTarget').value);
+  const saved=Number($('gSaved').value);
+  if(target<=0||saved<0){alert('Confira os valores da meta.');return;}
+  db.goals.push({
+    id:idnew(),name:$('gName').value.trim(),
+    target,saved,date:$('gDate').value
+  });
+  save();$('goalForm').reset();$('gSaved').value=0;
+  renderAll();alert('Meta cadastrada!');
+});
+
+function updateGoal(id,delta){
+  const g=db.goals.find(x=>x.id===id);
+  if(!g)return;
+  const raw=prompt('Informe o novo total já guardado (R$):',String(g.saved));
+  if(raw===null)return;
+  const value=Number(raw.replace(',','.'));
+  if(!Number.isFinite(value)||value<0){alert('Informe um valor válido.');return;}
+  g.saved=value;save();renderAll();
+}
+
+function deleteGoal(id){
+  if(!confirm('Excluir esta meta?'))return;
+  db.goals=db.goals.filter(g=>g.id!==id);
+  save();renderAll();
+}
+
+function renderGoals(){
+  if(!db.goals.length){
+    $('goalsList').innerHTML='<div class="empty">Você ainda não cadastrou metas.</div>';
+    return;
+  }
+  $('goalsList').innerHTML=db.goals.map(g=>{
+    const target=Number(g.target)||0;
+    const saved=Number(g.saved)||0;
+    const pct=target?Math.min(100,Math.max(0,saved/target*100)):0;
+    return `<div class="item">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(g.name)}</div>
+        <div class="item-meta">Guardado: ${money(saved)} de ${money(target)}</div>
+        <div style="height:9px;background:#e6edf7;border-radius:8px;overflow:hidden;margin-top:9px">
+          <div style="height:100%;width:${pct}%;background:#1769e0"></div>
+        </div>
+        <div class="item-meta">${pct.toFixed(1)}% concluído${g.date?' · Prazo: '+escapeHTML(g.date):''}</div>
+        <div class="item-actions">
+          <button class="btn btn-secondary" onclick="updateGoal('${g.id}')">Atualizar valor</button>
+          <button class="btn btn-danger" onclick="deleteGoal('${g.id}')">Excluir</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderDashboard(){
-const m=thisMonth(),income=personalSum(m,'in','paid'),expenses=personalSum(m,'out','paid'),u=uberStats(m);
-$('dashIn').textContent=money(income);
-$('dashOut').textContent=money(expenses);
-$('dashBalance').textContent=money(income-expenses);
-$('dashUber').textContent=money(u.gains);
-$('dashCosts').textContent=money(u.costs);
-$('dashProfit').textContent=money(u.profit);
-$('dashReserve').textContent=money(u.reserve);
-$('dashSummary').innerHTML=`Pessoal: <b>${money(income-expenses)}</b><br>Uber/99: <b>${money(u.profit)}</b> de lucro após os custos cadastrados<br>Trabalho: <b>${u.km} km</b> · <b>${u.hours} horas</b>`;
-const pending=db.personal.filter(a=>a.type==='out'&&a.status==='pending'&&isMonth(a.date,m));
-showList('dashPending',pending.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)}</small></div><div class="amount red">${money(a.value)}</div></div>`).join(''),'Nenhuma despesa pendente neste mês.');
+  const month=$('dashMonth').value||thisMonth();
+  const entries=db.personal.filter(a=>monthOf(a.date)===month);
+  const income=entries.filter(a=>a.type==='entrada'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
+  const expenses=entries.filter(a=>a.type==='despesa'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
+  const pendingExpenses=entries.filter(a=>a.type==='despesa'&&a.status==='pendente').reduce((s,a)=>s+(Number(a.value)||0),0);
+  const pendingIncome=entries.filter(a=>a.type==='entrada'&&a.status==='pendente').reduce((s,a)=>s+(Number(a.value)||0),0);
+  $('dashIncome').textContent=money(income);
+  $('dashExpenses').textContent=money(expenses);
+  $('dashProfit').textContent=money(income-expenses);
+  $('dashBalance').textContent=$('balanceTotal').textContent;
+  $('dashPendingExpenses').textContent=money(pendingExpenses);
+  $('dashPendingIncome').textContent=money(pendingIncome);
+  $('dashInvoice').textContent=money(cardOutstanding(month));
+
+  const upcoming=entries.filter(a=>a.status==='pendente').sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  $('dashDueList').innerHTML=upcoming.length?upcoming.slice(0,8).map(a=>`
+    <div class="item">
+      <div class="item-main">
+        <div class="item-title">${escapeHTML(a.desc||a.category)}</div>
+        <div class="item-meta">${escapeHTML(a.date)} · ${escapeHTML(a.category)}</div>
+      </div>
+      <div class="item-value ${a.type==='entrada'?'green':'red'}">${money(a.value)}</div>
+    </div>`).join(''):'<div class="empty">Nenhuma conta pessoal pendente neste mês.</div>';
+
+  $('dashSummary').innerHTML=`
+    <div class="item"><div class="item-main"><div class="item-title">Resultado do mês</div><div class="item-meta">${escapeHTML(monthName(month))}</div></div><div class="item-value">${money(income-expenses)}</div></div>
+    <div class="item"><div class="item-main"><div class="item-title">Despesas pendentes</div><div class="item-meta">Ainda não alteram o saldo disponível</div></div><div class="item-value red">${money(pendingExpenses)}</div></div>
+    <div class="item"><div class="item-main"><div class="item-title">Valores a receber</div><div class="item-meta">Ainda não alteram o saldo disponível</div></div><div class="item-value green">${money(pendingIncome)}</div></div>`;
 }
-function renderPersonal(){
-const m=$('pFilter').value;
-const rows=db.personal.filter(a=>!m||isMonth(a.date,m)).slice().sort((a,b)=>b.date.localeCompare(a.date));
-showList('pList',rows.map(a=>`<div class="item"><div class="detail"><b>${esc(a.desc)}</b><small>${a.date} · ${esc(a.category)} · ${esc(a.method)}</small><span class="tag">${a.status==='paid'?'Pago/Recebido':'Pendente'}${a.seriesType==='fixed'?' · Fixa':''}</span></div><div class="amount ${a.type==='in'?'green':'red'}">${a.type==='in'?'+':'−'}${money(a.value)}<div class="actions"><button class="btn light" onclick="togglePersonal('${a.id}')">${a.status==='paid'?'Marcar pendente':'Dar baixa'}</button><button class="btn light" onclick="editPersonal('${a.id}')">Editar</button><button class="btn danger" onclick="deletePersonal('${a.id}')">Excluir</button></div></div></div>`).join(''));
-}
-$('personalForm').addEventListener('submit',e=>{
-e.preventDefault();
-const date=$('pDate').value,amount=val('pValue'),repeat=$('pRepeat').value;
-if(!date||amount<=0){alert('Confira a data e o valor.');return}
-const series=repeat==='once'?'':idnew();
-const count=repeat==='fixed'?12:repeat==='repeat'?Math.min(60,Math.max(1,parseInt($('pQty').value)||1)):1;
-const period=repeat==='fixed'?'month':$('pPeriod').value;
-for(let i=0;i<count;i++){
-db.personal.push({id:idnew(),date:repeat==='once'?date:addDate(date,period,i),type:$('pType').value,category:$('pCat').value,value:amount,desc:$('pDesc').value.trim(),method:$('pMethod').value,status:$('pStatus').value,series,seriesType:repeat});
-}
-save();e.target.reset();$('pDate').value=today();$('pQty').value=3;updatePersonalCategories();repeatFields();renderAll();
-alert(repeat==='fixed'?'Despesa fixa cadastrada para 12 meses.':'Lançamento salvo.');
-});
-function togglePersonal(id){
-const a=db.personal.find(x=>x.id===id);if(!a)return;
-a.status=a.status==='paid'?'pending':'paid';save();renderAll();
-}
-function editPersonal(id){
-const a=db.personal.find(x=>x.id===id);if(!a)return;
-const d=prompt('Data (AAAA-MM-DD):',a.date);if(d===null)return;
-if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data inválida.');return}
-const desc=prompt('Descrição:',a.desc);if(desc===null)return;
-const amount=prompt('Valor em reais:',String(a.value));if(amount===null)return;
-if(!Number.isFinite(Number(amount))||Number(amount)<=0){alert('Valor inválido.');return}
-a.date=d;a.desc=desc.trim()||a.desc;a.value=Number(amount);
-save();renderAll();
-}
-function deletePersonal(id){
-const a=db.personal.find(x=>x.id===id);if(!a)return;
-if(!confirm('Excluir este lançamento?'))return;
-if(a.series&&confirm('Excluir também os outros lançamentos desta série?'))db.personal=db.personal.filter(x=>x.id!==id&&x.series!==a.series);
-else db.personal=db.personal.filter(x=>x.id!==id);
-save();renderAll();
-}
-function renderBalances(){
-const rows=db.personal.filter(a=>a.status==='paid');
-const calc=method=>rows.reduce((s,a)=>a.method===method?s+(a.type==='in'?a.value:-a.value):s,0);
-$('pixBalance').textContent=money(calc('Pix'));
-$('cashBalance').textContent=money(calc('Dinheiro'));
-$('totalBalance').textContent=money(calc('Pix')+calc('Dinheiro'));
-}
-function invoiceMonth(date,close){
-const d=new Date(date+'T12:00:00');
-if(d.getDate()>close)d.setMonth(d.getMonth()+1);
-return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-}
-function cardOutstanding(cardId){
-return db.purchases.filter(p=>p.cardId===cardId&&p.status!=='paid').reduce((s,p)=>s+p.value,0);
-}
-function renderCardOptions(){
-const old=$('purchaseCard').value,old2=$('invoiceCard').value;
-const options=db.cards.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
-$('purchaseCard').innerHTML=options||'<option value="">Cadastre um cartão primeiro</option>';
-$('invoiceCard').innerHTML=options||'<option value="">Nenhum cartão cadastrado</option>';
-if(db.cards.some(c=>c.id===old))$('purchaseCard').value=old;
-if(db.cards.some(c=>c.id===old2))$('invoiceCard').value=old2;
-}
-function renderCards(){
-renderCardOptions();
-showList('cardList',db.cards.map(c=>{
-const spent=cardOutstanding(c.id),available=Math.max(0,c.limit-spent);
-return `<div class="panel"><b>${esc(c.name)}</b><p class="muted">Limite: ${money(c.limit)}<br>Compras ainda não pagas: ${money(spent)}<br>Limite disponível estimado: ${money(available)}<br>Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</p><div class="bar"><span style="width:${c.limit?Math.min(100,spent/c.limit*100):0}%"></span></div><div class="actions"><button class="btn danger" onclick="deleteCard('${c.id}')">Excluir cartão</button></div></div>`;
-}).join(''),'Cadastre seu primeiro cartão acima.');
-}
-$('cardForm').addEventListener('submit',e=>{
-e.preventDefault();
-const name=$('cardName').value.trim(),limit=val('cardLimit'),close=Number($('cardClose').value),due=Number($('cardDue').value);
-if(!name||close<1||close>28||due<1||due>28){alert('Confira o nome e os dias do cartão.');return}
-db.cards.push({id:idnew(),name,limit,close,due});
-save();e.target.reset();$('cardClose').value=5;$('cardDue').value=10;renderAll();alert('Cartão cadastrado.');
-});
-function deleteCard(id){
-if(db.purchases.some(p=>p.cardId===id)&&!confirm('Este cartão tem compras. Excluir o cartão e todas as parcelas dele?'))return;
-if(!db.purchases.some(p=>p.cardId===id)&&!confirm('Excluir este cartão?'))return;
-db.cards=db.cards.filter(c=>c.id!==id);db.purchases=db.purchases.filter(p=>p.cardId!==id);save();renderAll();
-}
-$('purchaseForm').addEventListener('submit',e=>{
-e.preventDefault();
-const card=db.cards.find(c=>c.id===$('purchaseCard').value);
-const date=$('cDate').value,amount=val('cValue'),parts=Math.min(48,Math.max(1,parseInt($('cParts').value)||1));
-if(!card){alert('Cadastre e selecione um cartão primeiro.');return}
-if(!date||amount<=0){alert('Confira a data e o valor.');return}
-const cents=Math.round(amount*100),base=Math.floor(cents/parts),extra=cents%parts;
-const first=invoiceMonth(date,card.close);
-for(let i=0;i<parts;i++){
-const month=addDate(first+'-01','month',i).slice(0,7);
-db.purchases.push({id:idnew(),purchaseId:idnew(),cardId:card.id,date,month,desc:$('cDesc').value.trim(),category:$('cCat').value,value:(base+(i<extra?1:0))/100,part:i+1,parts,status:'pending'});
-}
-save();e.target.reset();$('cDate').value=today();$('cParts').value=1;renderAll();alert('Compra registrada nas faturas mensais.');
-});
-function renderInvoices(){
-const card=db.cards.find(c=>c.id===$('invoiceCard').value),month=$('invoiceMonth').value||thisMonth();
-if(!card){$('invoiceSummary').innerHTML='<p class="muted">Cadastre um cartão para visualizar faturas.</p>';showList('invoiceList','');return}
-const rows=db.purchases.filter(p=>p.cardId===card.id&&p.month===month);
-const total=rows.reduce((s,p)=>s+p.value,0),pending=rows.filter(p=>p.status!=='paid').reduce((s,p)=>s+p.value,0);
-$('invoiceSummary').innerHTML=`<div class="card"><small>${esc(card.name)} · Fatura ${month}</small><strong>${money(total)}</strong><p class="muted">Pendente: ${money(pending)} · Fechamento dia ${card.close} · Vencimento dia ${card.due}</p></div>`;
-showList('invoiceList',rows.map(p=>`<div class="item"><div class="detail"><b>${esc(p.desc)}</b><small>${esc(p.category)} · Parcela ${p.part}/${p.parts}<br>${p.date}</small><span class="tag">${p.status==='paid'?'Paga':'Pendente'}</span></div><div class="amount">${money(p.value)}<div class="actions"><button class="btn light" onclick="togglePurchase('${p.id}')">${p.status==='paid'?'Reabrir':'Marcar paga'}</button></div></div></div>`).join(''),'Nenhuma compra nesta fatura.');
-}
-function togglePurchase(id){
-const p=db.purchases.find(x=>x.id===id);if(!p)return;
-p.status=p.status==='paid'?'pending':'paid';save();renderAll();
-}
-$('uberForm').addEventListener('submit',e=>{
-e.preventDefault();
-const fuel=val('uFuel'),fp=val('uFPix'),fc=val('uFCash');
-if(Math.abs(fuel-fp-fc)>.02){alert('A soma do combustível por Pix e dinheiro precisa igualar o total.');return}
-if(!$('uDate').value){alert('Informe a data.');return}
-db.uber.push({id:idnew(),date:$('uDate').value,km:val('uKm'),hours:val('uHours'),pix:val('uPix'),cash:val('uCash'),category:$('uCat').value,epix:val('uEPix'),ecash:val('uECash'),fuel});
-save();e.target.reset();$('uDate').value=today();
-['uKm','uHours','uPix','uCash','uEPix','uECash','uFuel','uFPix','uFCash'].forEach(id=>$(id).value=0);
-renderAll();alert('Dia de trabalho salvo.');
-});
-function deleteUber(id){
-if(!confirm('Excluir este registro Uber/99?'))return;
-db.uber=db.uber.filter(a=>a.id!==id);save();renderAll();
-}
-function renderUber(){
-const m=$('uFilter').value||thisMonth(),s=uberStats(m);
-$('uGains').textContent=money(s.gains);$('uCosts').textContent=money(s.costs);
-$('uProfit').textContent=money(s.profit);$('uReserve').textContent=money(s.reserve);
-$('uKmTotal').textContent=s.km+' km';$('uHoursTotal').textContent=s.hours+' h';
-$('uHourRate').textContent=money(s.hours?s.profit/s.hours:0);
-$('uKmRate').textContent=money(s.km?s.profit/s.km:0);
-showList('uList',s.rows.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(a=>`<div class="item"><div class="detail"><b>${a.date}</b><small>Ganhos: ${money(uberG(a))}<br>Custos: ${money(uberC(a))}<br>${a.km} km · ${a.hours} h · ${esc(a.category)}</small></div><div class="amount">${money(uberG(a)-uberC(a))}<div class="actions"><button class="btn danger" onclick="deleteUber('${a.id}')">Excluir</button></div></div></div>`).join(''));
-}
-$('goalForm').addEventListener('submit',e=>{
-e.preventDefault();
-const target=val('gTarget');
-if(!target){alert('Informe o valor desejado.');return}
-db.goals.push({id:idnew(),name:$('gName').value.trim(),target,saved:val('gSaved')});
-save();e.target.reset();$('gSaved').value=0;renderAll();
-});
-function updateGoal(id){
-const g=db.goals.find(x=>x.id===id);if(!g)return;
-const n=prompt('Quanto já guardou?',String(g.saved));if(n===null)return;
-if(!Number.isFinite(Number(n))||Number(n)<0){alert('Valor inválido.');return}
-g.saved=Number(n);save();renderAll();
-}
-function deleteGoal(id){
-if(!confirm('Excluir esta meta?'))return;
-db.goals=db.goals.filter(g=>g.id!==id);save();renderAll();
-}
-function renderGoals(){
-showList('goalList',db.goals.map(g=>{
-const pct=Math.min(100,g.saved/g.target*100);
-return `<div class="panel"><b>${esc(g.name)}</b><p class="muted">${money(g.saved)} de ${money(g.target)} · ${pct.toFixed(0)}%</p><div class="bar"><span style="width:${pct}%"></span></div><div class="actions"><button class="btn light" onclick="updateGoal('${g.id}')">Atualizar</button><button class="btn danger" onclick="deleteGoal('${g.id}')">Excluir</button></div></div>`;
-}).join(''),'Nenhuma meta cadastrada.');
-}
+
 function renderReports(){
-const m=$('reportMonth').value||thisMonth(),inc=personalSum(m,'in','paid'),out=personalSum(m,'out','paid'),u=uberStats(m);
-$('reportSummary').innerHTML=`<div class="grid"><div class="card"><small>Entradas pessoais</small><strong class="green">${money(inc)}</strong></div><div class="card"><small>Despesas pessoais</small><strong class="red">${money(out)}</strong></div><div class="card"><small>Resultado pessoal</small><strong>${money(inc-out)}</strong></div><div class="card"><small>Ganhos Uber/99</small><strong>${money(u.gains)}</strong></div><div class="card"><small>Custos Uber/99</small><strong>${money(u.costs)}</strong></div><div class="card"><small>Lucro real Uber/99</small><strong>${money(u.profit)}</strong></div></div><p class="muted">Reserva sugerida: ${money(u.reserve)} · ${u.km} km · ${u.hours} horas</p>`;
-const cats={};
-db.personal.filter(a=>isMonth(a.date,m)&&a.type==='out'&&a.status==='paid').forEach(a=>cats[a.category]=(cats[a.category]||0)+a.value);
-showList('reportCats',Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([name,total])=>`<div class="item"><span>${esc(name)}</span><b>${money(total)}</b></div>`).join(''),'Nenhuma despesa paga neste mês.');
-const rows=u.rows.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(a=>`<tr><td>${a.date}</td><td>${money(uberG(a))}</td><td>${money(uberC(a))}</td><td>${money(uberG(a)-uberC(a))}</td><td>${a.km}</td><td>${a.hours}</td></tr>`).join('');
-$('reportUber').innerHTML=rows?`<div class="tablewrap"><table><thead><tr><th>Data</th><th>Ganhos</th><th>Custos</th><th>Lucro</th><th>Km</th><th>Horas</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty">Nenhum dia de trabalho neste mês.</div>';
+  const month=$('reportMonth').value||thisMonth();
+  const rows=db.personal.filter(a=>monthOf(a.date)===month);
+  const income=rows.filter(a=>a.type==='entrada'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
+  const expenses=rows.filter(a=>a.type==='despesa'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
+  $('reportIncome').textContent=money(income);
+  $('reportExpenses').textContent=money(expenses);
+  $('reportProfit').textContent=money(income-expenses);
+
+  const categories={};
+  rows.filter(a=>a.status==='pago').forEach(a=>{
+    const key=(a.type==='entrada'?'Entrada: ':'Despesa: ')+(a.category||'Outros');
+    categories[key]=(categories[key]||0)+(Number(a.value)||0);
+  });
+  $('reportCategories').innerHTML=Object.keys(categories).length
+    ?Object.entries(categories).sort((a,b)=>b[1]-a[1]).map(([name,value])=>`
+      <div class="item"><div class="item-main"><div class="item-title">${escapeHTML(name)}</div></div><div class="item-value">${money(value)}</div></div>`).join('')
+    :'<div class="empty">Sem lançamentos pagos neste mês.</div>';
+
+  const methods={};
+  rows.filter(a=>a.status==='pago').forEach(a=>{
+    const key=a.method||'Não informado';
+    if(!methods[key])methods[key]={entrada:0,despesa:0};
+    methods[key][a.type==='entrada'?'entrada':'despesa']+=(Number(a.value)||0);
+  });
+  $('reportMethods').innerHTML=Object.keys(methods).length
+    ?Object.entries(methods).map(([name,v])=>`
+      <div class="item"><div class="item-main"><div class="item-title">${escapeHTML(name)}</div><div class="item-meta">Entradas: ${money(v.entrada)} · Despesas: ${money(v.despesa)}</div></div><div class="item-value">${money(v.entrada-v.despesa)}</div></div>`).join('')
+    :'<div class="empty">Sem movimentações pagas neste mês.</div>';
 }
+
 function renderAll(){
-renderDashboard();renderPersonal();renderBalances();renderCards();renderInvoices();renderUber();renderGoals();renderReports();
+  renderBalances();
+  renderDashboard();
+  renderPersonal();
+  renderCards();
+  renderInvoices();
+  renderGoals();
+  renderReports();
 }
+
 function exportLocalBackup(){
-const backup={app:'Meu Financeiro Pro 2.0',version:2,exportedAt:new Date().toISOString(),localStorage:{}};
-['MFP_V2','MF'].forEach(k=>{
-const v=localStorage.getItem(k);
-if(v!==null)backup.localStorage[k]=v;
-});
-if(!Object.keys(backup.localStorage).length){
-backup.localStorage.MFP_V2=JSON.stringify(db);
+  save();
+  const payload={
+    app:'Meu Financeiro Pro 2.0',
+    exportedAt:new Date().toISOString(),
+    data:db
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='backup-meu-financeiro.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
-const url=URL.createObjectURL(blob);
-const a=document.createElement('a');
-a.href=url;a.download='backup-meu-financeiro.json';
-document.body.appendChild(a);a.click();a.remove();
-setTimeout(()=>URL.revokeObjectURL(url),1000);
-alert('Backup baixado. Guarde o arquivo em local seguro.');
-}
+
 function importLocalBackup(event){
-const file=event.target.files&&event.target.files[0];
-if(!file)return;
-const reader=new FileReader();
-reader.onload=()=>{
-try{
-const backup=JSON.parse(reader.result);
-if(!backup||!backup.localStorage||typeof backup.localStorage!=='object')throw new Error('Arquivo inválido');
-const raw=backup.localStorage.MFP_V2;
-if(!raw)throw new Error('O backup não contém os dados MFP_V2');
-const parsed=JSON.parse(raw);
-if(!parsed||!Array.isArray(parsed.personal)||!Array.isArray(parsed.uber)||!Array.isArray(parsed.cards)||!Array.isArray(parsed.purchases)||!Array.isArray(parsed.goals))throw new Error('Estrutura de dados inválida');
-if(!confirm('Restaurar este backup substituirá os dados atuais deste aparelho. Deseja continuar?'))return;
-localStorage.setItem('MFP_V2',JSON.stringify(parsed));
-if(backup.localStorage.MF)localStorage.setItem('MF',backup.localStorage.MF);
-db=parsed;
-alert('Backup restaurado. O aplicativo será recarregado.');
-location.reload();
-}catch(err){
-alert('Não foi possível restaurar: '+err.message);
-}finally{
-event.target.value='';
+  const file=event.target.files?.[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      const data=parsed.data||parsed;
+      if(!Array.isArray(data.personal)||!Array.isArray(data.cards)||
+         !Array.isArray(data.purchases)||!Array.isArray(data.goals)){
+        throw new Error('Formato de backup não reconhecido.');
+      }
+      if(!confirm('Restaurar este backup? Os dados atuais do aplicativo serão substituídos.'))return;
+      db={
+        personal:data.personal,
+        uber:[],
+        cards:data.cards,
+        purchases:data.purchases,
+        goals:data.goals
+      };
+      save();
+      localStorage.setItem('MFP_PERSONAL_ONLY_V1','1');
+      renderAll();
+      alert('Backup restaurado. Os registros Uber/99 não foram importados para este aplicativo pessoal.');
+    }catch(err){
+      alert('Não foi possível restaurar o arquivo. Confira se é um backup válido do Meu Financeiro.');
+    }finally{
+      event.target.value='';
+    }
+  };
+  reader.readAsText(file);
 }
-};
-reader.readAsText(file);
-}
+
 function init(){
-['pDate','cDate','uDate'].forEach(id=>$(id).value=today());
-['pFilter','uFilter','invoiceMonth','reportMonth'].forEach(id=>$(id).value=thisMonth());
-updatePersonalCategories();repeatFields();renderAll();
+  $('pDate').value=today();
+  $('purchaseDate').value=today();
+  $('dashMonth').value=thisMonth();
+  $('pFilter').value=thisMonth();
+  $('invoiceMonth').value=thisMonth();
+  $('reportMonth').value=thisMonth();
+  $('pRepeatCount').value=2;
+  $('cClose').value=5;
+  $('cDue').value=10;
+  updatePersonalCategories();
+  repeatFields();
+  ensureFixedOccurrences();
+  renderAll();
 }
-window.addEventListener('load',init);
+
+init();
 </script>
-</main>
 </body>
 </html>
+
+  
