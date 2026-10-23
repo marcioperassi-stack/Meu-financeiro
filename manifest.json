@@ -1,0 +1,10 @@
+
+{
+  "name": "Financeiro Pro 2.0",
+  "short_name": "Financeiro Pro",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1565C0"
+}
