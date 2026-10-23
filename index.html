@@ -7,134 +7,68 @@
 <title>Meu Financeiro Pro 2.0</title>
 <style>
 :root{
-  --blue:#1769e0;
-  --dark:#1048a0;
-  --bg:#f3f6fc;
-  --white:#fff;
-  --text:#202b3c;
-  --muted:#697586;
-  --green:#14804a;
-  --red:#c62828;
-  --border:#dce4f0;
-  --shadow:0 3px 12px rgba(30,60,100,.08)
+  --blue:#1769e0;--dark:#1048a0;--bg:#f3f6fc;--white:#fff;
+  --text:#202b3c;--muted:#697586;--green:#14804a;--red:#c62828;
+  --border:#dce4f0;--shadow:0 3px 12px rgba(30,60,100,.08)
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:var(--text)
-}
-header{
-  background:linear-gradient(135deg,var(--blue),var(--dark));
-  color:white;
-  padding:22px 16px;
-  text-align:center
-}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,var(--blue),var(--dark));color:white;padding:22px 16px;text-align:center}
 header h1{margin:0 0 7px;font-size:25px}
 header p{margin:0;font-size:14px;opacity:.92}
 main{max-width:1050px;margin:auto;padding:14px}
-nav{
-  display:flex;gap:7px;flex-wrap:wrap;
-  margin:0 0 16px
-}
-nav button{
-  flex:1 1 auto;
-  border:1px solid var(--border);
-  background:white;color:var(--text);
-  border-radius:10px;padding:12px 10px;
-  font-weight:bold;cursor:pointer
-}
-nav button.active{
-  background:var(--blue);
-  border-color:var(--blue);color:white
-}
-.page{display:none}
-.page.active{display:block}
-h2{font-size:21px;margin:5px 0 15px}
-h3{font-size:16px;margin:8px 0 12px}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:12px;margin-bottom:16px
-}
-.card{
-  background:white;border:1px solid var(--border);
-  border-radius:14px;padding:15px;
-  box-shadow:var(--shadow);min-width:0
-}
+nav{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 16px}
+nav button{flex:1 1 auto;border:1px solid var(--border);background:white;color:var(--text);border-radius:10px;padding:12px 10px;font-weight:bold;cursor:pointer}
+nav button.active{background:var(--blue);border-color:var(--blue);color:white}
+.page{display:none}.page.active{display:block}
+h2{font-size:21px;margin:5px 0 15px}h3{font-size:16px;margin:8px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:16px}
+.card{background:white;border:1px solid var(--border);border-radius:14px;padding:15px;box-shadow:var(--shadow);min-width:0}
 .card .label{font-size:13px;color:var(--muted);margin-bottom:8px}
 .card .value{font-size:21px;font-weight:bold;overflow-wrap:anywhere}
 .card .small{font-size:12px;color:var(--muted);margin-top:7px}
-.green{color:var(--green)!important}
-.red{color:var(--red)!important}
-.blue{color:var(--blue)!important}
-.panel{
-  background:white;border:1px solid var(--border);
-  border-radius:14px;padding:16px;margin-bottom:15px;
-  box-shadow:var(--shadow)
-}
-.formgrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px
-}
+.green{color:var(--green)!important}.red{color:var(--red)!important}.blue{color:var(--blue)!important}
+.panel{background:white;border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:15px;box-shadow:var(--shadow)}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
 label{font-size:13px;font-weight:bold;color:#435168}
-input,select,textarea{
-  width:100%;min-width:0;
-  padding:11px;border:1px solid #ccd7e6;
-  border-radius:9px;background:white;
-  color:var(--text);font-size:15px
-}
-input:focus,select:focus,textarea:focus{
-  outline:2px solid #b9d4ff;border-color:var(--blue)
-}
+input,select,textarea{width:100%;min-width:0;padding:11px;border:1px solid #ccd7e6;border-radius:9px;background:white;color:var(--text);font-size:15px}
+input:focus,select:focus,textarea:focus{outline:2px solid #b9d4ff;border-color:var(--blue)}
 button{font-family:inherit}
-.btn{
-  border:0;border-radius:9px;padding:12px 15px;
-  font-size:14px;font-weight:bold;cursor:pointer
-}
-.btn-primary{background:var(--blue);color:white}
-.btn-secondary{background:#eaf1fc;color:var(--dark)}
-.btn-danger{background:#ffeded;color:var(--red)}
-.btn-success{background:#e4f7ec;color:var(--green)}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-.actions .btn{flex:1 1 auto}
+.btn{border:0;border-radius:9px;padding:12px 15px;font-size:14px;font-weight:bold;cursor:pointer}
+.btn-primary{background:var(--blue);color:white}.btn-secondary{background:#eaf1fc;color:var(--dark)}
+.btn-danger{background:#ffeded;color:var(--red)}.btn-success{background:#e4f7ec;color:var(--green)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.actions .btn{flex:1 1 auto}
 .list{display:flex;flex-direction:column;gap:9px}
-.item{
-  background:white;border:1px solid var(--border);
-  border-radius:11px;padding:12px;
-  display:flex;align-items:flex-start;
-  justify-content:space-between;gap:10px
-}
-.item-main{flex:1;min-width:0}
-.item-title{font-weight:bold;overflow-wrap:anywhere}
+.item{background:white;border:1px solid var(--border);border-radius:11px;padding:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.item-main{flex:1;min-width:0}.item-title{font-weight:bold;overflow-wrap:anywhere}
 .item-meta{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
 .item-value{font-weight:bold;white-space:nowrap}
 .item-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
 .item-actions button{padding:7px 9px;font-size:12px}
-.tag{
-  display:inline-block;border-radius:20px;
-  padding:4px 8px;font-size:11px;font-weight:bold;
-  background:#edf2fa;color:#435168
-}
-.tag-paid{background:#e4f7ec;color:var(--green)}
-.tag-pending{background:#fff3d8;color:#8b5d00}
-.empty{
-  padding:20px;text-align:center;color:var(--muted);
-  border:1px dashed var(--border);border-radius:10px
-}
+.tag{display:inline-block;border-radius:20px;padding:4px 8px;font-size:11px;font-weight:bold;background:#edf2fa;color:#435168}
+.tag-paid{background:#e4f7ec;color:var(--green)}.tag-pending{background:#fff3d8;color:#8b5d00}
+.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:10px}
 .muted{color:var(--muted);font-size:13px;line-height:1.5}
 hr{border:0;border-top:1px solid var(--border);margin:16px 0}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.chart-card{border:1px solid var(--border);border-radius:12px;padding:14px;min-width:0}
+.chart-heading{font-size:16px;font-weight:bold;margin-bottom:5px}
+.chart-subtitle{font-size:12px;color:var(--muted);margin-bottom:12px}
+.chart-content{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.pie{width:132px;height:132px;flex:0 0 132px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
+.pie-hole{width:70px;height:70px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;font-weight:bold;padding:4px}
+.chart-legend{flex:1;min-width:130px;font-size:13px}
+.legend-line{display:flex;align-items:flex-start;gap:7px;margin:8px 0;line-height:1.35}
+.legend-dot{width:10px;height:10px;border-radius:3px;display:inline-block;flex:0 0 10px;margin-top:3px}
+.chart-detail{margin-top:12px;display:flex;flex-direction:column;gap:7px}
+.chart-detail-row{display:flex;justify-content:space-between;gap:10px;font-size:12px;border-top:1px solid #edf1f7;padding-top:7px}
+.chart-detail-row span:first-child{overflow-wrap:anywhere}
 @media(max-width:480px){
-  main{padding:10px}
-  header h1{font-size:22px}
-  .card{padding:12px}
-  .card .value{font-size:19px}
-  .panel{padding:12px}
-  .item{gap:7px}
+  main{padding:10px}header h1{font-size:22px}.card{padding:12px}
+  .card .value{font-size:19px}.panel{padding:12px}.item{gap:7px}
+  .chart-content{justify-content:center}.chart-legend{min-width:100%;width:100%}
 }
 </style>
 </head>
@@ -163,56 +97,27 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
     </div>
   </div>
   <div class="grid">
-    <div class="card">
-      <div class="label">Entradas recebidas</div>
-      <div class="value green" id="dashIncome">R$ 0,00</div>
-    </div>
-    <div class="card">
-      <div class="label">Despesas pagas</div>
-      <div class="value red" id="dashExpenses">R$ 0,00</div>
-    </div>
-    <div class="card">
-      <div class="label">Lucro real</div>
-      <div class="value blue" id="dashProfit">R$ 0,00</div>
-      <div class="small">Entradas recebidas menos despesas pagas</div>
-    </div>
-    <div class="card">
-      <div class="label">Saldo disponível</div>
-      <div class="value" id="dashBalance">R$ 0,00</div>
-      <div class="small">Pix + dinheiro registrados</div>
-    </div>
+    <div class="card"><div class="label">Entradas recebidas</div><div class="value green" id="dashIncome">R$ 0,00</div></div>
+    <div class="card"><div class="label">Despesas pagas</div><div class="value red" id="dashExpenses">R$ 0,00</div></div>
+    <div class="card"><div class="label">Lucro real</div><div class="value blue" id="dashProfit">R$ 0,00</div><div class="small">Entradas recebidas menos despesas pagas</div></div>
+    <div class="card"><div class="label">Saldo disponível</div><div class="value" id="dashBalance">R$ 0,00</div><div class="small">Pix + dinheiro registrados</div></div>
   </div>
-
   <div class="panel">
     <h3>Contas pendentes</h3>
     <div class="grid">
-      <div class="card">
-        <div class="label">Despesas a pagar</div>
-        <div class="value red" id="dashPendingExpenses">R$ 0,00</div>
-      </div>
-      <div class="card">
-        <div class="label">Valores a receber</div>
-        <div class="value green" id="dashPendingIncome">R$ 0,00</div>
-      </div>
-      <div class="card">
-        <div class="label">Fatura atual</div>
-        <div class="value" id="dashInvoice">R$ 0,00</div>
-      </div>
+      <div class="card"><div class="label">Despesas a pagar</div><div class="value red" id="dashPendingExpenses">R$ 0,00</div></div>
+      <div class="card"><div class="label">Valores a receber</div><div class="value green" id="dashPendingIncome">R$ 0,00</div></div>
+      <div class="card"><div class="label">Fatura atual</div><div class="value" id="dashInvoice">R$ 0,00</div></div>
     </div>
     <div id="dashDueList" class="list"></div>
   </div>
-
-  <div class="panel">
-    <h3>Entradas e despesas do mês</h3>
-    <div id="dashSummary" class="list"></div>
-  </div>
-
+  <div class="panel"><h3>Entradas e despesas do mês</h3><div id="dashSummary" class="list"></div></div>
   <div class="panel">
     <h3>Backup dos seus dados</h3>
     <p class="muted">Guarde uma cópia dos seus lançamentos em um lugar seguro. O backup permite transferir dados manualmente entre aparelhos.</p>
     <div class="actions">
       <button class="btn btn-primary" onclick="exportLocalBackup()">Baixar backup</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('backupFile').click()">Restaurar backup</button>
+      <button class="btn btn-secondary" onclick="$('backupFile').click()">Restaurar backup</button>
       <input id="backupFile" type="file" accept=".json,application/json" style="display:none" onchange="importLocalBackup(event)">
     </div>
   </div>
@@ -225,61 +130,31 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
     <form id="personalForm">
       <input type="hidden" id="pId">
       <div class="formgrid">
-        <div class="field">
-          <label for="pDate">Data</label>
-          <input type="date" id="pDate" required>
-        </div>
+        <div class="field"><label for="pDate">Data</label><input type="date" id="pDate" required></div>
         <div class="field">
           <label for="pType">Tipo</label>
           <select id="pType" required onchange="updatePersonalCategories()">
-            <option value="entrada">Entrada</option>
-            <option value="despesa">Despesa</option>
+            <option value="entrada">Entrada</option><option value="despesa">Despesa</option>
           </select>
         </div>
-        <div class="field">
-          <label for="pCategory">Categoria</label>
-          <select id="pCategory" required></select>
-        </div>
-        <div class="field">
-          <label for="pValue">Valor (R$)</label>
-          <input type="number" id="pValue" min="0.01" step="0.01" placeholder="0,00" required>
-        </div>
-        <div class="field">
-          <label for="pDesc">Descrição</label>
-          <input type="text" id="pDesc" maxlength="100" placeholder="Ex.: conta de luz">
-        </div>
-        <div class="field">
-          <label for="pMethod">Forma de pagamento/recebimento</label>
-          <select id="pMethod" required>
-            <option value="Pix">Pix</option>
-            <option value="Dinheiro">Dinheiro</option>
-            <option value="Cartão">Cartão</option>
-            <option value="Transferência">Transferência</option>
-            <option value="Outro">Outro</option>
-          </select>
-        </div>
+        <div class="field"><label for="pCategory">Categoria</label><select id="pCategory" required></select></div>
+        <div class="field"><label for="pPix">Valor em Pix (R$)</label><input type="number" id="pPix" min="0" step="0.01" value="0" oninput="updatePersonalTotal()" required></div>
+        <div class="field"><label for="pCash">Valor em dinheiro (R$)</label><input type="number" id="pCash" min="0" step="0.01" value="0" oninput="updatePersonalTotal()" required></div>
+        <div class="field"><label for="pValue">Valor total (R$)</label><input type="number" id="pValue" readonly value="0.00"></div>
+        <div class="field"><label for="pDesc">Descrição</label><input type="text" id="pDesc" maxlength="100" placeholder="Ex.: conta de luz"></div>
         <div class="field">
           <label for="pStatus">Situação</label>
-          <select id="pStatus" required>
-            <option value="pago">Pago/Recebido</option>
-            <option value="pendente">Pendente</option>
-          </select>
+          <select id="pStatus" required><option value="pago">Pago/Recebido</option><option value="pendente">Pendente</option></select>
         </div>
         <div class="field">
           <label for="pRepeat">Recorrência</label>
           <select id="pRepeat" onchange="repeatFields()">
-            <option value="once">Uma vez</option>
-            <option value="fixed">Fixa mensal, sem prazo final</option>
-            <option value="repeat">Repetir por período</option>
+            <option value="once">Uma vez</option><option value="fixed">Fixa mensal, sem prazo final</option><option value="repeat">Repetir por período</option>
           </select>
         </div>
         <div class="field" id="repeatPeriodBox" style="display:none">
           <label for="pPeriod">Periodicidade</label>
-          <select id="pPeriod">
-            <option value="day">Diária</option>
-            <option value="week">Semanal</option>
-            <option value="month">Mensal</option>
-          </select>
+          <select id="pPeriod"><option value="day">Diária</option><option value="week">Semanal</option><option value="month">Mensal</option></select>
         </div>
         <div class="field" id="repeatCountBox" style="display:none">
           <label for="pRepeatCount">Quantidade de lançamentos</label>
@@ -290,58 +165,56 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
         <button class="btn btn-primary" type="submit" id="pSaveBtn">Salvar lançamento</button>
         <button class="btn btn-secondary" type="button" onclick="resetPersonalForm()">Limpar</button>
       </div>
-      <p class="muted">Uma despesa fixa mensal continuará sendo gerada até você cancelar ou excluir a série. A opção “Repetir por período” permite definir uma quantidade de lançamentos.</p>
+      <p class="muted">Informe os valores em Pix e/ou dinheiro. O total será calculado automaticamente. Uma despesa fixa mensal continuará sendo gerada até você excluir a série.</p>
     </form>
+  </div>
+
+  <div class="panel">
+    <h3>Gráficos detalhados de entradas e despesas</h3>
+    <div class="field">
+      <label for="pChartMonth">Mês dos gráficos</label>
+      <input type="month" id="pChartMonth" onchange="renderPersonalCharts()">
+    </div>
+    <p class="muted">Os gráficos consideram lançamentos pagos/recebidos do mês selecionado. Veja os valores por categoria e a divisão entre Pix e dinheiro.</p>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-heading">Entradas por categoria</div>
+        <div class="chart-subtitle">Pix e dinheiro recebidos</div>
+        <div id="incomePie"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-heading">Despesas por categoria</div>
+        <div class="chart-subtitle">Pix e dinheiro pagos</div>
+        <div id="expensePie"></div>
+      </div>
+    </div>
   </div>
 
   <div class="panel">
     <h3>Histórico pessoal</h3>
     <div class="formgrid">
-      <div class="field">
-        <label for="pFilter">Filtrar por mês</label>
-        <input type="month" id="pFilter" onchange="renderPersonal()">
-      </div>
+      <div class="field"><label for="pFilter">Filtrar por mês</label><input type="month" id="pFilter" onchange="renderPersonal()"></div>
       <div class="field">
         <label for="pFilterType">Tipo de lançamento</label>
-        <select id="pFilterType" onchange="renderPersonal()">
-          <option value="todos">Todos</option>
-          <option value="entrada">Entradas</option>
-          <option value="despesa">Despesas</option>
-        </select>
+        <select id="pFilterType" onchange="renderPersonal()"><option value="todos">Todos</option><option value="entrada">Entradas</option><option value="despesa">Despesas</option></select>
       </div>
       <div class="field">
         <label for="pFilterStatus">Situação</label>
-        <select id="pFilterStatus" onchange="renderPersonal()">
-          <option value="todos">Todas</option>
-          <option value="pago">Pago/Recebido</option>
-          <option value="pendente">Pendente</option>
-        </select>
+        <select id="pFilterStatus" onchange="renderPersonal()"><option value="todos">Todas</option><option value="pago">Pago/Recebido</option><option value="pendente">Pendente</option></select>
       </div>
     </div>
-    <hr>
-    <div id="personalList" class="list"></div>
+    <hr><div id="personalList" class="list"></div>
   </div>
 </section>
-  
+
 <section id="saldos" class="page">
   <h2>Meus saldos</h2>
   <div class="grid">
-    <div class="card">
-      <div class="label">Saldo Pix</div>
-      <div class="value blue" id="balancePix">R$ 0,00</div>
-    </div>
-    <div class="card">
-      <div class="label">Saldo em dinheiro</div>
-      <div class="value green" id="balanceCash">R$ 0,00</div>
-    </div>
-    <div class="card">
-      <div class="label">Saldo total</div>
-      <div class="value" id="balanceTotal">R$ 0,00</div>
-    </div>
+    <div class="card"><div class="label">Saldo Pix</div><div class="value blue" id="balancePix">R$ 0,00</div></div>
+    <div class="card"><div class="label">Saldo em dinheiro</div><div class="value green" id="balanceCash">R$ 0,00</div></div>
+    <div class="card"><div class="label">Saldo total</div><div class="value" id="balanceTotal">R$ 0,00</div></div>
   </div>
-  <div class="panel">
-    <p class="muted">Os saldos são calculados com base nas entradas recebidas e despesas pagas registradas por forma de pagamento. Lançamentos pendentes não alteram os saldos.</p>
-  </div>
+  <div class="panel"><p class="muted">Os saldos usam entradas recebidas e despesas pagas. Lançamentos pendentes não alteram os saldos.</p></div>
 </section>
 
 <section id="cartao" class="page">
@@ -350,71 +223,31 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
     <h3>Cadastrar cartão</h3>
     <form id="cardForm">
       <div class="formgrid">
-        <div class="field">
-          <label for="cName">Nome do cartão</label>
-          <input id="cName" required maxlength="50" placeholder="Ex.: Cartão principal">
-        </div>
-        <div class="field">
-          <label for="cClose">Dia de fechamento</label>
-          <input id="cClose" type="number" min="1" max="31" value="5" required>
-        </div>
-        <div class="field">
-          <label for="cDue">Dia de vencimento</label>
-          <input id="cDue" type="number" min="1" max="31" value="10" required>
-        </div>
+        <div class="field"><label for="cName">Nome do cartão</label><input id="cName" required maxlength="50" placeholder="Ex.: Cartão principal"></div>
+        <div class="field"><label for="cClose">Dia de fechamento</label><input id="cClose" type="number" min="1" max="31" value="5" required></div>
+        <div class="field"><label for="cDue">Dia de vencimento</label><input id="cDue" type="number" min="1" max="31" value="10" required></div>
       </div>
-      <div class="actions">
-        <button class="btn btn-primary" type="submit">Salvar cartão</button>
-      </div>
+      <div class="actions"><button class="btn btn-primary" type="submit">Salvar cartão</button></div>
     </form>
   </div>
-
-  <div class="panel">
-    <h3>Meus cartões</h3>
-    <div id="cardsList" class="list"></div>
-  </div>
-
+  <div class="panel"><h3>Meus cartões</h3><div id="cardsList" class="list"></div></div>
   <div class="panel">
     <h3>Registrar compra no cartão</h3>
     <form id="purchaseForm">
       <div class="formgrid">
-        <div class="field">
-          <label for="purchaseCard">Cartão</label>
-          <select id="purchaseCard" required></select>
-        </div>
-        <div class="field">
-          <label for="purchaseDate">Data da compra</label>
-          <input type="date" id="purchaseDate" required>
-        </div>
-        <div class="field">
-          <label for="purchaseDesc">Descrição</label>
-          <input id="purchaseDesc" maxlength="100" required placeholder="Ex.: compra no mercado">
-        </div>
-        <div class="field">
-          <label for="purchaseValue">Valor total (R$)</label>
-          <input id="purchaseValue" type="number" min="0.01" step="0.01" required>
-        </div>
-        <div class="field">
-          <label for="purchaseParts">Número de parcelas</label>
-          <input id="purchaseParts" type="number" min="1" max="60" value="1" required>
-        </div>
+        <div class="field"><label for="purchaseCard">Cartão</label><select id="purchaseCard" required></select></div>
+        <div class="field"><label for="purchaseDate">Data da compra</label><input type="date" id="purchaseDate" required></div>
+        <div class="field"><label for="purchaseDesc">Descrição</label><input id="purchaseDesc" maxlength="100" required placeholder="Ex.: compra no mercado"></div>
+        <div class="field"><label for="purchaseValue">Valor total (R$)</label><input id="purchaseValue" type="number" min="0.01" step="0.01" required></div>
+        <div class="field"><label for="purchaseParts">Número de parcelas</label><input id="purchaseParts" type="number" min="1" max="60" value="1" required></div>
       </div>
-      <div class="actions">
-        <button class="btn btn-primary" type="submit">Registrar compra</button>
-      </div>
+      <div class="actions"><button class="btn btn-primary" type="submit">Registrar compra</button></div>
     </form>
   </div>
-
   <div class="panel">
     <h3>Faturas</h3>
-    <div class="formgrid">
-      <div class="field">
-        <label for="invoiceMonth">Mês da fatura</label>
-        <input type="month" id="invoiceMonth" onchange="renderInvoices()">
-      </div>
-    </div>
-    <hr>
-    <div id="invoiceList" class="list"></div>
+    <div class="field"><label for="invoiceMonth">Mês da fatura</label><input type="month" id="invoiceMonth" onchange="renderInvoices()"></div>
+    <hr><div id="invoiceList" class="list"></div>
   </div>
 </section>
 
@@ -424,64 +257,27 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
     <h3>Criar meta</h3>
     <form id="goalForm">
       <div class="formgrid">
-        <div class="field">
-          <label for="gName">Nome da meta</label>
-          <input id="gName" maxlength="70" required placeholder="Ex.: Reserva de emergência">
-        </div>
-        <div class="field">
-          <label for="gTarget">Valor desejado (R$)</label>
-          <input id="gTarget" type="number" min="0.01" step="0.01" required>
-        </div>
-        <div class="field">
-          <label for="gSaved">Valor já guardado (R$)</label>
-          <input id="gSaved" type="number" min="0" step="0.01" value="0" required>
-        </div>
-        <div class="field">
-          <label for="gDate">Data desejada (opcional)</label>
-          <input id="gDate" type="date">
-        </div>
+        <div class="field"><label for="gName">Nome da meta</label><input id="gName" maxlength="70" required placeholder="Ex.: Reserva de emergência"></div>
+        <div class="field"><label for="gTarget">Valor desejado (R$)</label><input id="gTarget" type="number" min="0.01" step="0.01" required></div>
+        <div class="field"><label for="gSaved">Valor já guardado (R$)</label><input id="gSaved" type="number" min="0" step="0.01" value="0" required></div>
+        <div class="field"><label for="gDate">Data desejada (opcional)</label><input id="gDate" type="date"></div>
       </div>
-      <div class="actions">
-        <button class="btn btn-primary" type="submit">Salvar meta</button>
-      </div>
+      <div class="actions"><button class="btn btn-primary" type="submit">Salvar meta</button></div>
     </form>
   </div>
-  <div class="panel">
-    <h3>Minhas metas</h3>
-    <div id="goalsList" class="list"></div>
-  </div>
+  <div class="panel"><h3>Minhas metas</h3><div id="goalsList" class="list"></div></div>
 </section>
 
 <section id="relatorios" class="page">
   <h2>Relatórios pessoais</h2>
-  <div class="panel">
-    <div class="field">
-      <label for="reportMonth">Mês do relatório</label>
-      <input type="month" id="reportMonth" onchange="renderReports()">
-    </div>
-  </div>
+  <div class="panel"><div class="field"><label for="reportMonth">Mês do relatório</label><input type="month" id="reportMonth" onchange="renderReports()"></div></div>
   <div class="grid">
-    <div class="card">
-      <div class="label">Entradas recebidas</div>
-      <div class="value green" id="reportIncome">R$ 0,00</div>
-    </div>
-    <div class="card">
-      <div class="label">Despesas pagas</div>
-      <div class="value red" id="reportExpenses">R$ 0,00</div>
-    </div>
-    <div class="card">
-      <div class="label">Resultado do mês</div>
-      <div class="value blue" id="reportProfit">R$ 0,00</div>
-    </div>
+    <div class="card"><div class="label">Entradas recebidas</div><div class="value green" id="reportIncome">R$ 0,00</div></div>
+    <div class="card"><div class="label">Despesas pagas</div><div class="value red" id="reportExpenses">R$ 0,00</div></div>
+    <div class="card"><div class="label">Resultado do mês</div><div class="value blue" id="reportProfit">R$ 0,00</div></div>
   </div>
-  <div class="panel">
-    <h3>Resumo por categoria</h3>
-    <div id="reportCategories" class="list"></div>
-  </div>
-  <div class="panel">
-    <h3>Resumo por forma de pagamento</h3>
-    <div id="reportMethods" class="list"></div>
-  </div>
+  <div class="panel"><h3>Resumo por categoria</h3><div id="reportCategories" class="list"></div></div>
+  <div class="panel"><h3>Resumo por forma de pagamento</h3><div id="reportMethods" class="list"></div></div>
 </section>
 
 <footer>Meu Financeiro Pro 2.0 — controle pessoal do seu dinheiro</footer>
@@ -498,45 +294,51 @@ const today = () => {
 const thisMonth = () => today().slice(0,7);
 const monthOf = date => String(date||'').slice(0,7);
 const monthName = month => {
-  if(!month) return '';
+  if(!month)return '';
   const [y,m]=month.split('-').map(Number);
   return new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
 };
 const escapeHTML = value => String(value??'').replace(/[&<>"']/g,c=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
-const blankDB = () => ({
-  personal:[],uber:[],cards:[],purchases:[],goals:[]
-});
+const blankDB = () => ({personal:[],uber:[],cards:[],purchases:[],goals:[]});
 
 let db;
-try {
+try{
   db=JSON.parse(localStorage.getItem('MFP_V2')||'null')||blankDB();
-} catch(e) {
+}catch(e){
   db=blankDB();
 }
 for(const key of ['personal','uber','cards','purchases','goals']){
-  if(!Array.isArray(db[key])) db[key]=[];
+  if(!Array.isArray(db[key]))db[key]=[];
 }
 
-/* Migração: remove os registros Uber/99 da área pessoal.
-   O arquivo de backup baixado anteriormente não é alterado. */
-if(localStorage.getItem('MFP_PERSONAL_ONLY_V1')!=='1'){
-  db.uber=[];
-  localStorage.setItem('MFP_PERSONAL_ONLY_V1','1');
-  localStorage.setItem('MFP_V2',JSON.stringify(db));
-}
+/* Migra lançamentos antigos sem apagar os dados existentes.
+   Registros antigos de Cartão/Transferência/Outro ficam preservados. */
+let migrationChanged=false;
+db.personal=db.personal.map(a=>{
+  if(a.pixValue!==undefined&&a.cashValue!==undefined)return a;
+  const method=a.method||'';
+  const value=Number(a.value)||0;
+  migrationChanged=true;
+  return {
+    ...a,
+    pixValue:method==='Pix'?value:0,
+    cashValue:method==='Dinheiro'?value:0,
+    legacyMethod:!['Pix','Dinheiro'].includes(method)?method:''
+  };
+});
+if(migrationChanged)localStorage.setItem('MFP_V2',JSON.stringify(db));
+
 function save(){
   localStorage.setItem('MFP_V2',JSON.stringify(db));
 }
-</script>
 
-<script>
 function go(page,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   $(page)?.classList.add('active');
   document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
+  if(btn)btn.classList.add('active');
   renderAll();
 }
 
@@ -546,7 +348,7 @@ function addDate(date,period,n){
     const x=new Date(y,m-1,d+n);
     return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
   }
-  if(period==='week') return addDate(date,'day',n*7);
+  if(period==='week')return addDate(date,'day',n*7);
   const index=(m-1)+n;
   const ny=y+Math.floor(index/12);
   const nm=((index%12)+12)%12;
@@ -554,14 +356,33 @@ function addDate(date,period,n){
   return `${ny}-${String(nm+1).padStart(2,'0')}-${String(Math.min(d,last)).padStart(2,'0')}`;
 }
 
+function splitValues(a){
+  if(a.pixValue!==undefined&&a.cashValue!==undefined){
+    return {pix:Number(a.pixValue)||0,cash:Number(a.cashValue)||0};
+  }
+  const value=Number(a.value)||0;
+  return {
+    pix:a.method==='Pix'?value:0,
+    cash:a.method==='Dinheiro'?value:0
+  };
+}
+
+function updatePersonalTotal(){
+  const pix=Math.max(0,Number($('pPix').value)||0);
+  const cash=Math.max(0,Number($('pCash').value)||0);
+  $('pValue').value=(pix+cash).toFixed(2);
+}
+
 function updatePersonalCategories(){
   const type=$('pType').value;
   const old=$('pCategory').value;
   const categories=type==='entrada'
-    ? ['Salário','Serviços','Uber/99','Recebimentos','Investimento','Empréstimo','Outros']
-    : ['Moradia','Mercado','Alimentação','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Uber/99 pagamentos','Outros'];
-  $('pCategory').innerHTML=categories.map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
-  if(categories.includes(old)) $('pCategory').value=old;
+    ?['Salário','Serviços','Recebimentos','Investimento','Empréstimo','Outros']
+    :['Moradia','Mercado','Alimentação','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Outros'];
+  $('pCategory').innerHTML=categories.map(c=>
+    `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`
+  ).join('');
+  if(categories.includes(old))$('pCategory').value=old;
 }
 
 function repeatFields(){
@@ -574,10 +395,12 @@ function resetPersonalForm(){
   $('personalForm').reset();
   $('pId').value='';
   $('pDate').value=today();
+  $('pPix').value='0';
+  $('pCash').value='0';
+  updatePersonalTotal();
   $('pRepeat').value='once';
   $('pRepeatCount').value='2';
   $('pStatus').value='pago';
-  $('pMethod').value='Pix';
   $('personalFormTitle').textContent='Novo lançamento';
   $('pSaveBtn').textContent='Salvar lançamento';
   updatePersonalCategories();
@@ -592,38 +415,33 @@ function personalSum(month,type,status){
   ).reduce((s,a)=>s+(Number(a.value)||0),0);
 }
 
-/* Gera mensalmente as ocorrências das despesas fixas até o mês atual.
-   A série não possui prazo final e pode ser cancelada excluindo a série. */
+/* Gera as ocorrências das séries fixas até o mês atual. */
 function ensureFixedOccurrences(){
   let changed=false;
   const groups={};
   db.personal.filter(a=>a.seriesType==='fixed'&&a.series).forEach(a=>{
-    if(!groups[a.series]) groups[a.series]=[];
+    if(!groups[a.series])groups[a.series]=[];
     groups[a.series].push(a);
   });
   const now=thisMonth();
   Object.values(groups).forEach(items=>{
     items.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
     const base=items[0];
-    if(!base||!base.date) return;
+    if(!base||!base.date)return;
     const [sy,sm]=base.date.split('-').map(Number);
     const [ny,nm]=now.split('-').map(Number);
     const months=(ny-sy)*12+(nm-sm);
-    if(months<0) return;
+    if(months<0)return;
     for(let i=1;i<=months;i++){
       const date=addDate(base.date,'month',i);
       const exists=db.personal.some(a=>a.series===base.series&&monthOf(a.date)===monthOf(date));
       if(!exists){
-        db.personal.push({
-          ...base,id:idnew(),date,
-          status:'pendente',
-          seriesIndex:i+1
-        });
+        db.personal.push({...base,id:idnew(),date,status:'pendente',seriesIndex:i+1});
         changed=true;
       }
     }
   });
-  if(changed) save();
+  if(changed)save();
 }
 
 $('personalForm').addEventListener('submit',e=>{
@@ -631,18 +449,25 @@ $('personalForm').addEventListener('submit',e=>{
   const editId=$('pId').value;
   const type=$('pType').value;
   const date=$('pDate').value;
-  const value=Number($('pValue').value);
-  if(!date||!Number.isFinite(value)||value<=0){
-    alert('Informe uma data e um valor válido.');
+  const pix=Math.max(0,Number($('pPix').value)||0);
+  const cash=Math.max(0,Number($('pCash').value)||0);
+  const value=Number((pix+cash).toFixed(2));
+
+  if(!date||value<=0){
+    alert('Informe a data e pelo menos um valor maior que zero em Pix ou dinheiro.');
     return;
   }
+
   const mode=$('pRepeat').value;
   const base={
     date,type,
     category:$('pCategory').value,
+    pixValue:pix,
+    cashValue:cash,
     value,
     desc:$('pDesc').value.trim(),
-    method:$('pMethod').value,
+    method:pix>0&&cash>0?'Pix + Dinheiro':pix>0?'Pix':'Dinheiro',
+    legacyMethod:'',
     status:$('pStatus').value
   };
 
@@ -663,19 +488,13 @@ $('personalForm').addEventListener('submit',e=>{
     const series=idnew();
     for(let i=0;i<count;i++){
       db.personal.push({
-        ...base,
-        id:idnew(),
-        date:addDate(date,period,i),
-        series,seriesType:'repeat',
-        part:i+1,parts:count
+        ...base,id:idnew(),date:addDate(date,period,i),
+        series,seriesType:'repeat',part:i+1,parts:count
       });
     }
   }else if(mode==='fixed'){
     const series=idnew();
-    db.personal.push({
-      ...base,id:idnew(),series,seriesType:'fixed',
-      seriesIndex:1,seriesStart:date
-    });
+    db.personal.push({...base,id:idnew(),series,seriesType:'fixed',seriesIndex:1,seriesStart:date});
   }else{
     db.personal.push({...base,id:idnew()});
   }
@@ -683,13 +502,9 @@ $('personalForm').addEventListener('submit',e=>{
   save();
   resetPersonalForm();
   renderAll();
-  if(mode==='fixed'){
-    alert('Despesa fixa cadastrada. Ela continuará mensalmente até você excluir a série.');
-  }else if(mode==='repeat'){
-    alert('Lançamentos repetidos cadastrados.');
-  }else{
-    alert('Lançamento salvo!');
-  }
+  alert(mode==='fixed'
+    ?'Lançamento fixo cadastrado. Ele continuará mensalmente até você excluir a série.'
+    :mode==='repeat'?'Lançamentos repetidos cadastrados.':'Lançamento salvo!');
 });
 
 function renderPersonal(){
@@ -709,13 +524,18 @@ function renderPersonal(){
 
   $('personalList').innerHTML=list.map(a=>{
     const isIn=a.type==='entrada';
+    const split=splitValues(a);
     const extra=a.seriesType==='repeat'&&a.part&&a.parts
-      ? ` · ${a.part}/${a.parts}`
-      : a.seriesType==='fixed'?' · Fixa mensal':'';
+      ?` · ${a.part}/${a.parts}`
+      :a.seriesType==='fixed'?' · Fixa mensal':'';
+    const paymentText=a.legacyMethod
+      ?`Forma antiga: ${escapeHTML(a.legacyMethod)}`
+      :`Pix: ${money(split.pix)} · Dinheiro: ${money(split.cash)}`;
     return `<div class="item">
       <div class="item-main">
         <div class="item-title">${escapeHTML(a.desc||a.category||'Lançamento')}</div>
-        <div class="item-meta">${escapeHTML(a.date)} · ${escapeHTML(a.category||'Outros')} · ${escapeHTML(a.method||'Não informado')}${extra}</div>
+        <div class="item-meta">${escapeHTML(a.date)} · ${escapeHTML(a.category||'Outros')}${extra}</div>
+        <div class="item-meta">${paymentText}</div>
         <div class="item-meta">
           <span class="tag ${a.status==='pago'?'tag-paid':'tag-pending'}">${a.status==='pago'?(isIn?'Recebido':'Pago'):'Pendente'}</span>
           <span class="tag">${isIn?'Entrada':'Despesa'}</span>
@@ -734,14 +554,16 @@ function renderPersonal(){
 function editPersonal(id){
   const a=db.personal.find(x=>x.id===id);
   if(!a)return;
+  const split=splitValues(a);
   $('pId').value=a.id;
   $('pDate').value=a.date;
   $('pType').value=a.type;
   updatePersonalCategories();
   $('pCategory').value=a.category;
-  $('pValue').value=a.value;
+  $('pPix').value=split.pix.toFixed(2);
+  $('pCash').value=split.cash.toFixed(2);
+  updatePersonalTotal();
   $('pDesc').value=a.desc||'';
-  $('pMethod').value=a.method||'Pix';
   $('pStatus').value=a.status||'pago';
   $('pRepeat').value='once';
   repeatFields();
@@ -778,13 +600,76 @@ function deletePersonal(id){
 
 function renderBalances(){
   const paid=db.personal.filter(a=>a.status==='pago');
-  const pix=paid.reduce((s,a)=>s+(a.method==='Pix'?(a.type==='entrada'?1:-1)*(Number(a.value)||0):0),0);
-  const cash=paid.reduce((s,a)=>s+(a.method==='Dinheiro'?(a.type==='entrada'?1:-1)*(Number(a.value)||0):0),0);
+  let pix=0,cash=0;
+  paid.forEach(a=>{
+    const split=splitValues(a);
+    const sign=a.type==='entrada'?1:-1;
+    pix+=sign*split.pix;
+    cash+=sign*split.cash;
+  });
   $('balancePix').textContent=money(pix);
   $('balanceCash').textContent=money(cash);
   $('balanceTotal').textContent=money(pix+cash);
 }
 
+/* Gráficos por categoria: cada categoria mostra o total e a divisão Pix/dinheiro. */
+function renderPersonalCharts(){
+  const month=$('pChartMonth').value||thisMonth();
+  const paid=db.personal.filter(a=>monthOf(a.date)===month&&a.status==='pago');
+  renderOnePersonalChart('entrada',paid,'incomePie');
+  renderOnePersonalChart('despesa',paid,'expensePie');
+}
+
+function renderOnePersonalChart(type,paid,targetId){
+  const rows=paid.filter(a=>a.type===type);
+  const categories={};
+  rows.forEach(a=>{
+    const name=a.category||'Outros';
+    if(!categories[name])categories[name]={pix:0,cash:0,total:0};
+    const split=splitValues(a);
+    categories[name].pix+=split.pix;
+    categories[name].cash+=split.cash;
+    categories[name].total+=Number(a.value)||0;
+  });
+
+  const pix=rows.reduce((s,a)=>s+splitValues(a).pix,0);
+  const cash=rows.reduce((s,a)=>s+splitValues(a).cash,0);
+  const total=pix+cash;
+  const pixPct=total?pix/total*100:0;
+  const cashPct=total?cash/total*100:0;
+  const gradient=total
+    ?`conic-gradient(#1769e0 0 ${pixPct}%, #20a36b ${pixPct}% 100%)`
+    :'#e6edf7';
+  const sorted=Object.entries(categories).sort((a,b)=>b[1].total-a[1].total);
+
+  if(!rows.length){
+    $(targetId).innerHTML='<div class="empty">Nenhum lançamento pago/recebido neste mês.</div>';
+    return;
+  }
+
+  const details=sorted.map(([name,v])=>{
+    const pct=total?v.total/total*100:0;
+    return `<div class="chart-detail-row">
+      <span><strong>${escapeHTML(name)}</strong><br>Pix ${money(v.pix)} · Dinheiro ${money(v.cash)}<br>${pct.toFixed(1)}% do total</span>
+      <strong>${money(v.total)}</strong>
+    </div>`;
+  }).join('');
+
+  $(targetId).innerHTML=`
+    <div class="chart-content">
+      <div class="pie" style="background:${gradient}">
+        <div class="pie-hole">${money(total)}<br>total</div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-line"><span class="legend-dot" style="background:#1769e0"></span><span>Pix<br><strong>${money(pix)}</strong> (${pixPct.toFixed(1)}%)</span></div>
+        <div class="legend-line"><span class="legend-dot" style="background:#20a36b"></span><span>Dinheiro<br><strong>${money(cash)}</strong> (${cashPct.toFixed(1)}%)</span></div>
+      </div>
+    </div>
+    <div class="chart-detail"><strong>Detalhamento por categoria</strong>${details}</div>`;
+}
+</script>
+
+<script>
 function renderCardOptions(){
   const current=$('purchaseCard').value;
   $('purchaseCard').innerHTML=db.cards.length
@@ -799,12 +684,16 @@ $('cardForm').addEventListener('submit',e=>{
   const close=Number($('cClose').value);
   const due=Number($('cDue').value);
   if(!name||close<1||close>31||due<1||due>31){
-    alert('Confira o nome e os dias do cartão.');return;
+    alert('Confira o nome e os dias do cartão.');
+    return;
   }
   db.cards.push({id:idnew(),name,close,due});
-  save();$('cardForm').reset();
-  $('cClose').value=5;$('cDue').value=10;
-  renderAll();alert('Cartão cadastrado!');
+  save();
+  $('cardForm').reset();
+  $('cClose').value=5;
+  $('cDue').value=10;
+  renderAll();
+  alert('Cartão cadastrado!');
 });
 
 function deleteCard(id){
@@ -828,9 +717,7 @@ function renderCards(){
       <div class="item-main">
         <div class="item-title">${escapeHTML(c.name)}</div>
         <div class="item-meta">Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</div>
-        <div class="item-actions">
-          <button class="btn btn-danger" onclick="deleteCard('${c.id}')">Excluir cartão</button>
-        </div>
+        <div class="item-actions"><button class="btn btn-danger" onclick="deleteCard('${c.id}')">Excluir cartão</button></div>
       </div>
     </div>`).join('');
 }
@@ -842,18 +729,22 @@ $('purchaseForm').addEventListener('submit',e=>{
   if(!card){alert('Cadastre ou selecione um cartão.');return;}
   const value=Number($('purchaseValue').value);
   const parts=Number($('purchaseParts').value);
-  if(value<=0||parts<1||parts>60){alert('Confira o valor e o número de parcelas.');return;}
+  if(!Number.isFinite(value)||value<=0||parts<1||parts>60){
+    alert('Confira o valor e o número de parcelas.');
+    return;
+  }
   db.purchases.push({
     id:idnew(),cardId,
     date:$('purchaseDate').value,
     desc:$('purchaseDesc').value.trim(),
-    value,parts,
-    paidParts:[]
+    value,parts,paidParts:[]
   });
-  save();$('purchaseForm').reset();
+  save();
+  $('purchaseForm').reset();
   $('purchaseDate').value=today();
   $('purchaseParts').value=1;
-  renderAll();alert('Compra registrada!');
+  renderAll();
+  alert('Compra registrada!');
 });
 
 function installmentDate(p,i){
@@ -924,7 +815,9 @@ function renderInvoices(){
       </div>`);
     }
   });
-  $('invoiceList').innerHTML=(rows.length?rows.join(''):'')+(items.length?items.join(''):'')||'<div class="empty">Nenhuma fatura ou compra neste mês.</div>';
+  $('invoiceList').innerHTML=(rows.length?rows.join(''):'')+
+    (items.length?items.join(''):'')||
+    '<div class="empty">Nenhuma fatura ou compra neste mês.</div>';
 }
 
 function togglePurchase(id,index){
@@ -945,23 +838,32 @@ function deletePurchase(id){
 $('goalForm').addEventListener('submit',e=>{
   e.preventDefault();
   const target=Number($('gTarget').value);
-  const saved=Number($('gSaved').value);
-  if(target<=0||saved<0){alert('Confira os valores da meta.');return;}
+  const savedValue=Number($('gSaved').value);
+  if(target<=0||savedValue<0){
+    alert('Confira os valores da meta.');
+    return;
+  }
   db.goals.push({
     id:idnew(),name:$('gName').value.trim(),
-    target,saved,date:$('gDate').value
+    target,saved:savedValue,date:$('gDate').value
   });
-  save();$('goalForm').reset();$('gSaved').value=0;
-  renderAll();alert('Meta cadastrada!');
+  save();
+  $('goalForm').reset();
+  $('gSaved').value=0;
+  renderAll();
+  alert('Meta cadastrada!');
 });
 
-function updateGoal(id,delta){
+function updateGoal(id){
   const g=db.goals.find(x=>x.id===id);
   if(!g)return;
   const raw=prompt('Informe o novo total já guardado (R$):',String(g.saved));
   if(raw===null)return;
   const value=Number(raw.replace(',','.'));
-  if(!Number.isFinite(value)||value<0){alert('Informe um valor válido.');return;}
+  if(!Number.isFinite(value)||value<0){
+    alert('Informe um valor válido.');
+    return;
+  }
   g.saved=value;save();renderAll();
 }
 
@@ -1004,6 +906,7 @@ function renderDashboard(){
   const expenses=entries.filter(a=>a.type==='despesa'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
   const pendingExpenses=entries.filter(a=>a.type==='despesa'&&a.status==='pendente').reduce((s,a)=>s+(Number(a.value)||0),0);
   const pendingIncome=entries.filter(a=>a.type==='entrada'&&a.status==='pendente').reduce((s,a)=>s+(Number(a.value)||0),0);
+
   $('dashIncome').textContent=money(income);
   $('dashExpenses').textContent=money(expenses);
   $('dashProfit').textContent=money(income-expenses);
@@ -1049,13 +952,28 @@ function renderReports(){
 
   const methods={};
   rows.filter(a=>a.status==='pago').forEach(a=>{
-    const key=a.method||'Não informado';
-    if(!methods[key])methods[key]={entrada:0,despesa:0};
-    methods[key][a.type==='entrada'?'entrada':'despesa']+=(Number(a.value)||0);
+    const split=splitValues(a);
+    const method=a.legacyMethod||'';
+    if(method){
+      if(!methods[method])methods[method]={entrada:0,despesa:0};
+      methods[method][a.type]+=(Number(a.value)||0);
+      return;
+    }
+    if(!methods.Pix)methods.Pix={entrada:0,despesa:0};
+    if(!methods.Dinheiro)methods.Dinheiro={entrada:0,despesa:0};
+    methods.Pix[a.type]+=split.pix;
+    methods.Dinheiro[a.type]+=split.cash;
   });
+
   $('reportMethods').innerHTML=Object.keys(methods).length
     ?Object.entries(methods).map(([name,v])=>`
-      <div class="item"><div class="item-main"><div class="item-title">${escapeHTML(name)}</div><div class="item-meta">Entradas: ${money(v.entrada)} · Despesas: ${money(v.despesa)}</div></div><div class="item-value">${money(v.entrada-v.despesa)}</div></div>`).join('')
+      <div class="item">
+        <div class="item-main">
+          <div class="item-title">${escapeHTML(name)}</div>
+          <div class="item-meta">Entradas: ${money(v.entrada)} · Despesas: ${money(v.despesa)}</div>
+        </div>
+        <div class="item-value">${money(v.entrada-v.despesa)}</div>
+      </div>`).join('')
     :'<div class="empty">Sem movimentações pagas neste mês.</div>';
 }
 
@@ -1063,6 +981,7 @@ function renderAll(){
   renderBalances();
   renderDashboard();
   renderPersonal();
+  renderPersonalCharts();
   renderCards();
   renderInvoices();
   renderGoals();
@@ -1073,6 +992,7 @@ function exportLocalBackup(){
   save();
   const payload={
     app:'Meu Financeiro Pro 2.0',
+    version:2,
     exportedAt:new Date().toISOString(),
     data:db
   };
@@ -1099,20 +1019,31 @@ function importLocalBackup(event){
          !Array.isArray(data.purchases)||!Array.isArray(data.goals)){
         throw new Error('Formato de backup não reconhecido.');
       }
-      if(!confirm('Restaurar este backup? Os dados atuais do aplicativo serão substituídos.'))return;
+      if(!confirm('Restaurar este backup? Os dados atuais serão substituídos. Faça um backup atual antes de continuar.'))return;
+
       db={
         personal:data.personal,
-        uber:[],
+        uber:Array.isArray(data.uber)?data.uber:[],
         cards:data.cards,
         purchases:data.purchases,
         goals:data.goals
       };
+      db.personal=db.personal.map(a=>{
+        if(a.pixValue!==undefined&&a.cashValue!==undefined)return a;
+        const value=Number(a.value)||0;
+        const method=a.method||'';
+        return {
+          ...a,
+          pixValue:method==='Pix'?value:0,
+          cashValue:method==='Dinheiro'?value:0,
+          legacyMethod:!['Pix','Dinheiro'].includes(method)?method:''
+        };
+      });
       save();
-      localStorage.setItem('MFP_PERSONAL_ONLY_V1','1');
       renderAll();
-      alert('Backup restaurado. Os registros Uber/99 não foram importados para este aplicativo pessoal.');
+      alert('Backup restaurado com sucesso!');
     }catch(err){
-      alert('Não foi possível restaurar o arquivo. Confira se é um backup válido do Meu Financeiro.');
+      alert('Não foi possível restaurar. Confira se o arquivo é um backup válido do Meu Financeiro.');
     }finally{
       event.target.value='';
     }
@@ -1125,11 +1056,15 @@ function init(){
   $('purchaseDate').value=today();
   $('dashMonth').value=thisMonth();
   $('pFilter').value=thisMonth();
+  $('pChartMonth').value=thisMonth();
   $('invoiceMonth').value=thisMonth();
   $('reportMonth').value=thisMonth();
+  $('pPix').value='0';
+  $('pCash').value='0';
   $('pRepeatCount').value=2;
   $('cClose').value=5;
   $('cDue').value=10;
+  updatePersonalTotal();
   updatePersonalCategories();
   repeatFields();
   ensureFixedOccurrences();
@@ -1140,5 +1075,3 @@ init();
 </script>
 </body>
 </html>
-
-  
