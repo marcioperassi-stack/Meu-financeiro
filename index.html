@@ -77,7 +77,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
   <h1>Meu Financeiro Pro 2.0</h1>
   <p>Controle seu dinheiro, contas, cartões e metas</p>
 </header>
-
 <main>
 <nav id="mainNav">
   <button class="active" onclick="go('dashboard',this)">Dashboard</button>
@@ -91,10 +90,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
 <section id="dashboard" class="page active">
   <h2>Meu resumo financeiro</h2>
   <div class="panel">
-    <div class="field">
-      <label for="dashMonth">Mês do resumo</label>
-      <input type="month" id="dashMonth" onchange="renderDashboard()">
-    </div>
+    <div class="field"><label for="dashMonth">Mês do resumo</label><input type="month" id="dashMonth" onchange="renderDashboard()"></div>
   </div>
   <div class="grid">
     <div class="card"><div class="label">Entradas recebidas</div><div class="value green" id="dashIncome">R$ 0,00</div></div>
@@ -114,7 +110,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
   <div class="panel"><h3>Entradas e despesas do mês</h3><div id="dashSummary" class="list"></div></div>
   <div class="panel">
     <h3>Backup dos seus dados</h3>
-    <p class="muted">Guarde uma cópia dos seus lançamentos em um lugar seguro. O backup permite transferir dados manualmente entre aparelhos.</p>
+    <p class="muted">Guarde uma cópia dos lançamentos para transferir manualmente entre aparelhos.</p>
     <div class="actions">
       <button class="btn btn-primary" onclick="exportLocalBackup()">Baixar backup</button>
       <button class="btn btn-secondary" onclick="$('backupFile').click()">Restaurar backup</button>
@@ -131,8 +127,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
       <input type="hidden" id="pId">
       <div class="formgrid">
         <div class="field"><label for="pDate">Data</label><input type="date" id="pDate" required></div>
-        <div class="field">
-          <label for="pType">Tipo</label>
+        <div class="field"><label for="pType">Tipo</label>
           <select id="pType" required onchange="updatePersonalCategories()">
             <option value="entrada">Entrada</option><option value="despesa">Despesa</option>
           </select>
@@ -142,12 +137,10 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
         <div class="field"><label for="pCash">Valor em dinheiro (R$)</label><input type="number" id="pCash" min="0" step="0.01" value="0" oninput="updatePersonalTotal()" required></div>
         <div class="field"><label for="pValue">Valor total (R$)</label><input type="number" id="pValue" readonly value="0.00"></div>
         <div class="field"><label for="pDesc">Descrição</label><input type="text" id="pDesc" maxlength="100" placeholder="Ex.: conta de luz"></div>
-        <div class="field">
-          <label for="pStatus">Situação</label>
+        <div class="field"><label for="pStatus">Situação</label>
           <select id="pStatus" required><option value="pago">Pago/Recebido</option><option value="pendente">Pendente</option></select>
         </div>
-        <div class="field">
-          <label for="pRepeat">Recorrência</label>
+        <div class="field"><label for="pRepeat">Recorrência</label>
           <select id="pRepeat" onchange="repeatFields()">
             <option value="once">Uma vez</option><option value="fixed">Fixa mensal, sem prazo final</option><option value="repeat">Repetir por período</option>
           </select>
@@ -157,25 +150,21 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
           <select id="pPeriod"><option value="day">Diária</option><option value="week">Semanal</option><option value="month">Mensal</option></select>
         </div>
         <div class="field" id="repeatCountBox" style="display:none">
-          <label for="pRepeatCount">Quantidade de lançamentos</label>
-          <input type="number" id="pRepeatCount" min="1" max="60" value="2">
+          <label for="pRepeatCount">Quantidade de lançamentos</label><input type="number" id="pRepeatCount" min="1" max="60" value="2">
         </div>
       </div>
       <div class="actions">
         <button class="btn btn-primary" type="submit" id="pSaveBtn">Salvar lançamento</button>
         <button class="btn btn-secondary" type="button" onclick="resetPersonalForm()">Limpar</button>
       </div>
-      <p class="muted">Informe os valores em Pix e/ou dinheiro. O total será calculado automaticamente. Uma despesa fixa mensal continuará sendo gerada até você excluir a série.</p>
+      <p class="muted">Informe Pix e/ou dinheiro. O total é calculado automaticamente. Lançamentos fixos continuam mensalmente até cancelar a série.</p>
     </form>
   </div>
 
   <div class="panel">
     <h3>Gráficos detalhados de entradas e despesas</h3>
-    <div class="field">
-      <label for="pChartMonth">Mês dos gráficos</label>
-      <input type="month" id="pChartMonth" onchange="renderPersonalCharts()">
-    </div>
-    <p class="muted">Os gráficos consideram lançamentos pagos/recebidos do mês selecionado. Veja os valores por categoria e a divisão entre Pix e dinheiro.</p>
+    <div class="field"><label for="pChartMonth">Mês dos gráficos</label><input type="month" id="pChartMonth" onchange="renderPersonalCharts()"></div>
+    <p class="muted">Gráficos dos lançamentos pagos/recebidos, detalhados por categoria e divididos entre Pix e dinheiro.</p>
     <div class="chart-grid">
       <div class="chart-card">
         <div class="chart-heading">Entradas por categoria</div>
@@ -194,12 +183,10 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
     <h3>Histórico pessoal</h3>
     <div class="formgrid">
       <div class="field"><label for="pFilter">Filtrar por mês</label><input type="month" id="pFilter" onchange="renderPersonal()"></div>
-      <div class="field">
-        <label for="pFilterType">Tipo de lançamento</label>
+      <div class="field"><label for="pFilterType">Tipo de lançamento</label>
         <select id="pFilterType" onchange="renderPersonal()"><option value="todos">Todos</option><option value="entrada">Entradas</option><option value="despesa">Despesas</option></select>
       </div>
-      <div class="field">
-        <label for="pFilterStatus">Situação</label>
+      <div class="field"><label for="pFilterStatus">Situação</label>
         <select id="pFilterStatus" onchange="renderPersonal()"><option value="todos">Todas</option><option value="pago">Pago/Recebido</option><option value="pendente">Pendente</option></select>
       </div>
     </div>
@@ -207,868 +194,848 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
   </div>
 </section>
 
-<section id="saldos" class="page">
-  <h2>Meus saldos</h2>
+<section id="saldos" class="section">
+  <h2>💰 Saldos</h2>
   <div class="grid">
-    <div class="card"><div class="label">Saldo Pix</div><div class="value blue" id="balancePix">R$ 0,00</div></div>
-    <div class="card"><div class="label">Saldo em dinheiro</div><div class="value green" id="balanceCash">R$ 0,00</div></div>
-    <div class="card"><div class="label">Saldo total</div><div class="value" id="balanceTotal">R$ 0,00</div></div>
+    <div class="card"><span>Saldo Pix</span><strong id="saldoPix">R$ 0,00</strong></div>
+    <div class="card"><span>Saldo Dinheiro</span><strong id="saldoCash">R$ 0,00</strong></div>
+    <div class="card"><span>Saldo total</span><strong id="saldoTotal">R$ 0,00</strong></div>
   </div>
-  <div class="panel"><p class="muted">Os saldos usam entradas recebidas e despesas pagas. Lançamentos pendentes não alteram os saldos.</p></div>
+  <p class="muted">Os saldos consideram somente lançamentos pessoais pagos ou recebidos.</p>
 </section>
 
-<section id="cartao" class="page">
-  <h2>Cartões de crédito</h2>
-  <div class="panel">
+<section id="cartao" class="section">
+  <h2>💳 Cartão de crédito</h2>
+  <div class="card">
     <h3>Cadastrar cartão</h3>
     <form id="cardForm">
-      <div class="formgrid">
-        <div class="field"><label for="cName">Nome do cartão</label><input id="cName" required maxlength="50" placeholder="Ex.: Cartão principal"></div>
-        <div class="field"><label for="cClose">Dia de fechamento</label><input id="cClose" type="number" min="1" max="31" value="5" required></div>
-        <div class="field"><label for="cDue">Dia de vencimento</label><input id="cDue" type="number" min="1" max="31" value="10" required></div>
+      <label for="cardName">Nome do cartão</label>
+      <input id="cardName" required placeholder="Ex.: Cartão principal">
+      <div class="grid">
+        <div>
+          <label for="cardClosing">Dia do fechamento</label>
+          <input id="cardClosing" type="number" min="1" max="31" value="5" required>
+        </div>
+        <div>
+          <label for="cardDue">Dia do vencimento</label>
+          <input id="cardDue" type="number" min="1" max="31" value="10" required>
+        </div>
       </div>
-      <div class="actions"><button class="btn btn-primary" type="submit">Salvar cartão</button></div>
+      <button type="submit">Salvar cartão</button>
     </form>
   </div>
-  <div class="panel"><h3>Meus cartões</h3><div id="cardsList" class="list"></div></div>
-  <div class="panel">
-    <h3>Registrar compra no cartão</h3>
+
+  <div class="card">
+    <h3>Registrar compra</h3>
     <form id="purchaseForm">
-      <div class="formgrid">
-        <div class="field"><label for="purchaseCard">Cartão</label><select id="purchaseCard" required></select></div>
-        <div class="field"><label for="purchaseDate">Data da compra</label><input type="date" id="purchaseDate" required></div>
-        <div class="field"><label for="purchaseDesc">Descrição</label><input id="purchaseDesc" maxlength="100" required placeholder="Ex.: compra no mercado"></div>
-        <div class="field"><label for="purchaseValue">Valor total (R$)</label><input id="purchaseValue" type="number" min="0.01" step="0.01" required></div>
-        <div class="field"><label for="purchaseParts">Número de parcelas</label><input id="purchaseParts" type="number" min="1" max="60" value="1" required></div>
+      <label for="purchaseCard">Cartão</label>
+      <select id="purchaseCard" required></select>
+      <label for="purchaseDesc">Descrição da compra</label>
+      <input id="purchaseDesc" required placeholder="Ex.: Mercado">
+      <div class="grid">
+        <div>
+          <label for="purchaseValue">Valor total (R$)</label>
+          <input id="purchaseValue" type="number" min="0.01" step="0.01" required>
+        </div>
+        <div>
+          <label for="purchaseDate">Data da compra</label>
+          <input id="purchaseDate" type="date" required>
+        </div>
+        <div>
+          <label for="purchaseInstallments">Número de parcelas</label>
+          <input id="purchaseInstallments" type="number" min="1" max="48" value="1" required>
+        </div>
       </div>
-      <div class="actions"><button class="btn btn-primary" type="submit">Registrar compra</button></div>
+      <button type="submit">Registrar compra</button>
     </form>
   </div>
-  <div class="panel">
+
+  <div class="card">
+    <h3>Cartões cadastrados</h3>
+    <div id="cardList"></div>
+  </div>
+
+  <div class="card">
     <h3>Faturas</h3>
-    <div class="field"><label for="invoiceMonth">Mês da fatura</label><input type="month" id="invoiceMonth" onchange="renderInvoices()"></div>
-    <hr><div id="invoiceList" class="list"></div>
+    <div id="invoiceList"></div>
+  </div>
+
+  <div class="card">
+    <h3>Compras registradas</h3>
+    <div id="purchaseList"></div>
   </div>
 </section>
 
-<section id="metas" class="page">
-  <h2>Metas financeiras</h2>
-  <div class="panel">
-    <h3>Criar meta</h3>
+<section id="metas" class="section">
+  <h2>🎯 Metas financeiras</h2>
+  <div class="card">
     <form id="goalForm">
-      <div class="formgrid">
-        <div class="field"><label for="gName">Nome da meta</label><input id="gName" maxlength="70" required placeholder="Ex.: Reserva de emergência"></div>
-        <div class="field"><label for="gTarget">Valor desejado (R$)</label><input id="gTarget" type="number" min="0.01" step="0.01" required></div>
-        <div class="field"><label for="gSaved">Valor já guardado (R$)</label><input id="gSaved" type="number" min="0" step="0.01" value="0" required></div>
-        <div class="field"><label for="gDate">Data desejada (opcional)</label><input id="gDate" type="date"></div>
+      <label for="goalName">Nome da meta</label>
+      <input id="goalName" required placeholder="Ex.: Reserva de emergência">
+      <div class="grid">
+        <div>
+          <label for="goalTarget">Valor desejado (R$)</label>
+          <input id="goalTarget" type="number" min="0.01" step="0.01" required>
+        </div>
+        <div>
+          <label for="goalSaved">Valor já guardado (R$)</label>
+          <input id="goalSaved" type="number" min="0" step="0.01" value="0">
+        </div>
       </div>
-      <div class="actions"><button class="btn btn-primary" type="submit">Salvar meta</button></div>
+      <button type="submit">Adicionar meta</button>
     </form>
   </div>
-  <div class="panel"><h3>Minhas metas</h3><div id="goalsList" class="list"></div></div>
+  <div id="goalList"></div>
 </section>
 
-<section id="relatorios" class="page">
-  <h2>Relatórios pessoais</h2>
-  <div class="panel"><div class="field"><label for="reportMonth">Mês do relatório</label><input type="month" id="reportMonth" onchange="renderReports()"></div></div>
-  <div class="grid">
-    <div class="card"><div class="label">Entradas recebidas</div><div class="value green" id="reportIncome">R$ 0,00</div></div>
-    <div class="card"><div class="label">Despesas pagas</div><div class="value red" id="reportExpenses">R$ 0,00</div></div>
-    <div class="card"><div class="label">Resultado do mês</div><div class="value blue" id="reportProfit">R$ 0,00</div></div>
+<section id="relatorios" class="section">
+  <h2>📊 Relatórios</h2>
+  <div class="card">
+    <label for="reportMonth">Mês do relatório</label>
+    <input id="reportMonth" type="month">
+    <button type="button" id="refreshReports">Atualizar relatório</button>
   </div>
-  <div class="panel"><h3>Resumo por categoria</h3><div id="reportCategories" class="list"></div></div>
-  <div class="panel"><h3>Resumo por forma de pagamento</h3><div id="reportMethods" class="list"></div></div>
+  <div id="reportSummary" class="grid"></div>
+  <div id="reportDetails"></div>
 </section>
 
-<footer>Meu Financeiro Pro 2.0 — controle pessoal do seu dinheiro</footer>
+<footer>
+  <p>Meu Financeiro Pro 2.0</p>
+  <p>Seus dados ficam salvos neste navegador. Faça backups regularmente.</p>
+</footer>
 </main>
 
 <script>
 const $ = id => document.getElementById(id);
-const money = n => (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const idnew = () => Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const money = value => (Number(value) || 0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const num = value => Number(value) || 0;
 const today = () => {
-  const d=new Date();
+  const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 };
-const thisMonth = () => today().slice(0,7);
-const monthOf = date => String(date||'').slice(0,7);
-const monthName = month => {
-  if(!month)return '';
-  const [y,m]=month.split('-').map(Number);
-  return new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
-};
-const escapeHTML = value => String(value??'').replace(/[&<>"']/g,c=>({
+const monthNow = () => today().slice(0,7);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
-const blankDB = () => ({personal:[],uber:[],cards:[],purchases:[],goals:[]});
+const formatDate = value => {
+  if (!value) return '—';
+  const parts = value.split('-');
+  return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : value;
+};
 
-let db;
-try{
-  db=JSON.parse(localStorage.getItem('MFP_V2')||'null')||blankDB();
-}catch(e){
-  db=blankDB();
-}
-for(const key of ['personal','uber','cards','purchases','goals']){
-  if(!Array.isArray(db[key]))db[key]=[];
-}
+const defaults = {
+  personal: [],
+  cards: [],
+  purchases: [],
+  goals: [],
+  uber: [],
+  settings: {}
+};
 
-/* Migra lançamentos antigos sem apagar os dados existentes.
-   Registros antigos de Cartão/Transferência/Outro ficam preservados. */
-let migrationChanged=false;
-db.personal=db.personal.map(a=>{
-  if(a.pixValue!==undefined&&a.cashValue!==undefined)return a;
-  const method=a.method||'';
-  const value=Number(a.value)||0;
-  migrationChanged=true;
-  return {
-    ...a,
-    pixValue:method==='Pix'?value:0,
-    cashValue:method==='Dinheiro'?value:0,
-    legacyMethod:!['Pix','Dinheiro'].includes(method)?method:''
-  };
-});
-if(migrationChanged)localStorage.setItem('MFP_V2',JSON.stringify(db));
+function loadDB() {
+  let raw = {};
+  try { raw = JSON.parse(localStorage.getItem('MF') || '{}') || {}; } catch {}
+  const data = {...defaults, ...raw};
+  data.personal = Array.isArray(data.personal) ? data.personal : [];
+  data.cards = Array.isArray(data.cards) ? data.cards : [];
+  data.purchases = Array.isArray(data.purchases) ? data.purchases : [];
+  data.goals = Array.isArray(data.goals) ? data.goals : [];
+  data.uber = Array.isArray(data.uber) ? data.uber : [];
 
-function save(){
-  localStorage.setItem('MFP_V2',JSON.stringify(db));
-}
-
-function go(page,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  $(page)?.classList.add('active');
-  document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  renderAll();
-}
-
-function addDate(date,period,n){
-  const [y,m,d]=String(date).split('-').map(Number);
-  if(period==='day'){
-    const x=new Date(y,m-1,d+n);
-    return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
-  }
-  if(period==='week')return addDate(date,'day',n*7);
-  const index=(m-1)+n;
-  const ny=y+Math.floor(index/12);
-  const nm=((index%12)+12)%12;
-  const last=new Date(ny,nm+1,0).getDate();
-  return `${ny}-${String(nm+1).padStart(2,'0')}-${String(Math.min(d,last)).padStart(2,'0')}`;
-}
-
-function splitValues(a){
-  if(a.pixValue!==undefined&&a.cashValue!==undefined){
-    return {pix:Number(a.pixValue)||0,cash:Number(a.cashValue)||0};
-  }
-  const value=Number(a.value)||0;
-  return {
-    pix:a.method==='Pix'?value:0,
-    cash:a.method==='Dinheiro'?value:0
-  };
-}
-
-function updatePersonalTotal(){
-  const pix=Math.max(0,Number($('pPix').value)||0);
-  const cash=Math.max(0,Number($('pCash').value)||0);
-  $('pValue').value=(pix+cash).toFixed(2);
-}
-
-function updatePersonalCategories(){
-  const type=$('pType').value;
-  const old=$('pCategory').value;
-  const categories=type==='entrada'
-    ?['Salário','Serviços','Recebimentos','Investimento','Empréstimo','Outros']
-    :['Moradia','Mercado','Alimentação','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Outros'];
-  $('pCategory').innerHTML=categories.map(c=>
-    `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`
-  ).join('');
-  if(categories.includes(old))$('pCategory').value=old;
-}
-
-function repeatFields(){
-  const mode=$('pRepeat').value;
-  $('repeatPeriodBox').style.display=mode==='repeat'?'flex':'none';
-  $('repeatCountBox').style.display=mode==='repeat'?'flex':'none';
-}
-
-function resetPersonalForm(){
-  $('personalForm').reset();
-  $('pId').value='';
-  $('pDate').value=today();
-  $('pPix').value='0';
-  $('pCash').value='0';
-  updatePersonalTotal();
-  $('pRepeat').value='once';
-  $('pRepeatCount').value='2';
-  $('pStatus').value='pago';
-  $('personalFormTitle').textContent='Novo lançamento';
-  $('pSaveBtn').textContent='Salvar lançamento';
-  updatePersonalCategories();
-  repeatFields();
-}
-
-function personalSum(month,type,status){
-  return db.personal.filter(a=>
-    (!month||monthOf(a.date)===month)&&
-    (!type||a.type===type)&&
-    (!status||a.status===status)
-  ).reduce((s,a)=>s+(Number(a.value)||0),0);
-}
-
-/* Gera as ocorrências das séries fixas até o mês atual. */
-function ensureFixedOccurrences(){
-  let changed=false;
-  const groups={};
-  db.personal.filter(a=>a.seriesType==='fixed'&&a.series).forEach(a=>{
-    if(!groups[a.series])groups[a.series]=[];
-    groups[a.series].push(a);
-  });
-  const now=thisMonth();
-  Object.values(groups).forEach(items=>{
-    items.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-    const base=items[0];
-    if(!base||!base.date)return;
-    const [sy,sm]=base.date.split('-').map(Number);
-    const [ny,nm]=now.split('-').map(Number);
-    const months=(ny-sy)*12+(nm-sm);
-    if(months<0)return;
-    for(let i=1;i<=months;i++){
-      const date=addDate(base.date,'month',i);
-      const exists=db.personal.some(a=>a.series===base.series&&monthOf(a.date)===monthOf(date));
-      if(!exists){
-        db.personal.push({...base,id:idnew(),date,status:'pendente',seriesIndex:i+1});
-        changed=true;
+  data.personal = data.personal.map(item => {
+    const entry = {...item};
+    if (entry.pixValue === undefined && entry.cashValue === undefined) {
+      const oldValue = num(entry.value);
+      if (entry.method === 'Pix') {
+        entry.pixValue = oldValue;
+        entry.cashValue = 0;
+      } else if (entry.method === 'Dinheiro') {
+        entry.pixValue = 0;
+        entry.cashValue = oldValue;
+      } else {
+        entry.pixValue = oldValue;
+        entry.cashValue = 0;
+        if (entry.method) entry.legacyMethod = entry.method;
       }
     }
+    entry.pixValue = num(entry.pixValue);
+    entry.cashValue = num(entry.cashValue);
+    entry.value = entry.pixValue + entry.cashValue;
+    return entry;
   });
-  if(changed)save();
+  return data;
 }
 
-$('personalForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const editId=$('pId').value;
-  const type=$('pType').value;
-  const date=$('pDate').value;
-  const pix=Math.max(0,Number($('pPix').value)||0);
-  const cash=Math.max(0,Number($('pCash').value)||0);
-  const value=Number((pix+cash).toFixed(2));
+let db = loadDB();
+let editingPersonalId = null;
+let editingCardId = null;
 
-  if(!date||value<=0){
-    alert('Informe a data e pelo menos um valor maior que zero em Pix ou dinheiro.');
-    return;
+function save() {
+  localStorage.setItem('MF', JSON.stringify(db));
+}
+
+function go(section) {
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+  const target = $(section);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('#mainNav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.section === section);
+  });
+  if (section === 'dashboard') renderDashboard();
+  if (section === 'saldos') renderBalances();
+  if (section === 'cartao') renderAll();
+  if (section === 'metas') renderGoals();
+  if (section === 'relatorios') renderReports();
+}
+
+function addDate(dateString, count, unit) {
+  const d = new Date(`${dateString}T12:00:00`);
+  if (unit === 'daily') d.setDate(d.getDate() + count);
+  else if (unit === 'weekly') d.setDate(d.getDate() + count * 7);
+  else {
+    const day = d.getDate();
+    d.setDate(1);
+    d.setMonth(d.getMonth() + count);
+    const lastDay = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+    d.setDate(Math.min(day, lastDay));
   }
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 
-  const mode=$('pRepeat').value;
-  const base={
-    date,type,
-    category:$('pCategory').value,
-    pixValue:pix,
-    cashValue:cash,
-    value,
-    desc:$('pDesc').value.trim(),
-    method:pix>0&&cash>0?'Pix + Dinheiro':pix>0?'Pix':'Dinheiro',
-    legacyMethod:'',
-    status:$('pStatus').value
+function splitValues(item) {
+  const pix = num(item.pixValue);
+  const cash = num(item.cashValue);
+  return {pix, cash, total: pix + cash};
+}
+
+function updatePersonalTotal() {
+  const pix = num($('pPixValue')?.value);
+  const cash = num($('pCashValue')?.value);
+  if ($('pTotalValue')) $('pTotalValue').value = (pix + cash).toFixed(2);
+}
+
+function updatePersonalCategories() {
+  const type = $('pType').value;
+  const categories = type === 'Entrada'
+    ? ['Salário','Serviços','Uber/99','Recebimento','Investimento','Empréstimo','Outras entradas','Outros']
+    : ['Moradia','Mercado','Alimentação','Uber/99','Pagamentos','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Outros'];
+  const select = $('pCategory');
+  const previous = select.value;
+  select.innerHTML = categories.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+  if (categories.includes(previous)) select.value = previous;
+}
+
+function repeatFields() {
+  const mode = $('pRepeat').value;
+  $('repeatOptions').style.display = mode === 'repeat' ? 'grid' : 'none';
+}
+
+function resetPersonalForm() {
+  editingPersonalId = null;
+  $('personalForm').reset();
+  $('pDate').value = today();
+  $('pPixValue').value = '';
+  $('pCashValue').value = '';
+  $('pTotalValue').value = '0.00';
+  $('pRepeat').value = 'normal';
+  $('pRepeatCount').value = '1';
+  $('pRepeatUnit').value = 'monthly';
+  $('pStatus').value = 'Pago';
+  updatePersonalCategories();
+  repeatFields();
+  $('personalSubmit').textContent = 'Salvar lançamento';
+  $('personalCancel').style.display = 'none';
+}
+
+function personalSum(items, type, month) {
+  return items.filter(item => item.type === type && (!month || (item.date || '').slice(0,7) === month))
+    .reduce((sum, item) => sum + splitValues(item).total, 0);
+}
+
+function ensureFixedOccurrences() {
+  const fixedItems = db.personal.filter(item => item.repeat === 'fixed' && !item.generated);
+  fixedItems.forEach(item => {
+    if (item.lastGeneratedMonth === monthNow()) return;
+    const month = monthNow();
+    if ((item.date || '').slice(0,7) >= month) return;
+    const nextDate = `${month}-` + String(Math.min(
+      Number((item.date || '').slice(8,10)) || 1,
+      new Date(Number(month.slice(0,4)), Number(month.slice(5,7)), 0).getDate()
+    )).padStart(2,'0');
+    db.personal.push({
+      ...item,
+      id: uid(),
+      date: nextDate,
+      status: 'Pendente',
+      generated: true,
+      parentId: item.id,
+      repeat: 'normal'
+    });
+    item.lastGeneratedMonth = month;
+  });
+}
+
+$('pType').addEventListener('change', updatePersonalCategories);
+$('pPixValue').addEventListener('input', updatePersonalTotal);
+$('pCashValue').addEventListener('input', updatePersonalTotal);
+$('pRepeat').addEventListener('change', repeatFields);
+$('personalCancel').addEventListener('click', resetPersonalForm);
+
+$('personalForm').addEventListener('submit', event => {
+  event.preventDefault();
+  const type = $('pType').value;
+  const pixValue = num($('pPixValue').value);
+  const cashValue = num($('pCashValue').value);
+  const total = pixValue + cashValue;
+  if (total <= 0) return alert('Informe um valor maior que zero.');
+  const date = $('pDate').value;
+  const repeat = $('pRepeat').value;
+  const count = repeat === 'repeat' ? Math.max(1, Math.min(60, Number($('pRepeatCount').value) || 1)) : 1;
+  const unit = $('pRepeatUnit').value;
+  const common = {
+    type,
+    description: $('pDescription').value.trim(),
+    category: $('pCategory').value,
+    pixValue,
+    cashValue,
+    value: total,
+    date,
+    status: $('pStatus').value,
+    repeat: repeat === 'fixed' ? 'fixed' : 'normal',
+    note: $('pNote').value.trim()
   };
 
-  if(editId){
-    const index=db.personal.findIndex(a=>a.id===editId);
-    if(index<0){alert('Lançamento não encontrado.');return;}
-    db.personal[index]={...db.personal[index],...base};
-    save();
-    resetPersonalForm();
-    renderAll();
-    alert('Lançamento atualizado!');
-    return;
-  }
-
-  if(mode==='repeat'){
-    const count=Math.max(1,Math.min(60,Number($('pRepeatCount').value)||1));
-    const period=$('pPeriod').value;
-    const series=idnew();
-    for(let i=0;i<count;i++){
+  if (editingPersonalId) {
+    const index = db.personal.findIndex(item => item.id === editingPersonalId);
+    if (index >= 0) {
+      db.personal[index] = {...db.personal[index], ...common};
+    }
+  } else {
+    for (let i = 0; i < count; i++) {
       db.personal.push({
-        ...base,id:idnew(),date:addDate(date,period,i),
-        series,seriesType:'repeat',part:i+1,parts:count
+        ...common,
+        id: uid(),
+        date: i === 0 ? date : addDate(date, i, unit),
+        repeat: repeat === 'fixed' ? 'fixed' : 'normal',
+        repeatGroup: repeat === 'repeat' ? uid() : null,
+        generated: false
       });
     }
-  }else if(mode==='fixed'){
-    const series=idnew();
-    db.personal.push({...base,id:idnew(),series,seriesType:'fixed',seriesIndex:1,seriesStart:date});
-  }else{
-    db.personal.push({...base,id:idnew()});
   }
 
   save();
   resetPersonalForm();
   renderAll();
-  alert(mode==='fixed'
-    ?'Lançamento fixo cadastrado. Ele continuará mensalmente até você excluir a série.'
-    :mode==='repeat'?'Lançamentos repetidos cadastrados.':'Lançamento salvo!');
 });
 
-function renderPersonal(){
-  const month=$('pFilter').value;
-  const type=$('pFilterType').value;
-  const status=$('pFilterStatus').value;
-  const list=db.personal.filter(a=>
-    (!month||monthOf(a.date)===month)&&
-    (type==='todos'||a.type===type)&&
-    (status==='todos'||a.status===status)
-  ).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-
-  if(!list.length){
-    $('personalList').innerHTML='<div class="empty">Nenhum lançamento encontrado.</div>';
-    return;
-  }
-
-  $('personalList').innerHTML=list.map(a=>{
-    const isIn=a.type==='entrada';
-    const split=splitValues(a);
-    const extra=a.seriesType==='repeat'&&a.part&&a.parts
-      ?` · ${a.part}/${a.parts}`
-      :a.seriesType==='fixed'?' · Fixa mensal':'';
-    const paymentText=a.legacyMethod
-      ?`Forma antiga: ${escapeHTML(a.legacyMethod)}`
-      :`Pix: ${money(split.pix)} · Dinheiro: ${money(split.cash)}`;
-    return `<div class="item">
-      <div class="item-main">
-        <div class="item-title">${escapeHTML(a.desc||a.category||'Lançamento')}</div>
-        <div class="item-meta">${escapeHTML(a.date)} · ${escapeHTML(a.category||'Outros')}${extra}</div>
-        <div class="item-meta">${paymentText}</div>
-        <div class="item-meta">
-          <span class="tag ${a.status==='pago'?'tag-paid':'tag-pending'}">${a.status==='pago'?(isIn?'Recebido':'Pago'):'Pendente'}</span>
-          <span class="tag">${isIn?'Entrada':'Despesa'}</span>
-        </div>
-        <div class="item-actions">
-          <button class="btn btn-secondary" onclick="editPersonal('${a.id}')">Editar</button>
-          <button class="btn btn-success" onclick="togglePersonal('${a.id}')">${a.status==='pago'?'Marcar pendente':'Dar baixa'}</button>
-          <button class="btn btn-danger" onclick="deletePersonal('${a.id}')">Excluir</button>
-        </div>
+function renderPersonal() {
+  const month = $('personalMonth').value || monthNow();
+  const items = db.personal.filter(item => (item.date || '').slice(0,7) === month)
+    .sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  $('personalList').innerHTML = items.length ? items.map(item => {
+    const vals = splitValues(item);
+    return `<div class="list-item">
+      <div class="list-main">
+        <strong>${escapeHTML(item.description)}</strong>
+        <small>${formatDate(item.date)} · ${escapeHTML(item.category)} · ${escapeHTML(item.type)} · ${escapeHTML(item.status)}</small>
+        <small>Pix: ${money(vals.pix)} · Dinheiro: ${money(vals.cash)}</small>
+        ${item.note ? `<small>${escapeHTML(item.note)}</small>` : ''}
+        ${item.legacyMethod ? `<small>Forma antiga: ${escapeHTML(item.legacyMethod)}</small>` : ''}
       </div>
-      <div class="item-value ${isIn?'green':'red'}">${isIn?'+':'−'} ${money(a.value)}</div>
+      <div class="list-value ${item.type === 'Entrada' ? 'positive' : 'negative'}">${money(vals.total)}</div>
+      <div class="list-actions">
+        <button type="button" class="secondary" onclick="editPersonal('${item.id}')">Editar</button>
+        <button type="button" class="secondary" onclick="togglePersonalStatus('${item.id}')">${item.status === 'Pago' || item.status === 'Recebido' ? 'Marcar pendente' : 'Dar baixa'}</button>
+        <button type="button" class="danger" onclick="deletePersonal('${item.id}')">Excluir</button>
+      </div>
     </div>`;
-  }).join('');
+  }).join('') : '<p class="muted">Nenhum lançamento neste mês.</p>';
 }
 
-function editPersonal(id){
-  const a=db.personal.find(x=>x.id===id);
-  if(!a)return;
-  const split=splitValues(a);
-  $('pId').value=a.id;
-  $('pDate').value=a.date;
-  $('pType').value=a.type;
+function editPersonal(id) {
+  const item = db.personal.find(x => x.id === id);
+  if (!item) return;
+  editingPersonalId = id;
+  $('pType').value = item.type;
   updatePersonalCategories();
-  $('pCategory').value=a.category;
-  $('pPix').value=split.pix.toFixed(2);
-  $('pCash').value=split.cash.toFixed(2);
+  $('pDescription').value = item.description || '';
+  $('pCategory').value = item.category || 'Outros';
+  $('pPixValue').value = num(item.pixValue).toFixed(2);
+  $('pCashValue').value = num(item.cashValue).toFixed(2);
   updatePersonalTotal();
-  $('pDesc').value=a.desc||'';
-  $('pStatus').value=a.status||'pago';
-  $('pRepeat').value='once';
+  $('pDate').value = item.date || today();
+  $('pStatus').value = item.status || 'Pago';
+  $('pRepeat').value = item.repeat === 'fixed' ? 'fixed' : 'normal';
+  $('pNote').value = item.note || '';
   repeatFields();
-  $('personalFormTitle').textContent='Editar lançamento';
-  $('pSaveBtn').textContent='Salvar alterações';
-  $('pessoal').scrollIntoView({behavior:'smooth'});
+  $('personalSubmit').textContent = 'Atualizar lançamento';
+  $('personalCancel').style.display = 'inline-block';
+  go('pessoal');
+  window.scrollTo(0,0);
 }
 
-function togglePersonal(id){
-  const a=db.personal.find(x=>x.id===id);
-  if(!a)return;
-  a.status=a.status==='pago'?'pendente':'pago';
-  save();renderAll();
+function togglePersonalStatus(id) {
+  const item = db.personal.find(x => x.id === id);
+  if (!item) return;
+  item.status = item.status === 'Pago' || item.status === 'Recebido' ? 'Pendente' : (item.type === 'Entrada' ? 'Recebido' : 'Pago');
+  save();
+  renderAll();
 }
 
-function deletePersonal(id){
-  const a=db.personal.find(x=>x.id===id);
-  if(!a)return;
-  if(a.seriesType==='fixed'&&a.series){
-    if(!confirm('Excluir esta despesa fixa e cancelar todos os lançamentos desta série?'))return;
-    db.personal=db.personal.filter(x=>x.series!==a.series);
-  }else if(a.seriesType==='repeat'&&a.series){
-    if(confirm('Excluir também os outros lançamentos desta série?')){
-      db.personal=db.personal.filter(x=>x.series!==a.series);
-    }else{
-      db.personal=db.personal.filter(x=>x.id!==id);
-    }
-  }else{
-    if(!confirm('Deseja excluir este lançamento?'))return;
-    db.personal=db.personal.filter(x=>x.id!==id);
-  }
-  save();renderAll();
+function deletePersonal(id) {
+  if (!confirm('Excluir este lançamento?')) return;
+  db.personal = db.personal.filter(item => item.id !== id && item.parentId !== id);
+  save();
+  renderAll();
 }
 
-function renderBalances(){
-  const paid=db.personal.filter(a=>a.status==='pago');
-  let pix=0,cash=0;
-  paid.forEach(a=>{
-    const split=splitValues(a);
-    const sign=a.type==='entrada'?1:-1;
-    pix+=sign*split.pix;
-    cash+=sign*split.cash;
+function renderBalances() {
+  const settled = db.personal.filter(item => item.status === 'Pago' || item.status === 'Recebido');
+  let pix = 0, cash = 0;
+  settled.forEach(item => {
+    const sign = item.type === 'Entrada' ? 1 : -1;
+    const vals = splitValues(item);
+    pix += sign * vals.pix;
+    cash += sign * vals.cash;
   });
-  $('balancePix').textContent=money(pix);
-  $('balanceCash').textContent=money(cash);
-  $('balanceTotal').textContent=money(pix+cash);
+  $('saldoPix').textContent = money(pix);
+  $('saldoCash').textContent = money(cash);
+  $('saldoTotal').textContent = money(pix + cash);
 }
 
-/* Gráficos por categoria: cada categoria mostra o total e a divisão Pix/dinheiro. */
-function renderPersonalCharts(){
-  const month=$('pChartMonth').value||thisMonth();
-  const paid=db.personal.filter(a=>monthOf(a.date)===month&&a.status==='pago');
-  renderOnePersonalChart('entrada',paid,'incomePie');
-  renderOnePersonalChart('despesa',paid,'expensePie');
+function renderPersonalCharts() {
+  const month = $('personalMonth').value || monthNow();
+  const entries = db.personal.filter(item => item.type === 'Entrada' && (item.date || '').slice(0,7) === month);
+  const expenses = db.personal.filter(item => item.type === 'Despesa' && (item.date || '').slice(0,7) === month);
+  renderOnePersonalChart('entryChart','entryChartDetails',entries,'Entradas');
+  renderOnePersonalChart('expenseChart','expenseChartDetails',expenses,'Despesas');
 }
 
-function renderOnePersonalChart(type,paid,targetId){
-  const rows=paid.filter(a=>a.type===type);
-  const categories={};
-  rows.forEach(a=>{
-    const name=a.category||'Outros';
-    if(!categories[name])categories[name]={pix:0,cash:0,total:0};
-    const split=splitValues(a);
-    categories[name].pix+=split.pix;
-    categories[name].cash+=split.cash;
-    categories[name].total+=Number(a.value)||0;
+function renderOnePersonalChart(canvasId, detailsId, items, title) {
+  const canvas = $(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const totals = {};
+  items.forEach(item => {
+    const category = item.category || 'Outros';
+    if (!totals[category]) totals[category] = {total:0,pix:0,cash:0};
+    const vals = splitValues(item);
+    totals[category].total += vals.total;
+    totals[category].pix += vals.pix;
+    totals[category].cash += vals.cash;
   });
-
-  const pix=rows.reduce((s,a)=>s+splitValues(a).pix,0);
-  const cash=rows.reduce((s,a)=>s+splitValues(a).cash,0);
-  const total=pix+cash;
-  const pixPct=total?pix/total*100:0;
-  const cashPct=total?cash/total*100:0;
-  const gradient=total
-    ?`conic-gradient(#1769e0 0 ${pixPct}%, #20a36b ${pixPct}% 100%)`
-    :'#e6edf7';
-  const sorted=Object.entries(categories).sort((a,b)=>b[1].total-a[1].total);
-
-  if(!rows.length){
-    $(targetId).innerHTML='<div class="empty">Nenhum lançamento pago/recebido neste mês.</div>';
+  const rows = Object.entries(totals).filter(([,v]) => v.total > 0).sort((a,b) => b[1].total-a[1].total);
+  const total = rows.reduce((sum,[,v]) => sum + v.total,0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if (!rows.length) {
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.textAlign = 'center';
+    ctx.fillText('Sem dados neste mês',canvas.width/2,canvas.height/2);
+    $(detailsId).innerHTML = '<p class="muted">Nenhum valor para exibir.</p>';
     return;
   }
-
-  const details=sorted.map(([name,v])=>{
-    const pct=total?v.total/total*100:0;
-    return `<div class="chart-detail-row">
-      <span><strong>${escapeHTML(name)}</strong><br>Pix ${money(v.pix)} · Dinheiro ${money(v.cash)}<br>${pct.toFixed(1)}% do total</span>
-      <strong>${money(v.total)}</strong>
-    </div>`;
-  }).join('');
-
-  $(targetId).innerHTML=`
-    <div class="chart-content">
-      <div class="pie" style="background:${gradient}">
-        <div class="pie-hole">${money(total)}<br>total</div>
-      </div>
-      <div class="chart-legend">
-        <div class="legend-line"><span class="legend-dot" style="background:#1769e0"></span><span>Pix<br><strong>${money(pix)}</strong> (${pixPct.toFixed(1)}%)</span></div>
-        <div class="legend-line"><span class="legend-dot" style="background:#20a36b"></span><span>Dinheiro<br><strong>${money(cash)}</strong> (${cashPct.toFixed(1)}%)</span></div>
-      </div>
-    </div>
-    <div class="chart-detail"><strong>Detalhamento por categoria</strong>${details}</div>`;
+  const colors = ['#2563eb','#0f766e','#f59e0b','#7c3aed','#db2777','#0891b2','#65a30d','#ea580c','#64748b','#9333ea'];
+  let start = -Math.PI/2;
+  rows.forEach(([,v],i) => {
+    const angle = (v.total/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width/2,canvas.height/2);
+    ctx.arc(canvas.width/2,canvas.height/2,Math.min(canvas.width,canvas.height)*0.39,start,start+angle);
+    ctx.closePath();
+    ctx.fillStyle = colors[i%colors.length];
+    ctx.fill();
+    start += angle;
+  });
+  $(detailsId).innerHTML = `<h4>${title}: ${money(total)}</h4>` + rows.map(([category,v],i) =>
+    `<div class="chart-row"><span><i style="background:${colors[i%colors.length]}"></i>${escapeHTML(category)}</span><strong>${money(v.total)} (${(v.total/total*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%)</strong><small>Pix: ${money(v.pix)} · Dinheiro: ${money(v.cash)}</small></div>`
+  ).join('');
 }
 </script>
 
 <script>
-function renderCardOptions(){
-  const current=$('purchaseCard').value;
-  $('purchaseCard').innerHTML=db.cards.length
-    ?db.cards.map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('')
-    :'<option value="">Cadastre um cartão primeiro</option>';
-  if(db.cards.some(c=>c.id===current))$('purchaseCard').value=current;
+function renderCardOptions() {
+  const select = $('purchaseCard');
+  if (!select) return;
+  select.innerHTML = db.cards.map(card =>
+    `<option value="${card.id}">${escapeHTML(card.name)}</option>`
+  ).join('');
 }
 
-$('cardForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const name=$('cName').value.trim();
-  const close=Number($('cClose').value);
-  const due=Number($('cDue').value);
-  if(!name||close<1||close>31||due<1||due>31){
-    alert('Confira o nome e os dias do cartão.');
-    return;
+$('cardForm').addEventListener('submit', event => {
+  event.preventDefault();
+  const card = {
+    id: editingCardId || uid(),
+    name: $('cardName').value.trim(),
+    closing: Math.min(31, Math.max(1, Number($('cardClosing').value) || 5)),
+    due: Math.min(31, Math.max(1, Number($('cardDue').value) || 10))
+  };
+  if (editingCardId) {
+    const index = db.cards.findIndex(item => item.id === editingCardId);
+    if (index >= 0) db.cards[index] = card;
+  } else {
+    db.cards.push(card);
   }
-  db.cards.push({id:idnew(),name,close,due});
-  save();
+  editingCardId = null;
   $('cardForm').reset();
-  $('cClose').value=5;
-  $('cDue').value=10;
+  $('cardClosing').value = 5;
+  $('cardDue').value = 10;
+  $('cardForm').querySelector('button[type="submit"]').textContent = 'Salvar cartão';
+  save();
   renderAll();
-  alert('Cartão cadastrado!');
 });
 
-function deleteCard(id){
-  if(db.purchases.some(p=>p.cardId===id)){
-    alert('Este cartão possui compras registradas. Exclua primeiro as compras relacionadas.');
-    return;
-  }
-  if(!confirm('Excluir este cartão?'))return;
-  db.cards=db.cards.filter(c=>c.id!==id);
-  save();renderAll();
+function editCard(id) {
+  const card = db.cards.find(item => item.id === id);
+  if (!card) return;
+  editingCardId = id;
+  $('cardName').value = card.name;
+  $('cardClosing').value = card.closing;
+  $('cardDue').value = card.due;
+  $('cardForm').querySelector('button[type="submit"]').textContent = 'Atualizar cartão';
+  go('cartao');
+  window.scrollTo(0,0);
 }
 
-function renderCards(){
-  renderCardOptions();
-  if(!db.cards.length){
-    $('cardsList').innerHTML='<div class="empty">Nenhum cartão cadastrado.</div>';
-    return;
-  }
-  $('cardsList').innerHTML=db.cards.map(c=>`
-    <div class="item">
-      <div class="item-main">
-        <div class="item-title">${escapeHTML(c.name)}</div>
-        <div class="item-meta">Fechamento: dia ${c.close} · Vencimento: dia ${c.due}</div>
-        <div class="item-actions"><button class="btn btn-danger" onclick="deleteCard('${c.id}')">Excluir cartão</button></div>
+function deleteCard(id) {
+  if (!confirm('Excluir este cartão? As compras vinculadas também serão excluídas.')) return;
+  db.cards = db.cards.filter(card => card.id !== id);
+  db.purchases = db.purchases.filter(purchase => purchase.cardId !== id);
+  save();
+  renderAll();
+}
+
+function renderCards() {
+  $('cardList').innerHTML = db.cards.length ? db.cards.map(card => `
+    <div class="list-item">
+      <div class="list-main">
+        <strong>${escapeHTML(card.name)}</strong>
+        <small>Fechamento: dia ${card.closing} · Vencimento: dia ${card.due}</small>
       </div>
-    </div>`).join('');
+      <div class="list-actions">
+        <button type="button" class="secondary" onclick="editCard('${card.id}')">Editar</button>
+        <button type="button" class="danger" onclick="deleteCard('${card.id}')">Excluir</button>
+      </div>
+    </div>
+  `).join('') : '<p class="muted">Cadastre um cartão para começar.</p>';
 }
 
-$('purchaseForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const cardId=$('purchaseCard').value;
-  const card=db.cards.find(c=>c.id===cardId);
-  if(!card){alert('Cadastre ou selecione um cartão.');return;}
-  const value=Number($('purchaseValue').value);
-  const parts=Number($('purchaseParts').value);
-  if(!Number.isFinite(value)||value<=0||parts<1||parts>60){
-    alert('Confira o valor e o número de parcelas.');
-    return;
-  }
+$('purchaseForm').addEventListener('submit', event => {
+  event.preventDefault();
+  if (!db.cards.length) return alert('Cadastre um cartão primeiro.');
+  const value = num($('purchaseValue').value);
+  const installments = Math.max(1, Math.min(48, Number($('purchaseInstallments').value) || 1));
+  if (value <= 0) return alert('Informe um valor válido.');
   db.purchases.push({
-    id:idnew(),cardId,
-    date:$('purchaseDate').value,
-    desc:$('purchaseDesc').value.trim(),
-    value,parts,paidParts:[]
+    id: uid(),
+    cardId: $('purchaseCard').value,
+    description: $('purchaseDesc').value.trim(),
+    value,
+    date: $('purchaseDate').value || today(),
+    installments,
+    paid: []
   });
-  save();
   $('purchaseForm').reset();
-  $('purchaseDate').value=today();
-  $('purchaseParts').value=1;
-  renderAll();
-  alert('Compra registrada!');
-});
-
-function installmentDate(p,i){
-  const card=db.cards.find(c=>c.id===p.cardId);
-  const close=card?Number(card.close)||1:1;
-  const d=new Date(p.date+'T12:00:00');
-  if(d.getDate()>=close)d.setMonth(d.getMonth()+1);
-  d.setDate(1);
-  d.setMonth(d.getMonth()+i);
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-}
-
-function cardOutstanding(month){
-  return db.purchases.reduce((sum,p)=>{
-    const partValue=(Number(p.value)||0)/(Number(p.parts)||1);
-    for(let i=0;i<(Number(p.parts)||1);i++){
-      if(installmentDate(p,i)===month&&!(p.paidParts||[]).includes(i)){
-        sum+=partValue;
-      }
-    }
-    return sum;
-  },0);
-}
-
-function renderInvoices(){
-  const month=$('invoiceMonth').value||thisMonth();
-  const rows=[];
-  db.cards.forEach(card=>{
-    const purchases=db.purchases.filter(p=>p.cardId===card.id);
-    let total=0,paid=0;
-    purchases.forEach(p=>{
-      for(let i=0;i<(Number(p.parts)||1);i++){
-        if(installmentDate(p,i)===month){
-          const amount=(Number(p.value)||0)/(Number(p.parts)||1);
-          if((p.paidParts||[]).includes(i))paid+=amount;
-          else total+=amount;
-        }
-      }
-    });
-    rows.push(`<div class="item">
-      <div class="item-main">
-        <div class="item-title">${escapeHTML(card.name)}</div>
-        <div class="item-meta">Fatura de ${escapeHTML(monthName(month))} · Vencimento dia ${card.due}</div>
-        <div class="item-meta">Em aberto: ${money(total)} · Já pago: ${money(paid)}</div>
-      </div>
-      <div class="item-value">${money(total+paid)}</div>
-    </div>`);
-  });
-
-  const items=[];
-  db.purchases.forEach(p=>{
-    const card=db.cards.find(c=>c.id===p.cardId);
-    for(let i=0;i<(Number(p.parts)||1);i++){
-      if(installmentDate(p,i)!==month)continue;
-      const amount=(Number(p.value)||0)/(Number(p.parts)||1);
-      const paid=(p.paidParts||[]).includes(i);
-      items.push(`<div class="item">
-        <div class="item-main">
-          <div class="item-title">${escapeHTML(p.desc)}</div>
-          <div class="item-meta">${escapeHTML(card?.name||'Cartão')} · Parcela ${i+1}/${p.parts} · ${escapeHTML(monthName(month))}</div>
-          <div class="item-meta"><span class="tag ${paid?'tag-paid':'tag-pending'}">${paid?'Pago':'Pendente'}</span></div>
-          <div class="item-actions">
-            <button class="btn ${paid?'btn-secondary':'btn-success'}" onclick="togglePurchase('${p.id}',${i})">${paid?'Marcar pendente':'Dar baixa'}</button>
-            <button class="btn btn-danger" onclick="deletePurchase('${p.id}')">Excluir compra</button>
-          </div>
-        </div>
-        <div class="item-value">${money(amount)}</div>
-      </div>`);
-    }
-  });
-  $('invoiceList').innerHTML=(rows.length?rows.join(''):'')+
-    (items.length?items.join(''):'')||
-    '<div class="empty">Nenhuma fatura ou compra neste mês.</div>';
-}
-
-function togglePurchase(id,index){
-  const p=db.purchases.find(x=>x.id===id);
-  if(!p)return;
-  if(!Array.isArray(p.paidParts))p.paidParts=[];
-  if(p.paidParts.includes(index))p.paidParts=p.paidParts.filter(i=>i!==index);
-  else p.paidParts.push(index);
-  save();renderAll();
-}
-
-function deletePurchase(id){
-  if(!confirm('Excluir esta compra e todas as suas parcelas?'))return;
-  db.purchases=db.purchases.filter(p=>p.id!==id);
-  save();renderAll();
-}
-
-$('goalForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const target=Number($('gTarget').value);
-  const savedValue=Number($('gSaved').value);
-  if(target<=0||savedValue<0){
-    alert('Confira os valores da meta.');
-    return;
-  }
-  db.goals.push({
-    id:idnew(),name:$('gName').value.trim(),
-    target,saved:savedValue,date:$('gDate').value
-  });
+  $('purchaseDate').value = today();
+  $('purchaseInstallments').value = 1;
   save();
-  $('goalForm').reset();
-  $('gSaved').value=0;
   renderAll();
-  alert('Meta cadastrada!');
 });
 
-function updateGoal(id){
-  const g=db.goals.find(x=>x.id===id);
-  if(!g)return;
-  const raw=prompt('Informe o novo total já guardado (R$):',String(g.saved));
-  if(raw===null)return;
-  const value=Number(raw.replace(',','.'));
-  if(!Number.isFinite(value)||value<0){
-    alert('Informe um valor válido.');
-    return;
-  }
-  g.saved=value;save();renderAll();
+function installmentDate(purchase, installmentIndex) {
+  const card = db.cards.find(item => item.id === purchase.cardId);
+  const original = new Date(`${purchase.date}T12:00:00`);
+  const closing = card ? Number(card.closing) : 5;
+  const due = card ? Number(card.due) : 10;
+
+  let invoiceMonth = new Date(original.getFullYear(), original.getMonth(), 1);
+  if (original.getDate() > closing) invoiceMonth.setMonth(invoiceMonth.getMonth()+1);
+  invoiceMonth.setMonth(invoiceMonth.getMonth()+installmentIndex);
+
+  let dueMonth = new Date(invoiceMonth.getFullYear(), invoiceMonth.getMonth(), 1);
+  if (due <= closing) dueMonth.setMonth(dueMonth.getMonth()+1);
+
+  const lastDay = new Date(dueMonth.getFullYear(), dueMonth.getMonth()+1, 0).getDate();
+  dueMonth.setDate(Math.min(due, lastDay));
+  return `${dueMonth.getFullYear()}-${String(dueMonth.getMonth()+1).padStart(2,'0')}-${String(dueMonth.getDate()).padStart(2,'0')}`;
 }
 
-function deleteGoal(id){
-  if(!confirm('Excluir esta meta?'))return;
-  db.goals=db.goals.filter(g=>g.id!==id);
-  save();renderAll();
+function cardOutstanding(purchase) {
+  const installmentValue = purchase.value / purchase.installments;
+  let outstanding = 0;
+  for (let i = 0; i < purchase.installments; i++) {
+    if (!(purchase.paid || []).includes(i)) outstanding += installmentValue;
+  }
+  return outstanding;
 }
 
-function renderGoals(){
-  if(!db.goals.length){
-    $('goalsList').innerHTML='<div class="empty">Você ainda não cadastrou metas.</div>';
-    return;
-  }
-  $('goalsList').innerHTML=db.goals.map(g=>{
-    const target=Number(g.target)||0;
-    const saved=Number(g.saved)||0;
-    const pct=target?Math.min(100,Math.max(0,saved/target*100)):0;
-    return `<div class="item">
-      <div class="item-main">
-        <div class="item-title">${escapeHTML(g.name)}</div>
-        <div class="item-meta">Guardado: ${money(saved)} de ${money(target)}</div>
-        <div style="height:9px;background:#e6edf7;border-radius:8px;overflow:hidden;margin-top:9px">
-          <div style="height:100%;width:${pct}%;background:#1769e0"></div>
-        </div>
-        <div class="item-meta">${pct.toFixed(1)}% concluído${g.date?' · Prazo: '+escapeHTML(g.date):''}</div>
-        <div class="item-actions">
-          <button class="btn btn-secondary" onclick="updateGoal('${g.id}')">Atualizar valor</button>
-          <button class="btn btn-danger" onclick="deleteGoal('${g.id}')">Excluir</button>
-        </div>
+function renderPurchases() {
+  $('purchaseList').innerHTML = db.purchases.length ? db.purchases.slice().reverse().map(purchase => {
+    const card = db.cards.find(item => item.id === purchase.cardId);
+    const installmentValue = purchase.value / purchase.installments;
+    const paidCount = (purchase.paid || []).length;
+    return `<div class="list-item">
+      <div class="list-main">
+        <strong>${escapeHTML(purchase.description)}</strong>
+        <small>${escapeHTML(card?.name || 'Cartão excluído')} · Compra em ${formatDate(purchase.date)}</small>
+        <small>Total: ${money(purchase.value)} · ${purchase.installments} parcela(s) de ${money(installmentValue)}</small>
+        <small>Parcelas pagas: ${paidCount}/${purchase.installments}</small>
+      </div>
+      <div class="list-value">${money(cardOutstanding(purchase))}</div>
+      <div class="list-actions">
+        <button type="button" class="danger" onclick="deletePurchase('${purchase.id}')">Excluir</button>
       </div>
     </div>`;
-  }).join('');
+  }).join('') : '<p class="muted">Nenhuma compra cadastrada.</p>';
 }
 
-function renderDashboard(){
-  const month=$('dashMonth').value||thisMonth();
-  const entries=db.personal.filter(a=>monthOf(a.date)===month);
-  const income=entries.filter(a=>a.type==='entrada'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
-  const expenses=entries.filter(a=>a.type==='despesa'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
-  const pendingExpenses=entries.filter(a=>a.type==='despesa'&&a.status==='pendente').reduce((s,a)=>s+(Number(a.value)||0),0);
-  const pendingIncome=entries.filter(a=>a.type==='entrada'&&a.status==='pendente').reduce((s,a)=>s+(Number(a.value)||0),0);
-
-  $('dashIncome').textContent=money(income);
-  $('dashExpenses').textContent=money(expenses);
-  $('dashProfit').textContent=money(income-expenses);
-  $('dashBalance').textContent=$('balanceTotal').textContent;
-  $('dashPendingExpenses').textContent=money(pendingExpenses);
-  $('dashPendingIncome').textContent=money(pendingIncome);
-  $('dashInvoice').textContent=money(cardOutstanding(month));
-
-  const upcoming=entries.filter(a=>a.status==='pendente').sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-  $('dashDueList').innerHTML=upcoming.length?upcoming.slice(0,8).map(a=>`
-    <div class="item">
-      <div class="item-main">
-        <div class="item-title">${escapeHTML(a.desc||a.category)}</div>
-        <div class="item-meta">${escapeHTML(a.date)} · ${escapeHTML(a.category)}</div>
-      </div>
-      <div class="item-value ${a.type==='entrada'?'green':'red'}">${money(a.value)}</div>
-    </div>`).join(''):'<div class="empty">Nenhuma conta pessoal pendente neste mês.</div>';
-
-  $('dashSummary').innerHTML=`
-    <div class="item"><div class="item-main"><div class="item-title">Resultado do mês</div><div class="item-meta">${escapeHTML(monthName(month))}</div></div><div class="item-value">${money(income-expenses)}</div></div>
-    <div class="item"><div class="item-main"><div class="item-title">Despesas pendentes</div><div class="item-meta">Ainda não alteram o saldo disponível</div></div><div class="item-value red">${money(pendingExpenses)}</div></div>
-    <div class="item"><div class="item-main"><div class="item-title">Valores a receber</div><div class="item-meta">Ainda não alteram o saldo disponível</div></div><div class="item-value green">${money(pendingIncome)}</div></div>`;
+function deletePurchase(id) {
+  if (!confirm('Excluir esta compra e suas parcelas?')) return;
+  db.purchases = db.purchases.filter(purchase => purchase.id !== id);
+  save();
+  renderAll();
 }
 
-function renderReports(){
-  const month=$('reportMonth').value||thisMonth();
-  const rows=db.personal.filter(a=>monthOf(a.date)===month);
-  const income=rows.filter(a=>a.type==='entrada'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
-  const expenses=rows.filter(a=>a.type==='despesa'&&a.status==='pago').reduce((s,a)=>s+(Number(a.value)||0),0);
-  $('reportIncome').textContent=money(income);
-  $('reportExpenses').textContent=money(expenses);
-  $('reportProfit').textContent=money(income-expenses);
+function togglePurchase(purchaseId, installmentIndex) {
+  const purchase = db.purchases.find(item => item.id === purchaseId);
+  if (!purchase) return;
+  purchase.paid = purchase.paid || [];
+  if (purchase.paid.includes(installmentIndex)) {
+    purchase.paid = purchase.paid.filter(index => index !== installmentIndex);
+  } else {
+    purchase.paid.push(installmentIndex);
+  }
+  save();
+  renderAll();
+}
 
-  const categories={};
-  rows.filter(a=>a.status==='pago').forEach(a=>{
-    const key=(a.type==='entrada'?'Entrada: ':'Despesa: ')+(a.category||'Outros');
-    categories[key]=(categories[key]||0)+(Number(a.value)||0);
-  });
-  $('reportCategories').innerHTML=Object.keys(categories).length
-    ?Object.entries(categories).sort((a,b)=>b[1]-a[1]).map(([name,value])=>`
-      <div class="item"><div class="item-main"><div class="item-title">${escapeHTML(name)}</div></div><div class="item-value">${money(value)}</div></div>`).join('')
-    :'<div class="empty">Sem lançamentos pagos neste mês.</div>';
-
-  const methods={};
-  rows.filter(a=>a.status==='pago').forEach(a=>{
-    const split=splitValues(a);
-    const method=a.legacyMethod||'';
-    if(method){
-      if(!methods[method])methods[method]={entrada:0,despesa:0};
-      methods[method][a.type]+=(Number(a.value)||0);
-      return;
+function renderInvoices() {
+  const month = $('reportMonth')?.value || monthNow();
+  const invoices = {};
+  db.purchases.forEach(purchase => {
+    for (let i = 0; i < purchase.installments; i++) {
+      const dueDate = installmentDate(purchase, i);
+      if (dueDate.slice(0,7) !== month) continue;
+      const key = `${purchase.cardId}_${month}`;
+      if (!invoices[key]) invoices[key] = {cardId:purchase.cardId, total:0, paid:0, items:[]};
+      const amount = purchase.value / purchase.installments;
+      const isPaid = (purchase.paid || []).includes(i);
+      invoices[key].total += amount;
+      if (isPaid) invoices[key].paid += amount;
+      invoices[key].items.push({purchase, index:i, amount, isPaid, dueDate});
     }
-    if(!methods.Pix)methods.Pix={entrada:0,despesa:0};
-    if(!methods.Dinheiro)methods.Dinheiro={entrada:0,despesa:0};
-    methods.Pix[a.type]+=split.pix;
-    methods.Dinheiro[a.type]+=split.cash;
   });
 
-  $('reportMethods').innerHTML=Object.keys(methods).length
-    ?Object.entries(methods).map(([name,v])=>`
-      <div class="item">
-        <div class="item-main">
-          <div class="item-title">${escapeHTML(name)}</div>
-          <div class="item-meta">Entradas: ${money(v.entrada)} · Despesas: ${money(v.despesa)}</div>
+  const rows = Object.values(invoices);
+  $('invoiceList').innerHTML = rows.length ? rows.map(invoice => {
+    const card = db.cards.find(item => item.id === invoice.cardId);
+    return `<div class="card">
+      <h4>${escapeHTML(card?.name || 'Cartão')} — ${month}</h4>
+      <p>Total da fatura: <strong>${money(invoice.total)}</strong></p>
+      <p>Pago: ${money(invoice.paid)} · Pendente: ${money(invoice.total-invoice.paid)}</p>
+      ${invoice.items.map(item => `
+        <div class="list-item">
+          <div class="list-main">
+            <strong>${escapeHTML(item.purchase.description)}</strong>
+            <small>Parcela ${item.index+1}/${item.purchase.installments} · Vencimento ${formatDate(item.dueDate)}</small>
+            <small>${item.isPaid ? 'Paga' : 'Pendente'}</small>
+          </div>
+          <strong>${money(item.amount)}</strong>
+          <button type="button" class="secondary" onclick="togglePurchase('${item.purchase.id}',${item.index})">
+            ${item.isPaid ? 'Desfazer baixa' : 'Dar baixa'}
+          </button>
         </div>
-        <div class="item-value">${money(v.entrada-v.despesa)}</div>
-      </div>`).join('')
-    :'<div class="empty">Sem movimentações pagas neste mês.</div>';
+      `).join('')}
+    </div>`;
+  }).join('') : '<p class="muted">Nenhuma parcela nesta fatura para o mês selecionado.</p>';
 }
 
-function renderAll(){
+$('goalForm').addEventListener('submit', event => {
+  event.preventDefault();
+  db.goals.push({
+    id: uid(),
+    name: $('goalName').value.trim(),
+    target: num($('goalTarget').value),
+    saved: num($('goalSaved').value)
+  });
+  $('goalForm').reset();
+  $('goalSaved').value = 0;
+  save();
+  renderGoals();
+});
+
+function updateGoal(id) {
+  const goal = db.goals.find(item => item.id === id);
+  if (!goal) return;
+  const value = prompt('Informe o total já guardado (R$):', goal.saved);
+  if (value === null) return;
+  const parsed = Number(value.replace(',', '.'));
+  if (!Number.isFinite(parsed) || parsed < 0) return alert('Informe um valor válido.');
+  goal.saved = parsed;
+  save();
+  renderGoals();
+}
+
+function deleteGoal(id) {
+  if (!confirm('Excluir esta meta?')) return;
+  db.goals = db.goals.filter(goal => goal.id !== id);
+  save();
+  renderGoals();
+}
+
+function renderGoals() {
+  $('goalList').innerHTML = db.goals.length ? db.goals.map(goal => {
+    const percent = goal.target > 0 ? Math.min(100, goal.saved / goal.target * 100) : 0;
+    return `<div class="card">
+      <h3>${escapeHTML(goal.name)}</h3>
+      <p>Guardado: ${money(goal.saved)} de ${money(goal.target)}</p>
+      <div class="progress"><div style="width:${percent}%"></div></div>
+      <p>${percent.toLocaleString('pt-BR',{maximumFractionDigits:1})}% concluído</p>
+      <div class="list-actions">
+        <button type="button" class="secondary" onclick="updateGoal('${goal.id}')">Atualizar valor</button>
+        <button type="button" class="danger" onclick="deleteGoal('${goal.id}')">Excluir</button>
+      </div>
+    </div>`;
+  }).join('') : '<p class="muted">Você ainda não cadastrou metas.</p>';
+}
+
+function renderDashboard() {
+  const month = monthNow();
+  const entries = personalSum(db.personal.filter(item => item.status === 'Pago' || item.status === 'Recebido'), 'Entrada', month);
+  const expenses = personalSum(db.personal.filter(item => item.status === 'Pago' || item.status === 'Recebido'), 'Despesa', month);
+  const net = entries - expenses;
+  const reserve = Math.max(0, net * 0.10);
+
+  $('dashEntries').textContent = money(entries);
+  $('dashExpenses').textContent = money(expenses);
+  $('dashNet').textContent = money(net);
+  $('dashReserve').textContent = money(reserve);
+
+  const pending = db.personal.filter(item => item.status === 'Pendente' && (item.date || '').slice(0,7) === month);
+  $('pendingList').innerHTML = pending.length ? pending.map(item =>
+    `<div class="list-item"><div class="list-main"><strong>${escapeHTML(item.description)}</strong><small>${formatDate(item.date)} · ${escapeHTML(item.category)}</small></div><strong>${money(item.value)}</strong></div>`
+  ).join('') : '<p class="muted">Nenhum lançamento pendente neste mês.</p>';
+
+  const nextInvoices = db.purchases.filter(purchase => cardOutstanding(purchase) > 0);
+  $('dashInvoices').innerHTML = nextInvoices.length ? nextInvoices.map(purchase => {
+    const card = db.cards.find(item => item.id === purchase.cardId);
+    return `<div class="list-item"><div class="list-main"><strong>${escapeHTML(purchase.description)}</strong><small>${escapeHTML(card?.name || 'Cartão')}</small></div><strong>${money(cardOutstanding(purchase))}</strong></div>`;
+  }).join('') : '<p class="muted">Nenhuma compra pendente no cartão.</p>';
+}
+
+function renderReports() {
+  const month = $('reportMonth').value || monthNow();
+  const items = db.personal.filter(item => (item.date || '').slice(0,7) === month);
+  const settled = items.filter(item => item.status === 'Pago' || item.status === 'Recebido');
+  const entries = personalSum(settled, 'Entrada');
+  const expenses = personalSum(settled, 'Despesa');
+  const net = entries - expenses;
+  $('reportSummary').innerHTML = `
+    <div class="card"><span>Entradas recebidas</span><strong>${money(entries)}</strong></div>
+    <div class="card"><span>Despesas pagas</span><strong>${money(expenses)}</strong></div>
+    <div class="card"><span>Saldo do mês</span><strong>${money(net)}</strong></div>
+  `;
+
+  const categories = {};
+  items.forEach(item => {
+    const key = `${item.type} — ${item.category || 'Outros'}`;
+    if (!categories[key]) categories[key] = {total:0, pix:0, cash:0};
+    const vals = splitValues(item);
+    categories[key].total += vals.total;
+    categories[key].pix += vals.pix;
+    categories[key].cash += vals.cash;
+  });
+
+  $('reportDetails').innerHTML = `
+    <div class="card">
+      <h3>Detalhamento por categoria</h3>
+      ${Object.entries(categories).length ? Object.entries(categories).sort((a,b) => b[1].total-a[1].total).map(([name,v]) =>
+        `<div class="chart-row"><strong>${escapeHTML(name)}</strong><span>${money(v.total)}</span><small>Pix: ${money(v.pix)} · Dinheiro: ${money(v.cash)}</small></div>`
+      ).join('') : '<p class="muted">Nenhum lançamento neste mês.</p>'}
+    </div>
+    <div class="card">
+      <h3>Resumo por tipo de saldo</h3>
+      <p>Entradas Pix: ${money(settled.filter(i => i.type === 'Entrada').reduce((s,i) => s+num(i.pixValue),0))}</p>
+      <p>Entradas em dinheiro: ${money(settled.filter(i => i.type === 'Entrada').reduce((s,i) => s+num(i.cashValue),0))}</p>
+      <p>Despesas Pix: ${money(settled.filter(i => i.type === 'Despesa').reduce((s,i) => s+num(i.pixValue),0))}</p>
+      <p>Despesas em dinheiro: ${money(settled.filter(i => i.type === 'Despesa').reduce((s,i) => s+num(i.cashValue),0))}</p>
+    </div>
+  `;
+}
+
+function renderAll() {
   renderBalances();
-  renderDashboard();
   renderPersonal();
   renderPersonalCharts();
+  renderCardOptions();
   renderCards();
+  renderPurchases();
   renderInvoices();
   renderGoals();
+  renderDashboard();
   renderReports();
 }
 
-function exportLocalBackup(){
-  save();
-  const payload={
-    app:'Meu Financeiro Pro 2.0',
-    version:2,
-    exportedAt:new Date().toISOString(),
-    data:db
-  };
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='backup-meu-financeiro.json';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+function exportLocalBackup() {
+  const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `meu-financeiro-backup-${today()}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
-function importLocalBackup(event){
-  const file=event.target.files?.[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const parsed=JSON.parse(reader.result);
-      const data=parsed.data||parsed;
-      if(!Array.isArray(data.personal)||!Array.isArray(data.cards)||
-         !Array.isArray(data.purchases)||!Array.isArray(data.goals)){
-        throw new Error('Formato de backup não reconhecido.');
+function importLocalBackup(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      if (!imported || typeof imported !== 'object' || !Array.isArray(imported.personal)) {
+        throw new Error('Arquivo de backup inválido.');
       }
-      if(!confirm('Restaurar este backup? Os dados atuais serão substituídos. Faça um backup atual antes de continuar.'))return;
-
-      db={
-        personal:data.personal,
-        uber:Array.isArray(data.uber)?data.uber:[],
-        cards:data.cards,
-        purchases:data.purchases,
-        goals:data.goals
+      if (!confirm('Restaurar este backup? Os dados atuais deste navegador serão substituídos.')) return;
+      db = {
+        ...defaults,
+        ...imported,
+        personal: Array.isArray(imported.personal) ? imported.personal : [],
+        cards: Array.isArray(imported.cards) ? imported.cards : [],
+        purchases: Array.isArray(imported.purchases) ? imported.purchases : [],
+        goals: Array.isArray(imported.goals) ? imported.goals : [],
+        uber: Array.isArray(imported.uber) ? imported.uber : []
       };
-      db.personal=db.personal.map(a=>{
-        if(a.pixValue!==undefined&&a.cashValue!==undefined)return a;
-        const value=Number(a.value)||0;
-        const method=a.method||'';
-        return {
-          ...a,
-          pixValue:method==='Pix'?value:0,
-          cashValue:method==='Dinheiro'?value:0,
-          legacyMethod:!['Pix','Dinheiro'].includes(method)?method:''
-        };
-      });
       save();
+      alert('Backup restaurado com sucesso.');
       renderAll();
-      alert('Backup restaurado com sucesso!');
-    }catch(err){
-      alert('Não foi possível restaurar. Confira se o arquivo é um backup válido do Meu Financeiro.');
-    }finally{
-      event.target.value='';
+    } catch (error) {
+      alert('Não foi possível restaurar o backup. Confira se o arquivo é válido.');
+    } finally {
+      event.target.value = '';
     }
   };
   reader.readAsText(file);
 }
 
-function init(){
-  $('pDate').value=today();
-  $('purchaseDate').value=today();
-  $('dashMonth').value=thisMonth();
-  $('pFilter').value=thisMonth();
-  $('pChartMonth').value=thisMonth();
-  $('invoiceMonth').value=thisMonth();
-  $('reportMonth').value=thisMonth();
-  $('pPix').value='0';
-  $('pCash').value='0';
-  $('pRepeatCount').value=2;
-  $('cClose').value=5;
-  $('cDue').value=10;
-  updatePersonalTotal();
+$('exportBackup').addEventListener('click', exportLocalBackup);
+$('importBackup').addEventListener('click', () => $('backupFile').click());
+$('backupFile').addEventListener('change', importLocalBackup);
+$('refreshReports').addEventListener('click', renderReports);
+$('reportMonth').value = monthNow();
+$('personalMonth').value = monthNow();
+$('purchaseDate').value = today();
+
+function init() {
+  ensureFixedOccurrences();
+  save();
   updatePersonalCategories();
   repeatFields();
-  ensureFixedOccurrences();
   renderAll();
+  go('dashboard');
 }
 
 init();
