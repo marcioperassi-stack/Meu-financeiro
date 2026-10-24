@@ -1,379 +1,462 @@
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#123b70">
-<title>Meu Financeiro Pro 2.0</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
-header{background:#123b70;color:white;padding:20px 15px}
-header h1{margin:0 0 6px;font-size:23px}
-header p{margin:0;font-size:13px}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:5}
-nav button,.btn{border:0;border-radius:8px;padding:12px 8px;font-weight:bold;cursor:pointer}
-nav button{background:#e3ebf7;color:#123b70;font-size:13px}
-nav button.ativo,.btn{background:#123b70;color:white}
-main{max-width:850px;margin:auto;padding:12px}
-.tela{display:none}
-.tela.ativa{display:block}
-h2{font-size:20px;margin:10px 0 14px}
-h3{font-size:16px;margin:0 0 12px}
-.card{background:white;border-radius:12px;padding:15px;margin-bottom:12px;box-shadow:0 2px 7px #0000000a}
-.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.card small{display:block;color:#64748b;margin-bottom:8px}
-.valor{font-size:20px;font-weight:bold;overflow-wrap:anywhere}
-.verde{color:#16834a}
-.vermelho{color:#c83232}
-label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:16px;color:#172033}
-input[type=checkbox]{width:auto}
-.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.acoes button{flex:1}
-.btn-sec{background:#e3ebf7;color:#123b70}
-.btn-perigo{background:#b42323;color:white}
-.linha{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
-.item{border-bottom:1px solid #e5eaf1;padding:12px 0}
-.item:last-child{border-bottom:0}
-.item p{margin:5px 0;color:#64748b;font-size:13px}
-.sem-dados{color:#64748b;text-align:center;padding:18px 5px}
-@media(min-width:600px){nav{grid-template-columns:repeat(6,1fr)}.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
-</style>
-</head>
-<body>
-<header>
-<h1>Meu Financeiro Pro 2.0</h1>
-<p>Controle pessoal, Uber e 99 em um só lugar</p>
-</header>
-<nav>
-<button type="button" class="ativo" data-tela="inicio">Início</button>
-<button type="button" data-tela="lancamentos">Lançamentos</button>
-<button type="button" data-tela="novo">Novo</button>
-<button type="button" data-tela="relatorios">Relatórios</button>
-<button type="button" data-tela="reserva">Reserva Uber</button>
-<button type="button" data-tela="backup">Backup</button>
-</nav>
-<main>
-<section id="inicio" class="tela ativa">
-<h2>Resumo financeiro</h2>
-<div class="grade">
-<div class="card"><small>Entradas pessoais</small><div class="valor verde" id="pEntradas">R$ 0,00</div></div>
-<div class="card"><small>Despesas pessoais</small><div class="valor vermelho" id="pDespesas">R$ 0,00</div></div>
-<div class="card"><small>Saldo pessoal</small><div class="valor" id="pSaldo">R$ 0,00</div></div>
-<div class="card"><small>Resultado Uber/99</small><div class="valor" id="uSaldo">R$ 0,00</div></div>
-</div>
-<div class="card">
-<h3>Resumo Uber / 99</h3>
-<div class="linha"><span>Entradas</span><strong id="uEntradas">R$ 0,00</strong></div>
-<div class="linha"><span>Despesas</span><strong id="uDespesas">R$ 0,00</strong></div>
-<div class="linha"><span>Reserva de 10%</span><strong id="uReserva">R$ 0,00</strong></div>
-<div class="linha"><span>Resultado após reserva</span><strong id="uLiquido">R$ 0,00</strong></div>
-</div>
-<div class="card">
-<h3>Últimos lançamentos</h3>
-<div id="ultimos" class="sem-dados">Nenhum lançamento ainda.</div>
-</div>
-</section>
-
-<section id="novo" class="tela">
-<h2>Novo lançamento</h2>
-<div class="card">
-<form id="formLancamento">
-<label for="tipo">Tipo</label>
-<select id="tipo" required>
-<option value="entrada">Entrada / recebimento</option>
-<option value="despesa">Despesa / pagamento</option>
-</select>
-<label for="area">Área</label>
-<select id="area" required>
-<option value="pessoal">Financeiro pessoal</option>
-<option value="uber">Uber</option>
-<option value="99">99</option>
-</select>
-<label for="descricao">Descrição</label>
-<input id="descricao" maxlength="100" placeholder="Descreva o lançamento" required>
-<label for="categoria">Categoria</label>
-<select id="categoria" required></select>
-<label for="valor">Valor (R$)</label>
-<input id="valor" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" required>
-<label for="data">Data</label>
-<input id="data" type="date" required>
-<label for="recorrencia">Periodicidade</label>
-<select id="recorrencia">
-<option value="unica">Uma vez</option>
-<option value="diaria">Diária</option>
-<option value="semanal">Semanal</option>
-<option value="mensal">Mensal</option>
-</select>
-<label><input id="fixa" type="checkbox"> Despesa fixa</label>
-<label><input id="cartao" type="checkbox"> Lançamento no cartão de crédito</label>
+<section id="backup" class="oculto">
+<h2>Backup dos dados</h2>
+<p>Exporte seus lançamentos, cartões e faturas para guardar uma cópia de segurança.</p>
 <div class="acoes">
-<button class="btn" type="submit" id="salvar">Salvar lançamento</button>
-<button class="btn btn-sec" type="button" id="cancelar" hidden>Cancelar edição</button>
+<button onclick="exportarBackup()">Exportar backup</button>
+<button class="secundario" onclick="document.getElementById('arquivoBackup').click()">Importar backup</button>
 </div>
-</form>
-</div>
+<input id="arquivoBackup" type="file" accept=".json,application/json" class="oculto" onchange="importarBackup(event)">
+<p class="pequeno">Guarde o arquivo exportado em um local seguro. A importação pode substituir os dados atuais.</p>
 </section>
 
-<section id="lancamentos" class="tela">
-<h2>Lançamentos</h2>
-<div class="card">
-<label for="fTipo">Tipo</label>
-<select id="fTipo">
-<option value="todos">Todos</option>
-<option value="entrada">Entradas</option>
-<option value="despesa">Despesas</option>
+<section id="compras" class="oculto">
+<h2>Compra no cartão</h2>
+<label>Cartão</label>
+<select id="cartaoCompra"></select>
+<label>Descrição da compra</label>
+<input id="descricaoCompra" placeholder="Ex.: eletrodoméstico">
+<div class="linha">
+<div>
+<label>Valor total (R$)</label>
+<input id="valorCompra" type="number" min="0.01" step="0.01">
+</div>
+<div>
+<label>Data da compra</label>
+<input id="dataCompra" type="date">
+</div>
+</div>
+<label>Número de parcelas</label>
+<select id="parcelasCompra">
+<option value="1">1 parcela</option>
+<option value="2">2 parcelas</option>
+<option value="3">3 parcelas</option>
+<option value="4">4 parcelas</option>
+<option value="5">5 parcelas</option>
+<option value="6">6 parcelas</option>
+<option value="10">10 parcelas</option>
+<option value="12">12 parcelas</option>
+<option value="18">18 parcelas</option>
+<option value="24">24 parcelas</option>
 </select>
-<label for="fArea">Área</label>
-<select id="fArea">
-<option value="todas">Todas</option>
-<option value="pessoal">Pessoal</option>
-<option value="uber">Uber</option>
-<option value="99">99</option>
-</select>
-<div id="lista" class="sem-dados">Nenhum lançamento cadastrado.</div>
+<div class="acoes">
+<button onclick="salvarCompra()">Salvar compra</button>
+<button class="secundario" onclick="mostrarAba('cartoes')">Voltar aos cartões</button>
 </div>
 </section>
 
-<section id="relatorios" class="tela">
-<h2>Relatórios</h2>
-<div class="card">
-<label for="rInicio">Data inicial</label>
-<input type="date" id="rInicio">
-<label for="rFim">Data final</label>
-<input type="date" id="rFim">
-<button type="button" class="btn" id="gerarRel">Gerar relatório</button>
-</div>
-<div class="grade">
-<div class="card"><small>Entradas</small><div id="rEntradas" class="valor verde">R$ 0,00</div></div>
-<div class="card"><small>Despesas</small><div id="rDespesas" class="valor vermelho">R$ 0,00</div></div>
-<div class="card"><small>Resultado</small><div id="rSaldo" class="valor">R$ 0,00</div></div>
-<div class="card"><small>Quantidade</small><div id="rQtd" class="valor">0</div></div>
-</div>
-<div class="card"><h3>Por categoria</h3><div id="rCategorias"></div></div>
-</section>
-
-<section id="reserva" class="tela">
-<h2>Reserva Uber / 99</h2>
-<div class="card">
-<p>A reserva de 10% é calculada somente sobre o resultado positivo do Uber e 99, depois das despesas dessas áreas. O financeiro pessoal não entra neste cálculo.</p>
-<div class="linha"><span>Entradas Uber/99</span><strong id="resE">R$ 0,00</strong></div>
-<div class="linha"><span>Despesas Uber/99</span><strong id="resD">R$ 0,00</strong></div>
-<div class="linha"><span>Resultado</span><strong id="resS">R$ 0,00</strong></div>
-<div class="linha"><span>Reserva de 10%</span><strong id="res10">R$ 0,00</strong></div>
-<div class="linha"><span>Após reserva</span><strong id="resFinal">R$ 0,00</strong></div>
-</div>
-</section>
-
-<section id="backup" class="tela">
-<h2>Backup e restauração</h2>
-<div class="card">
-<p>Baixe uma cópia dos seus lançamentos para guardar.</p>
-<button type="button" class="btn" id="exportar">Baixar backup</button>
-</div>
-<div class="card">
-<p>Restaurar substitui os lançamentos atuais pelos dados do arquivo selecionado.</p>
-<label for="arquivo">Arquivo de backup JSON</label>
-<input type="file" id="arquivo" accept=".json,application/json">
-<button type="button" class="btn" id="importar">Restaurar backup</button>
-</div>
-<div class="card"><div id="qtdBackup"></div></div>
+<section id="faturas" class="oculto">
+<h2>Faturas do cartão</h2>
+<label>Selecionar cartão</label>
+<select id="cartaoFatura" onchange="renderizarFatura()"></select>
+<label>Mês da fatura</label>
+<input id="mesFatura" type="month" onchange="renderizarFatura()">
+<div id="conteudoFatura"></div>
 </section>
 
 <script>
-(function(){
-"use strict";
-const $=id=>document.getElementById(id);
-const CHAVE="meuFinanceiroPro2_dados";
-let dados=[],editId=null;
+const CHAVE_DADOS="meuFinanceiroPro2_dados";
+const CHAVE_CARTOES="meuFinanceiroPro2_cartoes";
+const CHAVE_FATURAS="meuFinanceiroPro2_faturas";
 
-const dinheiro=n=>(Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const hoje=()=>{
+let lancamentos=JSON.parse(localStorage.getItem(CHAVE_DADOS)||"[]");
+let cartoes=JSON.parse(localStorage.getItem(CHAVE_CARTOES)||"[]");
+let faturasPagas=JSON.parse(localStorage.getItem(CHAVE_FATURAS)||"{}");
+
+function salvarDados(){
+ localStorage.setItem(CHAVE_DADOS,JSON.stringify(lancamentos));
+ localStorage.setItem(CHAVE_CARTOES,JSON.stringify(cartoes));
+ localStorage.setItem(CHAVE_FATURAS,JSON.stringify(faturasPagas));
+}
+
+function dinheiro(valor){
+ return Number(valor||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+}
+
+function dataHoje(){
  const d=new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-};
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function carregar(){
- try{
-  const v=JSON.parse(localStorage.getItem(CHAVE)||"[]");
-  dados=Array.isArray(v)?v:[];
- }catch(e){dados=[];}
 }
-function persistir(){
- try{localStorage.setItem(CHAVE,JSON.stringify(dados));return true;}
- catch(e){alert("Não foi possível salvar os dados neste navegador.");return false;}
-}
-const categorias={
- entrada:{
-  pessoal:["Salário","Recebimentos","Empréstimo recebido","Investimento recebido","Serviços","Vendas","Reembolso","Uber/99","Outras entradas","Outros"],
-  uber:["Uber/99","Corridas Uber","Recebimentos","Bônus","Gorjetas","Outras entradas","Outros"],
-  "99":["Uber/99","Corridas 99","Recebimentos","Bônus","Gorjetas","Outras entradas","Outros"]
- },
- despesa:{
-  pessoal:["Agiota","Empréstimo","Pagamentos","Aluguel","Moradia","Mercado","Alimentação","Água","Luz","Internet","Telefone","Transporte","Combustível","Manutenção","Pneus","Óleo","Cartão de crédito","Saúde","Farmácia","Educação","Lazer","Impostos","Uber/99","Outras despesas","Outros"],
-  uber:["Combustível","Manutenção","Pneus","Óleo","Lavagem","Pedágio","Estacionamento","Aluguel do veículo","Seguro","Financiamento do veículo","Agiota","Empréstimo","Pagamentos","Uber/99","Outras despesas","Outros"],
-  "99":["Combustível","Manutenção","Pneus","Óleo","Lavagem","Pedágio","Estacionamento","Aluguel do veículo","Seguro","Financiamento do veículo","Agiota","Empréstimo","Pagamentos","Uber/99","Outras despesas","Outros"]
- }
-};
-function atualizarCategorias(){
- const tipo=$("tipo").value,area=$("area").value,sel=$("categoria");
- const anterior=sel.value;
- sel.innerHTML=categorias[tipo][area].map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
- if(categorias[tipo][area].includes(anterior))sel.value=anterior;
-}
-function totais(lista){
- return lista.reduce((t,l)=>{
-  const v=Number(l.valor)||0;
-  if(l.tipo==="entrada")t.e+=v;else t.d+=v;
-  return t;
- },{e:0,d:0});
-}
-function porArea(area){return dados.filter(l=>area==="uber99"?(l.area==="uber"||l.area==="99"):l.area===area);}
-function atualizarResumo(){
- const p=totais(porArea("pessoal"));
- const u=totais(porArea("uber99"));
- const resultado=u.e-u.d;
- const reserva=Math.max(0,resultado)*0.10;
- $("pEntradas").textContent=dinheiro(p.e);
- $("pDespesas").textContent=dinheiro(p.d);
- $("pSaldo").textContent=dinheiro(p.e-p.d);
- $("uEntradas").textContent=dinheiro(u.e);
- $("uDespesas").textContent=dinheiro(u.d);
- $("uSaldo").textContent=dinheiro(resultado);
- $("uReserva").textContent=dinheiro(reserva);
- $("uLiquido").textContent=dinheiro(resultado-reserva);
- $("resE").textContent=dinheiro(u.e);
- $("resD").textContent=dinheiro(u.d);
- $("resS").textContent=dinheiro(resultado);
- $("res10").textContent=dinheiro(reserva);
- $("resFinal").textContent=dinheiro(resultado-reserva);
- renderizar();
- $("qtdBackup").textContent=dados.length+" lançamento(s) guardado(s) neste navegador.";
-}
-function renderizar(){
- const tipo=$("fTipo").value,area=$("fArea").value;
- const lista=dados.filter(l=>(tipo==="todos"||l.tipo===tipo)&&(area==="todas"||l.area===area)).sort((a,b)=>b.data.localeCompare(a.data));
- $("lista").innerHTML=lista.length?lista.map(itemHTML).join(""):'<div class="sem-dados">Nenhum lançamento cadastrado.</div>';
- const recentes=dados.slice().sort((a,b)=>b.data.localeCompare(a.data)).slice(0,5);
- $("ultimos").innerHTML=recentes.length?recentes.map(l=>`<div class="item"><div class="linha"><strong>${esc(l.descricao)}</strong><strong class="${l.tipo==="entrada"?"verde":"vermelho"}">${l.tipo==="entrada"?"+":"−"}${dinheiro(l.valor)}</strong></div><p>${esc(l.data)} · ${esc(l.categoria)} · ${esc(l.area)}</p></div>`).join(""):'<div class="sem-dados">Nenhum lançamento ainda.</div>';
-}
-function itemHTML(l){
- return `<div class="item"><div class="linha"><strong>${esc(l.descricao)}</strong><strong class="${l.tipo==="entrada"?"verde":"vermelho"}">${l.tipo==="entrada"?"+":"−"}${dinheiro(l.valor)}</strong></div><p>${esc(l.data)} · ${l.tipo==="entrada"?"Entrada":"Despesa"} · ${esc(l.area)} · ${esc(l.categoria)}</p><p>${l.fixa?"Despesa fixa · ":""}${l.recorrencia!=="unica"?"Repetição "+esc(l.recorrencia)+" · ":""}${l.cartao?"Cartão de crédito":""}</p><div class="acoes"><button type="button" class="btn btn-sec" data-editar="${esc(l.id)}">Editar</button><button type="button" class="btn btn-perigo" data-excluir="${esc(l.id)}">Excluir</button></div></div>`;
-}
-function tela(nome){
- document.querySelectorAll(".tela").forEach(s=>s.classList.toggle("ativa",s.id===nome));
- document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("ativo",b.dataset.tela===nome));
- if(nome==="reserva")atualizarResumo();
- if(nome==="relatorios")gerarRelatorio();
- if(nome==="backup")$("qtdBackup").textContent=dados.length+" lançamento(s) guardado(s) neste navegador.";
- window.scrollTo({top:0,behavior:"smooth"});
-}
-document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>tela(b.dataset.tela)));
-$("tipo").addEventListener("change",atualizarCategorias);
-$("area").addEventListener("change",atualizarCategorias);
-$("fTipo").addEventListener("change",renderizar);
-$("fArea").addEventListener("change",renderizar);
 
-$("formLancamento").addEventListener("submit",e=>{
- e.preventDefault();
- const valor=Number($("valor").value);
- const descricao=$("descricao").value.trim();
- if(!descricao||!Number.isFinite(valor)||valor<=0){alert("Preencha a descrição e informe um valor maior que zero.");return;}
- const item={
-  id:editId||("id"+Date.now()+Math.random().toString(36).slice(2,7)),
-  tipo:$("tipo").value,area:$("area").value,
-  descricao,categoria:$("categoria").value,valor,
-  data:$("data").value||hoje(),
-  recorrencia:$("recorrencia").value,
-  fixa:$("fixa").checked,cartao:$("cartao").checked
- };
- if(editId)dados=dados.map(l=>l.id===editId?item:l);else dados.push(item);
- if(!persistir())return;
- limpar();atualizarResumo();tela("lancamentos");
- alert(editId?"Lançamento atualizado!":"Lançamento salvo!");
-});
-function limpar(){
- $("formLancamento").reset();
- $("data").value=hoje();
- editId=null;
- $("salvar").textContent="Salvar lançamento";
- $("cancelar").hidden=true;
- atualizarCategorias();
+function mostrarAba(id){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("oculto"));
+ const sec=document.getElementById(id);
+ if(sec)sec.classList.remove("oculto");
+ if(id==="inicio")atualizarResumo();
+ if(id==="lancamentos")renderizarLancamentos();
+ if(id==="cartoes"){renderizarCartoes();atualizarSeletoresCartao();}
+ if(id==="compras"){atualizarSeletoresCartao();document.getElementById("dataCompra").value=dataHoje();}
+ if(id==="faturas"){atualizarSeletoresCartao();renderizarFatura();}
 }
-function editar(id){
- const l=dados.find(x=>x.id===id);if(!l)return;
- editId=id;
- $("tipo").value=l.tipo;$("area").value=l.area;
- atualizarCategorias();
- $("descricao").value=l.descricao;$("categoria").value=l.categoria;
- $("valor").value=l.valor;$("data").value=l.data;
- $("recorrencia").value=l.recorrencia||"unica";
- $("fixa").checked=!!l.fixa;$("cartao").checked=!!l.cartao;
- $("salvar").textContent="Salvar alterações";$("cancelar").hidden=false;
- tela("novo");
+
+function limparFormulario(){
+ document.getElementById("descricao").value="";
+ document.getElementById("valor").value="";
+ document.getElementById("data").value=dataHoje();
+ document.getElementById("tipo").value="entrada";
+ document.getElementById("area").value="pessoal";
+ document.getElementById("categoria").value="Outros";
+ document.getElementById("repeticao").value="nao";
+ document.getElementById("fixa").checked=false;
 }
-function excluir(id){
- const l=dados.find(x=>x.id===id);if(!l)return;
- if(!confirm("Excluir o lançamento "+l.descricao+"?"))return;
- const anterior=dados;
- dados=dados.filter(x=>x.id!==id);
- if(!persistir()){dados=anterior;return;}
+
+function salvarLancamento(){
+ const tipo=document.getElementById("tipo").value;
+ const area=document.getElementById("area").value;
+ const descricao=document.getElementById("descricao").value.trim();
+ const valor=Number(document.getElementById("valor").value);
+ const data=document.getElementById("data").value;
+ const categoria=document.getElementById("categoria").value;
+ const repeticao=document.getElementById("repeticao").value;
+ const fixa=document.getElementById("fixa").checked;
+
+ if(!descricao||!Number.isFinite(valor)||valor<=0||!data){
+  alert("Preencha descrição, valor e data corretamente.");
+  return;
+ }
+
+ const quantidade=tipo==="despesa"?(repeticao==="diaria"?30:repeticao==="semanal"?4:repeticao==="mensal"?12:1):1;
+
+ for(let i=0;i<quantidade;i++){
+  const d=new Date(data+"T12:00:00");
+  if(repeticao==="diaria")d.setDate(d.getDate()+i);
+  if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
+  if(repeticao==="mensal"){
+   const dia=d.getDate();
+   d.setDate(1);
+   d.setMonth(d.getMonth()+i);
+   const ultimo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+   d.setDate(Math.min(dia,ultimo));
+  }
+  lancamentos.push({
+   id:String(Date.now())+"_"+i+"_"+Math.random().toString(36).slice(2,7),
+   tipo:tipo,
+   area:area,
+   descricao:descricao,
+   valor:Math.round(valor*100)/100,
+   data:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),
+   categoria:categoria,
+   fixa:tipo==="despesa"&&fixa
+  });
+ }
+
+ salvarDados();
+ limparFormulario();
+ renderizarLancamentos();
+ atualizarResumo();
+ alert("Lançamento salvo com sucesso!");
+}
+
+function excluirLancamento(id){
+ if(!confirm("Deseja excluir este lançamento?"))return;
+ lancamentos=lancamentos.filter(x=>x.id!==id);
+ salvarDados();
+ renderizarLancamentos();
  atualizarResumo();
 }
-$("lista").addEventListener("click",e=>{
- const ed=e.target.closest("[data-editar]"),ex=e.target.closest("[data-excluir]");
- if(ed)editar(ed.dataset.editar);
- if(ex)excluir(ex.dataset.excluir);
-});
-$("cancelar").addEventListener("click",()=>{limpar();tela("lancamentos");});
 
-function gerarRelatorio(){
- const ini=$("rInicio").value,fim=$("rFim").value;
- if(ini&&fim&&ini>fim){alert("A data inicial deve ser anterior à final.");return;}
- const lista=dados.filter(l=>(!ini||l.data>=ini)&&(!fim||l.data<=fim));
- const t=totais(lista);
- $("rEntradas").textContent=dinheiro(t.e);
- $("rDespesas").textContent=dinheiro(t.d);
- $("rSaldo").textContent=dinheiro(t.e-t.d);
- $("rQtd").textContent=lista.length;
- const grupos={};
- lista.forEach(l=>{
-  const k=(l.tipo==="entrada"?"Entrada: ":"Despesa: ")+l.categoria;
-  grupos[k]=(grupos[k]||0)+Number(l.valor);
- });
- $("rCategorias").innerHTML=Object.keys(grupos).sort().map(k=>`<div class="linha item"><span>${esc(k)}</span><strong>${dinheiro(grupos[k])}</strong></div>`).join("")||'<div class="sem-dados">Nenhum lançamento no período.</div>';
+function renderizarLancamentos(){
+ const lista=document.getElementById("listaLancamentos");
+ if(!lancamentos.length){
+  lista.innerHTML="<p>Nenhum lançamento registrado.</p>";
+  return;
+ }
+ lista.innerHTML=lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).map(x=>
+  '<div class="item"><strong>'+escapar(x.descricao)+'</strong>'+
+  '<div>'+escapar(x.data)+' · '+escapar(x.area.toUpperCase())+' · '+escapar(x.categoria)+'</div>'+
+  '<div class="'+(x.tipo==="entrada"?"verde":"vermelho")+'">'+
+  (x.tipo==="entrada"?"+":"−")+dinheiro(x.valor)+'</div>'+
+  (x.fixa?'<div class="pequeno">Despesa fixa</div>':'')+
+  '<button class="perigo" onclick="excluirLancamento('+JSON.stringify(x.id)+')">Excluir</button></div>'
+ ).join("");
 }
-$("gerarRel").addEventListener("click",gerarRelatorio);
 
-$("exportar").addEventListener("click",()=>{
- const blob=new Blob([JSON.stringify({aplicativo:"Meu Financeiro Pro 2.0",versao:1,lancamentos:dados},null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="backup-meu-financeiro.json";
- document.body.appendChild(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
-});
-$("importar").addEventListener("click",async()=>{
- const arquivo=$("arquivo").files[0];
- if(!arquivo){alert("Selecione o arquivo de backup.");return;}
- try{
-  const obj=JSON.parse(await arquivo.text());
-  const lista=Array.isArray(obj)?obj:obj.lancamentos;
-  if(!Array.isArray(lista)||!lista.every(l=>l&&["entrada","despesa"].includes(l.tipo)&&["pessoal","uber","99"].includes(l.area)&&typeof l.descricao==="string"&&Number(l.valor)>0&&typeof l.data==="string")){
-   alert("Arquivo de backup inválido.");return;
+function atualizarResumo(){
+ const entradas=lancamentos.filter(x=>x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+ const despesas=lancamentos.filter(x=>x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+ const saldo=entradas-despesas;
+ const areas=["uber","99"];
+ let reserva=0;
+ areas.forEach(area=>{
+  const e=lancamentos.filter(x=>x.area===area&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+  const d=lancamentos.filter(x=>x.area===area&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+  reserva+=Math.max(0,e-d)*0.10;
+ });
+ document.getElementById("totalEntradas").textContent=dinheiro(entradas);
+ document.getElementById("totalDespesas").textContent=dinheiro(despesas);
+ document.getElementById("saldoTotal").textContent=dinheiro(saldo);
+ document.getElementById("reservaTotal").textContent=dinheiro(reserva);
+ document.getElementById("resumoAreas").innerHTML=
+  "<h3>Resultado por área</h3>"+
+  ["pessoal","uber","99"].map(area=>{
+   const e=lancamentos.filter(x=>x.area===area&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+   const d=lancamentos.filter(x=>x.area===area&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+   return '<div class="item"><strong>'+area.toUpperCase()+'</strong><div>Entradas: '+dinheiro(e)+'</div><div>Despesas: '+dinheiro(d)+'</div><div>Saldo: '+dinheiro(e-d)+'</div></div>';
+  }).join("");
+}
+
+function escapar(valor){
+ return String(valor??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function limparCartao(){
+ document.getElementById("cartaoId").value="";
+ document.getElementById("nomeCartao").value="";
+ document.getElementById("limiteCartao").value="";
+ document.getElementById("fechamentoCartao").value="20";
+ document.getElementById("vencimentoCartao").value="5";
+}
+
+function salvarCartao(){
+ const id=document.getElementById("cartaoId").value;
+ const nome=document.getElementById("nomeCartao").value.trim();
+ const limite=Number(document.getElementById("limiteCartao").value);
+ const fechamento=Number(document.getElementById("fechamentoCartao").value);
+ const vencimento=Number(document.getElementById("vencimentoCartao").value);
+
+ if(!nome||!Number.isFinite(limite)||limite<0||
+ fechamento<1||fechamento>31||vencimento<1||vencimento>31){
+  alert("Confira o nome, limite e dias do cartão.");
+  return;
+ }
+
+ const item={id:id||("cartao_"+Date.now()),nome,limite,fechamento,vencimento};
+ const indice=cartoes.findIndex(c=>c.id===item.id);
+ if(indice>=0)cartoes[indice]=item;
+ else cartoes.push(item);
+
+ salvarDados();
+ limparCartao();
+ renderizarCartoes();
+ atualizarSeletoresCartao();
+ alert("Cartão salvo com sucesso!");
+}
+
+function editarCartao(id){
+ const c=cartoes.find(x=>x.id===id);
+ if(!c)return;
+ document.getElementById("cartaoId").value=c.id;
+ document.getElementById("nomeCartao").value=c.nome;
+ document.getElementById("limiteCartao").value=c.limite;
+ document.getElementById("fechamentoCartao").value=c.fechamento;
+ document.getElementById("vencimentoCartao").value=c.vencimento;
+ window.scrollTo(0,0);
+}
+
+function excluirCartao(id){
+ if(!confirm("Excluir este cartão? As compras já registradas não serão apagadas."))return;
+ cartoes=cartoes.filter(c=>c.id!==id);
+ salvarDados();
+ renderizarCartoes();
+ atualizarSeletoresCartao();
+}
+
+function renderizarCartoes(){
+ const lista=document.getElementById("listaCartoes");
+ if(!cartoes.length){
+  lista.innerHTML="<p>Nenhum cartão cadastrado.</p>";
+  return;
+ }
+ lista.innerHTML=cartoes.map(c=>{
+  const usado=lancamentos.filter(x=>x.cartaoId===c.id&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+  return '<div class="cartao"><h3>'+escapar(c.nome)+'</h3>'+
+   '<div>Limite total: '+dinheiro(c.limite)+'</div>'+
+   '<div>Compras registradas: '+dinheiro(usado)+'</div>'+
+   '<div>Fechamento: dia '+c.fechamento+' · Vencimento: dia '+c.vencimento+'</div>'+
+   '<div class="acoes"><button onclick="editarCartao('+JSON.stringify(c.id)+')">Editar</button>'+
+   '<button onclick="abrirCompras('+JSON.stringify(c.id)+')">Nova compra</button>'+
+   '<button class="perigo" onclick="excluirCartao('+JSON.stringify(c.id)+')">Excluir</button></div></div>';
+ }).join("");
+}
+
+function atualizarSeletoresCartao(){
+ ["cartaoCompra","cartaoFatura"].forEach(id=>{
+  const select=document.getElementById(id);
+  const anterior=select.value;
+  select.innerHTML=cartoes.map(c=>'<option value="'+escapar(c.id)+'">'+escapar(c.nome)+'</option>').join("");
+  if(cartoes.some(c=>c.id===anterior))select.value=anterior;
+  if(!cartoes.length)select.innerHTML='<option value="">Cadastre um cartão primeiro</option>';
+ });
+}
+
+function abrirCompras(id){
+ mostrarAba("compras");
+ document.getElementById("cartaoCompra").value=id;
+ document.getElementById("dataCompra").value=dataHoje();
+}
+</script>
+
+<script>
+function salvarCompra(){
+ const cartaoId=document.getElementById("cartaoCompra").value;
+ const descricao=document.getElementById("descricaoCompra").value.trim();
+ const valor=Number(document.getElementById("valorCompra").value);
+ const data=document.getElementById("dataCompra").value;
+ const parcelas=Number(document.getElementById("parcelasCompra").value);
+ const cartao=cartoes.find(c=>c.id===cartaoId);
+
+ if(!cartao){alert("Cadastre um cartão primeiro.");return;}
+ if(!descricao||!Number.isFinite(valor)||valor<=0||!data||parcelas<1){
+  alert("Preencha todos os dados da compra corretamente.");return;
+ }
+
+ const valorCentavos=Math.round(valor*100);
+ const parcelaBase=Math.floor(valorCentavos/parcelas);
+ const resto=valorCentavos-parcelaBase*parcelas;
+
+ for(let i=0;i<parcelas;i++){
+  const d=new Date(data+"T12:00:00");
+  d.setMonth(d.getMonth()+i);
+  const dia=d.getDate();
+  d.setDate(1);
+  const ultimo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+  d.setDate(Math.min(dia,ultimo));
+
+  let mes=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+  const valorParcela=(parcelaBase+(i<resto?1:0))/100;
+
+  lancamentos.push({
+   id:"compra_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2,7),
+   tipo:"despesa",
+   area:"pessoal",
+   descricao:descricao+" ("+(i+1)+"/"+parcelas+")",
+   valor:valorParcela,
+   data:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),
+   categoria:"Cartão de crédito",
+   fixa:false,
+   cartaoId:cartaoId,
+   mesFatura:mes,
+   compraParcelas:parcelas
+  });
+ }
+
+ salvarDados();
+ document.getElementById("descricaoCompra").value="";
+ document.getElementById("valorCompra").value="";
+ renderizarCartoes();
+ atualizarResumo();
+ alert("Compra registrada e dividida em "+parcelas+" parcela(s).");
+ mostrarAba("faturas");
+ document.getElementById("cartaoFatura").value=cartaoId;
+ const primeira=lancamentos.find(x=>x.cartaoId===cartaoId&&x.data===data);
+ if(primeira)document.getElementById("mesFatura").value=primeira.mesFatura;
+ renderizarFatura();
+}
+
+function renderizarFatura(){
+ const cartaoId=document.getElementById("cartaoFatura").value;
+ const mes=document.getElementById("mesFatura").value;
+ const area=document.getElementById("conteudoFatura");
+
+ if(!cartaoId||!mes){
+  area.innerHTML="<p>Selecione um cartão e o mês da fatura.</p>";
+  return;
+ }
+
+ const itens=lancamentos.filter(x=>x.cartaoId===cartaoId&&x.mesFatura===mes);
+ const total=itens.reduce((s,x)=>s+Number(x.valor),0);
+ const paga=!!faturasPagas[cartaoId+"_"+mes];
+ const cartao=cartoes.find(c=>c.id===cartaoId);
+
+ area.innerHTML=
+  '<div class="cartao"><h3>Fatura de '+escapar(mes)+'</h3>'+
+  '<p>Cartão: '+escapar(cartao?cartao.nome:"")+'</p>'+
+  '<div class="valor">'+dinheiro(total)+'</div>'+
+  '<p>Status: <strong class="'+(paga?"verde":"vermelho")+'">'+(paga?"PAGA":"EM ABERTO")+'</strong></p>'+
+  '<div class="acoes">'+
+  '<button onclick="alternarFatura('+JSON.stringify(cartaoId)+','+JSON.stringify(mes)+')">'+(paga?"Reabrir fatura":"Marcar fatura como paga")+'</button>'+
+  '</div><h3>Compras da fatura</h3>'+
+  (itens.length?itens.map(x=>
+   '<div class="item">'+escapar(x.descricao)+'<br>'+escapar(x.data)+'<br>'+dinheiro(x.valor)+
+   '<br><button class="perigo" onclick="excluirCompra('+JSON.stringify(x.id)+')">Excluir parcela</button></div>'
+  ).join(""):"<p>Nenhuma compra neste mês.</p>")+
+  '<p class="pequeno">Marcar a fatura como paga não cria outra despesa, evitando contar a mesma compra duas vezes.</p></div>';
+}
+
+function alternarFatura(cartaoId,mes){
+ const chave=cartaoId+"_"+mes;
+ if(faturasPagas[chave]){
+  if(!confirm("Deseja reabrir esta fatura?"))return;
+  delete faturasPagas[chave];
+ }else{
+  if(!confirm("Confirmar que esta fatura foi paga?"))return;
+  faturasPagas[chave]=true;
+ }
+ salvarDados();
+ renderizarFatura();
+}
+
+function excluirCompra(id){
+ if(!confirm("Excluir esta parcela da compra?"))return;
+ lancamentos=lancamentos.filter(x=>x.id!==id);
+ salvarDados();
+ renderizarFatura();
+ renderizarCartoes();
+ atualizarResumo();
+}
+
+function exportarBackup(){
+ const backup={
+  versao:2,
+  exportadoEm:new Date().toISOString(),
+  lancamentos:lancamentos,
+  cartoes:cartoes,
+  faturasPagas:faturasPagas
+ };
+ const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="backup-financeiro-pro-2.json";
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ URL.revokeObjectURL(url);
+}
+
+function importarBackup(event){
+ const arquivo=event.target.files[0];
+ if(!arquivo)return;
+ const leitor=new FileReader();
+
+ leitor.onload=function(){
+  try{
+   const b=JSON.parse(leitor.result);
+   if(!b||!Array.isArray(b.lancamentos)||!Array.isArray(b.cartoes)||typeof b.faturasPagas!=="object"){
+    throw new Error("Formato inválido");
+   }
+   if(!confirm("A importação substituirá os dados atuais. Deseja continuar?"))return;
+   lancamentos=b.lancamentos;
+   cartoes=b.cartoes;
+   faturasPagas=b.faturasPagas||{};
+   salvarDados();
+   atualizarResumo();
+   renderizarLancamentos();
+   renderizarCartoes();
+   atualizarSeletoresCartao();
+   renderizarFatura();
+   alert("Backup importado com sucesso!");
+  }catch(e){
+   alert("Não foi possível importar. Confira se selecionou um backup válido.");
+  }finally{
+   event.target.value="";
   }
-  if(!confirm("A restauração substituirá os lançamentos atuais. Continuar?"))return;
-  const anterior=dados;dados=lista;
-  if(!persistir()){dados=anterior;return;}
-  atualizarResumo();alert("Backup restaurado com sucesso.");
- }catch(e){alert("Não foi possível ler esse arquivo JSON.");}
-});
-carregar();
-$("data").value=hoje();
-atualizarCategorias();
-atualizarResumo();
-})();
+ };
+ leitor.readAsText(arquivo);
+}
+
+function iniciarAplicativo(){
+ document.getElementById("data").value=dataHoje();
+ document.getElementById("dataCompra").value=dataHoje();
+ document.getElementById("mesFatura").value=dataHoje().slice(0,7);
+ atualizarSeletoresCartao();
+ atualizarResumo();
+ renderizarLancamentos();
+ renderizarCartoes();
+ renderizarFatura();
+ mostrarAba("inicio");
+}
+
+iniciarAplicativo();
 </script>
 </main>
 </body>
