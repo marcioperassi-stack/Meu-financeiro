@@ -3,48 +3,49 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#123b70">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123c69">
 <title>Financeiro Pro 2.0</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
-header{background:#123b70;color:white;text-align:center;padding:18px 10px}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5f9;color:#202b3c}
+header{background:#123c69;color:white;padding:18px 14px;text-align:center}
 header h1{margin:0;font-size:23px}
 header p{margin:6px 0 0;font-size:13px}
-main{max-width:850px;margin:auto;padding:12px}
-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-button{border:0;border-radius:8px;padding:12px;background:#1769aa;color:white;font-weight:bold;cursor:pointer}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 5px #0001}
+button{border:0;border-radius:8px;padding:10px 12px;background:#1769aa;color:white;font-weight:bold;cursor:pointer}
 nav button{flex:1;min-width:90px}
-button.secundario{background:#64748b}
-button.perigo{background:#c62828}
-section{background:white;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px #00000010}
-h2{font-size:19px;margin:0 0 12px}
-h3{font-size:16px;margin:14px 0 8px}
-label{display:block;font-size:13px;font-weight:bold;margin:9px 0 5px}
-input,select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px;background:white}
-input[type=checkbox]{width:auto}
-.linha{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.acoes button{flex:1}
-.resumo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.resumo div{background:#eff6ff;border-radius:8px;padding:12px;font-size:13px}
-.resumo strong{display:block;font-size:18px;margin-top:5px}
-.cartao{border:1px solid #dbe3ec;border-radius:9px;padding:12px;margin:9px 0;overflow-wrap:anywhere}
-.pequeno{font-size:12px;color:#64748b}
-.oculto{display:none!important}
-.item{border-bottom:1px solid #e2e8f0;padding:10px 0}
-.verde{color:#15803d}
-.vermelho{color:#b91c1c}
-@media(max-width:480px){.linha{grid-template-columns:1fr}}
+button.sec{background:#687789}
+button.danger{background:#c0392b}
+button.good{background:#188653}
+main{max-width:900px;margin:auto;padding:12px}
+section{display:none}
+section.active{display:block}
+.card{background:white;padding:15px;border-radius:12px;margin:0 0 12px;box-shadow:0 2px 7px #0000000c}
+h2{font-size:20px;margin:0 0 14px;color:#123c69}
+h3{font-size:16px;margin:8px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
+label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd4df;border-radius:7px;font-size:16px;background:white;color:#202b3c}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.actions button{flex:1}
+.stat{background:#eaf2fc;padding:12px;border-radius:9px;overflow-wrap:anywhere}
+.stat small{display:block;color:#526477;margin-bottom:5px}
+.stat strong{font-size:19px}
+.item{border:1px solid #e0e6ed;border-radius:9px;padding:12px;margin:9px 0;background:#fff}
+.item p{margin:5px 0;overflow-wrap:anywhere}
+.muted{font-size:12px;color:#64748b}
+.green{color:#147d45}.red{color:#b42318}
+.hidden{display:none!important}
+hr{border:0;border-top:1px solid #e2e8f0;margin:14px 0}
+footer{text-align:center;color:#64748b;font-size:12px;padding:18px}
 </style>
 </head>
 <body>
 <header>
 <h1>Financeiro Pro 2.0</h1>
-<p>Controle pessoal, Uber, 99 e cartões de crédito</p>
+<p>Controle pessoal, Uber/99 e cartões</p>
 </header>
-<main>
 <nav>
 <button onclick="mostrarAba('inicio')">Início</button>
 <button onclick="mostrarAba('lancamentos')">Lançamentos</button>
@@ -53,499 +54,446 @@ input[type=checkbox]{width:auto}
 <button onclick="mostrarAba('faturas')">Faturas</button>
 <button onclick="mostrarAba('backup')">Backup</button>
 </nav>
-
-<section id="inicio">
+<main>
+<section id="inicio" class="active">
+<div class="card">
 <h2>Resumo financeiro</h2>
-<div class="resumo">
-<div>Entradas<strong id="totalEntradas">R$ 0,00</strong></div>
-<div>Despesas<strong id="totalDespesas">R$ 0,00</strong></div>
-<div>Saldo<strong id="saldoTotal">R$ 0,00</strong></div>
-<div>Reserva Uber/99 (10%)<strong id="reservaTotal">R$ 0,00</strong></div>
+<label for="mesResumo">Mês do resumo</label>
+<input id="mesResumo" type="month" onchange="renderizarTudo()">
+<div class="grid" style="margin-top:12px">
+<div class="stat"><small>Entradas</small><strong id="totalEntradas">R$ 0,00</strong></div>
+<div class="stat"><small>Despesas</small><strong id="totalDespesas">R$ 0,00</strong></div>
+<div class="stat"><small>Saldo</small><strong id="saldoMes">R$ 0,00</strong></div>
+<div class="stat"><small>Reserva Uber/99 (10%)</small><strong id="reserva">R$ 0,00</strong></div>
 </div>
-<div id="resumoAreas"></div>
+</div>
+<div class="card">
+<h2>Resumo por categoria</h2>
+<div id="resumoCategorias"></div>
+</div>
 </section>
 
-<section id="lancamentos" class="oculto">
-<h2>Novo lançamento</h2>
-<label>Tipo</label>
-<select id="tipo">
-<option value="entrada">Entrada / Ganho</option>
-<option value="despesa">Despesa</option>
-</select>
-<label>Área</label>
-<select id="area">
-<option value="pessoal">Pessoal</option>
-<option value="uber">Uber</option>
-<option value="99">99</option>
-</select>
-<label>Descrição</label>
-<input id="descricao" placeholder="Ex.: corrida, mercado, combustível">
-<div class="linha">
-<div>
-<label>Valor (R$)</label>
-<input id="valor" type="number" min="0.01" step="0.01" placeholder="0,00">
+<section id="lancamentos">
+<div class="card">
+<h2 id="tituloFormulario">Novo lançamento</h2>
+<input id="edicaoId" type="hidden">
+<div class="grid">
+<div><label for="tipo">Tipo</label>
+<select id="tipo" onchange="atualizarCategorias()">
+<option value="entrada">Entrada</option><option value="despesa">Despesa</option>
+</select></div>
+<div><label for="data">Data</label><input id="data" type="date"></div>
+<div><label for="valor">Valor (R$)</label><input id="valor" type="number" min="0.01" step="0.01" placeholder="0,00"></div>
+<div><label for="categoria">Categoria</label><select id="categoria"></select></div>
 </div>
-<div>
-<label>Data</label>
-<input id="data" type="date">
+<label for="descricao">Descrição</label><input id="descricao" maxlength="100" placeholder="Ex.: corrida, mercado, conta de luz">
+<div class="grid">
+<div><label for="origem">Área</label>
+<select id="origem"><option value="pessoal">Pessoal</option><option value="uber">Uber/99</option></select></div>
+<div><label for="repeticao">Repetir lançamento</label>
+<select id="repeticao"><option value="nenhuma">Não repetir</option><option value="diaria">Diariamente (30 vezes)</option><option value="semanal">Semanalmente (12 vezes)</option><option value="mensal">Mensalmente (12 vezes)</option></select></div>
 </div>
-</div>
-<label>Categoria</label>
-<select id="categoria">
-<option>Uber/99</option>
-<option>Corridas</option>
-<option>Recebimentos</option>
-<option>Empréstimo recebido</option>
-<option>Combustível</option>
-<option>Manutenção</option>
-<option>Alimentação</option>
-<option>Moradia</option>
-<option>Contas fixas</option>
-<option>Cartão de crédito</option>
-<option>Agiota</option>
-<option>Empréstimo</option>
-<option>Pagamentos</option>
-<option>Outros</option>
-</select>
-<label>Repetir despesa</label>
-<select id="repeticao">
-<option value="nao">Não repetir</option>
-<option value="diaria">Diariamente (30 vezes)</option>
-<option value="semanal">Semanalmente (4 vezes)</option>
-<option value="mensal">Mensalmente (12 vezes)</option>
-</select>
-<label><input id="fixa" type="checkbox"> Despesa fixa</label>
-<div class="acoes">
+<div class="actions">
 <button onclick="salvarLancamento()">Salvar lançamento</button>
-<button class="secundario" onclick="limparFormulario()">Limpar</button>
+<button class="sec" onclick="limparFormulario()">Limpar</button>
 </div>
-<h3>Lançamentos registrados</h3>
+<p class="muted">Para alterar um lançamento, toque em Editar na lista abaixo. A repetição cria lançamentos separados.</p>
+</div>
+<div class="card">
+<h2>Meus lançamentos</h2>
+<div class="grid">
+<div><label for="filtroMes">Filtrar por mês</label><input id="filtroMes" type="month" onchange="renderizarLancamentos()"></div>
+<div><label for="filtroTipo">Tipo</label><select id="filtroTipo" onchange="renderizarLancamentos()"><option value="todos">Todos</option><option value="entrada">Entradas</option><option value="despesa">Despesas</option></select></div>
+</div>
 <div id="listaLancamentos"></div>
+</div>
 </section>
 
-<section id="cartoes" class="oculto">
-<h2>Cartões de crédito</h2>
-<label>Nome do cartão</label>
-<input id="nomeCartao" placeholder="Ex.: Cartão principal">
-<div class="linha">
-<div>
-<label>Limite total (R$)</label>
-<input id="limiteCartao" type="number" min="0" step="0.01">
+<section id="cartoes">
+<div class="card">
+<h2>Cadastro de cartão</h2>
+<input id="cartaoId" type="hidden">
+<label for="nomeCartao">Nome do cartão</label><input id="nomeCartao" placeholder="Ex.: Cartão principal">
+<div class="grid">
+<div><label for="limiteCartao">Limite (R$)</label><input id="limiteCartao" type="number" min="0" step="0.01"></div>
+<div><label for="fechamentoCartao">Dia de fechamento</label><input id="fechamentoCartao" type="number" min="1" max="31" value="20"></div>
+<div><label for="vencimentoCartao">Dia de vencimento</label><input id="vencimentoCartao" type="number" min="1" max="31" value="28"></div>
 </div>
-<div>
-<label>Dia de fechamento</label>
-<input id="fechamentoCartao" type="number" min="1" max="31" value="20">
+<div class="actions"><button onclick="salvarCartao()">Salvar cartão</button><button class="sec" onclick="limparCartao()">Limpar</button></div>
 </div>
-</div>
-<label>Dia do vencimento</label>
-<input id="vencimentoCartao" type="number" min="1" max="31" value="5">
-<div class="acoes">
-<button onclick="salvarCartao()">Salvar cartão</button>
-<button class="secundario" onclick="limparCartao()">Limpar</button>
-</div>
-<div id="listaCartoes"></div>
+<div class="card"><h2>Meus cartões</h2><div id="listaCartoes"></div></div>
 </section>
 
-<section id="compras" class="oculto">
+<section id="compras">
+<div class="card">
 <h2>Compra no cartão</h2>
-<label>Cartão</label>
-<select id="cartaoCompra"></select>
-<label>Descrição da compra</label>
-<input id="descricaoCompra" placeholder="Ex.: eletrodoméstico">
-<div class="linha">
-<div>
-<label>Valor total (R$)</label>
-<input id="valorCompra" type="number" min="0.01" step="0.01">
+<label for="cartaoCompra">Cartão</label><select id="cartaoCompra"></select>
+<div class="grid">
+<div><label for="dataCompra">Data da compra</label><input id="dataCompra" type="date"></div>
+<div><label for="valorCompra">Valor total (R$)</label><input id="valorCompra" type="number" min="0.01" step="0.01"></div>
+<div><label for="parcelasCompra">Número de parcelas</label><input id="parcelasCompra" type="number" min="1" max="48" value="1"></div>
 </div>
-<div>
-<label>Data da compra</label>
-<input id="dataCompra" type="date">
+<label for="descricaoCompra">Descrição da compra</label><input id="descricaoCompra" placeholder="Ex.: pneus, mercado">
+<div class="actions"><button onclick="salvarCompra()">Salvar compra</button></div>
 </div>
-</div>
-<label>Número de parcelas</label>
-<select id="parcelasCompra">
-<option value="1">1 parcela</option>
-<option value="2">2 parcelas</option>
-<option value="3">3 parcelas</option>
-<option value="4">4 parcelas</option>
-<option value="5">5 parcelas</option>
-<option value="6">6 parcelas</option>
-<option value="10">10 parcelas</option>
-<option value="12">12 parcelas</option>
-<option value="18">18 parcelas</option>
-<option value="24">24 parcelas</option>
-</select>
-<div class="acoes">
-<button onclick="salvarCompra()">Salvar compra</button>
+<div class="card"><h2>Compras registradas</h2><div id="listaCompras"></div></div>
+</section>
+
+<section id="faturas">
+<div class="card"><h2>Faturas dos cartões</h2>
+<label for="mesFatura">Mês da fatura</label><input id="mesFatura" type="month" onchange="renderizarFaturas()">
+<div id="listaFaturas"></div>
 </div>
 </section>
 
-<section id="faturas" class="oculto">
-<h2>Faturas do cartão</h2>
-<label>Cartão</label>
-<select id="cartaoFatura" onchange="renderizarFatura()"></select>
-<label>Mês da fatura</label>
-<input id="mesFatura" type="month" onchange="renderizarFatura()">
-<div id="conteudoFatura"></div>
-</section>
-
-<section id="backup" class="oculto">
-<h2>Backup dos dados</h2>
-<p>Exporte seus lançamentos, cartões e faturas para guardar uma cópia.</p>
-<div class="acoes">
-<button onclick="exportarBackup()">Exportar backup</button>
-<button class="secundario" onclick="document.getElementById('arquivoBackup').click()">Importar backup</button>
+<section id="backup">
+<div class="card"><h2>Backup dos dados</h2>
+<p>Salve uma cópia dos seus lançamentos, cartões e compras para poder restaurar depois.</p>
+<div class="actions"><button onclick="exportarBackup()">Baixar backup</button></div>
+<label for="arquivoBackup">Restaurar backup</label><input id="arquivoBackup" type="file" accept=".json,application/json">
+<div class="actions"><button onclick="importarBackup()">Restaurar dados</button></div>
+<p class="muted">A restauração substitui os dados atualmente salvos neste aparelho.</p>
 </div>
-<input id="arquivoBackup" type="file" accept=".json,application/json" class="oculto" onchange="importarBackup(event)">
-<p class="pequeno">Guarde o arquivo exportado em local seguro.</p>
 </section>
-
 <script>
+
+"use strict";
 const CHAVE_DADOS="meuFinanceiroPro2_dados";
 const CHAVE_CARTOES="meuFinanceiroPro2_cartoes";
-const CHAVE_FATURAS="meuFinanceiroPro2_faturas";
+const CHAVE_COMPRAS="meuFinanceiroPro2_faturas";
+let lancamentos=ler(CHAVE_DADOS,[]);
+let cartoes=ler(CHAVE_CARTOES,[]);
+let compras=ler(CHAVE_COMPRAS,[]);
 
-let lancamentos=JSON.parse(localStorage.getItem(CHAVE_DADOS)||"[]");
-let cartoes=JSON.parse(localStorage.getItem(CHAVE_CARTOES)||"[]");
-let faturasPagas=JSON.parse(localStorage.getItem(CHAVE_FATURAS)||"{}");
-
-function salvarDados(){
+function ler(chave,padrao){
+ try{const x=localStorage.getItem(chave);return x?JSON.parse(x):padrao}
+ catch(e){return padrao}
+}
+function guardar(){
  localStorage.setItem(CHAVE_DADOS,JSON.stringify(lancamentos));
  localStorage.setItem(CHAVE_CARTOES,JSON.stringify(cartoes));
- localStorage.setItem(CHAVE_FATURAS,JSON.stringify(faturasPagas));
+ localStorage.setItem(CHAVE_COMPRAS,JSON.stringify(compras));
 }
-
-function dinheiro(v){
- return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+function dinheiro(n){
+ return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 }
-
-function dataHoje(){
+function hoje(){
  const d=new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
-
-function escapar(v){
- return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function mesAtual(){return hoje().slice(0,7)}
+function escapar(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-
 function mostrarAba(id){
- document.querySelectorAll("main section").forEach(s=>s.classList.add("oculto"));
- const sec=document.getElementById(id);
- if(sec)sec.classList.remove("oculto");
- if(id==="inicio")atualizarResumo();
+ document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+ const alvo=document.getElementById(id);
+ if(alvo)alvo.classList.add("active");
+ if(id==="inicio")renderizarResumo();
  if(id==="lancamentos")renderizarLancamentos();
- if(id==="cartoes"){renderizarCartoes();atualizarSeletoresCartao();}
- if(id==="compras")atualizarSeletoresCartao();
- if(id==="faturas"){atualizarSeletoresCartao();renderizarFatura();}
+ if(id==="cartoes")renderizarCartoes();
+ if(id==="compras")renderizarCompras();
+ if(id==="faturas")renderizarFaturas();
 }
-
-function limparFormulario(){
- document.getElementById("descricao").value="";
- document.getElementById("valor").value="";
- document.getElementById("data").value=dataHoje();
- document.getElementById("tipo").value="entrada";
- document.getElementById("area").value="pessoal";
- document.getElementById("categoria").value="Outros";
- document.getElementById("repeticao").value="nao";
- document.getElementById("fixa").checked=false;
-}
-
-function salvarLancamento(){
+function atualizarCategorias(){
  const tipo=document.getElementById("tipo").value;
- const area=document.getElementById("area").value;
- const descricao=document.getElementById("descricao").value.trim();
- const valor=Number(document.getElementById("valor").value);
+ const categorias=tipo==="entrada"
+ ?["Salário","Serviços","Uber/99","Recebimento","Empréstimo","Outras entradas","Outros"]
+ :["Moradia","Mercado","Alimentação","Uber/99","Pagamentos","Água/luz/internet/telefone","Transporte","Saúde","Lazer","Combustível","Manutenção","Cartão de crédito","Agiota","Empréstimo","Outros"];
+ const sel=document.getElementById("categoria");
+ const anterior=sel.value;
+ sel.innerHTML=categorias.map(c=>`<option>${escapar(c)}</option>`).join("");
+ if(categorias.includes(anterior))sel.value=anterior;
+}
+function limparFormulario(){
+ document.getElementById("edicaoId").value="";
+ document.getElementById("tituloFormulario").textContent="Novo lançamento";
+ document.getElementById("tipo").value="entrada";
+ document.getElementById("data").value=hoje();
+ document.getElementById("valor").value="";
+ document.getElementById("descricao").value="";
+ document.getElementById("origem").value="pessoal";
+ document.getElementById("repeticao").value="nenhuma";
+ atualizarCategorias();
+}
+function salvarLancamento(){
+ const id=document.getElementById("edicaoId").value;
+ const tipo=document.getElementById("tipo").value;
  const data=document.getElementById("data").value;
+ const valor=Number(document.getElementById("valor").value);
  const categoria=document.getElementById("categoria").value;
+ const descricao=document.getElementById("descricao").value.trim();
+ const origem=document.getElementById("origem").value;
  const repeticao=document.getElementById("repeticao").value;
- const fixa=document.getElementById("fixa").checked;
-
- if(!descricao||!Number.isFinite(valor)||valor<=0||!data){
-  alert("Preencha descrição, valor e data corretamente.");
-  return;
+ if(!data||!Number.isFinite(valor)||valor<=0||!descricao){
+  alert("Preencha a data, a descrição e um valor maior que zero.");return;
  }
-
- const qtd=tipo==="despesa"?(repeticao==="diaria"?30:repeticao==="semanal"?4:repeticao==="mensal"?12:1):1;
-
- for(let i=0;i<qtd;i++){
-  const d=new Date(data+"T12:00:00");
-  if(repeticao==="diaria")d.setDate(d.getDate()+i);
-  if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
-  if(repeticao==="mensal"){
-   const dia=d.getDate();
-   d.setDate(1);
-   d.setMonth(d.getMonth()+i);
-   d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));
+ const base={tipo,data,valor,categoria,descricao,origem};
+ if(id){
+  const i=lancamentos.findIndex(x=>String(x.id)===String(id));
+  if(i<0){alert("Lançamento não encontrado.");return}
+  lancamentos[i]={...lancamentos[i],...base};
+ }else{
+  const quant=repeticao==="diaria"?30:repeticao==="semanal"?12:repeticao==="mensal"?12:1;
+  for(let i=0;i<quant;i++){
+   const d=new Date(data+"T12:00:00");
+   if(repeticao==="diaria")d.setDate(d.getDate()+i);
+   if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
+   if(repeticao==="mensal"){
+    const dia=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+i);
+    d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));
+   }
+   const dataNova=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+   lancamentos.push({...base,id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2),data:dataNova});
   }
-  lancamentos.push({
-   id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2,7),
-   tipo:tipo,
-   area:area,
-   descricao:descricao,
-   valor:Math.round(valor*100)/100,
-   data:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),
-   categoria:categoria,
-   fixa:tipo==="despesa"&&fixa
-  });
  }
-
- salvarDados();
- limparFormulario();
- renderizarLancamentos();
- atualizarResumo();
- alert("Lançamento salvo com sucesso!");
+ guardar();limparFormulario();renderizarTudo();
+ alert(id?"Lançamento atualizado!":"Lançamento salvo!");
 }
-
+function editarLancamento(id){
+ const x=lancamentos.find(a=>String(a.id)===String(id));
+ if(!x){alert("Lançamento não encontrado.");return}
+ mostrarAba("lancamentos");
+ document.getElementById("edicaoId").value=x.id;
+ document.getElementById("tituloFormulario").textContent="Editar lançamento";
+ document.getElementById("tipo").value=x.tipo;
+ atualizarCategorias();
+ document.getElementById("data").value=x.data;
+ document.getElementById("valor").value=x.valor;
+ document.getElementById("categoria").value=x.categoria;
+ document.getElementById("descricao").value=x.descricao;
+ document.getElementById("origem").value=x.origem||"pessoal";
+ document.getElementById("repeticao").value="nenhuma";
+ document.getElementById("tituloFormulario").scrollIntoView({behavior:"smooth",block:"start"});
+}
 function excluirLancamento(id){
- if(!confirm("Deseja excluir este lançamento?"))return;
- lancamentos=lancamentos.filter(x=>x.id!==id);
- salvarDados();
- renderizarLancamentos();
- atualizarResumo();
+ const x=lancamentos.find(a=>String(a.id)===String(id));
+ if(!x)return;
+ if(!confirm("Deseja realmente excluir o lançamento \""+x.descricao+"\" de "+dinheiro(x.valor)+"?"))return;
+ lancamentos=lancamentos.filter(a=>String(a.id)!==String(id));
+ guardar();renderizarTudo();
 }
-
 function renderizarLancamentos(){
- const el=document.getElementById("listaLancamentos");
- if(!lancamentos.length){el.innerHTML="<p>Nenhum lançamento registrado.</p>";return;}
- el.innerHTML=lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).map(x=>
-  '<div class="item"><strong>'+escapar(x.descricao)+'</strong>'+
-  '<div>'+escapar(x.data)+' · '+escapar(x.area.toUpperCase())+' · '+escapar(x.categoria)+'</div>'+
-  '<div class="'+(x.tipo==="entrada"?"verde":"vermelho")+'">'+(x.tipo==="entrada"?"+":"−")+dinheiro(x.valor)+'</div>'+
-  (x.fixa?'<div class="pequeno">Despesa fixa</div>':'')+
-  '<button class="perigo" onclick="excluirLancamento('+JSON.stringify(x.id)+')">Excluir</button></div>'
- ).join("");
+ const lista=document.getElementById("listaLancamentos");
+ if(!lista)return;
+ const mes=document.getElementById("filtroMes").value;
+ const tipo=document.getElementById("filtroTipo").value;
+ const itens=lancamentos.filter(x=>(!mes||x.data.startsWith(mes))&&(tipo==="todos"||x.tipo===tipo))
+ .sort((a,b)=>b.data.localeCompare(a.data));
+ if(!itens.length){lista.innerHTML='<p class="muted">Nenhum lançamento encontrado neste filtro.</p>';return}
+ lista.innerHTML=itens.map(x=>`
+ <div class="item">
+ <p><strong>${escapar(x.descricao)}</strong></p>
+ <p class="${x.tipo==="entrada"?"green":"red"}"><strong>${x.tipo==="entrada"?"Entrada":"Despesa"}: ${dinheiro(x.valor)}</strong></p>
+ <p>${escapar(x.categoria)} · ${x.origem==="uber"?"Uber/99":"Pessoal"}</p>
+ <p class="muted">${escapar(x.data)}</p>
+ <div class="actions">
+ <button onclick="editarLancamento('${escapar(x.id)}')">Editar</button>
+ <button class="danger" onclick="excluirLancamento('${escapar(x.id)}')">Excluir</button>
+ </div>
+ </div>`).join("");
 }
-
-function atualizarResumo(){
- const entradas=lancamentos.filter(x=>x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
- const despesas=lancamentos.filter(x=>x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
- let reserva=0;
- ["uber","99"].forEach(a=>{
-  const e=lancamentos.filter(x=>x.area===a&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
-  const d=lancamentos.filter(x=>x.area===a&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
-  reserva+=Math.max(0,e-d)*0.10;
- });
+function renderizarResumo(){
+ const mes=document.getElementById("mesResumo").value||mesAtual();
+ const itens=lancamentos.filter(x=>x.data.startsWith(mes));
+ const entradas=itens.filter(x=>x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+ const despesas=itens.filter(x=>x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+ const saldo=entradas-despesas;
+ const uberEntradas=itens.filter(x=>x.origem==="uber"&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+ const uberDespesas=itens.filter(x=>x.origem==="uber"&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+ const reserva=Math.max(0,uberEntradas-uberDespesas)*0.10;
  document.getElementById("totalEntradas").textContent=dinheiro(entradas);
  document.getElementById("totalDespesas").textContent=dinheiro(despesas);
- document.getElementById("saldoTotal").textContent=dinheiro(entradas-despesas);
- document.getElementById("reservaTotal").textContent=dinheiro(reserva);
- document.getElementById("resumoAreas").innerHTML="<h3>Resultado por área</h3>"+
-  ["pessoal","uber","99"].map(a=>{
-   const e=lancamentos.filter(x=>x.area===a&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
-   const d=lancamentos.filter(x=>x.area===a&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
-   return '<div class="item"><strong>'+a.toUpperCase()+'</strong><div>Entradas: '+dinheiro(e)+'</div><div>Despesas: '+dinheiro(d)+'</div><div>Saldo: '+dinheiro(e-d)+'</div></div>';
-  }).join("");
+ document.getElementById("saldoMes").textContent=dinheiro(saldo);
+ document.getElementById("reserva").textContent=dinheiro(reserva);
+ const cats={};
+ itens.forEach(x=>{
+  const k=(x.tipo==="entrada"?"Entrada":"Despesa")+" — "+x.categoria;
+  cats[k]=(cats[k]||0)+Number(x.valor);
+ });
+ const div=document.getElementById("resumoCategorias");
+ div.innerHTML=Object.keys(cats).length
+ ?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="item"><strong>${escapar(k)}</strong><p>${dinheiro(v)}</p></div>`).join("")
+ :'<p class="muted">Ainda não há lançamentos neste mês.</p>';
 }
-
-function limparCartao(){
- document.getElementById("nomeCartao").value="";
- document.getElementById("limiteCartao").value="";
- document.getElementById("fechamentoCartao").value="20";
- document.getElementById("vencimentoCartao").value="5";
+function renderizarTudo(){
+ guardar();renderizarResumo();renderizarLancamentos();renderizarCartoes();renderizarCompras();renderizarFaturas();
 }
 
 function salvarCartao(){
+ const id=document.getElementById("cartaoId").value;
  const nome=document.getElementById("nomeCartao").value.trim();
  const limite=Number(document.getElementById("limiteCartao").value);
  const fechamento=Number(document.getElementById("fechamentoCartao").value);
  const vencimento=Number(document.getElementById("vencimentoCartao").value);
- if(!nome||!Number.isFinite(limite)||limite<0||fechamento<1||fechamento>31||vencimento<1||vencimento>31){
+ if(!nome||limite<0||fechamento<1||fechamento>31||vencimento<1||vencimento>31){
   alert("Confira o nome, o limite e os dias do cartão.");return;
  }
- cartoes.push({id:"c_"+Date.now()+"_"+Math.random().toString(36).slice(2,6),nome,limite,fechamento,vencimento});
- salvarDados();
- limparCartao();
- renderizarCartoes();
- atualizarSeletoresCartao();
- alert("Cartão cadastrado!");
+ const c={id:id||"c_"+Date.now(),nome,limite,fechamento,vencimento};
+ if(id)cartoes=cartoes.map(x=>x.id===id?c:x);
+ else cartoes.push(c);
+ guardar();limparCartao();renderizarTudo();alert("Cartão salvo!");
 }
-
+function limparCartao(){
+ document.getElementById("cartaoId").value="";
+ document.getElementById("nomeCartao").value="";
+ document.getElementById("limiteCartao").value="";
+ document.getElementById("fechamentoCartao").value=20;
+ document.getElementById("vencimentoCartao").value=28;
+}
+function editarCartao(id){
+ const c=cartoes.find(x=>x.id===id);if(!c)return;
+ document.getElementById("cartaoId").value=c.id;
+ document.getElementById("nomeCartao").value=c.nome;
+ document.getElementById("limiteCartao").value=c.limite;
+ document.getElementById("fechamentoCartao").value=c.fechamento;
+ document.getElementById("vencimentoCartao").value=c.vencimento;
+ mostrarAba("cartoes");
+}
 function excluirCartao(id){
+ if(compras.some(x=>x.cartaoId===id)){
+  alert("Este cartão tem compras registradas. Exclua as compras antes de excluir o cartão.");return;
+ }
  if(!confirm("Excluir este cartão?"))return;
- cartoes=cartoes.filter(c=>c.id!==id);
- salvarDados();
- renderizarCartoes();
- atualizarSeletoresCartao();
+ cartoes=cartoes.filter(x=>x.id!==id);guardar();renderizarTudo();
 }
-
 function renderizarCartoes(){
- const el=document.getElementById("listaCartoes");
- if(!cartoes.length){el.innerHTML="<p>Nenhum cartão cadastrado.</p>";return;}
- el.innerHTML=cartoes.map(c=>{
-  const usado=lancamentos.filter(x=>x.cartaoId===c.id).reduce((s,x)=>s+Number(x.valor),0);
-  return '<div class="cartao"><h3>'+escapar(c.nome)+'</h3>'+
-   '<div>Limite: '+dinheiro(c.limite)+'</div><div>Compras registradas: '+dinheiro(usado)+'</div>'+
-   '<div>Fechamento: dia '+c.fechamento+' · Vencimento: dia '+c.vencimento+'</div>'+
-   '<div class="acoes"><button onclick="abrirCompras('+JSON.stringify(c.id)+')">Nova compra</button>'+
-   '<button class="perigo" onclick="excluirCartao('+JSON.stringify(c.id)+')">Excluir</button></div></div>';
+ const lista=document.getElementById("listaCartoes");
+ const sel=document.getElementById("cartaoCompra");
+ if(!lista||!sel)return;
+ const anterior=sel.value;
+ sel.innerHTML=cartoes.map(c=>`<option value="${escapar(c.id)}">${escapar(c.nome)}</option>`).join("");
+ if(cartoes.some(c=>c.id===anterior))sel.value=anterior;
+ if(!cartoes.length)lista.innerHTML='<p class="muted">Cadastre um cartão para começar.</p>';
+ else lista.innerHTML=cartoes.map(c=>{
+  const usado=compras.filter(x=>x.cartaoId===c.id).reduce((s,x)=>s+Number(x.valorTotal),0);
+  return `<div class="item"><strong>${escapar(c.nome)}</strong>
+  <p>Limite: ${dinheiro(c.limite)}</p><p>Compras registradas: ${dinheiro(usado)}</p>
+  <p class="muted">Fecha dia ${c.fechamento} · Vence dia ${c.vencimento}</p>
+  <div class="actions"><button onclick="editarCartao('${escapar(c.id)}')">Editar</button>
+  <button class="danger" onclick="excluirCartao('${escapar(c.id)}')">Excluir</button></div></div>`;
  }).join("");
 }
-
-function atualizarSeletoresCartao(){
- ["cartaoCompra","cartaoFatura"].forEach(id=>{
-  const el=document.getElementById(id);
-  const anterior=el.value;
-  el.innerHTML=cartoes.map(c=>'<option value="'+escapar(c.id)+'">'+escapar(c.nome)+'</option>').join("");
-  if(cartoes.some(c=>c.id===anterior))el.value=anterior;
-  if(!cartoes.length)el.innerHTML='<option value="">Cadastre um cartão primeiro</option>';
- });
-}
-
-function abrirCompras(id){
- mostrarAba("compras");
- document.getElementById("cartaoCompra").value=id;
- document.getElementById("dataCompra").value=dataHoje();
-}
-</script>
-
-<script>
 function salvarCompra(){
  const cartaoId=document.getElementById("cartaoCompra").value;
- const descricao=document.getElementById("descricaoCompra").value.trim();
- const valor=Number(document.getElementById("valorCompra").value);
  const data=document.getElementById("dataCompra").value;
- const parcelas=Number(document.getElementById("parcelasCompra").value);
- if(!cartoes.some(c=>c.id===cartaoId)){alert("Cadastre um cartão primeiro.");return;}
- if(!descricao||!Number.isFinite(valor)||valor<=0||!data){alert("Preencha os dados da compra.");return;}
-
- const centavos=Math.round(valor*100);
- const base=Math.floor(centavos/parcelas);
- const resto=centavos%parcelas;
- const compraId="compra_"+Date.now();
-
- for(let i=0;i<parcelas;i++){
-  const d=new Date(data+"T12:00:00");
-  const dia=d.getDate();
-  d.setDate(1);
-  d.setMonth(d.getMonth()+i);
+ const valorTotal=Number(document.getElementById("valorCompra").value);
+ const parcelas=Math.floor(Number(document.getElementById("parcelasCompra").value));
+ const descricao=document.getElementById("descricaoCompra").value.trim();
+ if(!cartaoId){alert("Cadastre um cartão primeiro.");return}
+ if(!data||!descricao||valorTotal<=0||parcelas<1||parcelas>48){
+  alert("Preencha todos os dados da compra corretamente.");return;
+ }
+ compras.push({id:"p_"+Date.now(),cartaoId,data,valorTotal,parcelas,descricao,pagas:[]});
+ guardar();
+ document.getElementById("valorCompra").value="";
+ document.getElementById("parcelasCompra").value=1;
+ document.getElementById("descricaoCompra").value="";
+ renderizarTudo();alert("Compra salva!");
+}
+function parcelasDaCompra(compra){
+ const valor=Number((compra.valorTotal/compra.parcelas).toFixed(2));
+ const resultado=[];
+ const base=new Date(compra.data+"T12:00:00");
+ for(let i=0;i<compra.parcelas;i++){
+  const d=new Date(base);
+  const dia=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+i);
   d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));
   const mes=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
-  lancamentos.push({
-   id:compraId+"_"+i,
-   tipo:"despesa",
-   area:"pessoal",
-   descricao:descricao+" ("+(i+1)+"/"+parcelas+")",
-   valor:(base+(i<resto?1:0))/100,
-   data:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),
-   categoria:"Cartão de crédito",
-   fixa:false,
-   cartaoId:cartaoId,
-   mesFatura:mes
-  });
+  resultado.push({mes,valor:i===compra.parcelas-1?Number((compra.valorTotal-valor*(compra.parcelas-1)).toFixed(2)):valor,numero:i+1});
  }
- salvarDados();
- document.getElementById("descricaoCompra").value="";
- document.getElementById("valorCompra").value="";
- renderizarCartoes();
- atualizarResumo();
- alert("Compra registrada!");
- mostrarAba("faturas");
- document.getElementById("cartaoFatura").value=cartaoId;
- const ultima=lancamentos.filter(x=>x.cartaoId===cartaoId).slice(-1)[0];
- if(ultima)document.getElementById("mesFatura").value=ultima.mesFatura;
- renderizarFatura();
+ return resultado;
 }
-
-function renderizarFatura(){
- const cartaoId=document.getElementById("cartaoFatura").value;
- const mes=document.getElementById("mesFatura").value;
- const el=document.getElementById("conteudoFatura");
- if(!cartaoId||!mes){el.innerHTML="<p>Selecione o cartão e o mês.</p>";return;}
- const itens=lancamentos.filter(x=>x.cartaoId===cartaoId&&x.mesFatura===mes);
- const total=itens.reduce((s,x)=>s+Number(x.valor),0);
- const chave=cartaoId+"_"+mes;
- const paga=!!faturasPagas[chave];
- const cartao=cartoes.find(c=>c.id===cartaoId);
- el.innerHTML='<div class="cartao"><h3>Fatura '+escapar(mes)+'</h3>'+
-  '<p>Cartão: '+escapar(cartao?cartao.nome:"")+'</p>'+
-  '<div class="resumo"><div>Total<strong>'+dinheiro(total)+'</strong></div>'+
-  '<div>Status<strong class="'+(paga?"verde":"vermelho")+'">'+(paga?"PAGA":"EM ABERTO")+'</strong></div></div>'+
-  '<div class="acoes"><button onclick="alternarFatura('+JSON.stringify(cartaoId)+','+JSON.stringify(mes)+')">'+(paga?"Reabrir fatura":"Marcar fatura como paga")+'</button></div>'+
-  '<h3>Compras da fatura</h3>'+
-  (itens.length?itens.map(x=>'<div class="item">'+escapar(x.descricao)+'<br>'+escapar(x.data)+'<br>'+dinheiro(x.valor)+
-   '<br><button class="perigo" onclick="excluirCompra('+JSON.stringify(x.id)+')">Excluir parcela</button></div>').join(""):"<p>Nenhuma compra neste mês.</p>")+
-  '<p class="pequeno">Marcar a fatura como paga não cria outra despesa.</p></div>';
+function renderizarCompras(){
+ const lista=document.getElementById("listaCompras");if(!lista)return;
+ if(!compras.length){lista.innerHTML='<p class="muted">Nenhuma compra registrada.</p>';return}
+ lista.innerHTML=compras.slice().reverse().map(c=>{
+  const cartao=cartoes.find(x=>x.id===c.cartaoId);
+  return `<div class="item"><strong>${escapar(c.descricao)}</strong>
+  <p>${dinheiro(c.valorTotal)} em ${c.parcelas} parcela(s)</p>
+  <p>${escapar(cartao?cartao.nome:"Cartão excluído")} · ${escapar(c.data)}</p>
+  <div class="actions"><button class="danger" onclick="excluirCompra('${escapar(c.id)}')">Excluir compra</button></div></div>`;
+ }).join("");
 }
-
-function alternarFatura(cartaoId,mes){
- const chave=cartaoId+"_"+mes;
- if(faturasPagas[chave]){
-  if(!confirm("Deseja reabrir esta fatura?"))return;
-  delete faturasPagas[chave];
- }else{
-  if(!confirm("Confirma que esta fatura foi paga?"))return;
-  faturasPagas[chave]=true;
- }
- salvarDados();
- renderizarFatura();
-}
-
 function excluirCompra(id){
- if(!confirm("Excluir esta parcela?"))return;
- lancamentos=lancamentos.filter(x=>x.id!==id);
- salvarDados();
- renderizarFatura();
- renderizarCartoes();
- atualizarResumo();
+ if(!confirm("Excluir esta compra e suas parcelas?"))return;
+ compras=compras.filter(c=>c.id!==id);guardar();renderizarTudo();
 }
-
+function chaveFatura(id,mes){return id+"|"+mes}
+function renderizarFaturas(){
+ const lista=document.getElementById("listaFaturas");if(!lista)return;
+ const mes=document.getElementById("mesFatura").value||mesAtual();
+ const grupos={};
+ compras.forEach(c=>{
+  const cartao=cartoes.find(x=>x.id===c.cartaoId);
+  if(!cartao)return;
+  parcelasDaCompra(c).forEach(p=>{
+   if(p.mes!==mes)return;
+   const chave=chaveFatura(c.cartaoId,mes);
+   if(!grupos[chave])grupos[chave]={cartao,valor:0,compras:[],ids:[]};
+   grupos[chave].valor+=p.valor;
+   grupos[chave].compras.push(`${c.descricao} — parcela ${p.numero}/${c.parcelas}: ${dinheiro(p.valor)}`);
+   grupos[chave].ids.push(c.id);
+  });
+ });
+ const chaves=Object.keys(grupos);
+ if(!chaves.length){lista.innerHTML='<p class="muted">Não há parcelas para este mês.</p>';return}
+ lista.innerHTML=chaves.map(k=>{
+  const g=grupos[k];
+  const pagas=compras.filter(c=>g.ids.includes(c.id)).every(c=>(c.pagas||[]).includes(mes));
+  return `<div class="item"><strong>${escapar(g.cartao.nome)}</strong>
+  <p>Total da fatura: <strong>${dinheiro(g.valor)}</strong></p>
+  <p class="muted">Vencimento: dia ${g.cartao.vencimento}/${mes.slice(5,7)}</p>
+  ${g.compras.map(x=>`<p>${escapar(x)}</p>`).join("")}
+  <p class="${pagas?"green":"red"}"><strong>${pagas?"Fatura marcada como paga":"Fatura pendente"}</strong></p>
+  <div class="actions"><button class="${pagas?"sec":"good"}" onclick="alternarFatura('${escapar(k)}')">${pagas?"Desmarcar pagamento":"Marcar como paga"}</button></div></div>`;
+ }).join("");
+}
+function alternarFatura(chave){
+ const partes=chave.split("|"),id=partes[0],mes=partes[1];
+ const doGrupo=compras.filter(c=>c.cartaoId===id&&parcelasDaCompra(c).some(p=>p.mes===mes));
+ const pagas=doGrupo.length>0&&doGrupo.every(c=>(c.pagas||[]).includes(mes));
+ doGrupo.forEach(c=>{
+  c.pagas=c.pagas||[];
+  if(pagas)c.pagas=c.pagas.filter(m=>m!==mes);
+  else if(!c.pagas.includes(mes))c.pagas.push(mes);
+ });
+ guardar();renderizarFaturas();
+}
 function exportarBackup(){
- const backup={versao:2,lancamentos,cartoes,faturasPagas};
- const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+ const dados={versao:2,lancamentos,cartoes,compras};
+ const blob=new Blob([JSON.stringify(dados,null,2)],{type:"application/json"});
  const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download="backup-financeiro-pro-2.json";
- document.body.appendChild(a);
- a.click();
- a.remove();
- URL.revokeObjectURL(url);
+ const a=document.createElement("a");a.href=url;a.download="backup-financeiro-pro.json";
+ document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 }
-
-function importarBackup(event){
- const arquivo=event.target.files[0];
- if(!arquivo)return;
+function importarBackup(){
+ const arquivo=document.getElementById("arquivoBackup").files[0];
+ if(!arquivo){alert("Escolha primeiro o arquivo de backup.");return}
  const leitor=new FileReader();
- leitor.onload=function(){
+ leitor.onload=()=>{
   try{
-   const b=JSON.parse(leitor.result);
-   if(!b||!Array.isArray(b.lancamentos)||!Array.isArray(b.cartoes)||!b.faturasPagas||typeof b.faturasPagas!=="object"){
-    throw new Error("Backup inválido");
-   }
-   if(!confirm("A importação substituirá os dados atuais. Continuar?"))return;
-   lancamentos=b.lancamentos;
-   cartoes=b.cartoes;
-   faturasPagas=b.faturasPagas;
-   salvarDados();
-   atualizarResumo();
-   renderizarLancamentos();
-   renderizarCartoes();
-   atualizarSeletoresCartao();
-   renderizarFatura();
-   alert("Backup importado com sucesso!");
-  }catch(e){
-   alert("Não foi possível importar este arquivo de backup.");
-  }finally{
-   event.target.value="";
-  }
+   const d=JSON.parse(leitor.result);
+   if(!Array.isArray(d.lancamentos)||!Array.isArray(d.cartoes)||!Array.isArray(d.compras))throw new Error("Arquivo inválido");
+   if(!confirm("A restauração substituirá os dados atuais. Deseja continuar?"))return;
+   lancamentos=d.lancamentos;cartoes=d.cartoes;compras=d.compras;
+   guardar();renderizarTudo();alert("Backup restaurado com sucesso!");
+  }catch(e){alert("Não foi possível restaurar. Verifique se escolheu um backup válido do Financeiro Pro.")}
  };
  leitor.readAsText(arquivo);
 }
-
 function iniciarAplicativo(){
- document.getElementById("data").value=dataHoje();
- document.getElementById("dataCompra").value=dataHoje();
- document.getElementById("mesFatura").value=dataHoje().slice(0,7);
- atualizarSeletoresCartao();
- atualizarResumo();
- renderizarLancamentos();
- renderizarCartoes();
- renderizarFatura();
- mostrarAba("inicio");
+ document.getElementById("data").value=hoje();
+ document.getElementById("dataCompra").value=hoje();
+ document.getElementById("mesResumo").value=mesAtual();
+ document.getElementById("filtroMes").value=mesAtual();
+ document.getElementById("mesFatura").value=mesAtual();
+ atualizarCategorias();
+ renderizarTudo();
 }
-
 iniciarAplicativo();
 </script>
 </main>
+<footer>Financeiro Pro 2.0</footer>
 </body>
 </html>
