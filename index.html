@@ -1,7 +1,8 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+<head> 
+<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#123c69">
@@ -461,5 +462,17 @@ iniciarAplicativo();
 </script>
 </main>
 <footer>Financeiro Pro 2.0</footer>
+ 
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("./sw.js")
+      .catch(function(error) {
+        console.error("Erro ao registrar service worker:", error);
+      });
+  });
+}
+</script>
+
 </body>
 </html>
