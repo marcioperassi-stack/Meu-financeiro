@@ -1,12 +1,149 @@
-<section id="backup" class="oculto">
-<h2>Backup dos dados</h2>
-<p>Exporte seus lançamentos, cartões e faturas para guardar uma cópia de segurança.</p>
-<div class="acoes">
-<button onclick="exportarBackup()">Exportar backup</button>
-<button class="secundario" onclick="document.getElementById('arquivoBackup').click()">Importar backup</button>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b70">
+<title>Financeiro Pro 2.0</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
+header{background:#123b70;color:white;text-align:center;padding:18px 10px}
+header h1{margin:0;font-size:23px}
+header p{margin:6px 0 0;font-size:13px}
+main{max-width:850px;margin:auto;padding:12px}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+button{border:0;border-radius:8px;padding:12px;background:#1769aa;color:white;font-weight:bold;cursor:pointer}
+nav button{flex:1;min-width:90px}
+button.secundario{background:#64748b}
+button.perigo{background:#c62828}
+section{background:white;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px #00000010}
+h2{font-size:19px;margin:0 0 12px}
+h3{font-size:16px;margin:14px 0 8px}
+label{display:block;font-size:13px;font-weight:bold;margin:9px 0 5px}
+input,select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:7px;font-size:16px;background:white}
+input[type=checkbox]{width:auto}
+.linha{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.acoes button{flex:1}
+.resumo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.resumo div{background:#eff6ff;border-radius:8px;padding:12px;font-size:13px}
+.resumo strong{display:block;font-size:18px;margin-top:5px}
+.cartao{border:1px solid #dbe3ec;border-radius:9px;padding:12px;margin:9px 0;overflow-wrap:anywhere}
+.pequeno{font-size:12px;color:#64748b}
+.oculto{display:none!important}
+.item{border-bottom:1px solid #e2e8f0;padding:10px 0}
+.verde{color:#15803d}
+.vermelho{color:#b91c1c}
+@media(max-width:480px){.linha{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>Financeiro Pro 2.0</h1>
+<p>Controle pessoal, Uber, 99 e cartões de crédito</p>
+</header>
+<main>
+<nav>
+<button onclick="mostrarAba('inicio')">Início</button>
+<button onclick="mostrarAba('lancamentos')">Lançamentos</button>
+<button onclick="mostrarAba('cartoes')">Cartões</button>
+<button onclick="mostrarAba('compras')">Compras</button>
+<button onclick="mostrarAba('faturas')">Faturas</button>
+<button onclick="mostrarAba('backup')">Backup</button>
+</nav>
+
+<section id="inicio">
+<h2>Resumo financeiro</h2>
+<div class="resumo">
+<div>Entradas<strong id="totalEntradas">R$ 0,00</strong></div>
+<div>Despesas<strong id="totalDespesas">R$ 0,00</strong></div>
+<div>Saldo<strong id="saldoTotal">R$ 0,00</strong></div>
+<div>Reserva Uber/99 (10%)<strong id="reservaTotal">R$ 0,00</strong></div>
 </div>
-<input id="arquivoBackup" type="file" accept=".json,application/json" class="oculto" onchange="importarBackup(event)">
-<p class="pequeno">Guarde o arquivo exportado em um local seguro. A importação pode substituir os dados atuais.</p>
+<div id="resumoAreas"></div>
+</section>
+
+<section id="lancamentos" class="oculto">
+<h2>Novo lançamento</h2>
+<label>Tipo</label>
+<select id="tipo">
+<option value="entrada">Entrada / Ganho</option>
+<option value="despesa">Despesa</option>
+</select>
+<label>Área</label>
+<select id="area">
+<option value="pessoal">Pessoal</option>
+<option value="uber">Uber</option>
+<option value="99">99</option>
+</select>
+<label>Descrição</label>
+<input id="descricao" placeholder="Ex.: corrida, mercado, combustível">
+<div class="linha">
+<div>
+<label>Valor (R$)</label>
+<input id="valor" type="number" min="0.01" step="0.01" placeholder="0,00">
+</div>
+<div>
+<label>Data</label>
+<input id="data" type="date">
+</div>
+</div>
+<label>Categoria</label>
+<select id="categoria">
+<option>Uber/99</option>
+<option>Corridas</option>
+<option>Recebimentos</option>
+<option>Empréstimo recebido</option>
+<option>Combustível</option>
+<option>Manutenção</option>
+<option>Alimentação</option>
+<option>Moradia</option>
+<option>Contas fixas</option>
+<option>Cartão de crédito</option>
+<option>Agiota</option>
+<option>Empréstimo</option>
+<option>Pagamentos</option>
+<option>Outros</option>
+</select>
+<label>Repetir despesa</label>
+<select id="repeticao">
+<option value="nao">Não repetir</option>
+<option value="diaria">Diariamente (30 vezes)</option>
+<option value="semanal">Semanalmente (4 vezes)</option>
+<option value="mensal">Mensalmente (12 vezes)</option>
+</select>
+<label><input id="fixa" type="checkbox"> Despesa fixa</label>
+<div class="acoes">
+<button onclick="salvarLancamento()">Salvar lançamento</button>
+<button class="secundario" onclick="limparFormulario()">Limpar</button>
+</div>
+<h3>Lançamentos registrados</h3>
+<div id="listaLancamentos"></div>
+</section>
+
+<section id="cartoes" class="oculto">
+<h2>Cartões de crédito</h2>
+<label>Nome do cartão</label>
+<input id="nomeCartao" placeholder="Ex.: Cartão principal">
+<div class="linha">
+<div>
+<label>Limite total (R$)</label>
+<input id="limiteCartao" type="number" min="0" step="0.01">
+</div>
+<div>
+<label>Dia de fechamento</label>
+<input id="fechamentoCartao" type="number" min="1" max="31" value="20">
+</div>
+</div>
+<label>Dia do vencimento</label>
+<input id="vencimentoCartao" type="number" min="1" max="31" value="5">
+<div class="acoes">
+<button onclick="salvarCartao()">Salvar cartão</button>
+<button class="secundario" onclick="limparCartao()">Limpar</button>
+</div>
+<div id="listaCartoes"></div>
 </section>
 
 <section id="compras" class="oculto">
@@ -40,17 +177,27 @@
 </select>
 <div class="acoes">
 <button onclick="salvarCompra()">Salvar compra</button>
-<button class="secundario" onclick="mostrarAba('cartoes')">Voltar aos cartões</button>
 </div>
 </section>
 
 <section id="faturas" class="oculto">
 <h2>Faturas do cartão</h2>
-<label>Selecionar cartão</label>
+<label>Cartão</label>
 <select id="cartaoFatura" onchange="renderizarFatura()"></select>
 <label>Mês da fatura</label>
 <input id="mesFatura" type="month" onchange="renderizarFatura()">
 <div id="conteudoFatura"></div>
+</section>
+
+<section id="backup" class="oculto">
+<h2>Backup dos dados</h2>
+<p>Exporte seus lançamentos, cartões e faturas para guardar uma cópia.</p>
+<div class="acoes">
+<button onclick="exportarBackup()">Exportar backup</button>
+<button class="secundario" onclick="document.getElementById('arquivoBackup').click()">Importar backup</button>
+</div>
+<input id="arquivoBackup" type="file" accept=".json,application/json" class="oculto" onchange="importarBackup(event)">
+<p class="pequeno">Guarde o arquivo exportado em local seguro.</p>
 </section>
 
 <script>
@@ -68,13 +215,17 @@ function salvarDados(){
  localStorage.setItem(CHAVE_FATURAS,JSON.stringify(faturasPagas));
 }
 
-function dinheiro(valor){
- return Number(valor||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+function dinheiro(v){
+ return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 }
 
 function dataHoje(){
  const d=new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function escapar(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
 function mostrarAba(id){
@@ -84,7 +235,7 @@ function mostrarAba(id){
  if(id==="inicio")atualizarResumo();
  if(id==="lancamentos")renderizarLancamentos();
  if(id==="cartoes"){renderizarCartoes();atualizarSeletoresCartao();}
- if(id==="compras"){atualizarSeletoresCartao();document.getElementById("dataCompra").value=dataHoje();}
+ if(id==="compras")atualizarSeletoresCartao();
  if(id==="faturas"){atualizarSeletoresCartao();renderizarFatura();}
 }
 
@@ -114,9 +265,9 @@ function salvarLancamento(){
   return;
  }
 
- const quantidade=tipo==="despesa"?(repeticao==="diaria"?30:repeticao==="semanal"?4:repeticao==="mensal"?12:1):1;
+ const qtd=tipo==="despesa"?(repeticao==="diaria"?30:repeticao==="semanal"?4:repeticao==="mensal"?12:1):1;
 
- for(let i=0;i<quantidade;i++){
+ for(let i=0;i<qtd;i++){
   const d=new Date(data+"T12:00:00");
   if(repeticao==="diaria")d.setDate(d.getDate()+i);
   if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
@@ -124,11 +275,10 @@ function salvarLancamento(){
    const dia=d.getDate();
    d.setDate(1);
    d.setMonth(d.getMonth()+i);
-   const ultimo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
-   d.setDate(Math.min(dia,ultimo));
+   d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));
   }
   lancamentos.push({
-   id:String(Date.now())+"_"+i+"_"+Math.random().toString(36).slice(2,7),
+   id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2,7),
    tipo:tipo,
    area:area,
    descricao:descricao,
@@ -155,16 +305,12 @@ function excluirLancamento(id){
 }
 
 function renderizarLancamentos(){
- const lista=document.getElementById("listaLancamentos");
- if(!lancamentos.length){
-  lista.innerHTML="<p>Nenhum lançamento registrado.</p>";
-  return;
- }
- lista.innerHTML=lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).map(x=>
+ const el=document.getElementById("listaLancamentos");
+ if(!lancamentos.length){el.innerHTML="<p>Nenhum lançamento registrado.</p>";return;}
+ el.innerHTML=lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).map(x=>
   '<div class="item"><strong>'+escapar(x.descricao)+'</strong>'+
   '<div>'+escapar(x.data)+' · '+escapar(x.area.toUpperCase())+' · '+escapar(x.categoria)+'</div>'+
-  '<div class="'+(x.tipo==="entrada"?"verde":"vermelho")+'">'+
-  (x.tipo==="entrada"?"+":"−")+dinheiro(x.valor)+'</div>'+
+  '<div class="'+(x.tipo==="entrada"?"verde":"vermelho")+'">'+(x.tipo==="entrada"?"+":"−")+dinheiro(x.valor)+'</div>'+
   (x.fixa?'<div class="pequeno">Despesa fixa</div>':'')+
   '<button class="perigo" onclick="excluirLancamento('+JSON.stringify(x.id)+')">Excluir</button></div>'
  ).join("");
@@ -173,33 +319,25 @@ function renderizarLancamentos(){
 function atualizarResumo(){
  const entradas=lancamentos.filter(x=>x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
  const despesas=lancamentos.filter(x=>x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
- const saldo=entradas-despesas;
- const areas=["uber","99"];
  let reserva=0;
- areas.forEach(area=>{
-  const e=lancamentos.filter(x=>x.area===area&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
-  const d=lancamentos.filter(x=>x.area===area&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+ ["uber","99"].forEach(a=>{
+  const e=lancamentos.filter(x=>x.area===a&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+  const d=lancamentos.filter(x=>x.area===a&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
   reserva+=Math.max(0,e-d)*0.10;
  });
  document.getElementById("totalEntradas").textContent=dinheiro(entradas);
  document.getElementById("totalDespesas").textContent=dinheiro(despesas);
- document.getElementById("saldoTotal").textContent=dinheiro(saldo);
+ document.getElementById("saldoTotal").textContent=dinheiro(entradas-despesas);
  document.getElementById("reservaTotal").textContent=dinheiro(reserva);
- document.getElementById("resumoAreas").innerHTML=
-  "<h3>Resultado por área</h3>"+
-  ["pessoal","uber","99"].map(area=>{
-   const e=lancamentos.filter(x=>x.area===area&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
-   const d=lancamentos.filter(x=>x.area===area&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
-   return '<div class="item"><strong>'+area.toUpperCase()+'</strong><div>Entradas: '+dinheiro(e)+'</div><div>Despesas: '+dinheiro(d)+'</div><div>Saldo: '+dinheiro(e-d)+'</div></div>';
+ document.getElementById("resumoAreas").innerHTML="<h3>Resultado por área</h3>"+
+  ["pessoal","uber","99"].map(a=>{
+   const e=lancamentos.filter(x=>x.area===a&&x.tipo==="entrada").reduce((s,x)=>s+Number(x.valor),0);
+   const d=lancamentos.filter(x=>x.area===a&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+   return '<div class="item"><strong>'+a.toUpperCase()+'</strong><div>Entradas: '+dinheiro(e)+'</div><div>Despesas: '+dinheiro(d)+'</div><div>Saldo: '+dinheiro(e-d)+'</div></div>';
   }).join("");
 }
 
-function escapar(valor){
- return String(valor??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
 function limparCartao(){
- document.getElementById("cartaoId").value="";
  document.getElementById("nomeCartao").value="";
  document.getElementById("limiteCartao").value="";
  document.getElementById("fechamentoCartao").value="20";
@@ -207,43 +345,23 @@ function limparCartao(){
 }
 
 function salvarCartao(){
- const id=document.getElementById("cartaoId").value;
  const nome=document.getElementById("nomeCartao").value.trim();
  const limite=Number(document.getElementById("limiteCartao").value);
  const fechamento=Number(document.getElementById("fechamentoCartao").value);
  const vencimento=Number(document.getElementById("vencimentoCartao").value);
-
- if(!nome||!Number.isFinite(limite)||limite<0||
- fechamento<1||fechamento>31||vencimento<1||vencimento>31){
-  alert("Confira o nome, limite e dias do cartão.");
-  return;
+ if(!nome||!Number.isFinite(limite)||limite<0||fechamento<1||fechamento>31||vencimento<1||vencimento>31){
+  alert("Confira o nome, o limite e os dias do cartão.");return;
  }
-
- const item={id:id||("cartao_"+Date.now()),nome,limite,fechamento,vencimento};
- const indice=cartoes.findIndex(c=>c.id===item.id);
- if(indice>=0)cartoes[indice]=item;
- else cartoes.push(item);
-
+ cartoes.push({id:"c_"+Date.now()+"_"+Math.random().toString(36).slice(2,6),nome,limite,fechamento,vencimento});
  salvarDados();
  limparCartao();
  renderizarCartoes();
  atualizarSeletoresCartao();
- alert("Cartão salvo com sucesso!");
-}
-
-function editarCartao(id){
- const c=cartoes.find(x=>x.id===id);
- if(!c)return;
- document.getElementById("cartaoId").value=c.id;
- document.getElementById("nomeCartao").value=c.nome;
- document.getElementById("limiteCartao").value=c.limite;
- document.getElementById("fechamentoCartao").value=c.fechamento;
- document.getElementById("vencimentoCartao").value=c.vencimento;
- window.scrollTo(0,0);
+ alert("Cartão cadastrado!");
 }
 
 function excluirCartao(id){
- if(!confirm("Excluir este cartão? As compras já registradas não serão apagadas."))return;
+ if(!confirm("Excluir este cartão?"))return;
  cartoes=cartoes.filter(c=>c.id!==id);
  salvarDados();
  renderizarCartoes();
@@ -251,30 +369,25 @@ function excluirCartao(id){
 }
 
 function renderizarCartoes(){
- const lista=document.getElementById("listaCartoes");
- if(!cartoes.length){
-  lista.innerHTML="<p>Nenhum cartão cadastrado.</p>";
-  return;
- }
- lista.innerHTML=cartoes.map(c=>{
-  const usado=lancamentos.filter(x=>x.cartaoId===c.id&&x.tipo==="despesa").reduce((s,x)=>s+Number(x.valor),0);
+ const el=document.getElementById("listaCartoes");
+ if(!cartoes.length){el.innerHTML="<p>Nenhum cartão cadastrado.</p>";return;}
+ el.innerHTML=cartoes.map(c=>{
+  const usado=lancamentos.filter(x=>x.cartaoId===c.id).reduce((s,x)=>s+Number(x.valor),0);
   return '<div class="cartao"><h3>'+escapar(c.nome)+'</h3>'+
-   '<div>Limite total: '+dinheiro(c.limite)+'</div>'+
-   '<div>Compras registradas: '+dinheiro(usado)+'</div>'+
+   '<div>Limite: '+dinheiro(c.limite)+'</div><div>Compras registradas: '+dinheiro(usado)+'</div>'+
    '<div>Fechamento: dia '+c.fechamento+' · Vencimento: dia '+c.vencimento+'</div>'+
-   '<div class="acoes"><button onclick="editarCartao('+JSON.stringify(c.id)+')">Editar</button>'+
-   '<button onclick="abrirCompras('+JSON.stringify(c.id)+')">Nova compra</button>'+
+   '<div class="acoes"><button onclick="abrirCompras('+JSON.stringify(c.id)+')">Nova compra</button>'+
    '<button class="perigo" onclick="excluirCartao('+JSON.stringify(c.id)+')">Excluir</button></div></div>';
  }).join("");
 }
 
 function atualizarSeletoresCartao(){
  ["cartaoCompra","cartaoFatura"].forEach(id=>{
-  const select=document.getElementById(id);
-  const anterior=select.value;
-  select.innerHTML=cartoes.map(c=>'<option value="'+escapar(c.id)+'">'+escapar(c.nome)+'</option>').join("");
-  if(cartoes.some(c=>c.id===anterior))select.value=anterior;
-  if(!cartoes.length)select.innerHTML='<option value="">Cadastre um cartão primeiro</option>';
+  const el=document.getElementById(id);
+  const anterior=el.value;
+  el.innerHTML=cartoes.map(c=>'<option value="'+escapar(c.id)+'">'+escapar(c.nome)+'</option>').join("");
+  if(cartoes.some(c=>c.id===anterior))el.value=anterior;
+  if(!cartoes.length)el.innerHTML='<option value="">Cadastre um cartão primeiro</option>';
  });
 }
 
@@ -292,84 +405,66 @@ function salvarCompra(){
  const valor=Number(document.getElementById("valorCompra").value);
  const data=document.getElementById("dataCompra").value;
  const parcelas=Number(document.getElementById("parcelasCompra").value);
- const cartao=cartoes.find(c=>c.id===cartaoId);
+ if(!cartoes.some(c=>c.id===cartaoId)){alert("Cadastre um cartão primeiro.");return;}
+ if(!descricao||!Number.isFinite(valor)||valor<=0||!data){alert("Preencha os dados da compra.");return;}
 
- if(!cartao){alert("Cadastre um cartão primeiro.");return;}
- if(!descricao||!Number.isFinite(valor)||valor<=0||!data||parcelas<1){
-  alert("Preencha todos os dados da compra corretamente.");return;
- }
-
- const valorCentavos=Math.round(valor*100);
- const parcelaBase=Math.floor(valorCentavos/parcelas);
- const resto=valorCentavos-parcelaBase*parcelas;
+ const centavos=Math.round(valor*100);
+ const base=Math.floor(centavos/parcelas);
+ const resto=centavos%parcelas;
+ const compraId="compra_"+Date.now();
 
  for(let i=0;i<parcelas;i++){
   const d=new Date(data+"T12:00:00");
-  d.setMonth(d.getMonth()+i);
   const dia=d.getDate();
   d.setDate(1);
-  const ultimo=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
-  d.setDate(Math.min(dia,ultimo));
-
-  let mes=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
-  const valorParcela=(parcelaBase+(i<resto?1:0))/100;
-
+  d.setMonth(d.getMonth()+i);
+  d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate()));
+  const mes=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
   lancamentos.push({
-   id:"compra_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2,7),
+   id:compraId+"_"+i,
    tipo:"despesa",
    area:"pessoal",
    descricao:descricao+" ("+(i+1)+"/"+parcelas+")",
-   valor:valorParcela,
+   valor:(base+(i<resto?1:0))/100,
    data:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),
    categoria:"Cartão de crédito",
    fixa:false,
    cartaoId:cartaoId,
-   mesFatura:mes,
-   compraParcelas:parcelas
+   mesFatura:mes
   });
  }
-
  salvarDados();
  document.getElementById("descricaoCompra").value="";
  document.getElementById("valorCompra").value="";
  renderizarCartoes();
  atualizarResumo();
- alert("Compra registrada e dividida em "+parcelas+" parcela(s).");
+ alert("Compra registrada!");
  mostrarAba("faturas");
  document.getElementById("cartaoFatura").value=cartaoId;
- const primeira=lancamentos.find(x=>x.cartaoId===cartaoId&&x.data===data);
- if(primeira)document.getElementById("mesFatura").value=primeira.mesFatura;
+ const ultima=lancamentos.filter(x=>x.cartaoId===cartaoId).slice(-1)[0];
+ if(ultima)document.getElementById("mesFatura").value=ultima.mesFatura;
  renderizarFatura();
 }
 
 function renderizarFatura(){
  const cartaoId=document.getElementById("cartaoFatura").value;
  const mes=document.getElementById("mesFatura").value;
- const area=document.getElementById("conteudoFatura");
-
- if(!cartaoId||!mes){
-  area.innerHTML="<p>Selecione um cartão e o mês da fatura.</p>";
-  return;
- }
-
+ const el=document.getElementById("conteudoFatura");
+ if(!cartaoId||!mes){el.innerHTML="<p>Selecione o cartão e o mês.</p>";return;}
  const itens=lancamentos.filter(x=>x.cartaoId===cartaoId&&x.mesFatura===mes);
  const total=itens.reduce((s,x)=>s+Number(x.valor),0);
- const paga=!!faturasPagas[cartaoId+"_"+mes];
+ const chave=cartaoId+"_"+mes;
+ const paga=!!faturasPagas[chave];
  const cartao=cartoes.find(c=>c.id===cartaoId);
-
- area.innerHTML=
-  '<div class="cartao"><h3>Fatura de '+escapar(mes)+'</h3>'+
+ el.innerHTML='<div class="cartao"><h3>Fatura '+escapar(mes)+'</h3>'+
   '<p>Cartão: '+escapar(cartao?cartao.nome:"")+'</p>'+
-  '<div class="valor">'+dinheiro(total)+'</div>'+
-  '<p>Status: <strong class="'+(paga?"verde":"vermelho")+'">'+(paga?"PAGA":"EM ABERTO")+'</strong></p>'+
-  '<div class="acoes">'+
-  '<button onclick="alternarFatura('+JSON.stringify(cartaoId)+','+JSON.stringify(mes)+')">'+(paga?"Reabrir fatura":"Marcar fatura como paga")+'</button>'+
-  '</div><h3>Compras da fatura</h3>'+
-  (itens.length?itens.map(x=>
-   '<div class="item">'+escapar(x.descricao)+'<br>'+escapar(x.data)+'<br>'+dinheiro(x.valor)+
-   '<br><button class="perigo" onclick="excluirCompra('+JSON.stringify(x.id)+')">Excluir parcela</button></div>'
-  ).join(""):"<p>Nenhuma compra neste mês.</p>")+
-  '<p class="pequeno">Marcar a fatura como paga não cria outra despesa, evitando contar a mesma compra duas vezes.</p></div>';
+  '<div class="resumo"><div>Total<strong>'+dinheiro(total)+'</strong></div>'+
+  '<div>Status<strong class="'+(paga?"verde":"vermelho")+'">'+(paga?"PAGA":"EM ABERTO")+'</strong></div></div>'+
+  '<div class="acoes"><button onclick="alternarFatura('+JSON.stringify(cartaoId)+','+JSON.stringify(mes)+')">'+(paga?"Reabrir fatura":"Marcar fatura como paga")+'</button></div>'+
+  '<h3>Compras da fatura</h3>'+
+  (itens.length?itens.map(x=>'<div class="item">'+escapar(x.descricao)+'<br>'+escapar(x.data)+'<br>'+dinheiro(x.valor)+
+   '<br><button class="perigo" onclick="excluirCompra('+JSON.stringify(x.id)+')">Excluir parcela</button></div>').join(""):"<p>Nenhuma compra neste mês.</p>")+
+  '<p class="pequeno">Marcar a fatura como paga não cria outra despesa.</p></div>';
 }
 
 function alternarFatura(cartaoId,mes){
@@ -378,7 +473,7 @@ function alternarFatura(cartaoId,mes){
   if(!confirm("Deseja reabrir esta fatura?"))return;
   delete faturasPagas[chave];
  }else{
-  if(!confirm("Confirmar que esta fatura foi paga?"))return;
+  if(!confirm("Confirma que esta fatura foi paga?"))return;
   faturasPagas[chave]=true;
  }
  salvarDados();
@@ -386,7 +481,7 @@ function alternarFatura(cartaoId,mes){
 }
 
 function excluirCompra(id){
- if(!confirm("Excluir esta parcela da compra?"))return;
+ if(!confirm("Excluir esta parcela?"))return;
  lancamentos=lancamentos.filter(x=>x.id!==id);
  salvarDados();
  renderizarFatura();
@@ -395,13 +490,7 @@ function excluirCompra(id){
 }
 
 function exportarBackup(){
- const backup={
-  versao:2,
-  exportadoEm:new Date().toISOString(),
-  lancamentos:lancamentos,
-  cartoes:cartoes,
-  faturasPagas:faturasPagas
- };
+ const backup={versao:2,lancamentos,cartoes,faturasPagas};
  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
@@ -417,17 +506,16 @@ function importarBackup(event){
  const arquivo=event.target.files[0];
  if(!arquivo)return;
  const leitor=new FileReader();
-
  leitor.onload=function(){
   try{
    const b=JSON.parse(leitor.result);
-   if(!b||!Array.isArray(b.lancamentos)||!Array.isArray(b.cartoes)||typeof b.faturasPagas!=="object"){
-    throw new Error("Formato inválido");
+   if(!b||!Array.isArray(b.lancamentos)||!Array.isArray(b.cartoes)||!b.faturasPagas||typeof b.faturasPagas!=="object"){
+    throw new Error("Backup inválido");
    }
-   if(!confirm("A importação substituirá os dados atuais. Deseja continuar?"))return;
+   if(!confirm("A importação substituirá os dados atuais. Continuar?"))return;
    lancamentos=b.lancamentos;
    cartoes=b.cartoes;
-   faturasPagas=b.faturasPagas||{};
+   faturasPagas=b.faturasPagas;
    salvarDados();
    atualizarResumo();
    renderizarLancamentos();
@@ -436,7 +524,7 @@ function importarBackup(event){
    renderizarFatura();
    alert("Backup importado com sucesso!");
   }catch(e){
-   alert("Não foi possível importar. Confira se selecionou um backup válido.");
+   alert("Não foi possível importar este arquivo de backup.");
   }finally{
    event.target.value="";
   }
