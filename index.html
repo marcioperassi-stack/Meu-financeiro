@@ -4,576 +4,538 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1565C0">
-<meta name="description" content="Controle financeiro pessoal e Uber/99">
-<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#123b70">
 <title>Meu Financeiro Pro 2.0</title>
 <style>
-:root{--azul:#1459c7;--fundo:#f4f7fc;--texto:#18243a;--verde:#13864b;--vermelho:#d33b45}
 *{box-sizing:border-box}
-body{margin:0;background:var(--fundo);color:var(--texto);font-family:Arial,sans-serif}
-header{background:linear-gradient(135deg,#1459c7,#287ee8);color:white;padding:20px 15px}
-header h1{font-size:23px;margin:0 0 5px}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#123b70;color:white;padding:20px 15px}
+header h1{margin:0 0 6px;font-size:23px}
 header p{margin:0;font-size:13px}
-nav{display:flex;gap:7px;padding:10px;background:white;overflow-x:auto;position:sticky;top:0;z-index:5;box-shadow:0 2px 7px #0001}
-nav button{white-space:nowrap;border:0;background:#edf2fa;color:#234;padding:11px 13px;border-radius:9px;font-weight:bold}
-nav button.active{background:var(--azul);color:white}
-main{padding:14px;max-width:950px;margin:auto}
-section.page{display:none}
-section.page.active{display:block}
-h2{font-size:20px;margin:8px 0 15px}
-h3{font-size:16px;margin:8px 0 12px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.card,.panel{background:white;border-radius:13px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #1b3b6810}
-.card small{display:block;color:#63718a;margin-bottom:7px}
-.card strong{font-size:21px;overflow-wrap:anywhere}
-.blue{color:var(--azul)}.green{color:var(--verde)}.red{color:var(--vermelho)}
-label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}
-input,select,textarea{width:100%;padding:11px;border:1px solid #ccd6e5;border-radius:8px;background:white;font-size:15px;color:var(--texto)}
-input:focus,select:focus,textarea:focus{outline:2px solid #b8d2ff;border-color:var(--azul)}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:5;box-shadow:0 2px 5px #0001}
+nav button{border:0;border-radius:8px;background:#e3ebf7;color:#123b70;padding:12px 4px;font-weight:bold;font-size:13px}
+nav button.ativo{background:#123b70;color:white}
+main{max-width:850px;margin:auto;padding:12px}
+.tela{display:none}
+.tela.ativa{display:block}
+h2{font-size:20px;margin:10px 0 14px}
+h3{font-size:16px;margin:0 0 12px}
+.card{background:white;border-radius:12px;padding:15px;margin-bottom:12px;box-shadow:0 2px 7px #0000000a}
+.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card small{display:block;color:#64748b;margin-bottom:8px}
+.valor{font-size:20px;font-weight:bold;overflow-wrap:anywhere}
+.verde{color:#16834a}
+.vermelho{color:#c83232}
+label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:16px;color:#172033}
 button{cursor:pointer}
-.btn{border:0;border-radius:9px;padding:12px 15px;background:var(--azul);color:white;font-weight:bold;margin-top:10px}
-.btn.secondary{background:#e8effb;color:#174b9d}
-.btn.danger{background:#fff0f0;color:#b32430}
-.btn.full{width:100%}
-.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}
-.wide{grid-column:1/-1}
-.item{border:1px solid #e2e8f2;padding:12px;border-radius:10px;margin:9px 0;background:white}
-.itemtop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
-.item p{margin:6px 0;color:#68758b;font-size:13px}
-.pill{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;background:#edf2fa}
-.pill.paid{background:#e3f8ec;color:#117640}
-.pill.pending{background:#fff1d7;color:#8a5b00}
-.muted{color:#68758b;font-size:13px}
-.empty{text-align:center;padding:20px;color:#758197}
-.progress{height:9px;background:#e8edf5;border-radius:10px;overflow:hidden;margin:9px 0}
-.progress span{display:block;height:100%;background:var(--azul);width:0}
-.bar{height:9px;border-radius:9px;background:#e9eef6;overflow:hidden;margin:7px 0}
-.bar span{height:100%;display:block;background:#2674df}
-hr{border:0;border-top:1px solid #e5eaf2;margin:14px 0}
-@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.formgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:380px){main{padding:9px}.card{padding:11px}.card strong{font-size:18px}.formgrid{grid-template-columns:1fr}.wide{grid-column:auto}}
+.btn{border:0;border-radius:8px;background:#123b70;color:white;padding:12px 15px;font-size:14px;font-weight:bold}
+.btn-sec{background:#e3ebf7;color:#123b70}
+.btn-perigo{background:#b42323;color:white}
+.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.acoes button{flex:1}
+.linha{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
+.item{border-bottom:1px solid #e5eaf1;padding:12px 0}
+.item:last-child{border-bottom:0}
+.item p{margin:5px 0;color:#64748b;font-size:13px}
+.sem-dados{color:#64748b;text-align:center;padding:18px 5px}
+.oculto{display:none!important}
+footer{text-align:center;color:#64748b;font-size:12px;padding:20px}
+@media(min-width:600px){nav{grid-template-columns:repeat(6,1fr)}.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <header>
 <h1>Meu Financeiro Pro 2.0</h1>
-<p>Controle pessoal, cartões e Uber/99</p>
+<p>Controle pessoal, Uber e 99 em um só lugar</p>
 </header>
-
-<nav id="nav">
-<button class="active" data-page="dashboard">Início</button>
-<button data-page="pessoal">Pessoal</button>
-<button data-page="saldos">Saldos</button>
-<button data-page="cartoes">Cartões</button>
-<button data-page="uber">Uber/99</button>
-<button data-page="metas">Metas</button>
-<button data-page="relatorios">Relatórios</button>
+<nav>
+<button type="button" class="ativo" data-tela="inicio">Início</button>
+<button type="button" data-tela="lancamentos">Lançamentos</button>
+<button type="button" data-tela="novo">Novo</button>
+<button type="button" data-tela="relatorios">Relatórios</button>
+<button type="button" data-tela="reserva">Reserva</button>
+<button type="button" data-tela="backup">Backup</button>
 </nav>
-
 <main>
-<section id="dashboard" class="page active">
+<section id="inicio" class="tela ativa">
 <h2>Resumo financeiro</h2>
-<div class="grid">
-<div class="card"><small>Entradas pessoais</small><strong class="green" id="dEntradas">R$ 0,00</strong></div>
-<div class="card"><small>Despesas pessoais</small><strong class="red" id="dDespesas">R$ 0,00</strong></div>
-<div class="card"><small>Saldo pessoal</small><strong class="blue" id="dSaldo">R$ 0,00</strong></div>
-<div class="card"><small>Lucro Uber/99</small><strong class="green" id="dUber">R$ 0,00</strong></div>
+<div class="grade">
+<div class="card"><small>Entradas</small><div class="valor verde" id="totalEntradas">R$ 0,00</div></div>
+<div class="card"><small>Despesas</small><div class="valor vermelho" id="totalDespesas">R$ 0,00</div></div>
+<div class="card"><small>Saldo disponível</small><div class="valor" id="saldoTotal">R$ 0,00</div></div>
+<div class="card"><small>Reserva sugerida</small><div class="valor" id="reservaTotal">R$ 0,00</div></div>
 </div>
-<div class="panel">
-<h3>Movimentações do mês</h3>
-<p id="dResumo" class="muted">Nenhum lançamento cadastrado.</p>
-<button class="btn full" onclick="irPara('pessoal')">+ Novo lançamento pessoal</button>
-<button class="btn secondary full" onclick="irPara('uber')">Abrir controle Uber/99</button>
+<div class="card">
+<h3>Resumo Uber / 99</h3>
+<div class="linha"><span>Entradas</span><strong id="appEntradas">R$ 0,00</strong></div>
+<div class="linha"><span>Despesas</span><strong id="appDespesas">R$ 0,00</strong></div>
+<div class="linha"><span>Resultado</span><strong id="appSaldo">R$ 0,00</strong></div>
 </div>
-<div class="panel">
-<h3>Contas pendentes</h3>
-<div id="dPendentes" class="empty">Nenhuma conta pendente.</div>
+<div class="card">
+<h3>Últimos lançamentos</h3>
+<div id="ultimosLancamentos" class="sem-dados">Nenhum lançamento ainda.</div>
 </div>
 </section>
-
-<section id="pessoal" class="page">
-<h2>Novo lançamento pessoal</h2>
-<div class="panel">
-<form id="formPessoal">
-<div class="formgrid">
-<div><label for="pData">Data</label><input id="pData" type="date" required></div>
-<div><label for="pTipo">Tipo</label>
-<select id="pTipo"><option value="entrada">Entrada</option><option value="despesa">Despesa</option></select></div>
-<div><label for="pCategoria">Categoria</label><select id="pCategoria"></select></div>
-<div class="wide"><label for="pDescricao">Descrição</label><input id="pDescricao" placeholder="Ex.: mercado, serviço, salário" required></div>
-<div class="wide"><label for="pValor">Valor (R$)</label><input id="pValor" type="number" min="0.01" step="0.01" required></div>
-<div><label for="pStatus">Situação</label><select id="pStatus"><option value="pago">Pago/Recebido</option><option value="pendente">Pendente</option></select></div>
-<div><label for="pRecorrencia">Repetição</label><select id="pRecorrencia"><option value="normal">Normal (uma vez)</option><option value="fixa">Fixa (mensal)</option><option value="repetir">Repetir por período</option></select></div>
-<div id="pPeriodoBox" style="display:none"><label for="pPeriodo">Periodicidade</label><select id="pPeriodo"><option value="diaria">Diária</option><option value="semanal">Semanal</option><option value="mensal">Mensal</option></select></div>
-<div id="pQtdBox" style="display:none"><label for="pQtd">Quantidade de vezes</label><input id="pQtd" type="number" min="1" max="60" value="2"></div>
+<section id="lancamentos" class="tela">
+<h2>Meus lançamentos</h2>
+<div class="card">
+<label for="filtroTipo">Filtrar por tipo</label>
+<select id="filtroTipo">
+<option value="todos">Todos</option>
+<option value="entrada">Entradas</option>
+<option value="despesa">Despesas</option>
+</select>
+<label for="filtroArea">Filtrar por área</label>
+<select id="filtroArea">
+<option value="todas">Todas</option>
+<option value="pessoal">Pessoal</option>
+<option value="uber">Uber</option>
+<option value="99">99</option>
+</select>
+<div id="listaLancamentos" class="sem-dados">Nenhum lançamento cadastrado.</div>
 </div>
-<button class="btn full" type="submit">Salvar lançamento</button>
+</section>
+<section id="novo" class="tela">
+<h2>Novo lançamento</h2>
+<div class="card">
+<form id="formLancamento">
+<label for="tipo">Tipo de lançamento</label>
+<select id="tipo" required>
+<option value="entrada">Entrada / ganho</option>
+<option value="despesa">Despesa</option>
+</select>
+<label for="area">Área</label>
+<select id="area" required>
+<option value="pessoal">Pessoal</option>
+<option value="uber">Uber</option>
+<option value="99">99</option>
+</select>
+<label for="descricao">Descrição</label>
+<input id="descricao" maxlength="100" placeholder="Ex.: corrida, mercado, aluguel" required>
+<label for="categoria">Categoria</label>
+<select id="categoria" required>
+<option value="Salário">Salário</option>
+<option value="Uber/99">Uber/99</option>
+<option value="Corridas">Corridas</option>
+<option value="Combustível">Combustível</option>
+<option value="Manutenção">Manutenção</option>
+<option value="Alimentação">Alimentação</option>
+<option value="Moradia">Moradia</option>
+<option value="Contas">Contas</option>
+<option value="Cartão de crédito">Cartão de crédito</option>
+<option value="Saúde">Saúde</option>
+<option value="Lazer">Lazer</option>
+<option value="Outros">Outros</option>
+</select>
+<label for="valor">Valor (R$)</label>
+<input id="valor" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" required>
+<label for="data">Data</label>
+<input id="data" type="date" required>
+<label for="recorrencia">Repetição</label>
+<select id="recorrencia">
+<option value="unica">Somente uma vez</option>
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+</select>
+<label><input id="fixa" type="checkbox" style="width:auto"> Despesa fixa</label>
+<button class="btn" type="submit" id="btnSalvar">Salvar lançamento</button>
+<button class="btn btn-sec oculto" type="button" id="btnCancelarEdicao">Cancelar edição</button>
 </form>
 </div>
-<div class="panel">
-<h3>Histórico pessoal</h3>
-<div class="formgrid">
-<div><label for="filtroMes">Filtrar mês</label><input id="filtroMes" type="month"></div>
-<div><label for="filtroTipo">Filtrar tipo</label><select id="filtroTipo"><option value="todos">Todos</option><option value="entrada">Entradas</option><option value="despesa">Despesas</option></select></div>
-</div>
-<div id="listaPessoal"></div>
-</div>
-<div class="panel">
-<h3>Gráficos por categoria</h3>
-<p class="muted">As barras mostram a participação de cada categoria no mês selecionado.</p>
-<h3>Entradas</h3><div id="grafEntradas"></div>
-<h3>Despesas</h3><div id="grafDespesas"></div>
-</div>
 </section>
-
-<section id="saldos" class="page">
-<h2>Saldos</h2>
-<div class="grid">
-<div class="card"><small>Saldo total</small><strong id="sTotal">R$ 0,00</strong></div>
-<div class="card"><small>Contas pendentes</small><strong class="red" id="sPendentes">R$ 0,00</strong></div>
-</div>
-<div class="panel">
-<p class="muted">Os saldos consideram os lançamentos pessoais marcados como Pago/Recebido. Entradas aumentam o saldo e despesas diminuem.</p>
-</div>
-</section>
-
-<section id="cartoes" class="page">
-<h2>Cartões de crédito</h2>
-<div class="panel">
-<h3>Configurar cartão</h3>
-<form id="formCartao">
-<label for="cNome">Nome do cartão</label>
-<input id="cNome" placeholder="Ex.: Cartão principal" required>
-<div class="formgrid">
-<div><label for="cFechamento">Dia de fechamento</label><input id="cFechamento" type="number" min="1" max="31" value="5" required></div>
-<div><label for="cVencimento">Dia de vencimento</label><input id="cVencimento" type="number" min="1" max="31" value="10" required></div>
-</div>
-<button class="btn full" type="submit">Cadastrar cartão</button>
-</form>
-<div id="listaCartoes"></div>
-</div>
-<div class="panel">
-<h3>Nova compra</h3>
-<form id="formCompra">
-<label for="compCartao">Cartão</label>
-<select id="compCartao" required></select>
-<label for="compDescricao">Descrição da compra</label>
-<input id="compDescricao" placeholder="Ex.: compras do mercado" required>
-<div class="formgrid">
-<div><label for="compValor">Valor total (R$)</label><input id="compValor" type="number" min="0.01" step="0.01" required></div>
-<div><label for="compParcelas">Número de parcelas</label><input id="compParcelas" type="number" min="1" max="48" value="1" required></div>
-<div><label for="compData">Data da compra</label><input id="compData" type="date" required></div>
-</div>
-<button class="btn full" type="submit">Registrar compra</button>
-</form>
-</div>
-<div class="panel">
-<h3>Compras e faturas</h3>
-<div id="listaCompras"></div>
-</div>
-</section>
-
-<section id="uber" class="page">
-<h2>Controle Uber/99</h2>
-<div class="grid">
-<div class="card"><small>Ganhos</small><strong class="green" id="uGanhos">R$ 0,00</strong></div>
-<div class="card"><small>Despesas</small><strong class="red" id="uDespesas">R$ 0,00</strong></div>
-<div class="card"><small>Lucro real</small><strong class="blue" id="uLucro">R$ 0,00</strong></div>
-<div class="card"><small>Reserva de 10%</small><strong id="uReserva">R$ 0,00</strong></div>
-</div>
-<div class="panel">
-<h3>Registrar ganhos</h3>
-<form id="formUGanho">
-<div class="formgrid">
-<div><label for="uDataG">Data</label><input id="uDataG" type="date" required></div>
-<div><label for="uAppG">Aplicativo</label><select id="uAppG"><option>Uber</option><option>99</option><option>Uber e 99</option></select></div>
-<div><label for="uValorG">Valor recebido (R$)</label><input id="uValorG" type="number" min="0.01" step="0.01" required></div>
-<div><label for="uKm">KM trabalhados</label><input id="uKm" type="number" min="0" step="0.1" value="0"></div>
-<div><label for="uHoras">Horas trabalhadas</label><input id="uHoras" type="number" min="0" step="0.25" value="0"></div>
-</div>
-<button class="btn full" type="submit">Salvar ganhos do dia</button>
-</form>
-</div>
-<div class="panel">
-<h3>Registrar despesa Uber/99</h3>
-<form id="formUDespesa">
-<div class="formgrid">
-<div><label for="uDataD">Data</label><input id="uDataD" type="date" required></div>
-<div><label for="uCatD">Categoria</label>
-<select id="uCatD">
-<option>Combustível</option><option>Manutenção</option><option>Lavagem do carro</option><option>Troca de óleo</option><option>Arrefecimento</option><option>Serviços mecânicos</option><option>Alimentação</option><option>Pedágio</option><option>Estacionamento</option><option>Outros</option>
-</select></div>
-<div><label for="uValorD">Valor (R$)</label><input id="uValorD" type="number" min="0.01" step="0.01" required></div>
-<div class="wide"><label for="uDescD">Descrição</label><input id="uDescD" placeholder="Ex.: abastecimento de etanol"></div>
-</div>
-<button class="btn full" type="submit">Salvar despesa</button>
-</form>
-</div>
-<div class="panel">
-<h3>Resultado e produtividade</h3>
-<div class="grid">
-<div class="card"><small>KM trabalhados</small><strong id="uTotalKm">0</strong></div>
-<div class="card"><small>Horas trabalhadas</small><strong id="uTotalHoras">0</strong></div>
-<div class="card"><small>Ganho por hora</small><strong id="uPorHora">R$ 0,00</strong></div>
-<div class="card"><small>Ganho por KM</small><strong id="uPorKm">R$ 0,00</strong></div>
-</div>
-<label for="uFiltroMes">Mês do relatório Uber/99</label>
-<input id="uFiltroMes" type="month">
-<div id="listaUber"></div>
-</div>
-</section>
-
-<section id="metas" class="page">
-<h2>Metas financeiras</h2>
-<div class="panel">
-<form id="formMeta">
-<label for="mNome">Nome da meta</label>
-<input id="mNome" placeholder="Ex.: reserva de emergência" required>
-<div class="formgrid">
-<div><label for="mValor">Valor desejado (R$)</label><input id="mValor" type="number" min="0.01" step="0.01" required></div>
-<div><label for="mInicial">Valor já guardado (R$)</label><input id="mInicial" type="number" min="0" step="0.01" value="0"></div>
-</div>
-<button class="btn full" type="submit">Criar meta</button>
-</form>
-</div>
-<div class="panel">
-<h3>Minhas metas</h3>
-<div id="listaMetas"></div>
-</div>
-</section>
-
-<section id="relatorios" class="page">
-<h2>Relatórios financeiros</h2>
-<div class="panel">
-<label for="rMes">Selecione o mês</label>
-<input id="rMes" type="month">
-<div class="grid">
-<div class="card"><small>Entradas pessoais pagas</small><strong class="green" id="rEntradas">R$ 0,00</strong></div>
-<div class="card"><small>Despesas pessoais pagas</small><strong class="red" id="rDespesas">R$ 0,00</strong></div>
-<div class="card"><small>Saldo pessoal do mês</small><strong id="rSaldo">R$ 0,00</strong></div>
-<div class="card"><small>Lucro Uber/99</small><strong id="rLucroUber">R$ 0,00</strong></div>
-</div>
-<div id="rDetalhes"></div>
-</div>
-<div class="panel">
-<h3>Backup dos dados</h3>
-<p class="muted">Salve uma cópia dos seus lançamentos ou restaure um backup JSON.</p>
-<button class="btn full" id="exportarDados" type="button">Exportar backup</button>
-<label for="importarArquivo">Restaurar backup de arquivo JSON</label>
-<input id="importarArquivo" type="file" accept=".json,application/json">
-<button class="btn secondary full" id="importarDados" type="button">Importar backup</button>
-</div>
-</section>
-
+ 
 <script>
+(function(){
+"use strict";
+
 const $ = id => document.getElementById(id);
-const dinheiro = n => (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const numero = id => Number($(id).value)||0;
-const hoje = new Date().toISOString().slice(0,10);
-const mesAtual = hoje.slice(0,7);
+const CHAVE = "meuFinanceiroPro2_dados";
+let lancamentos = [];
+let editandoId = null;
 
-let dados = {pessoal:[],cartoes:[],compras:[],ganhos:[],despesasUber:[],metas:[]};
-
-try {
- const salvo = localStorage.getItem('MFP_V2');
- if(salvo) dados = {...dados,...JSON.parse(salvo)};
-} catch(e) { alert('Não foi possível carregar os dados salvos.'); }
-
-function salvar(){
- try {localStorage.setItem('MFP_V2',JSON.stringify(dados));}
- catch(e){alert('Não foi possível salvar. Verifique o espaço disponível no navegador.');}
-}
-function idNovo(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
-function mesData(data){return (data||'').slice(0,7);}
-function esc(s){
- return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function irPara(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
- document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
- renderizar();window.scrollTo(0,0);
-}
-$('nav').addEventListener('click',e=>{
- const b=e.target.closest('button[data-page]');
- if(b)irPara(b.dataset.page);
-});
-
-$('pData').value=hoje;
-$('uDataG').value=hoje;
-$('uDataD').value=hoje;
-$('compData').value=hoje;
-$('filtroMes').value=mesAtual;
-$('uFiltroMes').value=mesAtual;
-$('rMes').value=mesAtual;
-
-const categorias={
- entrada:['Salário','Serviços','Uber/99','Recebimento','Empréstimo','Outras entradas','Outros'],
- despesa:['Moradia','Mercado','Alimentação','Uber/99','Pagamentos','Água','Luz','Internet','Telefone','Transporte','Saúde','Lazer','Agiota','Outros']
+const dinheiro = n => (Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const hoje = () => {
+  const d = new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 };
-function atualizarCategorias(){
- const tipo=$('pTipo').value,atual=$('pCategoria').value;
- $('pCategoria').innerHTML=categorias[tipo].map(c=>`<option>${esc(c)}</option>`).join('');
- if(categorias[tipo].includes(atual))$('pCategoria').value=atual;
-}
-$('pTipo').addEventListener('change',atualizarCategorias);
-atualizarCategorias();
+const texto = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
-function atualizarRepeticao(){
- const rep=$('pRecorrencia').value;
- $('pPeriodoBox').style.display=rep==='repetir'?'block':'none';
- $('pQtdBox').style.display=rep==='repetir'?'block':'none';
-}
-$('pRecorrencia').addEventListener('change',atualizarRepeticao);
-
-function adicionarMes(data,periodo,quantidade){
- const d=new Date((data||hoje)+'T12:00:00');
- if(periodo==='diaria')d.setDate(d.getDate()+quantidade);
- else if(periodo==='semanal')d.setDate(d.getDate()+7*quantidade);
- else d.setMonth(d.getMonth()+quantidade);
- return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-
-$('formPessoal').addEventListener('submit',e=>{
- e.preventDefault();
- const tipo=$('pTipo').value,rep=$('pRecorrencia').value;
- const quantidade=rep==='repetir'?Math.max(1,Math.min(60,Number($('pQtd').value)||1)):1;
- const base={tipo,categoria:$('pCategoria').value,descricao:$('pDescricao').value.trim(),valor:numero('pValor'),status:$('pStatus').value,recorrencia:rep,periodo:$('pPeriodo').value};
- if(base.valor<=0){alert('Informe um valor maior que zero.');return;}
- if(!base.descricao){alert('Informe a descrição.');return;}
- if(rep==='fixa'){
-  dados.pessoal.push({id:idNovo(),...base,data:$('pData').value||hoje,fixa:true});
- }else{
-  for(let i=0;i<quantidade;i++){
-   dados.pessoal.push({id:idNovo(),...base,data:rep==='repetir'?adicionarMes($('pData').value||hoje,base.periodo,i):($('pData').value||hoje),recorrencia:rep==='repetir'?'repetir':'normal',parcela:rep==='repetir'?`${i+1}/${quantidade}`:''});
+function carregar(){
+  try {
+    const dados = localStorage.getItem(CHAVE);
+    lancamentos = dados ? JSON.parse(dados) : [];
+    if(!Array.isArray(lancamentos)) lancamentos=[];
+  } catch(e) {
+    lancamentos=[];
   }
- }
- salvar();$('pDescricao').value='';$('pValor').value='';
- $('pRecorrencia').value='normal';atualizarRepeticao();renderizar();alert('Lançamento salvo com sucesso!');
+}
+function salvarDados(){
+  try {
+    localStorage.setItem(CHAVE,JSON.stringify(lancamentos));
+    return true;
+  } catch(e) {
+    alert("Não foi possível salvar neste navegador. Verifique o espaço disponível e as configurações do navegador.");
+    return false;
+  }
+}
+function mostrarTela(nome){
+  document.querySelectorAll(".tela").forEach(t=>t.classList.toggle("ativa",t.id===nome));
+  document.querySelectorAll("nav button[data-tela]").forEach(b=>b.classList.toggle("ativo",b.dataset.tela===nome));
+  if(nome==="novo" && !editandoId){
+    $("data").value=hoje();
+  }
+  atualizar();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("nav button[data-tela]").forEach(b=>{
+  b.addEventListener("click",()=>mostrarTela(b.dataset.tela));
 });
 
-$('filtroMes').addEventListener('change',renderizar);
-$('filtroTipo').addEventListener('change',renderizar);
-$('uFiltroMes').addEventListener('change',renderizar);
-$('rMes').addEventListener('change',renderizar);
+function totais(lista){
+  return lista.reduce((r,l)=>{
+    const v=Number(l.valor)||0;
+    if(l.tipo==="entrada") r.entradas+=v;
+    else r.despesas+=v;
+    return r;
+  },{entradas:0,despesas:0});
+}
+function atualizar(){
+  const t=totais(lancamentos);
+  $("totalEntradas").textContent=dinheiro(t.entradas);
+  $("totalDespesas").textContent=dinheiro(t.despesas);
+  $("saldoTotal").textContent=dinheiro(t.entradas-t.despesas);
+  $("reservaTotal").textContent=dinheiro(Math.max(0,t.entradas-t.despesas)*0.10);
 
-function pessoaisDoMes(mes){return dados.pessoal.filter(x=>mesData(x.data)===mes);}
-function valorPessoal(x){return Number(x.valor??((Number(x.pix)||0)+(Number(x.dinheiro)||0)))||0;}
-function totalPessoal(lista,tipo,status){
- return lista.filter(x=>(!tipo||x.tipo===tipo)&&(!status||x.status===status)).reduce((s,x)=>s+valorPessoal(x),0);
+  const apps=lancamentos.filter(l=>l.area==="uber"||l.area==="99");
+  const ta=totais(apps);
+  $("appEntradas").textContent=dinheiro(ta.entradas);
+  $("appDespesas").textContent=dinheiro(ta.despesas);
+  $("appSaldo").textContent=dinheiro(ta.entradas-ta.despesas);
+
+  renderizarLista("listaLancamentos",filtrar());
+  renderizarLista("ultimosLancamentos",lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).slice(0,5),true);
 }
-function renderPessoal(){
- const mes=$('filtroMes').value||mesAtual,tipo=$('filtroTipo').value;
- const lista=dados.pessoal.filter(x=>mesData(x.data)===mes&&(tipo==='todos'||x.tipo===tipo)).sort((a,b)=>b.data.localeCompare(a.data));
- $('listaPessoal').innerHTML=lista.length?lista.map(x=>{
-  const total=valorPessoal(x);
-  return `<div class="item"><div class="itemtop"><strong>${esc(x.descricao)}</strong><strong class="${x.tipo==='entrada'?'green':'red'}">${x.tipo==='entrada'?'+':'−'} ${dinheiro(total)}</strong></div>
-  <p>${esc(x.data)} · ${esc(x.categoria)}</p>
-  <p><span class="pill ${x.status==='pago'?'paid':'pending'}">${x.status==='pago'?'Pago/Recebido':'Pendente'}</span> ${x.parcela?`<span class="pill">${esc(x.parcela)}</span>`:''} ${x.fixa?'<span class="pill">Fixa mensal</span>':''}</p>
-  <button class="btn secondary" onclick="editarPessoal('${x.id}')">Editar</button>
-  ${x.status==='pago'?`<button class="btn secondary" onclick="alternarStatus('${x.id}')">Marcar pendente</button>`:`<button class="btn" onclick="alternarStatus('${x.id}')">Dar baixa</button>`}
-  <button class="btn danger" onclick="excluirPessoal('${x.id}')">Excluir</button></div>`;
- }).join(''):'<div class="empty">Nenhum lançamento neste filtro.</div>';
- renderGraficos(lista);
+function filtrar(){
+  const tipo=$("filtroTipo").value;
+  const area=$("filtroArea").value;
+  return lancamentos.filter(l=>(tipo==="todos"||l.tipo===tipo)&&(area==="todas"||l.area===area)).sort((a,b)=>b.data.localeCompare(a.data));
 }
-function editarPessoal(id){
- const x=dados.pessoal.find(a=>a.id===id);if(!x)return;
- const data=prompt('Nova data (AAAA-MM-DD):',x.data);if(data===null)return;
- if(!/^\d{4}-\d{2}-\d{2}$/.test(data)){alert('Data inválida.');return;}
- const descricao=prompt('Descrição:',x.descricao);if(descricao===null)return;
- const valor=prompt('Valor total em reais:',String(valorPessoal(x)));if(valor===null)return;
- const n=Number(valor.replace(',','.'));if(!Number.isFinite(n)||n<0){alert('Valor inválido.');return;}
- x.data=data;x.descricao=descricao.trim();x.valor=n;delete x.pix;delete x.dinheiro;
- salvar();renderizar();
+function renderizarLista(id,lista,simples=false){
+  const el=$(id);
+  if(!lista.length){
+    el.className="sem-dados";
+    el.textContent="Nenhum lançamento cadastrado.";
+    return;
+  }
+  el.className="";
+  el.innerHTML=lista.map(l=>{
+    const area=l.area==="uber"?"Uber":l.area==="99"?"99":"Pessoal";
+    const tipo=l.tipo==="entrada"?"Entrada":"Despesa";
+    const cor=l.tipo==="entrada"?"verde":"vermelho";
+    return `<div class="item">
+      <div class="linha"><strong>${texto(l.descricao)}</strong><strong class="${cor}">${l.tipo==="despesa"?"−":"+"}${dinheiro(l.valor)}</strong></div>
+      <p>${texto(l.data)} · ${tipo} · ${area}</p>
+      <p>${texto(l.categoria)}${l.fixa?" · Fixa":""}${l.recorrencia&&l.recorrencia!=="unica"?" · Repetição "+texto(l.recorrencia):""}</p>
+      ${simples?"":`<div class="acoes"><button class="btn btn-sec" type="button" data-editar="${texto(l.id)}">Editar</button><button class="btn btn-perigo" type="button" data-excluir="${texto(l.id)}">Excluir</button></div>`}
+    </div>`;
+  }).join("");
 }
-function alternarStatus(id){
- const x=dados.pessoal.find(a=>a.id===id);if(!x)return;
- x.status=x.status==='pago'?'pendente':'pago';salvar();renderizar();
+$("listaLancamentos").addEventListener("click",e=>{
+  const ed=e.target.closest("[data-editar]");
+  const ex=e.target.closest("[data-excluir]");
+  if(ed) editarLancamento(ed.dataset.editar);
+  if(ex) excluirLancamento(ex.dataset.excluir);
+});
+$("filtroTipo").addEventListener("change",atualizar);
+$("filtroArea").addEventListener("change",atualizar);
+
+function atualizarCategorias(){
+  const tipo=$("tipo").value;
+  const area=$("area").value;
+  const opcoes=tipo==="entrada"
+    ? ["Salário","Uber/99","Corridas","Serviços","Vendas","Reembolso","Outros"]
+    : ["Uber/99","Combustível","Manutenção","Pneus","Óleo","Alimentação","Moradia","Contas","Cartão de crédito","Saúde","Lazer","Outros"];
+  const categoria=$("categoria");
+  const anterior=categoria.value;
+  categoria.innerHTML=opcoes.map(o=>`<option value="${texto(o)}">${texto(o)}</option>`).join("");
+  if(opcoes.includes(anterior)) categoria.value=anterior;
+  if(area==="uber"||area==="99"){
+    const preferida=tipo==="entrada"?"Uber/99":"Combustível";
+    if(opcoes.includes(preferida)) categoria.value=preferida;
+  }
 }
-function excluirPessoal(id){
- if(!confirm('Excluir este lançamento?'))return;
- dados.pessoal=dados.pessoal.filter(x=>x.id!==id);salvar();renderizar();
+$("tipo").addEventListener("change",atualizarCategorias);
+$("area").addEventListener("change",atualizarCategorias);
+
+$("formLancamento").addEventListener("submit",e=>{
+  e.preventDefault();
+  const valor=Number($("valor").value);
+  if(!Number.isFinite(valor)||valor<=0){
+    alert("Informe um valor maior que zero.");
+    $("valor").focus();
+    return;
+  }
+  const registro={
+    id:editandoId||("l"+Date.now()+Math.random().toString(36).slice(2,7)),
+    tipo:$("tipo").value,
+    area:$("area").value,
+    descricao:$("descricao").value.trim(),
+    categoria:$("categoria").value,
+    valor,
+    data:$("data").value||hoje(),
+    recorrencia:$("recorrencia").value,
+    fixa:$("fixa").checked
+  };
+  if(!registro.descricao){
+    alert("Informe a descrição.");
+    $("descricao").focus();
+    return;
+  }
+  if(editandoId){
+    lancamentos=lancamentos.map(l=>l.id===editandoId?registro:l);
+  } else {
+    lancamentos.push(registro);
+  }
+  if(!salvarDados()) return;
+  limparFormulario();
+  atualizar();
+  mostrarTela("lancamentos");
+  alert(editandoId?"Lançamento atualizado!":"Lançamento salvo com sucesso!");
+});
+
+function limparFormulario(){
+  $("formLancamento").reset();
+  $("data").value=hoje();
+  editandoId=null;
+  $("btnSalvar").textContent="Salvar lançamento";
+  $("btnCancelarEdicao").classList.add("oculto");
+  atualizarCategorias();
 }
-function renderGraficos(lista){
- ['entrada','despesa'].forEach(tipo=>{
-  const alvo=tipo==='entrada'?'grafEntradas':'grafDespesas';
-  const itens=lista.filter(x=>x.tipo===tipo),mapa={};
-  itens.forEach(x=>mapa[x.categoria]=(mapa[x.categoria]||0)+valorPessoal(x));
-  const total=Object.values(mapa).reduce((a,b)=>a+b,0);
-  const cores=['#1764d2','#16a085','#f39c12','#8e44ad','#e74c3c','#3498db','#2c3e50'];
-  $(alvo).innerHTML=total?Object.entries(mapa).sort((a,b)=>b[1]-a[1]).map(([cat,val],i)=>`<div><div class="itemtop"><span>${esc(cat)}</span><strong>${dinheiro(val)}</strong></div><div class="bar"><span style="width:${Math.min(100,val/total*100)}%;background:${cores[i%cores.length]}"></span></div><p class="muted">${(val/total*100).toFixed(1)}% do total</p></div>`).join(''):'<p class="empty">Sem valores para exibir.</p>';
- });
+function editarLancamento(id){
+  const l=lancamentos.find(x=>x.id===id);
+  if(!l)return;
+  editandoId=id;
+  $("tipo").value=l.tipo;
+  $("area").value=l.area;
+  atualizarCategorias();
+  $("descricao").value=l.descricao;
+  $("categoria").value=l.categoria;
+  $("valor").value=l.valor;
+  $("data").value=l.data;
+  $("recorrencia").value=l.recorrencia||"unica";
+  $("fixa").checked=!!l.fixa;
+  $("btnSalvar").textContent="Salvar alterações";
+  $("btnCancelarEdicao").classList.remove("oculto");
+  mostrarTela("novo");
 }
+function excluirLancamento(id){
+  const l=lancamentos.find(x=>x.id===id);
+  if(!l)return;
+  if(!confirm("Deseja excluir o lançamento “"+l.descricao+"”?"))return;
+  const antigos=lancamentos;
+  lancamentos=lancamentos.filter(x=>x.id!==id);
+  if(!salvarDados()){
+    lancamentos=antigos;
+    return;
+  }
+  atualizar();
+}
+$("btnCancelarEdicao").addEventListener("click",()=>{
+  limparFormulario();
+  mostrarTela("lancamentos");
+});
+
+carregar();
+$("data").value=hoje();
+atualizarCategorias();
+atualizar();
+})();
 </script>
-
+ 
 <script>
-$('formCartao').addEventListener('submit',e=>{
- e.preventDefault();
- dados.cartoes.push({id:idNovo(),nome:$('cNome').value.trim(),fechamento:Number($('cFechamento').value),vencimento:Number($('cVencimento').value)});
- salvar();$('formCartao').reset();$('cFechamento').value=5;$('cVencimento').value=10;
- renderizar();alert('Cartão cadastrado!');
+(function(){
+"use strict";
+
+const $ = id => document.getElementById(id);
+const CHAVE = "meuFinanceiroPro2_dados";
+const dinheiro = n => (Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const ler = () => {
+  try {
+    const d=JSON.parse(localStorage.getItem(CHAVE)||"[]");
+    return Array.isArray(d)?d:[];
+  } catch(e) { return []; }
+};
+const escapar = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const main=document.querySelector("main");
+main.insertAdjacentHTML("beforeend",`
+<section id="relatorios" class="tela">
+  <h2>Relatórios financeiros</h2>
+  <div class="card">
+    <label for="relInicio">Data inicial</label>
+    <input type="date" id="relInicio">
+    <label for="relFim">Data final</label>
+    <input type="date" id="relFim">
+    <button type="button" class="btn" id="gerarRelatorio">Gerar relatório</button>
+  </div>
+  <div class="grade">
+    <div class="card"><small>Entradas do período</small><div class="valor verde" id="relEntradas">R$ 0,00</div></div>
+    <div class="card"><small>Despesas do período</small><div class="valor vermelho" id="relDespesas">R$ 0,00</div></div>
+    <div class="card"><small>Resultado do período</small><div class="valor" id="relSaldo">R$ 0,00</div></div>
+    <div class="card"><small>Lançamentos</small><div class="valor" id="relQuantidade">0</div></div>
+  </div>
+  <div class="card"><h3>Detalhamento por categoria</h3><div id="relCategorias" class="sem-dados">Escolha o período e gere o relatório.</div></div>
+</section>
+<section id="reserva" class="tela">
+  <h2>Reserva de dinheiro</h2>
+  <div class="card">
+    <h3>Estimativa da reserva</h3>
+    <p>A sugestão é reservar 10% do resultado positivo após descontar as despesas das entradas.</p>
+    <label for="percentualReserva">Percentual desejado (%)</label>
+    <input id="percentualReserva" type="number" min="0" max="100" step="1" value="10">
+    <div style="margin-top:16px">Entradas: <strong id="resEntradas">R$ 0,00</strong></div>
+    <div style="margin-top:10px">Despesas: <strong id="resDespesas">R$ 0,00</strong></div>
+    <div style="margin-top:10px">Resultado: <strong id="resResultado">R$ 0,00</strong></div>
+    <div style="margin-top:16px">Reserva sugerida: <div class="valor verde" id="resSugestao">R$ 0,00</div></div>
+    <p>Este cálculo é uma estimativa e não movimenta dinheiro nem altera seus lançamentos.</p>
+    <button type="button" class="btn" id="calcularReserva">Calcular reserva</button>
+  </div>
+</section>
+<section id="backup" class="tela">
+  <h2>Backup e restauração</h2>
+  <div class="card">
+    <h3>Salvar uma cópia</h3>
+    <p>Baixe uma cópia dos seus lançamentos para guardar com segurança.</p>
+    <button type="button" class="btn" id="exportarBackup">Baixar backup</button>
+  </div>
+  <div class="card">
+    <h3>Restaurar uma cópia</h3>
+    <p>Selecione um arquivo JSON de backup deste aplicativo. A restauração substitui os lançamentos atuais.</p>
+    <label for="arquivoBackup">Arquivo de backup</label>
+    <input type="file" id="arquivoBackup" accept=".json,application/json">
+    <button type="button" class="btn" id="importarBackup">Restaurar backup</button>
+  </div>
+  <div class="card">
+    <h3>Dados neste aparelho</h3>
+    <p id="backupQuantidade">Verificando lançamentos...</p>
+  </div>
+</section>
+`);
+
+function totais(lista){
+  return lista.reduce((r,l)=>{
+    const v=Number(l.valor)||0;
+    if(l.tipo==="entrada")r.e+=v;else r.d+=v;
+    return r;
+  },{e:0,d:0});
+}
+function gerarRelatorio(){
+  const inicio=$("relInicio").value;
+  const fim=$("relFim").value;
+  if(inicio&&fim&&inicio>fim){
+    alert("A data inicial deve ser anterior à data final.");
+    return;
+  }
+  const lista=ler().filter(l=>(!inicio||l.data>=inicio)&&(!fim||l.data<=fim));
+  const t=totais(lista);
+  $("relEntradas").textContent=dinheiro(t.e);
+  $("relDespesas").textContent=dinheiro(t.d);
+  $("relSaldo").textContent=dinheiro(t.e-t.d);
+  $("relQuantidade").textContent=String(lista.length);
+  const categorias={};
+  lista.forEach(l=>{
+    const nome=(l.tipo==="entrada"?"Entrada — ":"Despesa — ")+(l.categoria||"Outros");
+    categorias[nome]=(categorias[nome]||0)+(Number(l.valor)||0);
+  });
+  const nomes=Object.keys(categorias).sort();
+  $("relCategorias").className=nomes.length?"":"sem-dados";
+  $("relCategorias").innerHTML=nomes.length?nomes.map(n=>`<div class="linha item"><span>${escapar(n)}</span><strong>${dinheiro(categorias[n])}</strong></div>`).join(""):"Nenhum lançamento no período.";
+}
+function calcularReserva(){
+  const lista=ler();
+  const t=totais(lista);
+  let p=Number($("percentualReserva").value);
+  if(!Number.isFinite(p)||p<0||p>100){
+    alert("Informe um percentual entre 0 e 100.");
+    return;
+  }
+  $("resEntradas").textContent=dinheiro(t.e);
+  $("resDespesas").textContent=dinheiro(t.d);
+  $("resResultado").textContent=dinheiro(t.e-t.d);
+  $("resSugestao").textContent=dinheiro(Math.max(0,t.e-t.d)*p/100);
+}
+function atualizarBackup(){
+  $("backupQuantidade").textContent=ler().length+" lançamento(s) armazenado(s) neste navegador.";
+}
+$("gerarRelatorio").addEventListener("click",gerarRelatorio);
+$("calcularReserva").addEventListener("click",calcularReserva);
+$("percentualReserva").addEventListener("change",calcularReserva);
+
+$("exportarBackup").addEventListener("click",()=>{
+  const dados={
+    aplicativo:"Meu Financeiro Pro 2.0",
+    versao:1,
+    criadoEm:new Date().toISOString(),
+    lancamentos:ler()
+  };
+  const blob=new Blob([JSON.stringify(dados,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="backup-meu-financeiro.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
-
-$('formCompra').addEventListener('submit',e=>{
- e.preventDefault();
- if(!dados.cartoes.length){alert('Cadastre um cartão antes da compra.');return;}
- const valor=numero('compValor'),parcelas=Math.max(1,Math.min(48,numero('compParcelas')));
- if(valor<=0){alert('Informe um valor válido.');return;}
- dados.compras.push({id:idNovo(),cartaoId:$('compCartao').value,descricao:$('compDescricao').value.trim(),valor,parcelas,data:$('compData').value||hoje,mesFatura:mesData($('compData').value||hoje),pagas:[]});
- salvar();$('compDescricao').value='';$('compValor').value='';$('compParcelas').value=1;
- renderizar();alert('Compra cadastrada!');
-});
-
-function renderCartoes(){
- $('compCartao').innerHTML=dados.cartoes.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
- $('listaCartoes').innerHTML=dados.cartoes.length?dados.cartoes.map(c=>`<div class="item"><strong>${esc(c.nome)}</strong><p>Fechamento: dia ${c.fechamento} · Vencimento: dia ${c.vencimento}</p><button class="btn danger" onclick="excluirCartao('${c.id}')">Excluir cartão</button></div>`).join(''):'<p class="empty">Cadastre seu cartão acima.</p>';
- $('listaCompras').innerHTML=dados.compras.length?dados.compras.map(c=>{
-  const cartao=dados.cartoes.find(x=>x.id===c.cartaoId),parcela=c.valor/c.parcelas,pagas=c.pagas||[];
-  return `<div class="item"><strong>${esc(c.descricao)}</strong><p>${esc(cartao?cartao.nome:'Cartão removido')} · Compra em ${esc(c.data)}</p><p>Total ${dinheiro(c.valor)} · ${c.parcelas} parcela(s) de ${dinheiro(parcela)}</p>${Array.from({length:c.parcelas},(_,i)=>`<div class="itemtop"><span>Parcela ${i+1} · ${dinheiro(parcela)}</span><button class="btn ${pagas.includes(i)?'secondary':''}" onclick="alternarParcela('${c.id}',${i})">${pagas.includes(i)?'Paga':'Dar baixa'}</button></div>`).join('')}<button class="btn danger" onclick="excluirCompra('${c.id}')">Excluir compra</button></div>`;
- }).join(''):'<p class="empty">Nenhuma compra cadastrada.</p>';
-}
-function excluirCartao(id){
- if(!confirm('Excluir este cartão?'))return;
- dados.cartoes=dados.cartoes.filter(c=>c.id!==id);salvar();renderizar();
-}
-function excluirCompra(id){
- if(!confirm('Excluir esta compra?'))return;
- dados.compras=dados.compras.filter(c=>c.id!==id);salvar();renderizar();
-}
-function alternarParcela(id,i){
- const c=dados.compras.find(x=>x.id===id);if(!c)return;
- c.pagas=c.pagas||[];c.pagas=c.pagas.includes(i)?c.pagas.filter(n=>n!==i):[...c.pagas,i];
- salvar();renderizar();
-}
-
-$('formUGanho').addEventListener('submit',e=>{
- e.preventDefault();
- const valor=numero('uValorG');
- if(valor<=0){alert('Informe um ganho maior que zero.');return;}
- dados.ganhos.push({id:idNovo(),data:$('uDataG').value||hoje,app:$('uAppG').value,valor,km:numero('uKm'),horas:numero('uHoras')});
- salvar();$('uValorG').value='';$('uKm').value='0';$('uHoras').value='0';
- renderizar();alert('Ganhos salvos!');
-});
-
-$('formUDespesa').addEventListener('submit',e=>{
- e.preventDefault();
- const valor=numero('uValorD');if(valor<=0){alert('Informe uma despesa maior que zero.');return;}
- dados.despesasUber.push({id:idNovo(),data:$('uDataD').value||hoje,categoria:$('uCatD').value,valor,descricao:$('uDescD').value.trim()});
- salvar();$('uValorD').value='';$('uDescD').value='';
- renderizar();alert('Despesa Uber/99 salva!');
-});
-
-function somarGanhos(lista){
- return lista.reduce((s,x)=>s+(Number(x.valor??((Number(x.pix)||0)+(Number(x.dinheiro)||0)))||0,0);
-}
-function somarDespesas(lista){
- return lista.reduce((s,x)=>s+(Number(x.valor)||0),0);
-}
-function renderUber(){
- const mes=$('uFiltroMes').value||mesAtual;
- const gs=dados.ganhos.filter(x=>mesData(x.data)===mes);
- const ds=dados.despesasUber.filter(x=>mesData(x.data)===mes);
- const ganhos=somarGanhos(gs),despesas=somarDespesas(ds),lucro=ganhos-despesas;
- $('uGanhos').textContent=dinheiro(ganhos);
- $('uDespesas').textContent=dinheiro(despesas);
- $('uLucro').textContent=dinheiro(lucro);
- $('uReserva').textContent=dinheiro(Math.max(0,lucro)*.10);
- const km=gs.reduce((s,x)=>s+(Number(x.km)||0),0),horas=gs.reduce((s,x)=>s+(Number(x.horas)||0),0);
- $('uTotalKm').textContent=km.toLocaleString('pt-BR',{maximumFractionDigits:1});
- $('uTotalHoras').textContent=horas.toLocaleString('pt-BR',{maximumFractionDigits:2});
- $('uPorHora').textContent=dinheiro(horas?ganhos/horas:0);
- $('uPorKm').textContent=dinheiro(km?ganhos/km:0);
- const htmlG=gs.map(x=>`<div class="item"><strong>Ganho · ${esc(x.app)}</strong><p>${esc(x.data)} · ${dinheiro(x.valor??((Number(x.pix)||0)+(Number(x.dinheiro)||0)))} · ${x.km||0} km · ${x.horas||0} h</p><button class="btn danger" onclick="excluirUber('g','${x.id}')">Excluir</button></div>`).join('');
- const htmlD=ds.map(x=>`<div class="item"><strong>Despesa · ${esc(x.categoria)}</strong><p>${esc(x.data)} · ${dinheiro(x.valor)} · ${esc(x.descricao||'')}</p><button class="btn danger" onclick="excluirUber('d','${x.id}')">Excluir</button></div>`).join('');
- $('listaUber').innerHTML=(htmlG+htmlD)||'<p class="empty">Nenhum registro Uber/99 neste mês.</p>';
-}
-function excluirUber(tipo,id){
- if(!confirm('Excluir este registro?'))return;
- if(tipo==='g')dados.ganhos=dados.ganhos.filter(x=>x.id!==id);
- else dados.despesasUber=dados.despesasUber.filter(x=>x.id!==id);
- salvar();renderizar();
-}
-
-$('formMeta').addEventListener('submit',e=>{
- e.preventDefault();
- const valor=numero('mValor'),inicial=numero('mInicial');
- if(valor<=0){alert('Informe um valor desejado maior que zero.');return;}
- dados.metas.push({id:idNovo(),nome:$('mNome').value.trim(),valor,guardado:inicial});
- salvar();$('mNome').value='';$('mValor').value='';$('mInicial').value='0';
- renderizar();alert('Meta criada!');
-});
-function renderMetas(){
- $('listaMetas').innerHTML=dados.metas.length?dados.metas.map(m=>{
-  const pct=Math.min(100,Math.max(0,m.guardado/m.valor*100));
-  return `<div class="item"><strong>${esc(m.nome)}</strong><p>${dinheiro(m.guardado)} de ${dinheiro(m.valor)} · ${pct.toFixed(1)}%</p><div class="progress"><span style="width:${pct}%"></span></div><button class="btn secondary" onclick="contribuirMeta('${m.id}')">Adicionar valor</button><button class="btn danger" onclick="excluirMeta('${m.id}')">Excluir meta</button></div>`;
- }).join(''):'<p class="empty">Nenhuma meta criada.</p>';
-}
-function contribuirMeta(id){
- const m=dados.metas.find(x=>x.id===id);if(!m)return;
- const valor=prompt('Quanto deseja adicionar à meta? (R$)','0');if(valor===null)return;
- const n=Number(valor.replace(',','.'));if(!Number.isFinite(n)||n<=0){alert('Valor inválido.');return;}
- m.guardado+=n;salvar();renderizar();
-}
-function excluirMeta(id){
- if(!confirm('Excluir esta meta?'))return;
- dados.metas=dados.metas.filter(m=>m.id!==id);salvar();renderizar();
-}
-
-function renderDashboard(){
- const lista=pessoaisDoMes(mesAtual);
- const ent=totalPessoal(lista,'entrada','pago'),des=totalPessoal(lista,'despesa','pago');
- const gs=dados.ganhos.filter(x=>mesData(x.data)===mesAtual),ds=dados.despesasUber.filter(x=>mesData(x.data)===mesAtual);
- $('dEntradas').textContent=dinheiro(ent);$('dDespesas').textContent=dinheiro(des);
- $('dSaldo').textContent=dinheiro(ent-des);$('dUber').textContent=dinheiro(somarGanhos(gs)-somarDespesas(ds));
- $('dResumo').textContent=`Este mês: ${lista.length} lançamento(s) pessoal(is) e ${gs.length} registro(s) de ganhos Uber/99.`;
- const pend=dados.pessoal.filter(x=>x.status==='pendente');
- $('dPendentes').innerHTML=pend.length?pend.map(x=>`<div class="item"><strong>${esc(x.descricao)}</strong><p>${esc(x.data)} · ${esc(x.categoria)} · ${dinheiro(valorPessoal(x))}</p><button class="btn" onclick="alternarStatus('${x.id}')">Dar baixa</button></div>`).join(''):'Nenhuma conta pendente.';
-}
-function renderSaldos(){
- const pagas=dados.pessoal.filter(x=>x.status==='pago');
- const total=pagas.reduce((s,x)=>s+(x.tipo==='entrada'?1:-1)*valorPessoal(x),0);
- const pend=dados.pessoal.filter(x=>x.status==='pendente').reduce((s,x)=>s+valorPessoal(x),0);
- $('sTotal').textContent=dinheiro(total);$('sPendentes').textContent=dinheiro(pend);
-}
-function renderRelatorios(){
- const mes=$('rMes').value||mesAtual,lista=pessoaisDoMes(mes);
- const ent=totalPessoal(lista,'entrada','pago'),des=totalPessoal(lista,'despesa','pago');
- const gs=dados.ganhos.filter(x=>mesData(x.data)===mes),ds=dados.despesasUber.filter(x=>mesData(x.data)===mes);
- $('rEntradas').textContent=dinheiro(ent);$('rDespesas').textContent=dinheiro(des);
- $('rSaldo').textContent=dinheiro(ent-des);$('rLucroUber').textContent=dinheiro(somarGanhos(gs)-somarDespesas(ds));
- const cats={};
- lista.filter(x=>x.status==='pago').forEach(x=>cats[x.categoria]=(cats[x.categoria]||0)+(x.tipo==='entrada'?1:-1)*valorPessoal(x));
- $('rDetalhes').innerHTML='<h3>Resumo por categoria</h3>'+(Object.keys(cats).length?Object.entries(cats).map(([c,v])=>`<div class="itemtop"><span>${esc(c)}</span><strong class="${v<0?'red':'green'}">${dinheiro(v)}</strong></div>`).join('<hr>'):'<p class="empty">Sem lançamentos neste mês.</p>');
-}
-function renderizar(){
- renderDashboard();renderPessoal();renderSaldos();renderCartoes();renderUber();renderMetas();renderRelatorios();
-}
-
-$('exportarDados').addEventListener('click',()=>{
- const blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'});
- const url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='backup-meu-financeiro.json';a.click();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
-});
-$('importarDados').addEventListener('click',()=>{
- const arquivo=$('importarArquivo').files[0];
- if(!arquivo){alert('Escolha primeiro um arquivo de backup JSON.');return;}
- const leitor=new FileReader();
- leitor.onload=()=>{
+$("importarBackup").addEventListener("click",async()=>{
+  const arquivo=$("arquivoBackup").files[0];
+  if(!arquivo){
+    alert("Selecione um arquivo de backup primeiro.");
+    return;
+  }
   try{
-   const novo=JSON.parse(leitor.result),chaves=['pessoal','cartoes','compras','ganhos','despesasUber','metas'];
-   if(!novo||!chaves.every(k=>Array.isArray(novo[k])))throw new Error('Formato inválido');
-   if(!confirm('Importar este backup substituirá os dados atuais. Continuar?'))return;
-   dados=novo;salvar();renderizar();alert('Backup importado!');
-  }catch(e){alert('Arquivo inválido ou incompatível.');}
- };
- leitor.readAsText(arquivo);
+    const conteudo=JSON.parse(await arquivo.text());
+    const lista=Array.isArray(conteudo)?conteudo:conteudo.lancamentos;
+    if(!Array.isArray(lista)||!lista.every(l=>
+      l&&typeof l==="object"&&
+      ["entrada","despesa"].includes(l.tipo)&&
+      ["pessoal","uber","99"].includes(l.area)&&
+      typeof l.descricao==="string"&&
+      Number.isFinite(Number(l.valor))&&Number(l.valor)>0&&
+      typeof l.data==="string"
+    )){
+      alert("O arquivo não parece ser um backup válido deste aplicativo.");
+      return;
+    }
+    if(!confirm("A restauração substituirá os lançamentos atuais. Deseja continuar?"))return;
+    const anterior=localStorage.getItem(CHAVE);
+    try{
+      localStorage.setItem(CHAVE,JSON.stringify(lista));
+    }catch(e){
+      alert("Não foi possível restaurar. O armazenamento pode estar cheio.");
+      return;
+    }
+    alert("Backup restaurado. Recarregue a página para atualizar todas as telas.");
+    atualizarBackup();
+  }catch(e){
+    alert("Não foi possível ler o arquivo. Confira se ele é um backup JSON válido.");
+  }
 });
-
-if('serviceWorker' in navigator){
- window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.warn('Service worker:',err)));
-}
-renderizar();
+document.querySelector('nav button[data-tela="relatorios"]').addEventListener("click",gerarRelatorio);
+document.querySelector('nav button[data-tela="reserva"]').addEventListener("click",calcularReserva);
+document.querySelector('nav button[data-tela="backup"]').addEventListener("click",atualizarBackup);
+gerarRelatorio();
+calcularReserva();
+atualizarBackup();
+})();
 </script>
+ 
+</main>
 </body>
 </html>
+
+
+
