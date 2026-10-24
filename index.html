@@ -12,9 +12,10 @@ body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
 header{background:#123b70;color:white;padding:20px 15px}
 header h1{margin:0 0 6px;font-size:23px}
 header p{margin:0;font-size:13px}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:5;box-shadow:0 2px 5px #0001}
-nav button{border:0;border-radius:8px;background:#e3ebf7;color:#123b70;padding:12px 4px;font-weight:bold;font-size:13px}
-nav button.ativo{background:#123b70;color:white}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:5}
+nav button,.btn{border:0;border-radius:8px;padding:12px 8px;font-weight:bold;cursor:pointer}
+nav button{background:#e3ebf7;color:#123b70;font-size:13px}
+nav button.ativo,.btn{background:#123b70;color:white}
 main{max-width:850px;margin:auto;padding:12px}
 .tela{display:none}
 .tela.ativa{display:block}
@@ -28,19 +29,16 @@ h3{font-size:16px;margin:0 0 12px}
 .vermelho{color:#c83232}
 label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}
 input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:16px;color:#172033}
-button{cursor:pointer}
-.btn{border:0;border-radius:8px;background:#123b70;color:white;padding:12px 15px;font-size:14px;font-weight:bold}
+input[type=checkbox]{width:auto}
+.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acoes button{flex:1}
 .btn-sec{background:#e3ebf7;color:#123b70}
 .btn-perigo{background:#b42323;color:white}
-.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.acoes button{flex:1}
 .linha{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
 .item{border-bottom:1px solid #e5eaf1;padding:12px 0}
 .item:last-child{border-bottom:0}
 .item p{margin:5px 0;color:#64748b;font-size:13px}
 .sem-dados{color:#64748b;text-align:center;padding:18px 5px}
-.oculto{display:none!important}
-footer{text-align:center;color:#64748b;font-size:12px;padding:20px}
 @media(min-width:600px){nav{grid-template-columns:repeat(6,1fr)}.grade{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
@@ -54,488 +52,329 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:20px}
 <button type="button" data-tela="lancamentos">Lançamentos</button>
 <button type="button" data-tela="novo">Novo</button>
 <button type="button" data-tela="relatorios">Relatórios</button>
-<button type="button" data-tela="reserva">Reserva</button>
+<button type="button" data-tela="reserva">Reserva Uber</button>
 <button type="button" data-tela="backup">Backup</button>
 </nav>
 <main>
 <section id="inicio" class="tela ativa">
 <h2>Resumo financeiro</h2>
 <div class="grade">
-<div class="card"><small>Entradas</small><div class="valor verde" id="totalEntradas">R$ 0,00</div></div>
-<div class="card"><small>Despesas</small><div class="valor vermelho" id="totalDespesas">R$ 0,00</div></div>
-<div class="card"><small>Saldo disponível</small><div class="valor" id="saldoTotal">R$ 0,00</div></div>
-<div class="card"><small>Reserva sugerida</small><div class="valor" id="reservaTotal">R$ 0,00</div></div>
+<div class="card"><small>Entradas pessoais</small><div class="valor verde" id="pEntradas">R$ 0,00</div></div>
+<div class="card"><small>Despesas pessoais</small><div class="valor vermelho" id="pDespesas">R$ 0,00</div></div>
+<div class="card"><small>Saldo pessoal</small><div class="valor" id="pSaldo">R$ 0,00</div></div>
+<div class="card"><small>Resultado Uber/99</small><div class="valor" id="uSaldo">R$ 0,00</div></div>
 </div>
 <div class="card">
 <h3>Resumo Uber / 99</h3>
-<div class="linha"><span>Entradas</span><strong id="appEntradas">R$ 0,00</strong></div>
-<div class="linha"><span>Despesas</span><strong id="appDespesas">R$ 0,00</strong></div>
-<div class="linha"><span>Resultado</span><strong id="appSaldo">R$ 0,00</strong></div>
+<div class="linha"><span>Entradas</span><strong id="uEntradas">R$ 0,00</strong></div>
+<div class="linha"><span>Despesas</span><strong id="uDespesas">R$ 0,00</strong></div>
+<div class="linha"><span>Reserva de 10%</span><strong id="uReserva">R$ 0,00</strong></div>
+<div class="linha"><span>Resultado após reserva</span><strong id="uLiquido">R$ 0,00</strong></div>
 </div>
 <div class="card">
 <h3>Últimos lançamentos</h3>
-<div id="ultimosLancamentos" class="sem-dados">Nenhum lançamento ainda.</div>
+<div id="ultimos" class="sem-dados">Nenhum lançamento ainda.</div>
 </div>
 </section>
-<section id="lancamentos" class="tela">
-<h2>Meus lançamentos</h2>
+
+<section id="novo" class="tela">
+<h2>Novo lançamento</h2>
 <div class="card">
-<label for="filtroTipo">Filtrar por tipo</label>
-<select id="filtroTipo">
+<form id="formLancamento">
+<label for="tipo">Tipo</label>
+<select id="tipo" required>
+<option value="entrada">Entrada / recebimento</option>
+<option value="despesa">Despesa / pagamento</option>
+</select>
+<label for="area">Área</label>
+<select id="area" required>
+<option value="pessoal">Financeiro pessoal</option>
+<option value="uber">Uber</option>
+<option value="99">99</option>
+</select>
+<label for="descricao">Descrição</label>
+<input id="descricao" maxlength="100" placeholder="Descreva o lançamento" required>
+<label for="categoria">Categoria</label>
+<select id="categoria" required></select>
+<label for="valor">Valor (R$)</label>
+<input id="valor" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" required>
+<label for="data">Data</label>
+<input id="data" type="date" required>
+<label for="recorrencia">Periodicidade</label>
+<select id="recorrencia">
+<option value="unica">Uma vez</option>
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+</select>
+<label><input id="fixa" type="checkbox"> Despesa fixa</label>
+<label><input id="cartao" type="checkbox"> Lançamento no cartão de crédito</label>
+<div class="acoes">
+<button class="btn" type="submit" id="salvar">Salvar lançamento</button>
+<button class="btn btn-sec" type="button" id="cancelar" hidden>Cancelar edição</button>
+</div>
+</form>
+</div>
+</section>
+
+<section id="lancamentos" class="tela">
+<h2>Lançamentos</h2>
+<div class="card">
+<label for="fTipo">Tipo</label>
+<select id="fTipo">
 <option value="todos">Todos</option>
 <option value="entrada">Entradas</option>
 <option value="despesa">Despesas</option>
 </select>
-<label for="filtroArea">Filtrar por área</label>
-<select id="filtroArea">
+<label for="fArea">Área</label>
+<select id="fArea">
 <option value="todas">Todas</option>
 <option value="pessoal">Pessoal</option>
 <option value="uber">Uber</option>
 <option value="99">99</option>
 </select>
-<div id="listaLancamentos" class="sem-dados">Nenhum lançamento cadastrado.</div>
+<div id="lista" class="sem-dados">Nenhum lançamento cadastrado.</div>
 </div>
 </section>
-<section id="novo" class="tela">
-<h2>Novo lançamento</h2>
+
+<section id="relatorios" class="tela">
+<h2>Relatórios</h2>
 <div class="card">
-<form id="formLancamento">
-<label for="tipo">Tipo de lançamento</label>
-<select id="tipo" required>
-<option value="entrada">Entrada / ganho</option>
-<option value="despesa">Despesa</option>
-</select>
-<label for="area">Área</label>
-<select id="area" required>
-<option value="pessoal">Pessoal</option>
-<option value="uber">Uber</option>
-<option value="99">99</option>
-</select>
-<label for="descricao">Descrição</label>
-<input id="descricao" maxlength="100" placeholder="Ex.: corrida, mercado, aluguel" required>
-<label for="categoria">Categoria</label>
-<select id="categoria" required>
-<option value="Salário">Salário</option>
-<option value="Uber/99">Uber/99</option>
-<option value="Corridas">Corridas</option>
-<option value="Combustível">Combustível</option>
-<option value="Manutenção">Manutenção</option>
-<option value="Alimentação">Alimentação</option>
-<option value="Moradia">Moradia</option>
-<option value="Contas">Contas</option>
-<option value="Cartão de crédito">Cartão de crédito</option>
-<option value="Saúde">Saúde</option>
-<option value="Lazer">Lazer</option>
-<option value="Outros">Outros</option>
-</select>
-<label for="valor">Valor (R$)</label>
-<input id="valor" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" required>
-<label for="data">Data</label>
-<input id="data" type="date" required>
-<label for="recorrencia">Repetição</label>
-<select id="recorrencia">
-<option value="unica">Somente uma vez</option>
-<option value="diaria">Diária</option>
-<option value="semanal">Semanal</option>
-<option value="mensal">Mensal</option>
-</select>
-<label><input id="fixa" type="checkbox" style="width:auto"> Despesa fixa</label>
-<button class="btn" type="submit" id="btnSalvar">Salvar lançamento</button>
-<button class="btn btn-sec oculto" type="button" id="btnCancelarEdicao">Cancelar edição</button>
-</form>
+<label for="rInicio">Data inicial</label>
+<input type="date" id="rInicio">
+<label for="rFim">Data final</label>
+<input type="date" id="rFim">
+<button type="button" class="btn" id="gerarRel">Gerar relatório</button>
+</div>
+<div class="grade">
+<div class="card"><small>Entradas</small><div id="rEntradas" class="valor verde">R$ 0,00</div></div>
+<div class="card"><small>Despesas</small><div id="rDespesas" class="valor vermelho">R$ 0,00</div></div>
+<div class="card"><small>Resultado</small><div id="rSaldo" class="valor">R$ 0,00</div></div>
+<div class="card"><small>Quantidade</small><div id="rQtd" class="valor">0</div></div>
+</div>
+<div class="card"><h3>Por categoria</h3><div id="rCategorias"></div></div>
+</section>
+
+<section id="reserva" class="tela">
+<h2>Reserva Uber / 99</h2>
+<div class="card">
+<p>A reserva de 10% é calculada somente sobre o resultado positivo do Uber e 99, depois das despesas dessas áreas. O financeiro pessoal não entra neste cálculo.</p>
+<div class="linha"><span>Entradas Uber/99</span><strong id="resE">R$ 0,00</strong></div>
+<div class="linha"><span>Despesas Uber/99</span><strong id="resD">R$ 0,00</strong></div>
+<div class="linha"><span>Resultado</span><strong id="resS">R$ 0,00</strong></div>
+<div class="linha"><span>Reserva de 10%</span><strong id="res10">R$ 0,00</strong></div>
+<div class="linha"><span>Após reserva</span><strong id="resFinal">R$ 0,00</strong></div>
 </div>
 </section>
- 
+
+<section id="backup" class="tela">
+<h2>Backup e restauração</h2>
+<div class="card">
+<p>Baixe uma cópia dos seus lançamentos para guardar.</p>
+<button type="button" class="btn" id="exportar">Baixar backup</button>
+</div>
+<div class="card">
+<p>Restaurar substitui os lançamentos atuais pelos dados do arquivo selecionado.</p>
+<label for="arquivo">Arquivo de backup JSON</label>
+<input type="file" id="arquivo" accept=".json,application/json">
+<button type="button" class="btn" id="importar">Restaurar backup</button>
+</div>
+<div class="card"><div id="qtdBackup"></div></div>
+</section>
+
 <script>
 (function(){
 "use strict";
+const $=id=>document.getElementById(id);
+const CHAVE="meuFinanceiroPro2_dados";
+let dados=[],editId=null;
 
-const $ = id => document.getElementById(id);
-const CHAVE = "meuFinanceiroPro2_dados";
-let lancamentos = [];
-let editandoId = null;
-
-const dinheiro = n => (Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const hoje = () => {
-  const d = new Date();
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const dinheiro=n=>(Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const hoje=()=>{
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 };
-const texto = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function carregar(){
-  try {
-    const dados = localStorage.getItem(CHAVE);
-    lancamentos = dados ? JSON.parse(dados) : [];
-    if(!Array.isArray(lancamentos)) lancamentos=[];
-  } catch(e) {
-    lancamentos=[];
-  }
+ try{
+  const v=JSON.parse(localStorage.getItem(CHAVE)||"[]");
+  dados=Array.isArray(v)?v:[];
+ }catch(e){dados=[];}
 }
-function salvarDados(){
-  try {
-    localStorage.setItem(CHAVE,JSON.stringify(lancamentos));
-    return true;
-  } catch(e) {
-    alert("Não foi possível salvar neste navegador. Verifique o espaço disponível e as configurações do navegador.");
-    return false;
-  }
+function persistir(){
+ try{localStorage.setItem(CHAVE,JSON.stringify(dados));return true;}
+ catch(e){alert("Não foi possível salvar os dados neste navegador.");return false;}
 }
-function mostrarTela(nome){
-  document.querySelectorAll(".tela").forEach(t=>t.classList.toggle("ativa",t.id===nome));
-  document.querySelectorAll("nav button[data-tela]").forEach(b=>b.classList.toggle("ativo",b.dataset.tela===nome));
-  if(nome==="novo" && !editandoId){
-    $("data").value=hoje();
-  }
-  atualizar();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-document.querySelectorAll("nav button[data-tela]").forEach(b=>{
-  b.addEventListener("click",()=>mostrarTela(b.dataset.tela));
-});
-
-function totais(lista){
-  return lista.reduce((r,l)=>{
-    const v=Number(l.valor)||0;
-    if(l.tipo==="entrada") r.entradas+=v;
-    else r.despesas+=v;
-    return r;
-  },{entradas:0,despesas:0});
-}
-function atualizar(){
-  const t=totais(lancamentos);
-  $("totalEntradas").textContent=dinheiro(t.entradas);
-  $("totalDespesas").textContent=dinheiro(t.despesas);
-  $("saldoTotal").textContent=dinheiro(t.entradas-t.despesas);
-  $("reservaTotal").textContent=dinheiro(Math.max(0,t.entradas-t.despesas)*0.10);
-
-  const apps=lancamentos.filter(l=>l.area==="uber"||l.area==="99");
-  const ta=totais(apps);
-  $("appEntradas").textContent=dinheiro(ta.entradas);
-  $("appDespesas").textContent=dinheiro(ta.despesas);
-  $("appSaldo").textContent=dinheiro(ta.entradas-ta.despesas);
-
-  renderizarLista("listaLancamentos",filtrar());
-  renderizarLista("ultimosLancamentos",lancamentos.slice().sort((a,b)=>b.data.localeCompare(a.data)).slice(0,5),true);
-}
-function filtrar(){
-  const tipo=$("filtroTipo").value;
-  const area=$("filtroArea").value;
-  return lancamentos.filter(l=>(tipo==="todos"||l.tipo===tipo)&&(area==="todas"||l.area===area)).sort((a,b)=>b.data.localeCompare(a.data));
-}
-function renderizarLista(id,lista,simples=false){
-  const el=$(id);
-  if(!lista.length){
-    el.className="sem-dados";
-    el.textContent="Nenhum lançamento cadastrado.";
-    return;
-  }
-  el.className="";
-  el.innerHTML=lista.map(l=>{
-    const area=l.area==="uber"?"Uber":l.area==="99"?"99":"Pessoal";
-    const tipo=l.tipo==="entrada"?"Entrada":"Despesa";
-    const cor=l.tipo==="entrada"?"verde":"vermelho";
-    return `<div class="item">
-      <div class="linha"><strong>${texto(l.descricao)}</strong><strong class="${cor}">${l.tipo==="despesa"?"−":"+"}${dinheiro(l.valor)}</strong></div>
-      <p>${texto(l.data)} · ${tipo} · ${area}</p>
-      <p>${texto(l.categoria)}${l.fixa?" · Fixa":""}${l.recorrencia&&l.recorrencia!=="unica"?" · Repetição "+texto(l.recorrencia):""}</p>
-      ${simples?"":`<div class="acoes"><button class="btn btn-sec" type="button" data-editar="${texto(l.id)}">Editar</button><button class="btn btn-perigo" type="button" data-excluir="${texto(l.id)}">Excluir</button></div>`}
-    </div>`;
-  }).join("");
-}
-$("listaLancamentos").addEventListener("click",e=>{
-  const ed=e.target.closest("[data-editar]");
-  const ex=e.target.closest("[data-excluir]");
-  if(ed) editarLancamento(ed.dataset.editar);
-  if(ex) excluirLancamento(ex.dataset.excluir);
-});
-$("filtroTipo").addEventListener("change",atualizar);
-$("filtroArea").addEventListener("change",atualizar);
-
+const categorias={
+ entrada:{
+  pessoal:["Salário","Recebimentos","Empréstimo recebido","Investimento recebido","Serviços","Vendas","Reembolso","Uber/99","Outras entradas","Outros"],
+  uber:["Uber/99","Corridas Uber","Recebimentos","Bônus","Gorjetas","Outras entradas","Outros"],
+  "99":["Uber/99","Corridas 99","Recebimentos","Bônus","Gorjetas","Outras entradas","Outros"]
+ },
+ despesa:{
+  pessoal:["Agiota","Empréstimo","Pagamentos","Aluguel","Moradia","Mercado","Alimentação","Água","Luz","Internet","Telefone","Transporte","Combustível","Manutenção","Pneus","Óleo","Cartão de crédito","Saúde","Farmácia","Educação","Lazer","Impostos","Uber/99","Outras despesas","Outros"],
+  uber:["Combustível","Manutenção","Pneus","Óleo","Lavagem","Pedágio","Estacionamento","Aluguel do veículo","Seguro","Financiamento do veículo","Agiota","Empréstimo","Pagamentos","Uber/99","Outras despesas","Outros"],
+  "99":["Combustível","Manutenção","Pneus","Óleo","Lavagem","Pedágio","Estacionamento","Aluguel do veículo","Seguro","Financiamento do veículo","Agiota","Empréstimo","Pagamentos","Uber/99","Outras despesas","Outros"]
+ }
+};
 function atualizarCategorias(){
-  const tipo=$("tipo").value;
-  const area=$("area").value;
-  const opcoes=tipo==="entrada"
-    ? ["Salário","Uber/99","Corridas","Serviços","Vendas","Reembolso","Outros"]
-    : ["Uber/99","Combustível","Manutenção","Pneus","Óleo","Alimentação","Moradia","Contas","Cartão de crédito","Saúde","Lazer","Outros"];
-  const categoria=$("categoria");
-  const anterior=categoria.value;
-  categoria.innerHTML=opcoes.map(o=>`<option value="${texto(o)}">${texto(o)}</option>`).join("");
-  if(opcoes.includes(anterior)) categoria.value=anterior;
-  if(area==="uber"||area==="99"){
-    const preferida=tipo==="entrada"?"Uber/99":"Combustível";
-    if(opcoes.includes(preferida)) categoria.value=preferida;
-  }
+ const tipo=$("tipo").value,area=$("area").value,sel=$("categoria");
+ const anterior=sel.value;
+ sel.innerHTML=categorias[tipo][area].map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+ if(categorias[tipo][area].includes(anterior))sel.value=anterior;
 }
+function totais(lista){
+ return lista.reduce((t,l)=>{
+  const v=Number(l.valor)||0;
+  if(l.tipo==="entrada")t.e+=v;else t.d+=v;
+  return t;
+ },{e:0,d:0});
+}
+function porArea(area){return dados.filter(l=>area==="uber99"?(l.area==="uber"||l.area==="99"):l.area===area);}
+function atualizarResumo(){
+ const p=totais(porArea("pessoal"));
+ const u=totais(porArea("uber99"));
+ const resultado=u.e-u.d;
+ const reserva=Math.max(0,resultado)*0.10;
+ $("pEntradas").textContent=dinheiro(p.e);
+ $("pDespesas").textContent=dinheiro(p.d);
+ $("pSaldo").textContent=dinheiro(p.e-p.d);
+ $("uEntradas").textContent=dinheiro(u.e);
+ $("uDespesas").textContent=dinheiro(u.d);
+ $("uSaldo").textContent=dinheiro(resultado);
+ $("uReserva").textContent=dinheiro(reserva);
+ $("uLiquido").textContent=dinheiro(resultado-reserva);
+ $("resE").textContent=dinheiro(u.e);
+ $("resD").textContent=dinheiro(u.d);
+ $("resS").textContent=dinheiro(resultado);
+ $("res10").textContent=dinheiro(reserva);
+ $("resFinal").textContent=dinheiro(resultado-reserva);
+ renderizar();
+ $("qtdBackup").textContent=dados.length+" lançamento(s) guardado(s) neste navegador.";
+}
+function renderizar(){
+ const tipo=$("fTipo").value,area=$("fArea").value;
+ const lista=dados.filter(l=>(tipo==="todos"||l.tipo===tipo)&&(area==="todas"||l.area===area)).sort((a,b)=>b.data.localeCompare(a.data));
+ $("lista").innerHTML=lista.length?lista.map(itemHTML).join(""):'<div class="sem-dados">Nenhum lançamento cadastrado.</div>';
+ const recentes=dados.slice().sort((a,b)=>b.data.localeCompare(a.data)).slice(0,5);
+ $("ultimos").innerHTML=recentes.length?recentes.map(l=>`<div class="item"><div class="linha"><strong>${esc(l.descricao)}</strong><strong class="${l.tipo==="entrada"?"verde":"vermelho"}">${l.tipo==="entrada"?"+":"−"}${dinheiro(l.valor)}</strong></div><p>${esc(l.data)} · ${esc(l.categoria)} · ${esc(l.area)}</p></div>`).join(""):'<div class="sem-dados">Nenhum lançamento ainda.</div>';
+}
+function itemHTML(l){
+ return `<div class="item"><div class="linha"><strong>${esc(l.descricao)}</strong><strong class="${l.tipo==="entrada"?"verde":"vermelho"}">${l.tipo==="entrada"?"+":"−"}${dinheiro(l.valor)}</strong></div><p>${esc(l.data)} · ${l.tipo==="entrada"?"Entrada":"Despesa"} · ${esc(l.area)} · ${esc(l.categoria)}</p><p>${l.fixa?"Despesa fixa · ":""}${l.recorrencia!=="unica"?"Repetição "+esc(l.recorrencia)+" · ":""}${l.cartao?"Cartão de crédito":""}</p><div class="acoes"><button type="button" class="btn btn-sec" data-editar="${esc(l.id)}">Editar</button><button type="button" class="btn btn-perigo" data-excluir="${esc(l.id)}">Excluir</button></div></div>`;
+}
+function tela(nome){
+ document.querySelectorAll(".tela").forEach(s=>s.classList.toggle("ativa",s.id===nome));
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("ativo",b.dataset.tela===nome));
+ if(nome==="reserva")atualizarResumo();
+ if(nome==="relatorios")gerarRelatorio();
+ if(nome==="backup")$("qtdBackup").textContent=dados.length+" lançamento(s) guardado(s) neste navegador.";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>tela(b.dataset.tela)));
 $("tipo").addEventListener("change",atualizarCategorias);
 $("area").addEventListener("change",atualizarCategorias);
+$("fTipo").addEventListener("change",renderizar);
+$("fArea").addEventListener("change",renderizar);
 
 $("formLancamento").addEventListener("submit",e=>{
-  e.preventDefault();
-  const valor=Number($("valor").value);
-  if(!Number.isFinite(valor)||valor<=0){
-    alert("Informe um valor maior que zero.");
-    $("valor").focus();
-    return;
-  }
-  const registro={
-    id:editandoId||("l"+Date.now()+Math.random().toString(36).slice(2,7)),
-    tipo:$("tipo").value,
-    area:$("area").value,
-    descricao:$("descricao").value.trim(),
-    categoria:$("categoria").value,
-    valor,
-    data:$("data").value||hoje(),
-    recorrencia:$("recorrencia").value,
-    fixa:$("fixa").checked
-  };
-  if(!registro.descricao){
-    alert("Informe a descrição.");
-    $("descricao").focus();
-    return;
-  }
-  if(editandoId){
-    lancamentos=lancamentos.map(l=>l.id===editandoId?registro:l);
-  } else {
-    lancamentos.push(registro);
-  }
-  if(!salvarDados()) return;
-  limparFormulario();
-  atualizar();
-  mostrarTela("lancamentos");
-  alert(editandoId?"Lançamento atualizado!":"Lançamento salvo com sucesso!");
+ e.preventDefault();
+ const valor=Number($("valor").value);
+ const descricao=$("descricao").value.trim();
+ if(!descricao||!Number.isFinite(valor)||valor<=0){alert("Preencha a descrição e informe um valor maior que zero.");return;}
+ const item={
+  id:editId||("id"+Date.now()+Math.random().toString(36).slice(2,7)),
+  tipo:$("tipo").value,area:$("area").value,
+  descricao,categoria:$("categoria").value,valor,
+  data:$("data").value||hoje(),
+  recorrencia:$("recorrencia").value,
+  fixa:$("fixa").checked,cartao:$("cartao").checked
+ };
+ if(editId)dados=dados.map(l=>l.id===editId?item:l);else dados.push(item);
+ if(!persistir())return;
+ limpar();atualizarResumo();tela("lancamentos");
+ alert(editId?"Lançamento atualizado!":"Lançamento salvo!");
 });
-
-function limparFormulario(){
-  $("formLancamento").reset();
-  $("data").value=hoje();
-  editandoId=null;
-  $("btnSalvar").textContent="Salvar lançamento";
-  $("btnCancelarEdicao").classList.add("oculto");
-  atualizarCategorias();
+function limpar(){
+ $("formLancamento").reset();
+ $("data").value=hoje();
+ editId=null;
+ $("salvar").textContent="Salvar lançamento";
+ $("cancelar").hidden=true;
+ atualizarCategorias();
 }
-function editarLancamento(id){
-  const l=lancamentos.find(x=>x.id===id);
-  if(!l)return;
-  editandoId=id;
-  $("tipo").value=l.tipo;
-  $("area").value=l.area;
-  atualizarCategorias();
-  $("descricao").value=l.descricao;
-  $("categoria").value=l.categoria;
-  $("valor").value=l.valor;
-  $("data").value=l.data;
-  $("recorrencia").value=l.recorrencia||"unica";
-  $("fixa").checked=!!l.fixa;
-  $("btnSalvar").textContent="Salvar alterações";
-  $("btnCancelarEdicao").classList.remove("oculto");
-  mostrarTela("novo");
+function editar(id){
+ const l=dados.find(x=>x.id===id);if(!l)return;
+ editId=id;
+ $("tipo").value=l.tipo;$("area").value=l.area;
+ atualizarCategorias();
+ $("descricao").value=l.descricao;$("categoria").value=l.categoria;
+ $("valor").value=l.valor;$("data").value=l.data;
+ $("recorrencia").value=l.recorrencia||"unica";
+ $("fixa").checked=!!l.fixa;$("cartao").checked=!!l.cartao;
+ $("salvar").textContent="Salvar alterações";$("cancelar").hidden=false;
+ tela("novo");
 }
-function excluirLancamento(id){
-  const l=lancamentos.find(x=>x.id===id);
-  if(!l)return;
-  if(!confirm("Deseja excluir o lançamento “"+l.descricao+"”?"))return;
-  const antigos=lancamentos;
-  lancamentos=lancamentos.filter(x=>x.id!==id);
-  if(!salvarDados()){
-    lancamentos=antigos;
-    return;
-  }
-  atualizar();
+function excluir(id){
+ const l=dados.find(x=>x.id===id);if(!l)return;
+ if(!confirm("Excluir o lançamento "+l.descricao+"?"))return;
+ const anterior=dados;
+ dados=dados.filter(x=>x.id!==id);
+ if(!persistir()){dados=anterior;return;}
+ atualizarResumo();
 }
-$("btnCancelarEdicao").addEventListener("click",()=>{
-  limparFormulario();
-  mostrarTela("lancamentos");
+$("lista").addEventListener("click",e=>{
+ const ed=e.target.closest("[data-editar]"),ex=e.target.closest("[data-excluir]");
+ if(ed)editar(ed.dataset.editar);
+ if(ex)excluir(ex.dataset.excluir);
 });
+$("cancelar").addEventListener("click",()=>{limpar();tela("lancamentos");});
 
+function gerarRelatorio(){
+ const ini=$("rInicio").value,fim=$("rFim").value;
+ if(ini&&fim&&ini>fim){alert("A data inicial deve ser anterior à final.");return;}
+ const lista=dados.filter(l=>(!ini||l.data>=ini)&&(!fim||l.data<=fim));
+ const t=totais(lista);
+ $("rEntradas").textContent=dinheiro(t.e);
+ $("rDespesas").textContent=dinheiro(t.d);
+ $("rSaldo").textContent=dinheiro(t.e-t.d);
+ $("rQtd").textContent=lista.length;
+ const grupos={};
+ lista.forEach(l=>{
+  const k=(l.tipo==="entrada"?"Entrada: ":"Despesa: ")+l.categoria;
+  grupos[k]=(grupos[k]||0)+Number(l.valor);
+ });
+ $("rCategorias").innerHTML=Object.keys(grupos).sort().map(k=>`<div class="linha item"><span>${esc(k)}</span><strong>${dinheiro(grupos[k])}</strong></div>`).join("")||'<div class="sem-dados">Nenhum lançamento no período.</div>';
+}
+$("gerarRel").addEventListener("click",gerarRelatorio);
+
+$("exportar").addEventListener("click",()=>{
+ const blob=new Blob([JSON.stringify({aplicativo:"Meu Financeiro Pro 2.0",versao:1,lancamentos:dados},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="backup-meu-financeiro.json";
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+$("importar").addEventListener("click",async()=>{
+ const arquivo=$("arquivo").files[0];
+ if(!arquivo){alert("Selecione o arquivo de backup.");return;}
+ try{
+  const obj=JSON.parse(await arquivo.text());
+  const lista=Array.isArray(obj)?obj:obj.lancamentos;
+  if(!Array.isArray(lista)||!lista.every(l=>l&&["entrada","despesa"].includes(l.tipo)&&["pessoal","uber","99"].includes(l.area)&&typeof l.descricao==="string"&&Number(l.valor)>0&&typeof l.data==="string")){
+   alert("Arquivo de backup inválido.");return;
+  }
+  if(!confirm("A restauração substituirá os lançamentos atuais. Continuar?"))return;
+  const anterior=dados;dados=lista;
+  if(!persistir()){dados=anterior;return;}
+  atualizarResumo();alert("Backup restaurado com sucesso.");
+ }catch(e){alert("Não foi possível ler esse arquivo JSON.");}
+});
 carregar();
 $("data").value=hoje();
 atualizarCategorias();
-atualizar();
+atualizarResumo();
 })();
 </script>
- 
-<script>
-(function(){
-"use strict";
-
-const $ = id => document.getElementById(id);
-const CHAVE = "meuFinanceiroPro2_dados";
-const dinheiro = n => (Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const ler = () => {
-  try {
-    const d=JSON.parse(localStorage.getItem(CHAVE)||"[]");
-    return Array.isArray(d)?d:[];
-  } catch(e) { return []; }
-};
-const escapar = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-const main=document.querySelector("main");
-main.insertAdjacentHTML("beforeend",`
-<section id="relatorios" class="tela">
-  <h2>Relatórios financeiros</h2>
-  <div class="card">
-    <label for="relInicio">Data inicial</label>
-    <input type="date" id="relInicio">
-    <label for="relFim">Data final</label>
-    <input type="date" id="relFim">
-    <button type="button" class="btn" id="gerarRelatorio">Gerar relatório</button>
-  </div>
-  <div class="grade">
-    <div class="card"><small>Entradas do período</small><div class="valor verde" id="relEntradas">R$ 0,00</div></div>
-    <div class="card"><small>Despesas do período</small><div class="valor vermelho" id="relDespesas">R$ 0,00</div></div>
-    <div class="card"><small>Resultado do período</small><div class="valor" id="relSaldo">R$ 0,00</div></div>
-    <div class="card"><small>Lançamentos</small><div class="valor" id="relQuantidade">0</div></div>
-  </div>
-  <div class="card"><h3>Detalhamento por categoria</h3><div id="relCategorias" class="sem-dados">Escolha o período e gere o relatório.</div></div>
-</section>
-<section id="reserva" class="tela">
-  <h2>Reserva de dinheiro</h2>
-  <div class="card">
-    <h3>Estimativa da reserva</h3>
-    <p>A sugestão é reservar 10% do resultado positivo após descontar as despesas das entradas.</p>
-    <label for="percentualReserva">Percentual desejado (%)</label>
-    <input id="percentualReserva" type="number" min="0" max="100" step="1" value="10">
-    <div style="margin-top:16px">Entradas: <strong id="resEntradas">R$ 0,00</strong></div>
-    <div style="margin-top:10px">Despesas: <strong id="resDespesas">R$ 0,00</strong></div>
-    <div style="margin-top:10px">Resultado: <strong id="resResultado">R$ 0,00</strong></div>
-    <div style="margin-top:16px">Reserva sugerida: <div class="valor verde" id="resSugestao">R$ 0,00</div></div>
-    <p>Este cálculo é uma estimativa e não movimenta dinheiro nem altera seus lançamentos.</p>
-    <button type="button" class="btn" id="calcularReserva">Calcular reserva</button>
-  </div>
-</section>
-<section id="backup" class="tela">
-  <h2>Backup e restauração</h2>
-  <div class="card">
-    <h3>Salvar uma cópia</h3>
-    <p>Baixe uma cópia dos seus lançamentos para guardar com segurança.</p>
-    <button type="button" class="btn" id="exportarBackup">Baixar backup</button>
-  </div>
-  <div class="card">
-    <h3>Restaurar uma cópia</h3>
-    <p>Selecione um arquivo JSON de backup deste aplicativo. A restauração substitui os lançamentos atuais.</p>
-    <label for="arquivoBackup">Arquivo de backup</label>
-    <input type="file" id="arquivoBackup" accept=".json,application/json">
-    <button type="button" class="btn" id="importarBackup">Restaurar backup</button>
-  </div>
-  <div class="card">
-    <h3>Dados neste aparelho</h3>
-    <p id="backupQuantidade">Verificando lançamentos...</p>
-  </div>
-</section>
-`);
-
-function totais(lista){
-  return lista.reduce((r,l)=>{
-    const v=Number(l.valor)||0;
-    if(l.tipo==="entrada")r.e+=v;else r.d+=v;
-    return r;
-  },{e:0,d:0});
-}
-function gerarRelatorio(){
-  const inicio=$("relInicio").value;
-  const fim=$("relFim").value;
-  if(inicio&&fim&&inicio>fim){
-    alert("A data inicial deve ser anterior à data final.");
-    return;
-  }
-  const lista=ler().filter(l=>(!inicio||l.data>=inicio)&&(!fim||l.data<=fim));
-  const t=totais(lista);
-  $("relEntradas").textContent=dinheiro(t.e);
-  $("relDespesas").textContent=dinheiro(t.d);
-  $("relSaldo").textContent=dinheiro(t.e-t.d);
-  $("relQuantidade").textContent=String(lista.length);
-  const categorias={};
-  lista.forEach(l=>{
-    const nome=(l.tipo==="entrada"?"Entrada — ":"Despesa — ")+(l.categoria||"Outros");
-    categorias[nome]=(categorias[nome]||0)+(Number(l.valor)||0);
-  });
-  const nomes=Object.keys(categorias).sort();
-  $("relCategorias").className=nomes.length?"":"sem-dados";
-  $("relCategorias").innerHTML=nomes.length?nomes.map(n=>`<div class="linha item"><span>${escapar(n)}</span><strong>${dinheiro(categorias[n])}</strong></div>`).join(""):"Nenhum lançamento no período.";
-}
-function calcularReserva(){
-  const lista=ler();
-  const t=totais(lista);
-  let p=Number($("percentualReserva").value);
-  if(!Number.isFinite(p)||p<0||p>100){
-    alert("Informe um percentual entre 0 e 100.");
-    return;
-  }
-  $("resEntradas").textContent=dinheiro(t.e);
-  $("resDespesas").textContent=dinheiro(t.d);
-  $("resResultado").textContent=dinheiro(t.e-t.d);
-  $("resSugestao").textContent=dinheiro(Math.max(0,t.e-t.d)*p/100);
-}
-function atualizarBackup(){
-  $("backupQuantidade").textContent=ler().length+" lançamento(s) armazenado(s) neste navegador.";
-}
-$("gerarRelatorio").addEventListener("click",gerarRelatorio);
-$("calcularReserva").addEventListener("click",calcularReserva);
-$("percentualReserva").addEventListener("change",calcularReserva);
-
-$("exportarBackup").addEventListener("click",()=>{
-  const dados={
-    aplicativo:"Meu Financeiro Pro 2.0",
-    versao:1,
-    criadoEm:new Date().toISOString(),
-    lancamentos:ler()
-  };
-  const blob=new Blob([JSON.stringify(dados,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="backup-meu-financeiro.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-});
-$("importarBackup").addEventListener("click",async()=>{
-  const arquivo=$("arquivoBackup").files[0];
-  if(!arquivo){
-    alert("Selecione um arquivo de backup primeiro.");
-    return;
-  }
-  try{
-    const conteudo=JSON.parse(await arquivo.text());
-    const lista=Array.isArray(conteudo)?conteudo:conteudo.lancamentos;
-    if(!Array.isArray(lista)||!lista.every(l=>
-      l&&typeof l==="object"&&
-      ["entrada","despesa"].includes(l.tipo)&&
-      ["pessoal","uber","99"].includes(l.area)&&
-      typeof l.descricao==="string"&&
-      Number.isFinite(Number(l.valor))&&Number(l.valor)>0&&
-      typeof l.data==="string"
-    )){
-      alert("O arquivo não parece ser um backup válido deste aplicativo.");
-      return;
-    }
-    if(!confirm("A restauração substituirá os lançamentos atuais. Deseja continuar?"))return;
-    const anterior=localStorage.getItem(CHAVE);
-    try{
-      localStorage.setItem(CHAVE,JSON.stringify(lista));
-    }catch(e){
-      alert("Não foi possível restaurar. O armazenamento pode estar cheio.");
-      return;
-    }
-    alert("Backup restaurado. Recarregue a página para atualizar todas as telas.");
-    atualizarBackup();
-  }catch(e){
-    alert("Não foi possível ler o arquivo. Confira se ele é um backup JSON válido.");
-  }
-});
-document.querySelector('nav button[data-tela="relatorios"]').addEventListener("click",gerarRelatorio);
-document.querySelector('nav button[data-tela="reserva"]').addEventListener("click",calcularReserva);
-document.querySelector('nav button[data-tela="backup"]').addEventListener("click",atualizarBackup);
-gerarRelatorio();
-calcularReserva();
-atualizarBackup();
-})();
-</script>
- 
 </main>
 </body>
 </html>
-
-
-
