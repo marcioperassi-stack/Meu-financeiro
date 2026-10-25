@@ -9,11 +9,7 @@
 <link rel="manifest" href="manifest.json">
 <title>Meu Financeiro Pro 2.0</title>
 <style>
-:root{
- --azul:#7547f8;--azul2:#5d2bd6;--fundo:#f4f3fa;
- --verde:#35a853;--vermelho:#ef4438;--texto:#292747;
- --cinza:#85849b
-}
+:root{--azul:#7547f8;--azul2:#5d2bd6;--fundo:#f4f3fa;--verde:#35a853;--vermelho:#ef4438;--texto:#292747;--cinza:#85849b}
 *{box-sizing:border-box}
 body{margin:0;background:var(--fundo);color:var(--texto);font-family:Arial,sans-serif;font-size:15px}
 header{background:var(--azul);color:white;padding:20px 14px 24px}
@@ -23,8 +19,7 @@ nav{display:flex;gap:6px;padding:9px;background:white;overflow-x:auto;position:s
 nav button{white-space:nowrap;border:0;background:#f0ebff;color:var(--azul2);padding:11px 13px;border-radius:9px;font-weight:bold}
 nav button.ativo{background:var(--azul);color:white}
 main{max-width:850px;margin:auto;padding:12px}
-.tela{display:none}
-.tela.ativa{display:block}
+.tela{display:none}.tela.ativa{display:block}
 .card{background:white;border-radius:16px;padding:16px;margin-bottom:13px;box-shadow:0 2px 8px #0000000b}
 h2{font-size:20px;margin:0 0 14px;color:var(--texto)}
 h3{font-size:16px;margin:0 0 10px}
@@ -32,17 +27,13 @@ label{display:block;font-weight:bold;font-size:13px;margin:9px 0 5px}
 input,select{width:100%;padding:11px;border:1px solid #d8d7e5;border-radius:9px;background:white;font-size:15px;color:var(--texto)}
 button{cursor:pointer}
 .btn{border:0;border-radius:9px;background:var(--azul);color:white;padding:12px 14px;font-weight:bold;margin-top:10px}
-.btn.sec{background:#77768b}
-.btn.good{background:var(--verde)}
-.btn.danger{background:var(--vermelho)}
-.btn.full{width:100%}
+.btn.sec{background:#77768b}.btn.good{background:var(--verde)}.btn.danger{background:var(--vermelho)}.btn.full{width:100%}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
 .resumos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .resumo{padding:15px 12px;background:#f4f0ff;border-radius:13px;min-width:0}
 .resumo small{display:block;color:#77748e;margin-bottom:8px;line-height:1.3}
 .resumo strong{display:block;font-size:clamp(17px,4.5vw,23px);overflow-wrap:anywhere}
-.resumo.saldo{background:white;border:1px solid #e7e4f2}
-.resumo.projecao{background:white;border:1px solid #e7e4f2}
+.resumo.saldo,.resumo.projecao{background:white;border:1px solid #e7e4f2}
 .resumo .sub{font-size:11px;color:var(--cinza);line-height:1.4;margin-top:7px}
 .meslinha{display:flex;align-items:center;gap:10px;margin-bottom:13px}
 .meslinha button{border:0;background:#f0ebff;color:var(--azul);font-size:22px;border-radius:9px;padding:6px 13px}
@@ -51,11 +42,8 @@ button{cursor:pointer}
 .item p{margin:6px 0}
 .acoes{display:flex;flex-wrap:wrap;gap:6px}
 .acoes button{border:0;border-radius:7px;padding:9px;color:white;background:var(--azul)}
-.acoes .sec{background:#77768b}
-.acoes .good{background:var(--verde)}
-.acoes .danger{background:var(--vermelho)}
-.verde{color:var(--verde)}
-.vermelho{color:var(--vermelho)}
+.acoes .sec{background:#77768b}.acoes .good{background:var(--verde)}.acoes .danger{background:var(--vermelho)}
+.verde{color:var(--verde)}.vermelho{color:var(--vermelho)}
 .nota{font-size:13px;color:#77768b;line-height:1.5}
 .oculto{display:none!important}
 .barra{height:12px;background:#e9e7f2;border-radius:20px;overflow:hidden;margin:7px 0 13px}
@@ -96,18 +84,11 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 <input id="mesResumo" type="month">
 <button type="button" onclick="mudarMes(1)" aria-label="Próximo mês">›</button>
 </div>
-
 <div class="resumos">
-<div class="resumo saldo">
-<small>Saldo atual</small>
-<strong id="saldoAtual" class="verde">R$ 0,00</strong>
-<div class="sub">Entradas recebidas menos despesas pagas</div>
-</div>
-<div class="resumo projecao">
-<small>Projeção de saldo do mês</small>
-<strong id="saldoProjecao">R$ 0,00</strong>
-<div class="sub">Inclui lançamentos pagos e pendentes</div>
-</div>
+<div class="resumo saldo"><small>Saldo atual total</small><strong id="saldoAtual" class="verde">R$ 0,00</strong><div class="sub">Somente valores pagos ou recebidos</div></div>
+<div class="resumo projecao"><small>Projeção do mês</small><strong id="saldoProjecao">R$ 0,00</strong><div class="sub">Inclui valores pendentes</div></div>
+<div class="resumo"><small>Dinheiro em mãos</small><strong id="saldoDinheiro">R$ 0,00</strong></div>
+<div class="resumo"><small>Saldo bancário</small><strong id="saldoBanco">R$ 0,00</strong></div>
 <div class="resumo"><small>Entradas previstas</small><strong id="totalEntradas">R$ 0,00</strong></div>
 <div class="resumo"><small>Saídas previstas</small><strong id="totalDespesas">R$ 0,00</strong></div>
 <div class="resumo"><small>Ganhos Uber/99</small><strong id="ganhosUber">R$ 0,00</strong></div>
@@ -116,10 +97,7 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 <div class="resumo"><small>Reserva sugerida (10%)</small><strong id="reservaSugerida">R$ 0,00</strong></div>
 </div>
 </div>
-<div class="card">
-<h2>Resumo do mês</h2>
-<div id="resumoTexto">Seus lançamentos aparecerão aqui.</div>
-</div>
+<div class="card"><h2>Resumo do mês</h2><div id="resumoTexto">Seus lançamentos aparecerão aqui.</div></div>
 </section>
 
 <section id="lancamentos" class="tela">
@@ -129,9 +107,14 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 <div class="grid">
 <div><label for="tipo">Tipo</label><select id="tipo"><option value="entrada">Entrada</option><option value="despesa">Despesa</option></select></div>
 <div><label for="data">Data</label><input id="data" type="date" required></div>
-<div><label for="valor">Valor (R$)</label><input id="valor" type="number" min="0.01" step="0.01" placeholder="0,00" required></div>
 <div><label for="origem">Área</label><select id="origem"><option value="pessoal">Pessoal</option><option value="uber">Uber/99</option></select></div>
 </div>
+<div class="grid">
+<div><label for="valorDinheiro" id="rotuloDinheiro">Valor em dinheiro (R$)</label><input id="valorDinheiro" type="number" min="0" step="0.01" value="0"></div>
+<div><label for="valorBanco" id="rotuloBanco">Valor pelo banco (R$)</label><input id="valorBanco" type="number" min="0" step="0.01" value="0"></div>
+</div>
+<p class="nota">Você pode dividir o valor entre dinheiro e banco. O total será calculado automaticamente.</p>
+<div class="resumo"><small>Total do lançamento</small><strong id="totalLancamento">R$ 0,00</strong></div>
 <div class="grid">
 <div><label for="categoria">Categoria</label><select id="categoria"></select></div>
 <div><label for="statusLancamento">Situação</label><select id="statusLancamento"><option value="pendente">Pendente</option><option value="pago">Pago / Recebido</option></select></div>
@@ -142,8 +125,8 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 <div><label for="repeticao">Repetição</label><select id="repeticao"><option value="nenhuma">Não repetir</option><option value="diaria">Diária</option><option value="semanal">Semanal</option><option value="mensal">Mensal</option></select></div>
 <div id="blocoQuantidade" class="oculto"><label for="quantidadeRepeticoes">Quantidade de lançamentos</label><input id="quantidadeRepeticoes" type="number" min="1" step="1" value="2"></div>
 </div>
-<label><input id="despesaFixa" type="checkbox" style="width:auto"> Marcar como despesa fixa</label>
-<p class="nota">Cada repetição terá data, situação e edição próprias. A marcação de despesa fixa identifica o lançamento e não impede alterações individuais.</p>
+<label><input id="despesaFixa" type="checkbox" style="width:auto"> Marcar como despesa fixa mensal automática</label>
+<p class="nota">Uma despesa fixa gera ocorrências mensais automaticamente. Cada ocorrência terá pagamento e edição próprios.</p>
 <button class="btn good full" onclick="salvarLancamento()">Salvar lançamento</button>
 <button class="btn sec full" onclick="limparFormulario()">Limpar formulário</button>
 </div>
@@ -189,19 +172,11 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 </section>
 
 <section id="faturas" class="tela">
-<div class="card">
-<h2>Faturas</h2>
-<label for="mesFatura">Mês da fatura</label><input id="mesFatura" type="month">
-<div id="resumoFaturas"></div>
-</div>
+<div class="card"><h2>Faturas</h2><label for="mesFatura">Mês da fatura</label><input id="mesFatura" type="month"><div id="resumoFaturas"></div></div>
 </section>
 
 <section id="graficos" class="tela">
-<div class="card">
-<h2>Entradas e saídas</h2>
-<label for="mesGraficos">Mês de referência</label><input id="mesGraficos" type="month">
-<div id="conteudoGraficos"></div>
-</div>
+<div class="card"><h2>Entradas e saídas</h2><label for="mesGraficos">Mês de referência</label><input id="mesGraficos" type="month"><div id="conteudoGraficos"></div></div>
 </section>
 
 <section id="backup" class="tela">
@@ -280,11 +255,17 @@ function atualizarCategorias(){
  categoria.innerHTML=opcoes.map(nome=>`<option value="${nome}">${nome}</option>`).join("");
  categoria.value=opcoes.includes(anterior)?anterior:opcoes[0];
 }
+function atualizarTotalFormulario(){
+ const d=Number(document.getElementById("valorDinheiro").value)||0;
+ const b=Number(document.getElementById("valorBanco").value)||0;
+ document.getElementById("totalLancamento").textContent=dinheiro(d+b);
+}
 function limparFormulario(){
  document.getElementById("idEdicao").value="";
  document.getElementById("tipo").value="entrada";
  document.getElementById("data").value=hoje();
- document.getElementById("valor").value="";
+ document.getElementById("valorDinheiro").value="0";
+ document.getElementById("valorBanco").value="0";
  document.getElementById("origem").value="pessoal";
  document.getElementById("statusLancamento").value="pendente";
  document.getElementById("descricao").value="";
@@ -294,12 +275,15 @@ function limparFormulario(){
  document.getElementById("tituloFormulario").textContent="Novo lançamento";
  document.getElementById("blocoQuantidade").classList.add("oculto");
  atualizarCategorias();
+ atualizarTotalFormulario();
 }
 function salvarLancamento(){
  const id=document.getElementById("idEdicao").value;
  const tipo=document.getElementById("tipo").value;
  const data=document.getElementById("data").value;
- const valor=Number(document.getElementById("valor").value);
+ const valorDinheiro=Number(document.getElementById("valorDinheiro").value)||0;
+ const valorBanco=Number(document.getElementById("valorBanco").value)||0;
+ const valor=valorDinheiro+valorBanco;
  const origem=document.getElementById("origem").value;
  const categoria=document.getElementById("categoria").value;
  const status=document.getElementById("statusLancamento").value;
@@ -309,25 +293,31 @@ function salvarLancamento(){
  const fixa=document.getElementById("despesaFixa").checked;
 
  if(!data){alert("Informe a data.");return}
- if(!Number.isFinite(valor)||valor<=0){alert("Informe um valor válido.");return}
- if(!id&&repeticao!=="nenhuma"&&(!Number.isSafeInteger(quantidade)||quantidade<1)){
-  alert("Informe uma quantidade de lançamentos válida.");return;
+ if(!Number.isFinite(valor)||valor<=0){alert("Informe um valor maior que zero em dinheiro e/ou banco.");return}
+ if(!id&&repeticao!=="nenhuma"&&!fixa&&(!Number.isSafeInteger(quantidade)||quantidade<1)){
+  alert("Informe uma quantidade válida de lançamentos.");return;
+ }
+ if(fixa&&tipo!=="despesa"){
+  alert("A opção de despesa fixa só pode ser usada em despesas.");return;
  }
 
- const base={tipo,data,valor,origem,categoria,status,descricao,despesaFixa:fixa,periodicidade:repeticao};
+ const base={
+  tipo,data,valor,valorDinheiro,valorBanco,origem,categoria,status,descricao,
+  despesaFixa:fixa,periodicidade:fixa?"mensal":repeticao
+ };
 
  if(id){
   const i=lancamentos.findIndex(x=>String(x.id)===String(id));
   if(i<0){alert("Lançamento não encontrado.");return}
   lancamentos[i]={...lancamentos[i],...base};
  }else{
-  const total=repeticao==="nenhuma"?1:quantidade;
-  const grupoId=repeticao==="nenhuma"?"":"rec_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+  const total=fixa?1:(repeticao==="nenhuma"?1:quantidade);
+  const grupoId=(fixa||repeticao!=="nenhuma")?"rec_"+Date.now()+"_"+Math.random().toString(36).slice(2):"";
   const [ano,mes,dia]=data.split("-").map(Number);
 
   for(let i=0;i<total;i++){
    let d;
-   if(repeticao==="mensal"){
+   if(repeticao==="mensal"||fixa){
     const primeiro=new Date(ano,mes-1+i,1);
     const ultimoDia=new Date(primeiro.getFullYear(),primeiro.getMonth()+1,0).getDate();
     d=new Date(primeiro.getFullYear(),primeiro.getMonth(),Math.min(dia,ultimoDia));
@@ -336,12 +326,12 @@ function salvarLancamento(){
     if(repeticao==="diaria")d.setDate(d.getDate()+i);
     if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
    }
-
    lancamentos.push({
     ...base,
     id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2),
     data:dataLocal(d),
     grupoId,
+    fixaModelo:fixa,
     parcelaNumero:i+1,
     totalParcelas:total
    });
@@ -352,6 +342,36 @@ function salvarLancamento(){
  renderizarTudo();
  alert(id?"Lançamento atualizado!":"Lançamento(s) salvo(s)!");
 }
+function gerarDespesasFixas(){
+ const modelos=lancamentos.filter(x=>x.despesaFixa&&x.fixaModelo);
+ const hojeData=hoje();
+ const limite=new Date();
+ limite.setMonth(limite.getMonth()+18);
+ modelos.forEach(modelo=>{
+  const existentes=new Set(
+   lancamentos.filter(x=>x.grupoId===modelo.grupoId).map(x=>String(x.data).slice(0,7))
+  );
+  const [ano,mes,dia]=String(modelo.data).split("-").map(Number);
+  for(let i=1;i<=18;i++){
+   const primeiro=new Date(ano,mes-1+i,1);
+   const ultimoDia=new Date(primeiro.getFullYear(),primeiro.getMonth()+1,0).getDate();
+   const d=new Date(primeiro.getFullYear(),primeiro.getMonth(),Math.min(dia,ultimoDia));
+   const data=dataLocal(d);
+   if(data<=hojeData||d>limite||existentes.has(data.slice(0,7)))continue;
+   lancamentos.push({
+    ...modelo,
+    id:"l_fix_"+modelo.id+"_"+data,
+    data,
+    status:"pendente",
+    fixaModelo:false,
+    geradaFixa:true,
+    parcelaNumero:i+1,
+    totalParcelas:0
+   });
+   existentes.add(data.slice(0,7));
+  }
+ });
+}
 function editarLancamento(id){
  const x=lancamentos.find(a=>String(a.id)===String(id));
  if(!x)return;
@@ -359,16 +379,18 @@ function editarLancamento(id){
  document.getElementById("tipo").value=x.tipo||"entrada";
  atualizarCategorias();
  document.getElementById("data").value=x.data||hoje();
- document.getElementById("valor").value=x.valor||"";
+ document.getElementById("valorDinheiro").value=x.valorDinheiro??x.valor??0;
+ document.getElementById("valorBanco").value=x.valorBanco??0;
  document.getElementById("origem").value=x.origem||"pessoal";
  document.getElementById("categoria").value=x.categoria||"Uber/99";
  document.getElementById("statusLancamento").value=x.status||"pendente";
  document.getElementById("descricao").value=x.descricao||"";
  document.getElementById("repeticao").value="nenhuma";
  document.getElementById("quantidadeRepeticoes").value="1";
- document.getElementById("despesaFixa").checked=!!x.despesaFixa;
+ document.getElementById("despesaFixa").checked=!!x.fixaModelo;
  document.getElementById("tituloFormulario").textContent="Editar lançamento";
  document.getElementById("blocoQuantidade").classList.add("oculto");
+ atualizarTotalFormulario();
  abrirTela("lancamentos",document.querySelectorAll("nav button")[1]);
  window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -397,17 +419,20 @@ function renderizarLancamentos(){
  if(!itens.length){lista.innerHTML="<p class='nota'>Nenhum lançamento encontrado.</p>";return}
  lista.innerHTML=itens.map(x=>{
   const st=x.status||"pendente";
+  const vD=Number(x.valorDinheiro??x.valor??0);
+  const vB=Number(x.valorBanco??0);
   const parcela=x.totalParcelas>1?`<p><strong>Ocorrência ${x.parcelaNumero||1} de ${x.totalParcelas}</strong></p>`:"";
   return `<div class="item">
    <p><strong>${escapar(x.descricao||x.categoria||"Lançamento")}</strong></p>
    <p>${escapar(x.data)} · ${escapar(x.categoria||"Outros")}</p>
    ${parcela}
    <p>${x.tipo==="entrada"?"Entrada":"Despesa"} · ${x.origem==="uber"?"Uber/99":"Pessoal"}</p>
-   <p><strong>${dinheiro(x.valor)}</strong></p>
-   <p class="${st==="pago"?"verde":"vermelho"}"><strong>${st==="pago"?"Pago / Recebido":"Pendente"}</strong>${x.despesaFixa?" · Despesa fixa":""}</p>
+   <p>Dinheiro: ${dinheiro(vD)} · Banco: ${dinheiro(vB)}</p>
+   <p><strong>Total: ${dinheiro(vD+vB)}</strong></p>
+   <p class="${st==="pago"?"verde":"vermelho"}"><strong>${st==="pago"?(x.tipo==="entrada"?"Recebido":"Pago"):"Pendente"}</strong>${x.despesaFixa?" · Despesa fixa":""}</p>
    <div class="acoes">
     <button onclick="editarLancamento('${escapar(x.id)}')">Editar</button>
-    <button class="${st==="pago"?"sec":"good"}" onclick="alterarStatusLancamento('${escapar(x.id)}')">${st==="pago"?"Marcar pendente":"Marcar pago/recebido"}</button>
+    <button class="${st==="pago"?"sec":"good"}" onclick="alterarStatusLancamento('${escapar(x.id)}')">${st==="pago"?"Marcar pendente":(x.tipo==="entrada"?"Marcar recebido":"Marcar pago")}</button>
     <button class="danger" onclick="excluirLancamento('${escapar(x.id)}')">Excluir</button>
    </div>
   </div>`;
@@ -416,7 +441,9 @@ function renderizarLancamentos(){
 function renderizarResumo(){
  const mes=document.getElementById("mesResumo").value||mesAtual();
  const itens=lancamentos.filter(x=>String(x.data||"").startsWith(mes));
- const soma=f=>itens.filter(f).reduce((s,x)=>s+Number(x.valor||0),0);
+ const soma=f=>itens.filter(f).reduce((s,x)=>s+Number(x.valor??(Number(x.valorDinheiro||0)+Number(x.valorBanco||0))||0),0);
+ const somaMeio=(tipo,meio)=>itens.filter(x=>x.tipo===tipo&&(x.status||"pendente")==="pago")
+  .reduce((s,x)=>s+Number(x[meio]??(meio==="valorDinheiro"?x.valor||0:0)),0);
  const entradas=soma(x=>x.tipo==="entrada");
  const despesas=soma(x=>x.tipo==="despesa");
  const entradasPagas=soma(x=>x.tipo==="entrada"&&(x.status||"pendente")==="pago");
@@ -425,8 +452,12 @@ function renderizarResumo(){
  const gastosUber=soma(x=>x.tipo==="despesa"&&x.origem==="uber");
  const combustivel=soma(x=>x.tipo==="despesa"&&x.origem==="uber"&&/combustível/i.test(x.categoria||""));
  const reserva=Math.max(0,ganhosUber-gastosUber)*0.10;
+ const dinheiroSaldo=somaMeio("entrada","valorDinheiro")-somaMeio("despesa","valorDinheiro");
+ const bancoSaldo=somaMeio("entrada","valorBanco")-somaMeio("despesa","valorBanco");
 
  document.getElementById("saldoAtual").textContent=dinheiro(entradasPagas-despesasPagas);
+ document.getElementById("saldoDinheiro").textContent=dinheiro(dinheiroSaldo);
+ document.getElementById("saldoBanco").textContent=dinheiro(bancoSaldo);
  document.getElementById("saldoProjecao").textContent=dinheiro(entradas-despesas);
  document.getElementById("saldoProjecao").className=(entradas-despesas)<0?"vermelho":"verde";
  document.getElementById("totalEntradas").textContent=dinheiro(entradas);
@@ -560,7 +591,7 @@ function renderizarGraficos(){
  const itens=lancamentos.filter(x=>String(x.data||"").startsWith(mes));
  const soma=(tipo,status=null)=>itens.filter(x=>
   x.tipo===tipo&&(status===null||(x.status||"pendente")===status)
- ).reduce((s,x)=>s+Number(x.valor||0),0);
+ ).reduce((s,x)=>s+Number(x.valor??(Number(x.valorDinheiro||0)+Number(x.valorBanco||0))||0),0);
  const entradas=soma("entrada");
  const despesas=soma("despesa");
  const max=Math.max(entradas,despesas,1);
@@ -586,7 +617,7 @@ function renderizarGraficos(){
 function exportarBackup(){
  try{
   const backup={
-   versao:3,
+   versao:4,
    dataExportacao:new Date().toISOString(),
    lancamentos:lancamentos,
    cartoes:cartoes,
@@ -621,10 +652,16 @@ function importarBackup(evento){
     evento.target.value="";
     return;
    }
-   lancamentos=backup.lancamentos;
+   lancamentos=backup.lancamentos.map(x=>{
+    if(x.valorDinheiro===undefined&&x.valorBanco===undefined){
+     return {...x,valorDinheiro:Number(x.valor||0),valorBanco:0};
+    }
+    return x;
+   });
    cartoes=Array.isArray(backup.cartoes)?backup.cartoes:[];
    compras=Array.isArray(backup.compras)?backup.compras:[];
    metas=Array.isArray(backup.metas)?backup.metas:[];
+   gerarDespesasFixas();
    guardar();
    renderizarTudo();
    document.getElementById("statusBackup").textContent="Backup importado com sucesso.";
@@ -646,6 +683,8 @@ function renderizarTudo(){
 document.addEventListener("DOMContentLoaded",function(){
  atualizarCategorias();
  document.getElementById("tipo").addEventListener("change",atualizarCategorias);
+ document.getElementById("valorDinheiro").addEventListener("input",atualizarTotalFormulario);
+ document.getElementById("valorBanco").addEventListener("input",atualizarTotalFormulario);
  document.getElementById("repeticao").addEventListener("change",function(){
   document.getElementById("blocoQuantidade").classList.toggle("oculto",this.value==="nenhuma");
  });
@@ -662,7 +701,18 @@ document.addEventListener("DOMContentLoaded",function(){
  document.getElementById("mesResumo").value=m;
  document.getElementById("mesGraficos").value=m;
  document.getElementById("mesFatura").value=m;
+
+ lancamentos=lancamentos.map(x=>{
+  if(x.valorDinheiro===undefined&&x.valorBanco===undefined){
+   return {...x,valorDinheiro:Number(x.valor||0),valorBanco:0};
+  }
+  return x;
+ });
+ gerarDespesasFixas();
+ guardar();
+ atualizarTotalFormulario();
  renderizarTudo();
+
  if("serviceWorker" in navigator){
   navigator.serviceWorker.register("./sw.js").catch(()=>{});
  }
