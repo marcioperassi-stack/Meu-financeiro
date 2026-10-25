@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -113,10 +114,16 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 <label for="descricao">Descrição</label>
 <input id="descricao" maxlength="180" placeholder="Ex.: aluguel, combustível, corrida">
 <div class="grid">
-<div><label for="repeticao">Repetição</label><select id="repeticao"><option value="nenhuma">Não repetir</option><option value="diaria">Diária</option><option value="semanal">Semanal</option><option value="mensal">Mensal</option><option value="fixa">Fixa — a cada 30 dias</option></select></div>
-<div id="blocoQuantidade" class="oculto"><label for="quantidadeRepeticoes">Quantidade de lançamentos</label><input id="quantidadeRepeticoes" type="number" min="1" step="1" value="2"></div>
+<div><label for="repeticao">Repetição</label><select id="repeticao">
+<option value="nenhuma">Não repetir</option>
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+<option value="fixa">Fixa — a cada 30 dias</option>
+</select></div>
+<div id="blocoQuantidade" class="oculto"><label for="quantidadeRepeticoes">Quantidade de lançamentos</label><input id="quantidadeRepeticoes" type="number" min="1" max="240" step="1" value="24"></div>
 </div>
-<p class="nota">A opção Fixa cria uma nova cobrança a cada 30 dias, mantendo cada cobrança independente para edição e baixa de pagamento.</p>
+<p class="nota">Diária, semanal e mensal criam lançamentos separados. Cada parcela pode ser paga, editada ou excluída individualmente. Fixa gera cobranças a cada 30 dias.</p>
 <button class="btn good full" onclick="salvarLancamento()">Salvar lançamento</button>
 <button class="btn sec full" onclick="limparFormulario()">Limpar formulário</button>
 </div>
@@ -175,6 +182,7 @@ const CHAVE_DADOS="meuFinanceiroPro2_dados";
 const CHAVE_CARTOES="meuFinanceiroPro2_cartoes";
 const CHAVE_COMPRAS="meuFinanceiroPro2_faturas";
 const CHAVE_METAS="meuFinanceiroPro2_metas";
+
 function ler(chave,padrao){
  try{const v=localStorage.getItem(chave);return v?JSON.parse(v):padrao}catch(e){return padrao}
 }
@@ -186,6 +194,7 @@ if(!Array.isArray(lancamentos))lancamentos=[];
 if(!Array.isArray(cartoes))cartoes=[];
 if(!Array.isArray(compras))compras=[];
 if(!Array.isArray(metas))metas=[];
+
 function guardar(){
  localStorage.setItem(CHAVE_DADOS,JSON.stringify(lancamentos));
  localStorage.setItem(CHAVE_CARTOES,JSON.stringify(cartoes));
@@ -207,6 +216,12 @@ function deslocarDias(data,dias){
  const d=new Date(p[0],p[1]-1,p[2]);
  d.setDate(d.getDate()+dias);
  return dataLocal(d);
+}
+function somarMeses(data,quantidade){
+ const [ano,mes,dia]=String(data).split("-").map(Number);
+ const primeiro=new Date(ano,mes-1+quantidade,1);
+ const ultimo=new Date(primeiro.getFullYear(),primeiro.getMonth()+1,0).getDate();
+ return dataLocal(new Date(primeiro.getFullYear(),primeiro.getMonth(),Math.min(dia,ultimo)));
 }
 function mudarMes(delta){
  const campo=document.getElementById("mesResumo");
@@ -248,11 +263,12 @@ function limparFormulario(){
  document.getElementById("statusLancamento").value="pendente";
  document.getElementById("descricao").value="";
  document.getElementById("repeticao").value="nenhuma";
- document.getElementById("quantidadeRepeticoes").value="2";
+ document.getElementById("quantidadeRepeticoes").value="24";
  document.getElementById("tituloFormulario").textContent="Novo lançamento";
  document.getElementById("blocoQuantidade").classList.add("oculto");
  atualizarCategorias();atualizarTotalFormulario();
 }
+
 function salvarLancamento(){
  const id=document.getElementById("idEdicao").value;
  const tipo=document.getElementById("tipo").value;
@@ -266,64 +282,83 @@ function salvarLancamento(){
  const descricao=document.getElementById("descricao").value.trim();
  const repeticao=document.getElementById("repeticao").value;
  const quantidade=Number(document.getElementById("quantidadeRepeticoes").value);
+
  if(!data){alert("Informe a data.");return}
  if(!Number.isFinite(valor)||valor<=0){alert("Informe um valor maior que zero.");return}
- if(!id&&repeticao!=="nenhuma"&&(!Number.isSafeInteger(quantidade)||quantidade<1)){
-  alert("Informe uma quantidade válida.");return;
+ if(!id&&repeticao!=="nenhuma"&&repeticao!=="fixa"&&(!Number.isSafeInteger(quantidade)||quantidade<1||quantidade>240)){
+  alert("Informe uma quantidade entre 1 e 240.");return;
  }
- const base={tipo,data,valor,valorDinheiro,valorBanco,origem,categoria,status,descricao,periodicidade:repeticao};
+ const base={tipo,valor,valorDinheiro,valorBanco,origem,categoria,status,descricao};
+
  if(id){
   const i=lancamentos.findIndex(x=>String(x.id)===String(id));
   if(i<0){alert("Lançamento não encontrado.");return}
-  lancamentos[i]={...lancamentos[i],...base};
+  lancamentos[i]={...lancamentos[i],...base,data};
  }else{
-  const total=repeticao==="nenhuma"?1:(repeticao==="fixa"?1:quantidade);
   const grupoId=repeticao!=="nenhuma"?"rec_"+Date.now()+"_"+Math.random().toString(36).slice(2):"";
+  const total=repeticao==="nenhuma"?1:(repeticao==="fixa"?1:quantidade);
+
   for(let i=0;i<total;i++){
-   const novaData=repeticao==="diaria"?deslocarDias(data,i):
-    repeticao==="semanal"?deslocarDias(data,i*7):
-    repeticao==="mensal"?somarMeses(data,i):
-    repeticao==="fixa"?deslocarDias(data,i*30):data;
+   let novaData=data;
+   if(repeticao==="diaria")novaData=deslocarDias(data,i);
+   if(repeticao==="semanal")novaData=deslocarDias(data,i*7);
+   if(repeticao==="mensal")novaData=somarMeses(data,i);
+
    lancamentos.push({
-    ...base,id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2),
-    data:novaData,grupoId,periodicidade:repeticao,
-    fixaModelo:repeticao==="fixa",geradaFixa:false,
-    parcelaNumero:i+1,totalParcelas:total
+    ...base,
+    id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2),
+    data:novaData,
+    periodicidade:repeticao,
+    grupoId,
+    fixaModelo:repeticao==="fixa",
+    geradaFixa:false,
+    parcelaNumero:repeticao==="fixa"?0:i+1,
+    totalParcelas:repeticao==="fixa"?0:total
    });
   }
  }
  guardar();
  if(repeticao==="fixa"&&!id)gerarProximaFixa();
- limparFormulario();renderizarTudo();
+ guardar();
+ limparFormulario();
+ renderizarTudo();
  alert(id?"Lançamento atualizado!":"Lançamento(s) salvo(s)!");
 }
-function somarMeses(data,quantidade){
- const [ano,mes,dia]=String(data).split("-").map(Number);
- const primeiro=new Date(ano,mes-1+quantidade,1);
- const ultimo=new Date(primeiro.getFullYear(),primeiro.getMonth()+1,0).getDate();
- return dataLocal(new Date(primeiro.getFullYear(),primeiro.getMonth(),Math.min(dia,ultimo)));
-}
+
 function gerarProximaFixa(){
  const modelos=lancamentos.filter(x=>x.periodicidade==="fixa"&&x.fixaModelo);
  modelos.forEach(modelo=>{
-  const ultima=lancamentos.filter(x=>x.grupoId===modelo.grupoId)
-   .sort((a,b)=>String(b.data).localeCompare(String(a.data)))[0];
-  if(!ultima)return;
-  let proxima=deslocarDias(ultima.data,30);
+  const grupo=lancamentos.filter(x=>x.grupoId===modelo.grupoId);
+  if(!grupo.length)return;
+  let proxima=deslocarDias(grupo.map(x=>x.data).sort().pop(),30);
   const limite=deslocarDias(hoje(),30*18);
   let contador=0;
   while(proxima<=limite&&contador<18){
    if(!lancamentos.some(x=>x.grupoId===modelo.grupoId&&x.data===proxima)){
-    lancamentos.push({...modelo,id:"l_fix_"+modelo.id+"_"+proxima,data:proxima,status:"pendente",fixaModelo:false,geradaFixa:true,parcelaNumero:0,totalParcelas:0});
+    lancamentos.push({
+     ...modelo,
+     id:"l_fix_"+modelo.id+"_"+proxima,
+     data:proxima,
+     status:"pendente",
+     fixaModelo:false,
+     geradaFixa:true,
+     parcelaNumero:0,
+     totalParcelas:0
+    });
    }
-   proxima=deslocarDias(proxima,30);contador++;
+   proxima=deslocarDias(proxima,30);
+   contador++;
   }
  });
 }
+</script>
+
+<script>
 function editarLancamento(id){
  const x=lancamentos.find(a=>String(a.id)===String(id));if(!x)return;
  document.getElementById("idEdicao").value=x.id;
- document.getElementById("tipo").value=x.tipo||"entrada";atualizarCategorias();
+ document.getElementById("tipo").value=x.tipo||"entrada";
+ atualizarCategorias();
  document.getElementById("data").value=x.data||hoje();
  document.getElementById("valorDinheiro").value=x.valorDinheiro??x.valor??0;
  document.getElementById("valorBanco").value=x.valorBanco??0;
@@ -332,15 +367,17 @@ function editarLancamento(id){
  document.getElementById("statusLancamento").value=x.status||"pendente";
  document.getElementById("descricao").value=x.descricao||"";
  document.getElementById("repeticao").value=x.periodicidade||"nenhuma";
- document.getElementById("quantidadeRepeticoes").value="1";
+ document.getElementById("quantidadeRepeticoes").value=String(x.totalParcelas||24);
  document.getElementById("tituloFormulario").textContent="Editar lançamento";
  document.getElementById("blocoQuantidade").classList.toggle("oculto",!["diaria","semanal","mensal"].includes(x.periodicidade));
- atualizarTotalFormulario();abrirTela("lancamentos",document.querySelectorAll("nav button")[1]);
+ atualizarTotalFormulario();
+ abrirTela("lancamentos",document.querySelectorAll("nav button")[1]);
  window.scrollTo({top:0,behavior:"smooth"});
 }
 function excluirLancamento(id){
  if(!confirm("Excluir somente este lançamento?"))return;
- lancamentos=lancamentos.filter(x=>String(x.id)!==String(id));guardar();renderizarTudo();
+ lancamentos=lancamentos.filter(x=>String(x.id)!==String(id));
+ guardar();renderizarTudo();
 }
 function alterarStatusLancamento(id){
  const x=lancamentos.find(a=>String(a.id)===String(id));if(!x)return;
@@ -358,15 +395,24 @@ function renderizarLancamentos(){
   (statusFiltro==="todos"||(x.status||"pendente")===statusFiltro)
  ).sort((a,b)=>(b.data||"").localeCompare(a.data||""));
  if(!itens.length){lista.innerHTML="<p class='nota'>Nenhum lançamento encontrado.</p>";return}
+
  lista.innerHTML=itens.map(x=>{
   const st=x.status||"pendente";
-  const vD=Number(x.valorDinheiro??x.valor??0),vB=Number(x.valorBanco??0);
-  const repeticao=x.periodicidade==="fixa"?"Fixa · a cada 30 dias":x.periodicidade&&x.periodicidade!=="nenhuma"?"Repetição: "+x.periodicidade:"";
+  const vD=Number(x.valorDinheiro??x.valor??0);
+  const vB=Number(x.valorBanco??0);
+  let repeticao="";
+  if(x.periodicidade==="fixa"){
+   repeticao="Fixa · a cada 30 dias";
+  }else if(["diaria","semanal","mensal"].includes(x.periodicidade)){
+   const numero=Number(x.parcelaNumero||1);
+   const total=Number(x.totalParcelas||1);
+   repeticao="Parcela "+String(numero).padStart(2,"0")+"/"+String(total).padStart(2,"0")+" · "+x.periodicidade;
+  }
   return `<div class="item">
    <p><strong>${escapar(x.descricao||x.categoria||"Lançamento")}</strong></p>
-   <p>${escapar(x.data)} · ${escapar(x.categoria||"Outros")}</p>
+   <p>${escapar(x.data||"")} · ${escapar(x.categoria||"Outros")}</p>
    <p>${x.tipo==="entrada"?"Entrada":"Despesa"} · ${x.origem==="uber"?"Uber/99":"Pessoal"}</p>
-   ${repeticao?`<p>${escapar(repeticao)}</p>`:""}
+   ${repeticao?`<p><strong>${escapar(repeticao)}</strong></p>`:""}
    <p>Dinheiro: ${dinheiro(vD)} · Banco: ${dinheiro(vB)}</p>
    <p><strong>Total: ${dinheiro(vD+vB)}</strong></p>
    <p class="${st==="pago"?"verde":"vermelho"}"><strong>${st==="pago"?(x.tipo==="entrada"?"Recebido":"Pago"):"Pendente"}</strong></p>
@@ -374,7 +420,8 @@ function renderizarLancamentos(){
     <button onclick="editarLancamento('${escapar(x.id)}')">Editar</button>
     <button class="${st==="pago"?"sec":"good"}" onclick="alterarStatusLancamento('${escapar(x.id)}')">${st==="pago"?"Marcar pendente":(x.tipo==="entrada"?"Marcar recebido":"Marcar pago")}</button>
     <button class="danger" onclick="excluirLancamento('${escapar(x.id)}')">Excluir</button>
-   </div></div>`;
+   </div>
+  </div>`;
  }).join("");
 }
 function renderizarResumo(){
@@ -403,7 +450,8 @@ function renderizarResumo(){
  document.getElementById("reservaSugerida").textContent=dinheiro(reserva);
  document.getElementById("resumoTexto").innerHTML=`<p>Referência: <strong>${escapar(mes)}</strong></p><p>Entradas pendentes: ${dinheiro(entradas-entradasPagas)}</p><p>Despesas pendentes: ${dinheiro(despesas-despesasPagas)}</p><p>Resultado Uber/99: ${dinheiro(ganhosUber-gastosUber)}</p>`;
 }
- function salvarCartao(){
+
+function salvarCartao(){
  const id=document.getElementById("cartaoId").value;
  const nome=document.getElementById("nomeCartao").value.trim();
  const fechamento=Number(document.getElementById("fechamentoCartao").value);
@@ -576,7 +624,6 @@ document.addEventListener("DOMContentLoaded",function(){
  guardar();
  atualizarTotalFormulario();
  renderizarTudo();
-
  if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
 });
 </script>
