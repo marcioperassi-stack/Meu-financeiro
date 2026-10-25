@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -193,7 +192,6 @@ footer{text-align:center;padding:18px;color:#77768b;font-size:12px}
 </main>
 <footer>Meu Financeiro Pro 2.0</footer>
 <script>
-
 const CHAVE_DADOS="meuFinanceiroPro2_dados";
 const CHAVE_CARTOES="meuFinanceiroPro2_cartoes";
 const CHAVE_COMPRAS="meuFinanceiroPro2_faturas";
@@ -301,10 +299,7 @@ function salvarLancamento(){
   alert("A opção de despesa fixa só pode ser usada em despesas.");return;
  }
 
- const base={
-  tipo,data,valor,valorDinheiro,valorBanco,origem,categoria,status,descricao,
-  despesaFixa:fixa,periodicidade:fixa?"mensal":repeticao
- };
+ const base={tipo,data,valor,valorDinheiro,valorBanco,origem,categoria,status,descricao,despesaFixa:fixa,periodicidade:fixa?"mensal":repeticao};
 
  if(id){
   const i=lancamentos.findIndex(x=>String(x.id)===String(id));
@@ -326,15 +321,7 @@ function salvarLancamento(){
     if(repeticao==="diaria")d.setDate(d.getDate()+i);
     if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
    }
-   lancamentos.push({
-    ...base,
-    id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2),
-    data:dataLocal(d),
-    grupoId,
-    fixaModelo:fixa,
-    parcelaNumero:i+1,
-    totalParcelas:total
-   });
+   lancamentos.push({...base,id:"l_"+Date.now()+"_"+i+"_"+Math.random().toString(36).slice(2),data:dataLocal(d),grupoId,fixaModelo:fixa,parcelaNumero:i+1,totalParcelas:total});
   }
  }
  guardar();
@@ -348,9 +335,7 @@ function gerarDespesasFixas(){
  const limite=new Date();
  limite.setMonth(limite.getMonth()+18);
  modelos.forEach(modelo=>{
-  const existentes=new Set(
-   lancamentos.filter(x=>x.grupoId===modelo.grupoId).map(x=>String(x.data).slice(0,7))
-  );
+  const existentes=new Set(lancamentos.filter(x=>x.grupoId===modelo.grupoId).map(x=>String(x.data).slice(0,7)));
   const [ano,mes,dia]=String(modelo.data).split("-").map(Number);
   for(let i=1;i<=18;i++){
    const primeiro=new Date(ano,mes-1+i,1);
@@ -358,16 +343,7 @@ function gerarDespesasFixas(){
    const d=new Date(primeiro.getFullYear(),primeiro.getMonth(),Math.min(dia,ultimoDia));
    const data=dataLocal(d);
    if(data<=hojeData||d>limite||existentes.has(data.slice(0,7)))continue;
-   lancamentos.push({
-    ...modelo,
-    id:"l_fix_"+modelo.id+"_"+data,
-    data,
-    status:"pendente",
-    fixaModelo:false,
-    geradaFixa:true,
-    parcelaNumero:i+1,
-    totalParcelas:0
-   });
+   lancamentos.push({...modelo,id:"l_fix_"+modelo.id+"_"+data,data,status:"pendente",fixaModelo:false,geradaFixa:true,parcelaNumero:i+1,totalParcelas:0});
    existentes.add(data.slice(0,7));
   }
  });
@@ -441,7 +417,7 @@ function renderizarLancamentos(){
 function renderizarResumo(){
  const mes=document.getElementById("mesResumo").value||mesAtual();
  const itens=lancamentos.filter(x=>String(x.data||"").startsWith(mes));
- const soma=f=>itens.filter(f).reduce((s,x)=>s+Number(x.valor??(Number(x.valorDinheiro||0)+Number(x.valorBanco||0))||0),0);
+ const soma=f=>itens.filter(f).reduce((s,x)=>s+Number(x.valor ?? (Number(x.valorDinheiro||0)+Number(x.valorBanco||0))),0);
  const somaMeio=(tipo,meio)=>itens.filter(x=>x.tipo===tipo&&(x.status||"pendente")==="pago")
   .reduce((s,x)=>s+Number(x[meio]??(meio==="valorDinheiro"?x.valor||0:0)),0);
  const entradas=soma(x=>x.tipo==="entrada");
@@ -472,8 +448,7 @@ function renderizarResumo(){
    <p>Despesas pendentes: ${dinheiro(despesas-despesasPagas)}</p>
    <p>Resultado Uber/99: ${dinheiro(ganhosUber-gastosUber)}</p>`;
 }
-
-function salvarCartao(){
+ function salvarCartao(){
  const id=document.getElementById("cartaoId").value;
  const nome=document.getElementById("nomeCartao").value.trim();
  const fechamento=Number(document.getElementById("fechamentoCartao").value);
@@ -591,7 +566,7 @@ function renderizarGraficos(){
  const itens=lancamentos.filter(x=>String(x.data||"").startsWith(mes));
  const soma=(tipo,status=null)=>itens.filter(x=>
   x.tipo===tipo&&(status===null||(x.status||"pendente")===status)
- ).reduce((s,x)=>s+Number(x.valor??(Number(x.valorDinheiro||0)+Number(x.valorBanco||0))||0),0);
+ ).reduce((s,x)=>s+Number(x.valor ?? (Number(x.valorDinheiro||0)+Number(x.valorBanco||0))),0);
  const entradas=soma("entrada");
  const despesas=soma("despesa");
  const max=Math.max(entradas,despesas,1);
@@ -616,14 +591,7 @@ function renderizarGraficos(){
 }
 function exportarBackup(){
  try{
-  const backup={
-   versao:4,
-   dataExportacao:new Date().toISOString(),
-   lancamentos:lancamentos,
-   cartoes:cartoes,
-   compras:compras,
-   metas:metas
-  };
+  const backup={versao:4,dataExportacao:new Date().toISOString(),lancamentos:lancamentos,cartoes:cartoes,compras:compras,metas:metas};
   const arquivo=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(arquivo);
   const link=document.createElement("a");
@@ -645,17 +613,13 @@ function importarBackup(evento){
  leitor.onload=function(){
   try{
    const backup=JSON.parse(leitor.result);
-   if(!backup||typeof backup!=="object"||!Array.isArray(backup.lancamentos)){
-    throw new Error("Backup inválido");
-   }
+   if(!backup||typeof backup!=="object"||!Array.isArray(backup.lancamentos))throw new Error("Backup inválido");
    if(!confirm("Importar este backup substituirá os dados deste navegador. Deseja continuar?")){
     evento.target.value="";
     return;
    }
    lancamentos=backup.lancamentos.map(x=>{
-    if(x.valorDinheiro===undefined&&x.valorBanco===undefined){
-     return {...x,valorDinheiro:Number(x.valor||0),valorBanco:0};
-    }
+    if(x.valorDinheiro===undefined&&x.valorBanco===undefined)return {...x,valorDinheiro:Number(x.valor||0),valorBanco:0};
     return x;
    });
    cartoes=Array.isArray(backup.cartoes)?backup.cartoes:[];
@@ -703,9 +667,7 @@ document.addEventListener("DOMContentLoaded",function(){
  document.getElementById("mesFatura").value=m;
 
  lancamentos=lancamentos.map(x=>{
-  if(x.valorDinheiro===undefined&&x.valorBanco===undefined){
-   return {...x,valorDinheiro:Number(x.valor||0),valorBanco:0};
-  }
+  if(x.valorDinheiro===undefined&&x.valorBanco===undefined)return {...x,valorDinheiro:Number(x.valor||0),valorBanco:0};
   return x;
  });
  gerarDespesasFixas();
