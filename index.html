@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,797 +7,1008 @@
 <meta name="theme-color" content="#123b70">
 <title>Meu Financeiro Pro 2.0</title>
 <style>
-:root{--azul:#123b70;--azul2:#1d5da8;--fundo:#f1f5fa;--branco:#fff;--verde:#16834b;--vermelho:#c93636;--texto:#172638;--cinza:#64748b}
 *{box-sizing:border-box}
-body{margin:0;background:var(--fundo);color:var(--texto);font-family:Arial,sans-serif}
-header{background:linear-gradient(120deg,var(--azul),var(--azul2));color:white;padding:20px 15px;text-align:center}
-header h1{margin:0;font-size:24px}
-header p{margin:7px 0 0;font-size:13px}
-nav{display:flex;gap:7px;padding:10px;overflow-x:auto;background:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 5px #0001}
-nav button{white-space:nowrap;border:0;border-radius:8px;background:#e7edf5;padding:11px 13px;color:var(--azul);font-weight:bold}
-nav button.ativo{background:var(--azul);color:#fff}
-main{max-width:1000px;margin:auto;padding:12px}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#123b70;color:white;padding:20px 15px}
+header h1{margin:0 0 6px;font-size:23px}
+header p{margin:0;font-size:13px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:white;position:sticky;top:0;z-index:5}
+nav button,.btn{border:0;border-radius:8px;padding:12px 8px;font-weight:bold;cursor:pointer}
+nav button{background:#e3ebf7;color:#123b70;font-size:13px}
+nav button.ativo,.btn{background:#123b70;color:white}
+main{max-width:850px;margin:auto;padding:12px}
 .tela{display:none}
 .tela.ativa{display:block}
-.card{background:white;border-radius:12px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #0000000d}
-h2{font-size:19px;color:var(--azul);margin:5px 0 15px}
-h3{font-size:16px;margin:8px 0}
-.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
-.numero{font-size:21px;font-weight:bold;margin-top:7px;overflow-wrap:anywhere}
-.pequeno{font-size:12px;color:var(--cinza)}
-.verde{color:var(--verde)}
-.vermelho{color:var(--vermelho)}
-label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #ccd5e1;border-radius:8px;background:white;font-size:16px;color:var(--texto)}
-button{cursor:pointer}
-.acao{border:0;border-radius:8px;background:var(--azul2);color:white;padding:12px 15px;font-weight:bold;margin-top:10px}
-.secundario{background:#e7edf5;color:var(--azul)}
-.perigo{background:var(--vermelho);color:white}
-.linha{display:flex;gap:10px;flex-wrap:wrap}
-.linha>*{flex:1;min-width:130px}
-.item{border-bottom:1px solid #e5eaf0;padding:12px 0}
-.item:last-child{border:0}
-.item strong{display:block}
-.item small{color:var(--cinza)}
-.tabela{width:100%;border-collapse:collapse;font-size:13px}
-.tabela th,.tabela td{padding:9px 6px;border-bottom:1px solid #e5eaf0;text-align:left}
-.tabela th{color:var(--azul)}
-.grafico{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
-.legenda{font-size:13px;line-height:1.9}
-canvas{max-width:100%;height:auto}
-.aviso{background:#fff8df;border-left:4px solid #e4ad27;padding:12px;border-radius:7px;font-size:13px}
-.oculto{display:none!important}
-footer{text-align:center;color:var(--cinza);font-size:12px;padding:25px}
-@media(max-width:500px){header h1{font-size:21px}.numero{font-size:19px}.card{padding:13px}}
+h2{font-size:20px;margin:10px 0 14px}
+h3{font-size:16px;margin:0 0 12px}
+.card{background:white;border-radius:12px;padding:15px;margin-bottom:12px;box-shadow:0 2px 7px #0000000a}
+.grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card small{display:block;color:#64748b;margin-bottom:8px}
+.valor{font-size:20px;font-weight:bold;overflow-wrap:anywhere}
+.verde{color:#16834a}
+.vermelho{color:#c83232}
+label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:16px;color:#172033}
+input[type=checkbox]{width:auto}
+.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acoes button{flex:1}
+.btn-sec{background:#e3ebf7;color:#123b70}
+.btn-perigo{background:#b42323;color:white}
+.linha{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
+.item{border-bottom:1px solid #e5eaf1;padding:12px 0}
+.item:last-child{border-bottom:0}
+.item p{margin:5px 0;color:#64748b;font-size:13px}
+.sem-dados{color:#64748b;text-align:center;padding:18px 5px}
+.pill{display:inline-block;border-radius:99px;padding:4px 8px;background:#e3ebf7;color:#123b70;font-size:12px;font-weight:bold}
+canvas{display:block;width:100%;height:auto;max-width:100%}
+@media(min-width:600px){
+nav{grid-template-columns:repeat(7,1fr)}
+.grade{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
 </style>
 </head>
 <body>
 <header>
 <h1>Meu Financeiro Pro 2.0</h1>
-<p>Controle pessoal, cartões e trabalho Uber/99</p>
+<p>Controle seu dinheiro, cartões e trabalho Uber/99</p>
 </header>
-
 <nav>
-<button class="ativo" data-tela="inicio">Resumo</button>
-<button data-tela="lancamentos">Lançamentos</button>
-<button data-tela="cartoes">Cartões</button>
-<button data-tela="uber">Uber/99</button>
-<button data-tela="metas">Metas</button>
-<button data-tela="relatorios">Gráficos</button>
-<button data-tela="backup">Backup</button>
+<button type="button" class="ativo" data-tela="inicio">Início</button>
+<button type="button" data-tela="lancamentos">Lançamentos</button>
+<button type="button" data-tela="novo">Novo</button>
+<button type="button" data-tela="cartoes">Cartões</button>
+<button type="button" data-tela="relatorios">Relatórios</button>
+<button type="button" data-tela="reserva">Reserva Uber</button>
+<button type="button" data-tela="backup">Backup</button>
 </nav>
-
 <main>
+
 <section id="inicio" class="tela ativa">
-<div class="card">
 <h2>Resumo financeiro</h2>
-<label>Mês de referência</label>
-<input type="month" id="mesResumo">
-</div>
 <div class="grade">
-<div class="card"><div class="pequeno">Entradas pessoais pagas</div><div class="numero verde" id="resEntradas">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Despesas pessoais pagas</div><div class="numero vermelho" id="resDespesas">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Ganhos Uber/99</div><div class="numero verde" id="resUber">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Custos Uber/99</div><div class="numero vermelho" id="resCustosUber">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Lucro Uber/99</div><div class="numero" id="resLucroUber">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Reserva sugerida de 10%</div><div class="numero" id="resReserva">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Faturas de cartão do mês</div><div class="numero vermelho" id="resFaturas">R$ 0,00</div></div>
-<div class="card"><div class="pequeno">Saldo pessoal do mês</div><div class="numero" id="resSaldo">R$ 0,00</div></div>
+<div class="card"><small>Entradas pessoais</small><div class="valor verde" id="pEntradas">R$ 0,00</div></div>
+<div class="card"><small>Despesas pessoais</small><div class="valor vermelho" id="pDespesas">R$ 0,00</div></div>
+<div class="card"><small>Saldo pessoal</small><div class="valor" id="pSaldo">R$ 0,00</div></div>
+<div class="card"><small>Resultado Uber/99</small><div class="valor" id="uSaldo">R$ 0,00</div></div>
 </div>
 <div class="card">
-<h3>Como é calculada a reserva</h3>
-<p class="pequeno">A reserva corresponde a 10% do resultado dos ganhos Uber/99 menos todos os custos, incluindo combustível.</p>
+<h3>Resumo Uber / 99</h3>
+<div class="linha"><span>Entradas</span><strong id="uEntradas">R$ 0,00</strong></div>
+<div class="linha"><span>Despesas e combustível</span><strong id="uDespesas">R$ 0,00</strong></div>
+<div class="linha"><span>Reserva de 10%</span><strong id="uReserva">R$ 0,00</strong></div>
+<div class="linha"><span>Resultado após reserva</span><strong id="uLiquido">R$ 0,00</strong></div>
+</div>
+<div class="card">
+<h3>Últimos lançamentos</h3>
+<div id="ultimos" class="sem-dados">Nenhum lançamento ainda.</div>
+</div>
+</section>
+
+<section id="novo" class="tela">
+<h2>Novo lançamento</h2>
+<div class="card">
+<form id="formLancamento">
+<label for="tipo">Tipo</label>
+<select id="tipo" required>
+<option value="entrada">Entrada / recebimento</option>
+<option value="despesa">Despesa / pagamento</option>
+</select>
+
+<label for="area">Área</label>
+<select id="area" required>
+<option value="pessoal">Financeiro pessoal</option>
+<option value="uber">Uber</option>
+<option value="99">99</option>
+</select>
+
+<label for="descricao">Descrição</label>
+<input id="descricao" maxlength="100" placeholder="Descreva o lançamento" required>
+
+<label for="categoria">Categoria</label>
+<select id="categoria" required></select>
+
+<label for="valor">Valor (R$)</label>
+<input id="valor" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" required>
+
+<label for="data">Data</label>
+<input id="data" type="date" required>
+
+<label for="recorrencia">Periodicidade</label>
+<select id="recorrencia">
+<option value="unica">Uma vez</option>
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+</select>
+
+<label><input id="fixa" type="checkbox"> Despesa fixa</label>
+
+<label><input id="cartao" type="checkbox"> Lançamento no cartão de crédito</label>
+<div id="avisoCartao" class="sem-dados" hidden>
+Para compras no cartão, utilize a aba Cartões.
+</div>
+
+<div class="acoes">
+<button class="btn" type="submit" id="salvar">Salvar lançamento</button>
+<button class="btn btn-sec" type="button" id="cancelar" hidden>Cancelar edição</button>
+</div>
+</form>
 </div>
 </section>
 
 <section id="lancamentos" class="tela">
+<h2>Lançamentos</h2>
 <div class="card">
-<h2>Novo lançamento pessoal</h2>
-<input type="hidden" id="lancId">
-<div class="linha">
-<div><label>Data</label><input type="date" id="lancData"></div>
-<div><label>Tipo</label><select id="lancTipo"><option value="entrada">Entrada</option><option value="despesa">Despesa</option></select></div>
-</div>
-<label>Categoria</label>
-<select id="lancCategoria">
-<option>Salário</option><option>Serviços</option><option>Moradia</option><option>Mercado</option><option>Alimentação</option><option>Água</option><option>Luz</option><option>Internet</option><option>Telefone</option><option>Transporte</option><option>Saúde</option><option>Lazer</option><option>Combustível</option><option>Outros</option>
+<label for="fTipo">Tipo</label>
+<select id="fTipo">
+<option value="todos">Todos</option>
+<option value="entrada">Entradas</option>
+<option value="despesa">Despesas</option>
 </select>
-<label>Descrição</label><input id="lancDescricao" placeholder="Descrição do lançamento">
-<label>Valor (R$)</label><input type="number" id="lancValor" min="0" step="0.01" placeholder="0,00">
-<div class="linha">
-<div><label>Status</label><select id="lancStatus"><option value="pago">Pago/Recebido</option><option value="pendente">Pendente</option></select></div>
-<div><label>Repetição</label><select id="lancRepeticao"><option value="unica">Uma vez</option><option value="mensal">Fixa mensal</option><option value="semanal">Semanal</option><option value="diaria">Diária</option></select></div>
-</div>
-<label>Quantidade de repetições</label><input type="number" id="lancQtd" min="1" max="120" value="1">
-<button class="acao" onclick="salvarLancamento()">Salvar lançamento</button>
-<button class="acao secundario" onclick="limparFormulario()">Limpar</button>
-</div>
-<div class="card">
-<h2>Meus lançamentos</h2>
-<label>Filtrar por mês</label><input type="month" id="mesLancamentos">
-<div id="listaLancamentos"></div>
-</div>
-</section>
-
-<section id="cartoes" class="tela">
-<div class="card">
-<h2>Cadastrar cartão</h2>
-<input type="hidden" id="cartaoId">
-<label>Nome do cartão</label><input id="cartaoNome" placeholder="Ex.: Cartão principal">
-<label>Limite total (R$)</label><input type="number" id="cartaoLimite" min="0" step="0.01">
-<div class="linha">
-<div><label>Dia de fechamento</label><input type="number" id="cartaoFechamento" min="1" max="31"></div>
-<div><label>Dia de vencimento</label><input type="number" id="cartaoVencimento" min="1" max="31"></div>
-</div>
-<button class="acao" onclick="salvarCartao()">Salvar cartão</button>
-</div>
-<div class="card"><h2>Meus cartões</h2><div id="listaCartoes"></div></div>
-<div class="card">
-<h2>Nova compra no cartão</h2>
-<label>Cartão</label><select id="compraCartao"></select>
-<label>Data da compra</label><input type="date" id="compraData">
-<label>Descrição</label><input id="compraDescricao" placeholder="Descrição da compra">
-<label>Categoria</label><input id="compraCategoria" placeholder="Ex.: Mercado">
-<div class="linha">
-<div><label>Valor total (R$)</label><input type="number" id="compraValor" min="0" step="0.01"></div>
-<div><label>Parcelas</label><input type="number" id="compraParcelas" min="1" max="48" value="1"></div>
-</div>
-<button class="acao" onclick="salvarCompra()">Salvar compra</button>
-</div>
-<div class="card"><h2>Faturas por mês</h2><label>Mês da fatura</label><input type="month" id="mesFatura"><div id="listaFaturas"></div></div>
-</section>
-
-<section id="uber" class="tela">
-<div class="card">
-<h2>Lançamento Uber/99</h2>
-<input type="hidden" id="uberId">
-<label>Data</label><input type="date" id="uberData">
-<div class="linha">
-<div><label>Ganhos (R$)</label><input type="number" id="uberGanhos" min="0" step="0.01"></div>
-<div><label>Despesas (R$)</label><input type="number" id="uberDespesas" min="0" step="0.01"></div>
-</div>
-<div class="linha">
-<div><label>Combustível (R$)</label><input type="number" id="uberCombustivel" min="0" step="0.01"></div>
-<div><label>Quilômetros rodados</label><input type="number" id="uberKm" min="0" step="0.1"></div>
-</div>
-<label>Horas trabalhadas</label><input type="number" id="uberHoras" min="0" step="0.1">
-<label>Descrição/observação</label><input id="uberDescricao" placeholder="Opcional">
-<button class="acao" onclick="salvarUber()">Salvar dia de trabalho</button>
-</div>
-<div class="card"><h2>Histórico Uber/99</h2><label>Filtrar por mês</label><input type="month" id="mesUber"><div id="listaUber"></div></div>
-</section>
-
-<section id="metas" class="tela">
-<div class="card">
-<h2>Minhas metas</h2>
-<input type="hidden" id="metaId">
-<label>Nome da meta</label><input id="metaNome" placeholder="Ex.: Reserva de emergência">
-<div class="linha">
-<div><label>Valor desejado (R$)</label><input type="number" id="metaAlvo" min="0" step="0.01"></div>
-<div><label>Valor guardado (R$)</label><input type="number" id="metaGuardado" min="0" step="0.01"></div>
-</div>
-<button class="acao" onclick="salvarMeta()">Salvar meta</button>
-<div id="listaMetas"></div>
-</div>
-</section>
-
-<section id="relatorios" class="tela">
-<div class="card">
-<h2>Gráficos por categoria</h2>
-<label>Mês do relatório</label><input type="month" id="mesGraficos">
-<h3>Entradas por categoria</h3>
-<div class="grafico"><canvas id="graficoEntradas" width="280" height="220"></canvas><div id="legendaEntradas" class="legenda"></div></div>
-<h3>Despesas por categoria</h3>
-<div class="grafico"><canvas id="graficoDespesas" width="280" height="220"></canvas><div id="legendaDespesas" class="legenda"></div></div>
-</div>
-</section>
-
-<section id="backup" class="tela">
-<div class="card">
-<h2>Backup e segurança dos dados</h2>
-<div class="aviso">Faça cópias de segurança regularmente. Os dados salvos no navegador de um aparelho não aparecem automaticamente em outro aparelho.</div>
-<button class="acao" onclick="exportarBackup()">Exportar backup</button>
-<label>Importar backup JSON</label><input type="file" id="arquivoBackup" accept=".json,application/json">
-<button class="acao secundario" onclick="importarBackup()">Importar backup</button>
+<label for="fArea">Área</label>
+<select id="fArea">
+<option value="todas">Todas</option>
+<option value="pessoal">Pessoal</option>
+<option value="uber">Uber</option>
+<option value="99">99</option>
+</select>
+<div id="lista" class="sem-dados">Nenhum lançamento cadastrado.</div>
 </div>
 </section>
 </main>
-<footer>Meu Financeiro Pro 2.0</footer>
+<section id="cartoes" class="aba">
+  <h2>Cartões de crédito</h2>
+
+  <form id="formCartao" class="painel">
+    <input type="hidden" id="cartaoId">
+    <label>Nome do cartão</label>
+    <input id="nomeCartao" required placeholder="Ex.: Cartão principal">
+    <div class="linha">
+      <div>
+        <label>Limite total (R$)</label>
+        <input id="limiteCartao" type="number" min="0" step="0.01" required>
+      </div>
+      <div>
+        <label>Dia de fechamento</label>
+        <input id="fechamentoCartao" type="number" min="1" max="31" required>
+      </div>
+      <div>
+        <label>Dia de vencimento</label>
+        <input id="vencimentoCartao" type="number" min="1" max="31" required>
+      </div>
+    </div>
+    <button id="salvarCartao" type="submit">Salvar cartão</button>
+    <button id="cancelarCartao" type="button" class="secundario" hidden>Cancelar</button>
+  </form>
+
+  <div id="listaCartoes"></div>
+
+  <h3>Registrar compra</h3>
+  <form id="formCompra" class="painel">
+    <label>Cartão</label>
+    <select id="compraCartao" required></select>
+    <label>Descrição da compra</label>
+    <input id="compraDescricao" required>
+    <div class="linha">
+      <div>
+        <label>Valor total (R$)</label>
+        <input id="compraValor" type="number" min="0.01" step="0.01" required>
+      </div>
+      <div>
+        <label>Data</label>
+        <input id="compraData" type="date" required>
+      </div>
+      <div>
+        <label>Parcelas</label>
+        <input id="compraParcelas" type="number" min="1" max="48" value="1" required>
+      </div>
+    </div>
+    <button type="submit">Registrar compra</button>
+  </form>
+
+  <h3>Consultar fatura</h3>
+  <div class="painel">
+    <label>Cartão</label>
+    <select id="faturaCartao"></select>
+    <label>Mês da fatura</label>
+    <input id="faturaMes" type="month">
+    <div id="detalheFatura"></div>
+  </div>
+</section>
+
+<section id="relatorios" class="aba">
+  <h2>Relatórios e gráficos</h2>
+  <div class="painel">
+    <div class="linha">
+      <div>
+        <label>Data inicial</label>
+        <input type="date" id="rInicio">
+      </div>
+      <div>
+        <label>Data final</label>
+        <input type="date" id="rFim">
+      </div>
+    </div>
+    <button id="gerarRel" type="button">Gerar relatório</button>
+    <div class="grade">
+      <div class="indicador">
+        <span>Entradas</span>
+        <strong id="rEntradas">R$ 0,00</strong>
+      </div>
+      <div class="indicador">
+        <span>Despesas</span>
+        <strong id="rDespesas">R$ 0,00</strong>
+      </div>
+      <div class="indicador">
+        <span>Saldo</span>
+        <strong id="rSaldo">R$ 0,00</strong>
+      </div>
+      <div class="indicador">
+        <span>Lançamentos</span>
+        <strong id="rQtd">0</strong>
+      </div>
+    </div>
+  </div>
+
+  <h3>Despesas por categoria</h3>
+  <div class="painel">
+    <canvas id="graficoCanvas" height="260"></canvas>
+    <div id="graficoLegenda"></div>
+    <p id="graficoAviso"></p>
+    <div id="rCategorias"></div>
+  </div>
+
+  <h3>Movimentação mensal</h3>
+  <div class="painel">
+    <label>Tipo de movimentação</label>
+    <select id="graficoMovimento">
+      <option value="todos">Entradas e despesas</option>
+      <option value="entrada">Somente entradas</option>
+      <option value="despesa">Somente despesas</option>
+    </select>
+    <div id="graficoMes"></div>
+    <div id="graficoTipo"></div>
+  </div>
+</section>
+
+<section id="reserva" class="aba">
+  <h2>Reserva Uber / 99</h2>
+  <div class="painel">
+    <p>O cálculo considera os ganhos menos todas as despesas do trabalho, incluindo combustível.</p>
+    <div class="indicador">
+      <span>Ganhos Uber / 99</span>
+      <strong id="resE">R$ 0,00</strong>
+    </div>
+    <div class="indicador">
+      <span>Despesas Uber / 99</span>
+      <strong id="resD">R$ 0,00</strong>
+    </div>
+    <div class="indicador">
+      <span>Resultado líquido</span>
+      <strong id="resS">R$ 0,00</strong>
+    </div>
+    <div class="indicador">
+      <span>Reserva sugerida de 10%</span>
+      <strong id="res10">R$ 0,00</strong>
+    </div>
+    <div class="indicador">
+      <span>Valor restante após reserva</span>
+      <strong id="resFinal">R$ 0,00</strong>
+    </div>
+  </div>
+</section>
+
+<section id="backup" class="aba">
+  <h2>Backup dos dados</h2>
+  <div class="painel">
+    <p>Exporte uma cópia dos seus dados para guardar ou transferir para outro aparelho.</p>
+    <button type="button" id="exportar">Exportar backup</button>
+    <p id="qtdBackup"></p>
+    <hr>
+    <label>Restaurar backup</label>
+    <input type="file" id="arquivo" accept=".json,application/json">
+    <button type="button" id="importar">Importar backup</button>
+    <p class="aviso">A importação substitui os dados atuais pelos dados do arquivo escolhido.</p>
+  </div>
+</section>
+
+</main>
 
 <script>
- const CHAVE_NOVA="MFP_PRO_2026";
-const CHAVE_DADOS="meuFinanceiroPro2_dados";
-const CHAVE_CARTOES="meuFinanceiroPro2_cartoes";
-const CHAVE_COMPRAS="meuFinanceiroPro2_faturas";
-const CHAVE_METAS="meuFinanceiroPro2_metas";
+(function(){
+"use strict";
 
-let db={lancamentos:[],cartoes:[],compras:[],uber:[],metas:[]};
+const CHAVE = "MFP3_dados";
+const CHAVE_CARTOES = "MFP3_cartoes";
+const CHAVE_FATURAS = "MFP3_faturas";
 
-const el=id=>document.getElementById(id);
-const dinheiro=n=>(Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const numero=id=>Number(el(id).value)||0;
-const hoje=()=>new Date().toISOString().slice(0,10);
-const mesAtual=()=>hoje().slice(0,7);
-const idNovo=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
-const lerJSON=(chave)=>{
- try{return JSON.parse(localStorage.getItem(chave)||"null")}catch(e){return null}
-};
-const arraySeguro=v=>Array.isArray(v)?v:[];
-const dataMes=d=>String(d||"").slice(0,7);
+const hoje = new Date();
+const dataHoje = hoje.getFullYear() + "-" +
+  String(hoje.getMonth()+1).padStart(2,"0") + "-" +
+  String(hoje.getDate()).padStart(2,"0");
 
-function salvarDados(){
- try{
-  localStorage.setItem(CHAVE_NOVA,JSON.stringify(db));
-  localStorage.setItem(CHAVE_DADOS,JSON.stringify(db.lancamentos));
-  localStorage.setItem(CHAVE_CARTOES,JSON.stringify(db.cartoes));
-  localStorage.setItem(CHAVE_COMPRAS,JSON.stringify(db.compras));
-  localStorage.setItem(CHAVE_METAS,JSON.stringify(db.metas));
-  return true;
- }catch(e){
-  alert("Não foi possível salvar. Faça um backup dos seus dados.");
-  return false;
- }
-}
+const vazio = () => ({
+  pessoal: [],
+  uber: []
+});
 
-function primeiroArray(obj,chaves){
- if(Array.isArray(obj))return obj;
- if(!obj||typeof obj!=="object")return [];
- for(const k of chaves)if(Array.isArray(obj[k]))return obj[k];
- return [];
-}
+let dados = vazio();
+let cartoes = [];
+let faturas = {};
+let editId = null;
+let editCartaoId = null;
 
-function normalizarLancamento(x){
- if(!x||typeof x!=="object")return null;
- const tipoTexto=String(x.tipo||x.type||"").toLowerCase();
- const tipo=(tipoTexto.includes("desp")||tipoTexto==="saida"||tipoTexto==="expense")?"despesa":"entrada";
- const valor=Number(x.valor??x.value??x.amount??x.total??0)||0;
- const data=String(x.data||x.date||x.dataLancamento||hoje()).slice(0,10);
- const origemTexto=String(x.origem||x.source||"").toLowerCase();
- const categoria=String(x.categoria||x.category||"Outros");
- const uber=origemTexto.includes("uber")||origemTexto.includes("99")||categoria.toLowerCase().includes("uber/99");
- return {
-  ...x,
-  id:String(x.id||idNovo()),
-  data,tipo,valor,categoria,
-  descricao:String(x.descricao||x.description||x.nome||categoria),
-  status:String(x.status||"pago").toLowerCase(),
-  origem:uber?"uber":"pessoal"
- };
-}
-
-function carregarDados(){
- const atual=lerJSON(CHAVE_NOVA);
- const antigos=lerJSON("MFP_V2");
- const dadosAntigos=lerJSON(CHAVE_DADOS);
- const cartoesAntigos=lerJSON(CHAVE_CARTOES);
- const comprasAntigas=lerJSON(CHAVE_COMPRAS);
- const metasAntigas=lerJSON(CHAVE_METAS);
-
- const origem=atual||{};
- let lanc=primeiroArray(origem,["lancamentos","personal","pessoal","ganhos","despesasUber"]);
- let cart=primeiroArray(origem,["cartoes","cards"]);
- let comp=primeiroArray(origem,["compras","purchases","faturas"]);
- let uber=primeiroArray(origem,["uber","registrosUber","despesasUber"]);
- let metas=primeiroArray(origem,["metas","goals"]);
-
- if(!lanc.length&&!cart.length&&!comp.length&&!uber.length&&!metas.length){
-  lanc=primeiroArray(antigos,["lancamentos","personal","pessoal","ganhos"]);
-  cart=primeiroArray(antigos,["cartoes","cards"]);
-  comp=primeiroArray(antigos,["compras","purchases"]);
-  uber=primeiroArray(antigos,["uber","registrosUber","despesasUber"]);
-  metas=primeiroArray(antigos,["metas","goals"]);
- }
- if(!lanc.length&&Array.isArray(dadosAntigos))lanc=dadosAntigos;
- if(!cart.length&&Array.isArray(cartoesAntigos))cart=cartoesAntigos;
- if(!comp.length&&Array.isArray(comprasAntigas))comp=comprasAntigas;
- if(!metas.length&&Array.isArray(metasAntigas))metas=metasAntigas;
-
- db.lancamentos=arraySeguro(lanc).map(normalizarLancamento).filter(Boolean);
- db.cartoes=arraySeguro(cart).map(c=>({...c,id:String(c.id||idNovo()),nome:c.nome||c.name||"Cartão",limite:Number(c.limite??c.limit??0)||0}));
- db.compras=arraySeguro(comp).map(c=>({...c,id:String(c.id||idNovo()),valor:Number(c.valor??c.value??c.total??0)||0,parcelas:Math.max(1,Number(c.parcelas??c.installments??1)||1)}));
- db.uber=arraySeguro(uber).map(x=>({...x,id:String(x.id||idNovo())}));
- db.metas=arraySeguro(metas).map(x=>({...x,id:String(x.id||idNovo())}));
-
- // Recupera registros Uber que estejam misturados nos lançamentos antigos.
- db.lancamentos.forEach(x=>{
-  if(x.origem==="uber"&&!db.uber.some(u=>u.id===x.id)){
-   db.uber.push({
-    id:x.id,data:x.data,
-    ganhos:x.tipo==="entrada"?x.valor:0,
-    despesas:x.tipo==="despesa"&&!/combustível/i.test(x.categoria)?x.valor:0,
-    combustivel:x.tipo==="despesa"&&/combustível/i.test(x.categoria)?x.valor:0,
-    descricao:x.descricao
-   });
+function lerDados(chave, padrao){
+  try {
+    const salvo = localStorage.getItem(chave);
+    return salvo ? JSON.parse(salvo) : padrao;
+  } catch(e) {
+    return padrao;
   }
- });
 }
 
-function trocarTela(nome){
- document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
- document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("ativo",b.dataset.tela===nome));
- el(nome).classList.add("ativa");
- renderizarTudo();
-}
-document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>trocarTela(b.dataset.tela)));
+dados = lerDados(CHAVE, vazio());
+cartoes = lerDados(CHAVE_CARTOES, []);
+faturas = lerDados(CHAVE_FATURAS, {});
 
-function valorLancamento(x){
- return Number(x.valor??x.value??0)||0;
-}
-function lancamentosDoMes(mes){
- return db.lancamentos.filter(x=>dataMes(x.data)===mes);
-}
-function pago(x){
- const s=String(x.status||"pago").toLowerCase();
- return !["pendente","pending","aberto"].includes(s);
+if(!dados || typeof dados !== "object") dados = vazio();
+if(!Array.isArray(dados.pessoal)) dados.pessoal = [];
+if(!Array.isArray(dados.uber)) dados.uber = [];
+if(!Array.isArray(cartoes)) cartoes = [];
+if(!faturas || typeof faturas !== "object") faturas = {};
+
+function salvar(){
+  localStorage.setItem(CHAVE, JSON.stringify(dados));
+  localStorage.setItem(CHAVE_CARTOES, JSON.stringify(cartoes));
+  localStorage.setItem(CHAVE_FATURAS, JSON.stringify(faturas));
 }
 
-function salvarLancamento(){
- const valor=numero("lancValor");
- if(valor<=0){alert("Informe um valor maior que zero.");return}
- const id=el("lancId").value;
- const base={
-  id:id||idNovo(),
-  data:el("lancData").value||hoje(),
-  tipo:el("lancTipo").value,
-  categoria:el("lancCategoria").value,
-  descricao:el("lancDescricao").value.trim()||el("lancCategoria").value,
-  valor,
-  status:el("lancStatus").value,
-  origem:"pessoal"
- };
- const repeticao=el("lancRepeticao").value;
- const qtd=Math.min(120,Math.max(1,Number(el("lancQtd").value)||1));
- if(id){
-  const i=db.lancamentos.findIndex(x=>x.id===id);
-  if(i>=0)db.lancamentos[i]=base;
- }else{
-  for(let i=0;i<qtd;i++){
-   let d=new Date(base.data+"T12:00:00");
-   if(repeticao==="mensal")d.setMonth(d.getMonth()+i);
-   if(repeticao==="semanal")d.setDate(d.getDate()+7*i);
-   if(repeticao==="diaria")d.setDate(d.getDate()+i);
-   db.lancamentos.push({...base,id:idNovo(),data:d.toISOString().slice(0,10)});
-  }
- }
- salvarDados();limparFormulario();renderizarTudo();
- alert("Lançamento salvo!");
+function dinheiro(valor){
+  return Number(valor || 0).toLocaleString("pt-BR", {
+    style:"currency",
+    currency:"BRL"
+  });
+}
+
+function numero(valor){
+  const n = Number(valor);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function idNovo(){
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,8);
+}
+
+function elemento(id){
+  return document.getElementById(id);
+}
+
+function valorCampo(id){
+  const el = elemento(id);
+  return el ? el.value : "";
+}
+
+function mostrar(id, conteudo){
+  const el = elemento(id);
+  if(el) el.innerHTML = conteudo;
+}
+
+function escapar(texto){
+  return String(texto ?? "").replace(/[&<>"']/g, letra => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[letra]);
+}
+
+function dataFormatada(data){
+  if(!data) return "";
+  const partes = data.split("-");
+  return partes.length === 3
+    ? partes[2] + "/" + partes[1] + "/" + partes[0]
+    : data;
+}
+
+function todosLancamentos(){
+  return [
+    ...dados.pessoal.map(x => ({...x, area:"pessoal"})),
+    ...dados.uber.map(x => ({...x, area:"uber"}))
+  ];
+}
+
+function somar(lista, tipo){
+  return lista
+    .filter(x => x.tipo === tipo && x.status !== "Pendente")
+    .reduce((total, x) => total + numero(x.valor), 0);
+}
+
+function lancamentosDoPeriodo(lista, inicio, fim){
+  return lista.filter(x =>
+    (!inicio || x.data >= inicio) &&
+    (!fim || x.data <= fim)
+  );
+}
+
+function atualizarTudo(){
+  salvar();
+  atualizarInicio();
+  atualizarLista();
+  atualizarReserva();
+  atualizarCartoes();
+  atualizarRelatorio();
+}
+ function atualizarInicio(){
+  const pessoais = dados.pessoal;
+  const uber = dados.uber;
+
+  const entradas = somar(pessoais, "entrada");
+  const despesas = somar(pessoais, "despesa");
+  const ganhosUber = somar(uber, "entrada");
+  const despesasUber = somar(uber, "despesa");
+
+  const saldo = entradas - despesas;
+  const liquidoUber = ganhosUber - despesasUber;
+  const reserva = Math.max(0, liquidoUber * 0.10);
+
+  if(elemento("pEntradas")) elemento("pEntradas").textContent = dinheiro(entradas);
+  if(elemento("pDespesas")) elemento("pDespesas").textContent = dinheiro(despesas);
+  if(elemento("pSaldo")) elemento("pSaldo").textContent = dinheiro(saldo);
+  if(elemento("uSaldo")) elemento("uSaldo").textContent = dinheiro(liquidoUber);
+  if(elemento("uEntradas")) elemento("uEntradas").textContent = dinheiro(ganhosUber);
+  if(elemento("uDespesas")) elemento("uDespesas").textContent = dinheiro(despesasUber);
+  if(elemento("uReserva")) elemento("uReserva").textContent = dinheiro(reserva);
+  if(elemento("uLiquido")) elemento("uLiquido").textContent = dinheiro(liquidoUber - reserva);
+
+  const recentes = todosLancamentos()
+    .sort((a,b) => (b.data || "").localeCompare(a.data || ""))
+    .slice(0,5);
+
+  mostrar("ultimos", recentes.length ? recentes.map(x => `
+    <div class="item">
+      <div>
+        <strong>${escapar(x.descricao)}</strong>
+        <small>${dataFormatada(x.data)} · ${x.area === "uber" ? "Uber / 99" : "Pessoal"}</small>
+      </div>
+      <strong>${dinheiro(x.valor)}</strong>
+    </div>
+  `).join("") : "<p>Nenhum lançamento cadastrado.</p>");
+}
+
+function atualizarLista(){
+  const tipo = valorCampo("fTipo") || "todos";
+  const area = valorCampo("fArea") || "todos";
+
+  let lista = todosLancamentos();
+
+  if(tipo !== "todos") lista = lista.filter(x => x.tipo === tipo);
+  if(area !== "todos") lista = lista.filter(x => x.area === area);
+
+  lista.sort((a,b) => (b.data || "").localeCompare(a.data || ""));
+
+  mostrar("lista", lista.length ? lista.map(x => `
+    <div class="item">
+      <div class="item-info">
+        <strong>${escapar(x.descricao)}</strong>
+        <small>
+          ${dataFormatada(x.data)} ·
+          ${x.area === "uber" ? "Uber / 99" : "Pessoal"} ·
+          ${escapar(x.categoria || "")} ·
+          ${x.status === "Pendente" ? "Pendente" : "Pago/Recebido"}
+          ${x.fixa ? " · Fixa" : ""}
+        </small>
+        <strong class="${x.tipo === "entrada" ? "positivo" : "negativo"}">
+          ${x.tipo === "entrada" ? "+" : "-"} ${dinheiro(x.valor)}
+        </strong>
+      </div>
+      <div class="acoes">
+        ${x.status === "Pendente" ? `<button type="button" onclick="baixarLancamento('${x.id}','${x.area}')">Dar baixa</button>` : ""}
+        <button type="button" class="secundario" onclick="editarLancamento('${x.id}','${x.area}')">Editar</button>
+        <button type="button" class="perigo" onclick="excluirLancamento('${x.id}','${x.area}')">Excluir</button>
+      </div>
+    </div>
+  `).join("") : "<p>Nenhum lançamento encontrado.</p>");
+}
+
+function atualizarReserva(){
+  const ganhos = somar(dados.uber, "entrada");
+  const despesas = somar(dados.uber, "despesa");
+  const liquido = ganhos - despesas;
+  const reserva = Math.max(0, liquido * 0.10);
+
+  if(elemento("resE")) elemento("resE").textContent = dinheiro(ganhos);
+  if(elemento("resD")) elemento("resD").textContent = dinheiro(despesas);
+  if(elemento("resS")) elemento("resS").textContent = dinheiro(liquido);
+  if(elemento("res10")) elemento("res10").textContent = dinheiro(reserva);
+  if(elemento("resFinal")) elemento("resFinal").textContent = dinheiro(liquido - reserva);
 }
 
 function limparFormulario(){
- ["lancId","lancDescricao","lancValor"].forEach(id=>el(id).value="");
- el("lancData").value=hoje();
- el("lancTipo").value="entrada";
- el("lancStatus").value="pago";
- el("lancRepeticao").value="unica";
- el("lancQtd").value=1;
+  elemento("formLancamento").reset();
+  elemento("data").value = dataHoje;
+  elemento("salvar").textContent = "Salvar lançamento";
+  if(elemento("cancelar")) elemento("cancelar").hidden = true;
+  editId = null;
 }
 
-function editarLancamento(id){
- const x=db.lancamentos.find(a=>a.id===id);if(!x)return;
- trocarTela("lancamentos");
- el("lancId").value=x.id;
- el("lancData").value=x.data;
- el("lancTipo").value=x.tipo;
- el("lancCategoria").value=x.categoria;
- el("lancDescricao").value=x.descricao;
- el("lancValor").value=x.valor;
- el("lancStatus").value=x.status;
- el("lancRepeticao").value="unica";
- el("lancQtd").value=1;
+function salvarLancamento(evento){
+  evento.preventDefault();
+
+  const tipo = valorCampo("tipo");
+  const area = valorCampo("area");
+  const descricao = valorCampo("descricao").trim();
+  const categoria = valorCampo("categoria");
+  const valor = numero(valorCampo("valor"));
+  const data = valorCampo("data");
+  const status = valorCampo("status") || "Pago";
+  const recorrencia = valorCampo("recorrencia") || "nenhuma";
+  const fixa = elemento("fixa") ? elemento("fixa").checked : false;
+  const cartao = valorCampo("cartao");
+
+  if(!descricao || !data || valor <= 0){
+    alert("Preencha a descrição, a data e um valor maior que zero.");
+    return;
+  }
+
+  if(!["pessoal","uber"].includes(area)){
+    alert("Selecione a área do lançamento.");
+    return;
+  }
+
+  if(tipo === "despesa" && area === "pessoal" && cartao){
+    const cartaoExiste = cartoes.some(c => c.id === cartao);
+    if(!cartaoExiste){
+      alert("Selecione um cartão válido.");
+      return;
+    }
+  }
+
+  const registro = {
+    id: editId || idNovo(),
+    tipo,
+    area,
+    descricao,
+    categoria,
+    valor,
+    data,
+    status,
+    fixa,
+    recorrencia,
+    cartao: tipo === "despesa" && area === "pessoal" ? cartao : ""
+  };
+
+  if(editId){
+    const lista = area === "uber" ? dados.uber : dados.pessoal;
+    const indice = lista.findIndex(x => x.id === editId);
+    if(indice >= 0) lista[indice] = registro;
+  } else {
+    const lista = area === "uber" ? dados.uber : dados.pessoal;
+    lista.push(registro);
+
+    if(recorrencia !== "nenhuma" || fixa){
+      const quantidade = recorrencia === "diaria" ? 12 :
+        recorrencia === "semanal" ? 12 : 12;
+
+      for(let i=1; i<quantidade; i++){
+        const proxima = new Date(data + "T12:00:00");
+
+        if(recorrencia === "diaria") proxima.setDate(proxima.getDate()+i);
+        else if(recorrencia === "semanal") proxima.setDate(proxima.getDate()+(7*i));
+        else proxima.setMonth(proxima.getMonth()+i);
+
+        const novaData = proxima.getFullYear() + "-" +
+          String(proxima.getMonth()+1).padStart(2,"0") + "-" +
+          String(proxima.getDate()).padStart(2,"0");
+
+        lista.push({...registro, id:idNovo(), data:novaData});
+      }
+    }
+  }
+
+  limparFormulario();
+  atualizarTudo();
+  alert("Lançamento salvo com sucesso!");
 }
 
-function excluirLancamento(id){
- if(!confirm("Excluir este lançamento?"))return;
- db.lancamentos=db.lancamentos.filter(x=>x.id!==id);
- salvarDados();renderizarTudo();
+function editarLancamento(id, area){
+  const lista = area === "uber" ? dados.uber : dados.pessoal;
+  const x = lista.find(item => item.id === id);
+  if(!x) return;
+
+  elemento("tipo").value = x.tipo;
+  elemento("area").value = x.area;
+  elemento("descricao").value = x.descricao;
+  elemento("categoria").value = x.categoria;
+  elemento("valor").value = x.valor;
+  elemento("data").value = x.data;
+  if(elemento("status")) elemento("status").value = x.status || "Pago";
+  elemento("recorrencia").value = "nenhuma";
+  if(elemento("fixa")) elemento("fixa").checked = !!x.fixa;
+  if(elemento("cartao")) elemento("cartao").value = x.cartao || "";
+
+  editId = id;
+  elemento("salvar").textContent = "Atualizar lançamento";
+  if(elemento("cancelar")) elemento("cancelar").hidden = false;
+
+  mostrarAba("novo");
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
-function renderizarLancamentos(){
- const mes=el("mesLancamentos").value||mesAtual();
- const lista=db.lancamentos.filter(x=>dataMes(x.data)===mes).sort((a,b)=>b.data.localeCompare(a.data));
- el("listaLancamentos").innerHTML=lista.length?lista.map(x=>`
- <div class="item">
- <strong>${x.tipo==="entrada"?"Entrada":"Despesa"} — ${dinheiro(x.valor)}</strong>
- <small>${x.data} • ${x.categoria} • ${x.status==="pendente"?"Pendente":"Pago/Recebido"}</small>
- <div>${String(x.descricao||"").replace(/[<>]/g,"")}</div>
- <button class="acao secundario" onclick="editarLancamento('${x.id}')">Editar</button>
- <button class="acao perigo" onclick="excluirLancamento('${x.id}')">Excluir</button>
- </div>`).join(""):"<p class='pequeno'>Nenhum lançamento neste mês.</p>";
+function excluirLancamento(id, area){
+  if(!confirm("Deseja realmente excluir este lançamento?")) return;
+
+  const lista = area === "uber" ? dados.uber : dados.pessoal;
+  const indice = lista.findIndex(x => x.id === id);
+  if(indice >= 0) lista.splice(indice,1);
+
+  atualizarTudo();
 }
 
-function salvarCartao(){
- const nome=el("cartaoNome").value.trim();
- if(!nome){alert("Informe o nome do cartão.");return}
- const id=el("cartaoId").value;
- const c={
-  id:id||idNovo(),nome,limite:numero("cartaoLimite"),
-  fechamento:numero("cartaoFechamento"),vencimento:numero("cartaoVencimento")
- };
- if(id){
-  const i=db.cartoes.findIndex(x=>x.id===id);
-  if(i>=0)db.cartoes[i]=c;
- }else db.cartoes.push(c);
- el("cartaoId").value="";el("cartaoNome").value="";
- el("cartaoLimite").value="";el("cartaoFechamento").value="";
- el("cartaoVencimento").value="";
- salvarDados();renderizarTudo();alert("Cartão salvo!");
+function baixarLancamento(id, area){
+  const lista = area === "uber" ? dados.uber : dados.pessoal;
+  const x = lista.find(item => item.id === id);
+  if(!x) return;
+
+  x.status = "Pago";
+  atualizarTudo();
 }
 
-function totalComprasCartao(id){
- return db.compras.filter(x=>String(x.cartaoId||x.cartao||"")===String(id))
- .reduce((s,x)=>s+(Number(x.valor)||0),0);
+window.editarLancamento = editarLancamento;
+window.excluirLancamento = excluirLancamento;
+window.baixarLancamento = baixarLancamento;
+
+function mostrarAba(nome){
+  document.querySelectorAll(".aba").forEach(el => {
+    el.classList.toggle("ativa", el.id === nome);
+  });
+
+  document.querySelectorAll("[data-aba]").forEach(el => {
+    el.classList.toggle("selecionado", el.dataset.aba === nome);
+  });
+
+  if(nome === "relatorios") atualizarRelatorio();
+  if(nome === "cartoes") atualizarCartoes();
 }
 
-function renderizarCartoes(){
- el("listaCartoes").innerHTML=db.cartoes.length?db.cartoes.map(c=>{
-  const usado=totalComprasCartao(c.id);
-  const disponivel=Math.max(0,(Number(c.limite)||0)-usado);
-  return `<div class="item"><strong>${c.nome}</strong>
-  <small>Fechamento: dia ${c.fechamento||"-"} • Vencimento: dia ${c.vencimento||"-"}</small>
-  <p>Limite total: <b>${dinheiro(c.limite)}</b></p>
-  <p>Limite utilizado: <span class="vermelho">${dinheiro(usado)}</span></p>
-  <p>Limite disponível: <span class="verde">${dinheiro(disponivel)}</span></p>
-  <button class="acao secundario" onclick="editarCartao('${c.id}')">Editar</button>
-  <button class="acao perigo" onclick="excluirCartao('${c.id}')">Excluir</button></div>`;
- }).join(""):"<p class='pequeno'>Nenhum cartão cadastrado.</p>";
- el("compraCartao").innerHTML=db.cartoes.map(c=>`<option value="${c.id}">${c.nome}</option>`).join("");
- if(!db.cartoes.length)el("compraCartao").innerHTML="<option value=''>Cadastre um cartão primeiro</option>";
+document.querySelectorAll("[data-aba]").forEach(botao => {
+  botao.addEventListener("click", () => mostrarAba(botao.dataset.aba));
+});
+
+function atualizarCartoes(){
+  mostrar("listaCartoes", cartoes.length ? cartoes.map(c => {
+    const usado = (dados.compras || [])
+      .filter(x => x.cartao === c.id)
+      .reduce((s,x) => s + numero(x.valor),0);
+
+    return `
+      <div class="item">
+        <div>
+          <strong>${escapar(c.nome)}</strong>
+          <small>Limite: ${dinheiro(c.limite)} · Compras: ${dinheiro(usado)}</small>
+          <small>Fechamento: dia ${c.fechamento} · Vencimento: dia ${c.vencimento}</small>
+        </div>
+        <div class="acoes">
+          <button type="button" class="secundario" onclick="editarCartao('${c.id}')">Editar</button>
+          <button type="button" class="perigo" onclick="excluirCartao('${c.id}')">Excluir</button>
+        </div>
+      </div>
+    `;
+  }).join("") : "<p>Nenhum cartão cadastrado.</p>");
+
+  const opcoes = cartoes.map(c =>
+    `<option value="${c.id}">${escapar(c.nome)}</option>`
+  ).join("");
+
+  if(elemento("compraCartao")) elemento("compraCartao").innerHTML = opcoes || '<option value="">Cadastre um cartão primeiro</option>';
+  if(elemento("faturaCartao")) elemento("faturaCartao").innerHTML = opcoes || '<option value="">Nenhum cartão</option>';
+
+  atualizarFatura();
+}
+
+function salvarCartao(evento){
+  evento.preventDefault();
+
+  const nome = valorCampo("nomeCartao").trim();
+  const limite = numero(valorCampo("limiteCartao"));
+  const fechamento = numero(valorCampo("fechamentoCartao"));
+  const vencimento = numero(valorCampo("vencimentoCartao"));
+
+  if(!nome || limite <= 0 || fechamento < 1 || fechamento > 31 || vencimento < 1 || vencimento > 31){
+    alert("Confira os dados do cartão.");
+    return;
+  }
+
+  const cartao = {
+    id: editCartaoId || idNovo(),
+    nome, limite, fechamento, vencimento
+  };
+
+  if(editCartaoId){
+    const i = cartoes.findIndex(c => c.id === editCartaoId);
+    if(i >= 0) cartoes[i] = cartao;
+  } else {
+    cartoes.push(cartao);
+  }
+
+  editCartaoId = null;
+  elemento("formCartao").reset();
+  elemento("salvarCartao").textContent = "Salvar cartão";
+  if(elemento("cancelarCartao")) elemento("cancelarCartao").hidden = true;
+  atualizarTudo();
 }
 
 function editarCartao(id){
- const c=db.cartoes.find(x=>x.id===id);if(!c)return;
- el("cartaoId").value=c.id;el("cartaoNome").value=c.nome;
- el("cartaoLimite").value=c.limite||0;
- el("cartaoFechamento").value=c.fechamento||"";
- el("cartaoVencimento").value=c.vencimento||"";
- window.scrollTo(0,0);
+  const c = cartoes.find(x => x.id === id);
+  if(!c) return;
+
+  editCartaoId = id;
+  elemento("nomeCartao").value = c.nome;
+  elemento("limiteCartao").value = c.limite;
+  elemento("fechamentoCartao").value = c.fechamento;
+  elemento("vencimentoCartao").value = c.vencimento;
+  elemento("salvarCartao").textContent = "Atualizar cartão";
+  if(elemento("cancelarCartao")) elemento("cancelarCartao").hidden = false;
 }
 
 function excluirCartao(id){
- if(db.compras.some(x=>String(x.cartaoId||x.cartao)===String(id))){
-  alert("Este cartão possui compras. Exclua ou transfira as compras antes.");return;
- }
- if(!confirm("Excluir este cartão?"))return;
- db.cartoes=db.cartoes.filter(c=>c.id!==id);salvarDados();renderizarTudo();
-}
-
-function salvarCompra(){
- const cartaoId=el("compraCartao").value;
- if(!cartaoId){alert("Cadastre e selecione um cartão.");return}
- const valor=numero("compraValor");
- if(valor<=0){alert("Informe o valor da compra.");return}
- db.compras.push({
-  id:idNovo(),cartaoId,data:el("compraData").value||hoje(),
-  descricao:el("compraDescricao").value.trim(),
-  categoria:el("compraCategoria").value.trim()||"Outros",
-  valor,parcelas:Math.min(48,Math.max(1,numero("compraParcelas")||1))
- });
- ["compraDescricao","compraCategoria","compraValor"].forEach(id=>el(id).value="");
- el("compraParcelas").value=1;
- salvarDados();renderizarTudo();alert("Compra registrada!");
-}
-
-function parcelaNoMes(compra,mes){
- const data=new Date((compra.data||hoje())+"T12:00:00");
- const inicio=new Date(mes+"-01T12:00:00");
- const meses=(inicio.getFullYear()-data.getFullYear())*12+(inicio.getMonth()-data.getMonth());
- const parcelas=Math.max(1,Number(compra.parcelas)||1);
- if(meses<0||meses>=parcelas)return 0;
- return (Number(compra.valor)||0)/parcelas;
-}
-
-function totalFaturaMes(mes){
- return db.compras.reduce((s,c)=>s+parcelaNoMes(c,mes),0);
-}
-
-function renderizarFaturas(){
- const mes=el("mesFatura").value||mesAtual();
- const linhas=db.cartoes.map(c=>{
-  const compras=db.compras.filter(x=>String(x.cartaoId||x.cartao)===String(c.id));
-  const total=compras.reduce((s,x)=>s+parcelaNoMes(x,mes),0);
-  return `<div class="item"><strong>${c.nome}</strong><span>${dinheiro(total)}</span>
-  ${compras.filter(x=>parcelaNoMes(x,mes)>0).map(x=>`<p class="pequeno">${x.descricao||x.categoria} — ${dinheiro(parcelaNoMes(x,mes))} (${x.parcelas}x)</p>`).join("")}
-  </div>`;
- }).join("");
- el("listaFaturas").innerHTML=linhas||"<p class='pequeno'>Nenhum cartão cadastrado.</p>";
-}
- // Salvamento novo sem apagar nem sobrescrever os arquivos antigos.
-function salvarDados(){
- try{
-  localStorage.setItem(CHAVE_NOVA,JSON.stringify(db));
-  return true;
- }catch(e){
-  alert("Erro ao salvar os dados. Exporte um backup assim que possível.");
-  return false;
- }
-}
-
-// Leitura adicional para aproveitar formatos antigos de armazenamento.
-function carregarDados(){
- const atual=lerJSON(CHAVE_NOVA);
- const antigo=lerJSON("MFP_V2");
- const dados=lerJSON(CHAVE_DADOS);
- const cartoesSalvos=lerJSON(CHAVE_CARTOES);
- const comprasSalvas=lerJSON(CHAVE_COMPRAS);
- const metasSalvas=lerJSON(CHAVE_METAS);
-
- const fontes=[atual,antigo,dados].filter(x=>x&&typeof x==="object");
- const procurar=(nomes)=>{
-  for(const fonte of fontes){
-   const a=primeiroArray(fonte,nomes);
-   if(a.length)return a;
+  if((dados.compras || []).some(x => x.cartao === id)){
+    alert("Este cartão possui compras registradas. Não é possível excluí-lo.");
+    return;
   }
-  return [];
- };
 
- db.lancamentos=procurar(["lancamentos","personal","pessoal","ganhos"]);
- db.cartoes=procurar(["cartoes","cards"]);
- db.compras=procurar(["compras","purchases","faturas"]);
- db.uber=procurar(["uber","registrosUber","despesasUber"]);
- db.metas=procurar(["metas","goals"]);
+  if(!confirm("Excluir este cartão?")) return;
+  cartoes = cartoes.filter(c => c.id !== id);
+  atualizarTudo();
+}
 
- if(!db.lancamentos.length&&Array.isArray(dados))db.lancamentos=dados;
- if(!db.cartoes.length&&Array.isArray(cartoesSalvos))db.cartoes=cartoesSalvos;
- if(!db.compras.length&&Array.isArray(comprasSalvas))db.compras=comprasSalvas;
- if(!db.metas.length&&Array.isArray(metasSalvas))db.metas=metasSalvas;
+window.editarCartao = editarCartao;
+window.excluirCartao = excluirCartao;
 
- db.lancamentos=arraySeguro(db.lancamentos).map(normalizarLancamento).filter(Boolean);
- db.cartoes=arraySeguro(db.cartoes).map(c=>({
-  ...c,id:String(c.id||idNovo()),nome:c.nome||c.name||"Cartão",
-  limite:Number(c.limite??c.limit??0)||0
- }));
- db.compras=arraySeguro(db.compras).map(c=>({
-  ...c,id:String(c.id||idNovo()),
-  valor:Number(c.valor??c.value??c.total??0)||0,
-  parcelas:Math.max(1,Number(c.parcelas??c.installments??1)||1)
- }));
- db.uber=arraySeguro(db.uber).map(x=>({...x,id:String(x.id||idNovo())}));
- db.metas=arraySeguro(db.metas).map(x=>({...x,id:String(x.id||idNovo())}));
+function salvarCompra(evento){
+  evento.preventDefault();
 
- db.lancamentos.forEach(x=>{
-  if(x.origem==="uber"&&!db.uber.some(u=>u.id===x.id)){
-   db.uber.push({
-    id:x.id,data:x.data,
-    ganhos:x.tipo==="entrada"?x.valor:0,
-    despesas:x.tipo==="despesa"&&!/combustível/i.test(x.categoria||"")?x.valor:0,
-    combustivel:x.tipo==="despesa"&&/combustível/i.test(x.categoria||"")?x.valor:0,
-    descricao:x.descricao
-   });
+  const cartao = valorCampo("compraCartao");
+  const descricao = valorCampo("compraDescricao").trim();
+  const valor = numero(valorCampo("compraValor"));
+  const data = valorCampo("compraData");
+  const parcelas = Math.max(1, Math.min(48, numero(valorCampo("compraParcelas"))));
+
+  if(!cartao || !descricao || valor <= 0 || !data){
+    alert("Preencha todos os dados da compra.");
+    return;
   }
- });
-}
 
-function salvarUber(){
- const ganhos=numero("uberGanhos");
- const despesas=numero("uberDespesas");
- const combustivel=numero("uberCombustivel");
- if(ganhos+despesas+combustivel<=0){alert("Informe algum valor de ganhos ou custos.");return}
- const id=el("uberId").value;
- const registro={
-  id:id||idNovo(),
-  data:el("uberData").value||hoje(),
-  ganhos,despesas,combustivel,
-  km:numero("uberKm"),horas:numero("uberHoras"),
-  descricao:el("uberDescricao").value.trim()
- };
- if(id){
-  const i=db.uber.findIndex(x=>x.id===id);
-  if(i>=0)db.uber[i]=registro;
- }else db.uber.push(registro);
- el("uberId").value="";
- ["uberGanhos","uberDespesas","uberCombustivel","uberKm","uberHoras","uberDescricao"].forEach(x=>el(x).value="");
- el("uberData").value=hoje();
- salvarDados();renderizarTudo();alert("Registro Uber/99 salvo!");
-}
-
-function editarUber(id){
- const x=db.uber.find(a=>a.id===id);if(!x)return;
- trocarTela("uber");
- el("uberId").value=x.id;
- el("uberData").value=x.data||hoje();
- el("uberGanhos").value=x.ganhos||0;
- el("uberDespesas").value=x.despesas||0;
- el("uberCombustivel").value=x.combustivel||0;
- el("uberKm").value=x.km||0;
- el("uberHoras").value=x.horas||0;
- el("uberDescricao").value=x.descricao||"";
-}
-
-function excluirUber(id){
- if(!confirm("Excluir este registro Uber/99?"))return;
- db.uber=db.uber.filter(x=>x.id!==id);
- salvarDados();renderizarTudo();
-}
-
-function renderizarUber(){
- const mes=el("mesUber").value||mesAtual();
- const lista=db.uber.filter(x=>dataMes(x.data)===mes).sort((a,b)=>String(b.data).localeCompare(String(a.data)));
- el("listaUber").innerHTML=lista.length?lista.map(x=>{
-  const ganhos=Number(x.ganhos??x.valorGanhos??0)||0;
-  const despesas=Number(x.despesas??x.custos??0)||0;
-  const combustivel=Number(x.combustivel??x.combustível??0)||0;
-  const lucro=ganhos-despesas-combustivel;
-  return `<div class="item"><strong>${x.data||""} — ${dinheiro(lucro)}</strong>
-  <small>Ganhos: ${dinheiro(ganhos)} • Despesas: ${dinheiro(despesas)} • Combustível: ${dinheiro(combustivel)}</small>
-  <p class="pequeno">${Number(x.km)||0} km • ${Number(x.horas)||0} horas</p>
-  <button class="acao secundario" onclick="editarUber('${x.id}')">Editar</button>
-  <button class="acao perigo" onclick="excluirUber('${x.id}')">Excluir</button></div>`;
- }).join(""):"<p class='pequeno'>Nenhum registro neste mês.</p>";
-}
-
-function salvarMeta(){
- const nome=el("metaNome").value.trim();
- const alvo=numero("metaAlvo");
- if(!nome||alvo<=0){alert("Informe o nome e o valor desejado.");return}
- const id=el("metaId").value;
- const meta={id:id||idNovo(),nome,alvo,guardado:numero("metaGuardado")};
- if(id){
-  const i=db.metas.findIndex(x=>x.id===id);
-  if(i>=0)db.metas[i]=meta;
- }else db.metas.push(meta);
- el("metaId").value="";
- el("metaNome").value="";
- el("metaAlvo").value="";
- el("metaGuardado").value="";
- salvarDados();renderizarTudo();alert("Meta salva!");
-}
-
-function editarMeta(id){
- const m=db.metas.find(x=>x.id===id);if(!m)return;
- el("metaId").value=m.id;el("metaNome").value=m.nome;
- el("metaAlvo").value=m.alvo;el("metaGuardado").value=m.guardado||0;
-}
-
-function excluirMeta(id){
- if(!confirm("Excluir esta meta?"))return;
- db.metas=db.metas.filter(x=>x.id!==id);
- salvarDados();renderizarTudo();
-}
-
-function renderizarMetas(){
- el("listaMetas").innerHTML=db.metas.length?db.metas.map(m=>{
-  const alvo=Number(m.alvo)||0;
-  const guardado=Number(m.guardado)||0;
-  const percentual=alvo>0?Math.min(100,guardado/alvo*100):0;
-  return `<div class="item"><strong>${m.nome}</strong>
-  <p>${dinheiro(guardado)} de ${dinheiro(alvo)} — ${percentual.toFixed(1)}%</p>
-  <progress value="${percentual}" max="100" style="width:100%;height:16px"></progress>
-  <button class="acao secundario" onclick="editarMeta('${m.id}')">Editar</button>
-  <button class="acao perigo" onclick="excluirMeta('${m.id}')">Excluir</button></div>`;
- }).join(""):"<p class='pequeno'>Nenhuma meta cadastrada.</p>";
-}
-
-function renderizarResumo(){
- const mes=el("mesResumo").value||mesAtual();
- const lanc=lancamentosDoMes(mes).filter(pago);
- const pessoais=lanc.filter(x=>x.origem!=="uber");
- const entradas=pessoais.filter(x=>x.tipo==="entrada").reduce((s,x)=>s+valorLancamento(x),0);
- const despesas=pessoais.filter(x=>x.tipo==="despesa").reduce((s,x)=>s+valorLancamento(x),0);
-
- const uber=db.uber.filter(x=>dataMes(x.data)===mes);
- const ganhos=uber.reduce((s,x)=>s+(Number(x.ganhos??x.valorGanhos??0)||0),0);
- const custos=uber.reduce((s,x)=>s+(Number(x.despesas??x.custos??0)||0),0);
- const combustivel=uber.reduce((s,x)=>s+(Number(x.combustivel??x.combustível??0)||0),0);
- const lucro=ganhos-custos-combustivel;
- const reserva=Math.max(0,lucro)*0.10;
- const faturas=totalFaturaMes(mes);
- const saldo=entradas-despesas-faturas;
-
- el("resEntradas").textContent=dinheiro(entradas);
- el("resDespesas").textContent=dinheiro(despesas);
- el("resUber").textContent=dinheiro(ganhos);
- el("resCustosUber").textContent=dinheiro(custos+combustivel);
- el("resLucroUber").textContent=dinheiro(lucro);
- el("resReserva").textContent=dinheiro(reserva);
- el("resFaturas").textContent=dinheiro(faturas);
- el("resSaldo").textContent=dinheiro(saldo);
- el("resLucroUber").className="numero "+(lucro>=0?"verde":"vermelho");
- el("resSaldo").className="numero "+(saldo>=0?"verde":"vermelho");
-}
-
-const coresGrafico=["#1d5da8","#18a66a","#e5a323","#c94c4c","#8057b5","#159ca5","#e17a32","#64748b","#d45b9b","#789b35"];
-
-function desenharPizza(canvasId,legendaId,lista){
- const canvas=el(canvasId);
- const ctx=canvas.getContext("2d");
- ctx.clearRect(0,0,canvas.width,canvas.height);
- const total=lista.reduce((s,x)=>s+x.valor,0);
- if(total<=0){
-  ctx.font="14px Arial";ctx.fillStyle="#64748b";
-  ctx.fillText("Sem dados neste mês",55,110);
-  el(legendaId).innerHTML="";
-  return;
- }
- let inicio=-Math.PI/2;
- lista.forEach((x,i)=>{
-  const fatia=x.valor/total*Math.PI*2;
-  ctx.beginPath();ctx.moveTo(110,110);
-  ctx.arc(110,110,90,inicio,inicio+fatia);
-  ctx.closePath();ctx.fillStyle=coresGrafico[i%coresGrafico.length];ctx.fill();
-  inicio+=fatia;
- });
- el(legendaId).innerHTML=lista.map((x,i)=>{
-  const pct=x.valor/total*100;
-  return `<div><span style="display:inline-block;width:10px;height:10px;background:${coresGrafico[i%coresGrafico.length]};border-radius:2px"></span> ${x.nome}: ${dinheiro(x.valor)} (${pct.toFixed(1)}%)</div>`;
- }).join("");
-}
-
-function renderizarGraficos(){
- const mes=el("mesGraficos").value||mesAtual();
- const lanc=lancamentosDoMes(mes).filter(pago).filter(x=>x.origem!=="uber");
- const agrupar=tipo=>{
-  const mapa={};
-  lanc.filter(x=>x.tipo===tipo).forEach(x=>{
-   const cat=x.categoria||"Outros";
-   mapa[cat]=(mapa[cat]||0)+valorLancamento(x);
+  dados.compras.push({
+    id:idNovo(), cartao, descricao, valor, data, parcelas
   });
-  return Object.entries(mapa).map(([nome,valor])=>({nome,valor}));
- };
- desenharPizza("graficoEntradas","legendaEntradas",agrupar("entrada"));
- desenharPizza("graficoDespesas","legendaDespesas",agrupar("despesa"));
+
+  elemento("formCompra").reset();
+  elemento("compraData").value = dataHoje;
+  atualizarTudo();
+  alert("Compra registrada!");
 }
 
-function renderizarTudo(){
- renderizarResumo();
- renderizarLancamentos();
- renderizarCartoes();
- renderizarFaturas();
- renderizarUber();
- renderizarMetas();
- renderizarGraficos();
+function atualizarFatura(){
+  const cartaoId = valorCampo("faturaCartao");
+  const mes = valorCampo("faturaMes");
+  if(!elemento("detalheFatura")) return;
+
+  if(!cartaoId || !mes){
+    mostrar("detalheFatura","Selecione o cartão e o mês.");
+    return;
+  }
+
+  const compras = (dados.compras || []).filter(x => {
+    if(x.cartao !== cartaoId) return false;
+
+    const inicio = new Date(x.data + "T12:00:00");
+    const [ano,mesCompra] = mes.split("-").map(Number);
+    const alvo = new Date(ano, mesCompra-1, 1);
+    const fechamento = numero(cartoes.find(c => c.id === cartaoId)?.fechamento || 1);
+
+    const primeiraFatura = new Date(inicio.getFullYear(), inicio.getMonth(), 1);
+    if(inicio.getDate() > fechamento) primeiraFatura.setMonth(primeiraFatura.getMonth()+1);
+
+    const diferenca = (alvo.getFullYear()-primeiraFatura.getFullYear())*12 +
+      alvo.getMonth()-primeiraFatura.getMonth();
+
+    return diferenca >= 0 && diferenca < x.parcelas;
+  });
+
+  const total = compras.reduce((s,x) => s + numero(x.valor)/Math.max(1,x.parcelas),0);
+
+  mostrar("detalheFatura", `
+    <h3>Total da fatura: ${dinheiro(total)}</h3>
+    ${compras.length ? compras.map(x => `
+      <div class="item">
+        <span>${escapar(x.descricao)} (${x.parcelas}x)</span>
+        <strong>${dinheiro(numero(x.valor)/Math.max(1,x.parcelas))}</strong>
+      </div>
+    `).join("") : "<p>Nenhuma compra nesta fatura.</p>"}
+  `);
+}
+
+function atualizarRelatorio(){
+  const inicio = valorCampo("rInicio");
+  const fim = valorCampo("rFim");
+
+  const lista = lancamentosDoPeriodo(todosLancamentos(), inicio, fim);
+  const entradas = somar(lista,"entrada");
+  const despesas = somar(lista,"despesa");
+
+  if(elemento("rEntradas")) elemento("rEntradas").textContent = dinheiro(entradas);
+  if(elemento("rDespesas")) elemento("rDespesas").textContent = dinheiro(despesas);
+  if(elemento("rSaldo")) elemento("rSaldo").textContent = dinheiro(entradas-despesas);
+  if(elemento("rQtd")) elemento("rQtd").textContent = lista.length;
+
+  const porCategoria = {};
+  lista.filter(x => x.tipo === "despesa" && x.status !== "Pendente")
+    .forEach(x => {
+      const categoria = x.categoria || "Outros";
+      porCategoria[categoria] = (porCategoria[categoria] || 0) + numero(x.valor);
+    });
+
+  desenharGrafico(porCategoria);
+}
+
+function desenharGrafico(categorias){
+  const canvas = elemento("graficoCanvas");
+  const legenda = elemento("graficoLegenda");
+  if(!canvas || !legenda) return;
+
+  const itens = Object.entries(categorias).filter(x => x[1] > 0);
+  const contexto = canvas.getContext("2d");
+  const largura = canvas.clientWidth || 300;
+  const altura = 260;
+
+  canvas.width = largura * (window.devicePixelRatio || 1);
+  canvas.height = altura * (window.devicePixelRatio || 1);
+  contexto.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  contexto.clearRect(0,0,largura,altura);
+
+  if(!itens.length){
+    legenda.innerHTML = "Não há despesas pagas no período selecionado.";
+    return;
+  }
+
+  const cores = [
+    "#2563eb","#16a34a","#f59e0b","#dc2626",
+    "#9333ea","#0891b2","#ea580c","#64748b",
+    "#db2777","#65a30d"
+  ];
+
+  const total = itens.reduce((s,x) => s+x[1],0);
+  let angulo = -Math.PI/2;
+  const cx = largura/2;
+  const cy = 125;
+  const raio = Math.min(100, largura/3);
+
+  itens.forEach((item,i) => {
+    const fatia = item[1]/total * Math.PI*2;
+    contexto.beginPath();
+    contexto.moveTo(cx,cy);
+    contexto.arc(cx,cy,raio,angulo,angulo+fatia);
+    contexto.closePath();
+    contexto.fillStyle = cores[i % cores.length];
+    contexto.fill();
+    angulo += fatia;
+  });
+
+  legenda.innerHTML = itens.map((item,i) => `
+    <div class="item">
+      <span>
+        <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${cores[i % cores.length]}"></span>
+        ${escapar(item[0])}
+      </span>
+      <strong>${dinheiro(item[1])} · ${(item[1]/total*100).toFixed(1)}%</strong>
+    </div>
+  `).join("");
+
+  mostrar("rCategorias", `Total de despesas por categoria: ${dinheiro(total)}`);
 }
 
 function exportarBackup(){
- const conteudo=JSON.stringify(db,null,2);
- const arquivo=new Blob([conteudo],{type:"application/json"});
- const url=URL.createObjectURL(arquivo);
- const a=document.createElement("a");
- a.href=url;a.download="backup-meu-financeiro-pro.json";
- document.body.appendChild(a);a.click();a.remove();
- URL.revokeObjectURL(url);
+  const backup = {
+    versao:3,
+    dataExportacao:new Date().toISOString(),
+    dados,
+    cartoes,
+    faturas
+  };
+
+  const arquivo = new Blob(
+    [JSON.stringify(backup,null,2)],
+    {type:"application/json"}
+  );
+
+  const url = URL.createObjectURL(arquivo);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "Meu-Financeiro-Pro-backup.json";
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 function importarBackup(){
- const arquivo=el("arquivoBackup").files[0];
- if(!arquivo){alert("Escolha primeiro um arquivo de backup.");return}
- const leitor=new FileReader();
- leitor.onload=()=>{
-  try{
-   const dados=JSON.parse(leitor.result);
-   if(!dados||typeof dados!=="object")throw new Error("Arquivo inválido");
-   if(!confirm("A importação substituirá os dados atualmente abertos. Deseja continuar?"))return;
-   db={
-    lancamentos:arraySeguro(dados.lancamentos).map(normalizarLancamento).filter(Boolean),
-    cartoes:arraySeguro(dados.cartoes),
-    compras:arraySeguro(dados.compras),
-    uber:arraySeguro(dados.uber),
-    metas:arraySeguro(dados.metas)
-   };
-   salvarDados();renderizarTudo();
-   alert("Backup importado!");
-  }catch(e){alert("Não foi possível ler este backup. Confira se o arquivo é do Meu Financeiro Pro.")}
- };
- leitor.readAsText(arquivo);
+  const arquivo = elemento("arquivo").files[0];
+  if(!arquivo){
+    alert("Escolha um arquivo de backup primeiro.");
+    return;
+  }
+
+  if(!confirm("Atenção: os dados atuais serão substituídos. Deseja continuar?")) return;
+
+  const leitor = new FileReader();
+
+  leitor.onload = () => {
+    try {
+      const backup = JSON.parse(leitor.result);
+
+      if(!backup.dados || !Array.isArray(backup.dados.pessoal) || !Array.isArray(backup.dados.uber)){
+        throw new Error("Arquivo inválido");
+      }
+
+      dados = backup.dados;
+      if(!Array.isArray(dados.compras)) dados.compras = [];
+      cartoes = Array.isArray(backup.cartoes) ? backup.cartoes : [];
+      faturas = backup.faturas || {};
+
+      atualizarTudo();
+      alert("Backup restaurado com sucesso!");
+    } catch(e) {
+      alert("Não foi possível importar. Confira se escolheu um backup válido.");
+    }
+  };
+
+  leitor.readAsText(arquivo);
 }
 
-// Atualiza os relatórios quando o mês é alterado.
-["mesResumo","mesLancamentos","mesUber","mesFatura","mesGraficos"].forEach(id=>{
- el(id).addEventListener("change",renderizarTudo);
-});
+if(!Array.isArray(dados.compras)) dados.compras = [];
 
-// Inicialização
-document.addEventListener("DOMContentLoaded",()=>{
- carregarDados();
- el("mesResumo").value=mesAtual();
- el("mesLancamentos").value=mesAtual();
- el("mesUber").value=mesAtual();
- el("mesFatura").value=mesAtual();
- el("mesGraficos").value=mesAtual();
- el("lancData").value=hoje();
- el("uberData").value=hoje();
- el("compraData").value=hoje();
- renderizarTudo();
-});
+elemento("formLancamento").addEventListener("submit", salvarLancamento);
+elemento("formCartao").addEventListener("submit", salvarCartao);
+elemento("formCompra").addEventListener("submit", salvarCompra);
+
+elemento("gerarRel").addEventListener("click", atualizarRelatorio);
+elemento("fTipo").addEventListener("change", atualizarLista);
+elemento("fArea").addEventListener("change", atualizarLista);
+elemento("faturaCartao").addEventListener("change", atualizarFatura);
+elemento("faturaMes").addEventListener("change", atualizarFatura);
+elemento("graficoMovimento").addEventListener("change", atualizarRelatorio);
+
+elemento("exportar").addEventListener("click", exportarBackup);
+elemento("importar").addEventListener("click", importarBackup);
+
+if(elemento("cancelar")){
+  elemento("cancelar").addEventListener("click", limparFormulario);
+}
+
+if(elemento("cancelarCartao")){
+  elemento("cancelarCartao").addEventListener("click", () => {
+    editCartaoId = null;
+    elemento("formCartao").reset();
+    elemento("salvarCartao").textContent = "Salvar cartão";
+    elemento("cancelarCartao").hidden = true;
+  });
+}
+
+if(elemento("data")) elemento("data").value = dataHoje;
+if(elemento("compraData")) elemento("compraData").value = dataHoje;
+if(elemento("faturaMes")) elemento("faturaMes").value = dataHoje.slice(0,7);
+
+if(elemento("qtdBackup")){
+  elemento("qtdBackup").textContent =
+    "Lançamentos pessoais: " + dados.pessoal.length +
+    " · Lançamentos Uber/99: " + dados.uber.length;
+}
+
+atualizarTudo();
+mostrarAba("inicio");
+
+})();
 </script>
 </body>
 </html>
+ 
