@@ -10,19 +10,22 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fundo);color:var(--texto)}
 header{background:linear-gradient(135deg,var(--azul),var(--azul2));color:white;padding:20px 16px;text-align:center}
-header h1{margin:0;font-size:23px}header p{margin:7px 0 0;font-size:13px;color:#dce8fa}
+header h1{margin:0;font-size:23px}
+header p{margin:7px 0 0;font-size:13px;color:#dce8fa}
 nav{display:flex;gap:7px;padding:10px;background:white;overflow-x:auto;position:sticky;top:0;z-index:10;box-shadow:0 2px 7px #00000012}
 nav button{flex:0 0 auto;border:0;border-radius:9px;padding:11px 13px;background:#e7edf6;color:var(--azul);font-weight:bold}
 nav button.ativa{background:var(--azul);color:white}
 main{max-width:900px;margin:auto;padding:14px}
-.tela{display:none}.tela.ativa{display:block}
+.tela{display:none}
+.tela.ativa{display:block}
 h2{font-size:20px;color:var(--azul);margin:5px 0 15px}
 h3{font-size:16px;color:var(--azul);margin:4px 0 12px}
 .card{background:white;border-radius:13px;padding:15px;margin-bottom:13px;box-shadow:0 2px 8px #102b5510;border:1px solid var(--borda)}
 .resumo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .numero{font-size:20px;font-weight:bold;margin-top:7px;overflow-wrap:anywhere}
 .pequeno{font-size:12px;color:var(--cinza)}
-.verde{color:var(--verde)}.vermelho{color:var(--vermelho)}
+.verde{color:var(--verde)}
+.vermelho{color:var(--vermelho)}
 label{display:block;font-size:13px;font-weight:bold;margin:11px 0 5px}
 input,select,textarea{width:100%;padding:12px;border:1px solid #cbd6e5;border-radius:9px;background:white;color:var(--texto);font-size:15px}
 button{font-family:inherit;cursor:pointer}
@@ -30,7 +33,8 @@ button{font-family:inherit;cursor:pointer}
 .btn-sec{background:#e7edf6;color:var(--azul)}
 .btn-perigo{background:#b83232;color:white}
 .btn-verde{background:#16834a;color:white}
-.linha{display:flex;gap:9px;flex-wrap:wrap}.linha>*{flex:1;min-width:120px}
+.linha{display:flex;gap:9px;flex-wrap:wrap}
+.linha>*{flex:1;min-width:120px}
 .item{border:1px solid var(--borda);border-radius:10px;padding:12px;margin:9px 0;background:white}
 .item-topo{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .item strong{color:var(--azul)}
@@ -124,6 +128,7 @@ canvas{display:block;width:100%;max-height:300px}
 <div id="listaLancamentos"></div>
 </div>
 </section>
+
 <section id="uber" class="tela">
 <h2>Controle Uber / 99</h2>
 <div class="card">
@@ -241,6 +246,30 @@ const idNovo=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const escapar=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const dataBR=d=>d?d.split("-").reverse().join("/"):"";
 
+/* NORMALIZAÇÃO DOS DADOS */
+function tipoNormalizado(v){
+ const t=String(v||"").trim().toLowerCase();
+ if(t==="despesa"||t==="despesas"||t==="saída"||t==="saida")return "despesa";
+ return "entrada";
+}
+function statusNormalizado(v){
+ const s=String(v||"").trim().toLowerCase();
+ if(s==="pago"||s==="paga"||s==="recebido"||s==="recebida"||s==="pago/recebido")return "pago";
+ return "pendente";
+}
+function normalizarLancamento(x){
+ const y={...x};
+ y.tipo=tipoNormalizado(y.tipo);
+ y.status=statusNormalizado(y.status);
+ if(y.dinheiro===undefined&&y.banco===undefined){
+  y.dinheiro=(y.forma||"dinheiro")==="dinheiro"?numero(y.valor):0;
+  y.banco=y.forma==="banco"?numero(y.valor):0;
+ }
+ y.dinheiro=numero(y.dinheiro);
+ y.banco=numero(y.banco);
+ return y;
+}
+
 function adicionarDias(data,dias){
  const d=new Date(data+"T12:00:00");d.setDate(d.getDate()+dias);
  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
@@ -257,10 +286,7 @@ function lerDados(){
  const vazio={pessoal:[],uber:[],cartoes:[],compras:[],fixas:[]};
  try{
   const salvo=JSON.parse(localStorage.getItem(CHAVE)||"{}");
-  vazio.pessoal=Array.isArray(salvo.pessoal)?salvo.pessoal.map(x=>{
-   if(x.dinheiro!==undefined||x.banco!==undefined)return x;
-   return {...x,dinheiro:(x.forma||"dinheiro")==="dinheiro"?numero(x.valor):0,banco:x.forma==="banco"?numero(x.valor):0};
-  }):[];
+  vazio.pessoal=Array.isArray(salvo.pessoal)?salvo.pessoal.map(normalizarLancamento):[];
   vazio.uber=Array.isArray(salvo.uber)?salvo.uber:[];
   vazio.cartoes=Array.isArray(salvo.cartoes)?salvo.cartoes:[];
   vazio.compras=Array.isArray(salvo.compras)?salvo.compras:[];
@@ -356,7 +382,6 @@ function salvarLancamento(e){
    if(recorrencia==="diaria")dataNova=adicionarDias(data,i);
    if(recorrencia==="semanal")dataNova=adicionarDias(data,i*7);
    if(recorrencia==="mensal")dataNova=adicionarMeses(data,i);
-
    dados.pessoal.push({
     id:idNovo(),data:dataNova,tipo,categoria,descricao,
     dinheiro:dinheiroValor,banco:bancoValor,status,
@@ -451,9 +476,9 @@ function gerarFixas(){
 /* SALDOS */
 function calcularPessoal(lista){
  let entradas=0,despesas=0,dinheiroSaldo=0,bancoSaldo=0;
- lista.filter(x=>x.status==="pago").forEach(x=>{
-  const d=numero(x.dinheiro),b=numero(x.banco),s=x.tipo==="entrada"?1:-1;
-  if(x.tipo==="entrada")entradas+=d+b;else despesas+=d+b;
+ lista.filter(x=>statusNormalizado(x.status)==="pago").forEach(x=>{
+  const d=numero(x.dinheiro),b=numero(x.banco),s=tipoNormalizado(x.tipo)==="entrada"?1:-1;
+  if(tipoNormalizado(x.tipo)==="entrada")entradas+=d+b;else despesas+=d+b;
   dinheiroSaldo+=d*s;bancoSaldo+=b*s;
  });
  return {entradas,despesas,resultado:entradas-despesas,dinheiro:dinheiroSaldo,banco:bancoSaldo,total:dinheiroSaldo+bancoSaldo};
@@ -598,66 +623,166 @@ $("btnCancelarCartao").addEventListener("click",limparCartao);
 $("btnSalvarCompra").addEventListener("click",salvarCompra);
 $("mesFatura").addEventListener("change",renderFatura);
 $("cartaoFatura").addEventListener("change",renderFatura);
-
-/* GRÁFICOS */
+  /* GRÁFICOS */
 const cores=["#2563eb","#16a34a","#f59e0b","#dc2626","#9333ea","#0891b2","#db2777","#64748b","#84cc16","#ea580c"];
+
 function canvas(id){
  const c=$(id);if(!c)return null;
  const w=Math.max(280,c.parentElement.clientWidth-30),h=260,escala=window.devicePixelRatio||1;
- c.width=w*escala;c.height=h*escala;c.style.width=w+"px";c.style.height=h+"px";
- const ctx=c.getContext("2d");ctx.scale(escala,escala);return {ctx,w,h};
+ c.width=w*escala;c.height=h*escala;
+ c.style.width=w+"px";c.style.height=h+"px";
+ const ctx=c.getContext("2d");
+ ctx.scale(escala,escala);
+ return {ctx,w,h};
 }
+
 function pizza(id,legenda,grupos){
  const a=canvas(id);if(!a)return;
- const {ctx,w,h}=a,total=grupos.reduce((s,x)=>s+x.valor,0);
+ const {ctx,w,h}=a;
+ const total=grupos.reduce((s,x)=>s+numero(x.valor),0);
  ctx.clearRect(0,0,w,h);
- if(total<=0){ctx.fillStyle="#94a3b8";ctx.font="14px Arial";ctx.textAlign="center";ctx.fillText("Sem dados neste período",w/2,h/2);$(legenda).innerHTML="";return}
- let inicio=-Math.PI/2;const cx=w/2,cy=115,r=Math.min(85,w*.25);
+
+ if(total<=0){
+  ctx.fillStyle="#94a3b8";
+  ctx.font="14px Arial";
+  ctx.textAlign="center";
+  ctx.fillText("Sem dados neste período",w/2,h/2);
+  $(legenda).innerHTML='<p class="vazio">Nenhum lançamento pago nesta categoria.</p>';
+  return;
+ }
+
+ let inicio=-Math.PI/2;
+ const cx=w/2,cy=115,r=Math.min(85,w*.25);
+
  grupos.forEach((x,i)=>{
-  const ang=x.valor/total*Math.PI*2;
-  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,inicio,inicio+ang);ctx.closePath();
-  ctx.fillStyle=cores[i%cores.length];ctx.fill();inicio+=ang;
+  const ang=numero(x.valor)/total*Math.PI*2;
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.arc(cx,cy,r,inicio,inicio+ang);
+  ctx.closePath();
+  ctx.fillStyle=cores[i%cores.length];
+  ctx.fill();
+  inicio+=ang;
  });
- $(legenda).innerHTML=grupos.map((x,i)=>`<div class="legenda-item"><span style="display:inline-block;width:12px;height:12px;background:${cores[i%cores.length]};margin-right:7px"></span>${escapar(x.nome)}: <strong>${dinheiro(x.valor)}</strong> (${(x.valor/total*100).toFixed(1).replace(".",",")}%)</div>`).join("");
+
+ $(legenda).innerHTML=grupos.map((x,i)=>`
+ <div class="legenda-item">
+ <span style="display:inline-block;width:12px;height:12px;background:${cores[i%cores.length]};margin-right:7px"></span>
+ ${escapar(x.nome)}: <strong>${dinheiro(x.valor)}</strong>
+ (${(x.valor/total*100).toFixed(1).replace(".",",")}%)
+ </div>`).join("");
 }
+
 function comparativo(ent,desp){
  const a=canvas("graficoComparativo");if(!a)return;
- const {ctx,w}=a;ctx.clearRect(0,0,w,260);
- const maior=Math.max(ent,desp,1),base=205,maxH=150,bw=Math.min(75,w/4);
- [{nome:"Entradas",valor:ent,x:w*.28,cor:"#16a34a"},{nome:"Despesas",valor:desp,x:w*.68,cor:"#dc2626"}].forEach(b=>{
-  const h=b.valor/maior*maxH;ctx.fillStyle=b.cor;ctx.fillRect(b.x-bw/2,base-h,bw,h);
-  ctx.fillStyle="#64748b";ctx.font="12px Arial";ctx.textAlign="center";ctx.fillText(b.nome,b.x,base+22);
-  ctx.fillStyle="#17243a";ctx.font="11px Arial";ctx.fillText(dinheiro(b.valor),b.x,Math.max(15,base-h-8));
+ const {ctx,w}=a;
+ ctx.clearRect(0,0,w,260);
+
+ const maior=Math.max(ent,desp,1);
+ const base=205,maxH=150,bw=Math.min(75,w/4);
+
+ [
+  {nome:"Entradas",valor:ent,x:w*.28,cor:"#16a34a"},
+  {nome:"Despesas",valor:desp,x:w*.68,cor:"#dc2626"}
+ ].forEach(b=>{
+  const h=b.valor/maior*maxH;
+  ctx.fillStyle=b.cor;
+  ctx.fillRect(b.x-bw/2,base-h,bw,h);
+  ctx.fillStyle="#64748b";
+  ctx.font="12px Arial";
+  ctx.textAlign="center";
+  ctx.fillText(b.nome,b.x,base+22);
+  ctx.fillStyle="#17243a";
+  ctx.font="11px Arial";
+  ctx.fillText(dinheiro(b.valor),b.x,Math.max(15,base-h-8));
  });
- ctx.strokeStyle="#64748b";ctx.beginPath();ctx.moveTo(20,base);ctx.lineTo(w-20,base);ctx.stroke();
+
+ ctx.strokeStyle="#64748b";
+ ctx.beginPath();
+ ctx.moveTo(20,base);
+ ctx.lineTo(w-20,base);
+ ctx.stroke();
 }
+
 function agrupar(lista){
- const mapa={};lista.forEach(x=>{const n=x.categoria||"Outros";mapa[n]=(mapa[n]||0)+totalLancamento(x)});
- return Object.entries(mapa).map(([nome,valor])=>({nome,valor})).sort((a,b)=>b.valor-a.valor);
+ const mapa={};
+
+ lista.forEach(x=>{
+  const nome=x.categoria||"Outros";
+  mapa[nome]=(mapa[nome]||0)+totalLancamento(x);
+ });
+
+ return Object.entries(mapa)
+  .map(([nome,valor])=>({nome,valor}))
+  .filter(x=>x.valor>0)
+  .sort((a,b)=>b.valor-a.valor);
 }
+
+/* RELATÓRIOS CORRIGIDOS */
 function atualizarRelatorios(){
  const mes=$("relMes").value||mesAtual();
- const listaMes=dados.pessoal.filter(x=>x.data.startsWith(mes)&&x.status==="pago");
- const ent=listaMes.filter(x=>x.tipo==="entrada"),desp=listaMes.filter(x=>x.tipo==="despesa");
- const entradas=ent.reduce((s,x)=>s+totalLancamento(x),0),despesas=desp.reduce((s,x)=>s+totalLancamento(x),0);
- $("relEntradas").textContent=dinheiro(entradas);$("relDespesas").textContent=dinheiro(despesas);
+
+ /*
+  * Considera somente lançamentos pagos/recebidos.
+  * Normaliza tipo e status para reconhecer também
+  * registros antigos que possam ter sido salvos
+  * com letras maiúsculas ou nomes diferentes.
+  */
+ const listaMes=dados.pessoal.filter(x=>
+  String(x.data||"").startsWith(mes)&&
+  statusNormalizado(x.status)==="pago"
+ );
+
+ const ent=listaMes.filter(x=>tipoNormalizado(x.tipo)==="entrada");
+ const desp=listaMes.filter(x=>tipoNormalizado(x.tipo)==="despesa");
+
+ const entradas=ent.reduce((s,x)=>s+totalLancamento(x),0);
+ const despesas=desp.reduce((s,x)=>s+totalLancamento(x),0);
+
+ $("relEntradas").textContent=dinheiro(entradas);
+ $("relDespesas").textContent=dinheiro(despesas);
  $("relResultado").textContent=dinheiro(entradas-despesas);
- const fim=mes+"-31",acumulado=dados.pessoal.filter(x=>x.data<=fim);
+
+ const fim=mes+"-31";
+ const acumulado=dados.pessoal.filter(x=>x.data<=fim);
  const saldo=calcularPessoal(acumulado);
+
  $("relDinheiro").textContent=dinheiro(saldo.dinheiro);
  $("relBanco").textContent=dinheiro(saldo.banco);
  $("relTotalSaldo").textContent=dinheiro(saldo.total);
+
  comparativo(entradas,despesas);
- pizza("graficoDespesas","legendaDespesas",agrupar(desp));
- pizza("graficoEntradas","legendaEntradas",agrupar(ent));
+
+ /* Gráfico de despesas pagas por categoria */
+ pizza(
+  "graficoDespesas",
+  "legendaDespesas",
+  agrupar(desp)
+ );
+
+ /* Gráfico de entradas recebidas por categoria */
+ pizza(
+  "graficoEntradas",
+  "legendaEntradas",
+  agrupar(ent)
+ );
 }
+
 $("btnAtualizarRelatorios").addEventListener("click",atualizarRelatorios);
 $("relMes").addEventListener("change",atualizarRelatorios);
 
 /* PAINEL */
 function atualizarInicio(){
- const mes=mesAtual(),listaMes=dados.pessoal.filter(x=>x.data.startsWith(mes)&&x.status==="pago");
- const rMes=calcularPessoal(listaMes),saldo=calcularPessoal(dados.pessoal),u=resumoUber();
+ const mes=mesAtual();
+ const listaMes=dados.pessoal.filter(x=>
+  String(x.data||"").startsWith(mes)&&
+  statusNormalizado(x.status)==="pago"
+ );
+
+ const rMes=calcularPessoal(listaMes);
+ const saldo=calcularPessoal(dados.pessoal);
+ const u=resumoUber();
+
  $("dashEntradas").textContent=dinheiro(rMes.entradas);
  $("dashDespesas").textContent=dinheiro(rMes.despesas);
  $("dashSaldo").textContent=dinheiro(saldo.total);
@@ -666,51 +791,107 @@ function atualizarInicio(){
  $("dashGanhos").textContent=dinheiro(u.ganhos);
  $("dashCustos").textContent=dinheiro(u.custos);
  $("dashLucro").textContent=dinheiro(u.lucro);
- $("dashMes").textContent=`Entradas: ${dinheiro(rMes.entradas)} · Despesas: ${dinheiro(rMes.despesas)} · Resultado: ${dinheiro(rMes.resultado)}`;
+
+ $("dashMes").textContent=
+ `Entradas: ${dinheiro(rMes.entradas)} · Despesas: ${dinheiro(rMes.despesas)} · Resultado: ${dinheiro(rMes.resultado)}`;
 }
 
 /* BACKUP */
 function exportarBackup(){
- const conteudo=JSON.stringify({versao:4,dataExportacao:new Date().toISOString(),dados},null,2);
- const blob=new Blob([conteudo],{type:"application/json"}),url=URL.createObjectURL(blob);
- const a=document.createElement("a");a.href=url;a.download="backup-meu-financeiro-pro.json";
- document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ const conteudo=JSON.stringify({
+  versao:4,
+  dataExportacao:new Date().toISOString(),
+  dados
+ },null,2);
+
+ const blob=new Blob([conteudo],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="backup-meu-financeiro-pro.json";
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ URL.revokeObjectURL(url);
 }
+
 function importarBackup(){
  const arquivo=$("arquivoBackup").files[0];
- if(!arquivo){aviso("Selecione primeiro um arquivo de backup.");return}
+
+ if(!arquivo){
+  aviso("Selecione primeiro um arquivo de backup.");
+  return;
+ }
+
  const leitor=new FileReader();
+
  leitor.onload=()=>{
   try{
-   const bruto=JSON.parse(leitor.result),recebido=bruto.dados||bruto;
-   if(!["pessoal","uber","cartoes","compras"].every(k=>Array.isArray(recebido[k]))){aviso("Backup inválido.");return}
+   const bruto=JSON.parse(leitor.result);
+   const recebido=bruto.dados||bruto;
+
+   if(!["pessoal","uber","cartoes","compras"].every(k=>Array.isArray(recebido[k]))){
+    aviso("Backup inválido.");
+    return;
+   }
+
    if(!confirm("A restauração substituirá os dados atuais. Deseja continuar?"))return;
+
    dados={
-    pessoal:recebido.pessoal.map(x=>{
-     if(x.dinheiro!==undefined||x.banco!==undefined)return x;
-     return {...x,dinheiro:(x.forma||"dinheiro")==="dinheiro"?numero(x.valor):0,banco:x.forma==="banco"?numero(x.valor):0};
-    }),
-    uber:recebido.uber,cartoes:recebido.cartoes,compras:recebido.compras,
+    pessoal:recebido.pessoal.map(normalizarLancamento),
+    uber:recebido.uber,
+    cartoes:recebido.cartoes,
+    compras:recebido.compras,
     fixas:Array.isArray(recebido.fixas)?recebido.fixas:[]
    };
-   salvar();atualizarTudo();$("arquivoBackup").value="";aviso("Backup restaurado com sucesso!");
-  }catch(e){aviso("Não foi possível ler esse backup JSON.")}
+
+   salvar();
+   atualizarTudo();
+   $("arquivoBackup").value="";
+   aviso("Backup restaurado com sucesso!");
+
+  }catch(e){
+   aviso("Não foi possível ler esse backup JSON.");
+  }
  };
+
  leitor.readAsText(arquivo);
 }
+
 $("btnExportar").addEventListener("click",exportarBackup);
 $("btnImportar").addEventListener("click",importarBackup);
 
 /* ATUALIZAÇÃO GERAL */
 function atualizarTudo(){
- renderLancamentos();renderUber();renderCartoes();renderCompras();atualizarInicio();atualizarRelatorios();
+ renderLancamentos();
+ renderUber();
+ renderCartoes();
+ renderCompras();
+ atualizarInicio();
+ atualizarRelatorios();
 }
+
+/* INICIALIZAÇÃO */
 function iniciarAplicativo(){
- $("dataLancamento").value=hoje();$("dataUber").value=hoje();$("dataCompra").value=hoje();
- $("filtroMes").value=mesAtual();$("relMes").value=mesAtual();$("mesFatura").value=mesAtual();
- atualizarCategorias();atualizarOpcaoRepeticao();gerarFixas();salvar();
- limparLancamento();limparUber();limparCartao();atualizarTudo();
+ $("dataLancamento").value=hoje();
+ $("dataUber").value=hoje();
+ $("dataCompra").value=hoje();
+
+ $("filtroMes").value=mesAtual();
+ $("relMes").value=mesAtual();
+ $("mesFatura").value=mesAtual();
+
+ atualizarCategorias();
+ atualizarOpcaoRepeticao();
+ gerarFixas();
+ salvar();
+
+ limparLancamento();
+ limparUber();
+ limparCartao();
+ atualizarTudo();
 }
+
 iniciarAplicativo();
 </script>
 </body>
