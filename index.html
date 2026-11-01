@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#102b55">
+<link rel="manifest" href="./manifest.json">
 <title>Meu Financeiro Pro 2.0</title>
 <style>
 :root{--azul:#102b55;--azul2:#174783;--fundo:#eef3fa;--branco:#fff;--texto:#17243a;--verde:#16834a;--vermelho:#c73535;--cinza:#68758a;--borda:#dce4ef}
@@ -234,7 +236,7 @@ canvas{display:block;width:100%;max-height:300px}
 </section>
 </main>
 <script>
-  "use strict";
+"use strict";
 
 const $=id=>document.getElementById(id);
 const CHAVE="MFP_V2";
@@ -623,7 +625,8 @@ $("btnCancelarCartao").addEventListener("click",limparCartao);
 $("btnSalvarCompra").addEventListener("click",salvarCompra);
 $("mesFatura").addEventListener("change",renderFatura);
 $("cartaoFatura").addEventListener("change",renderFatura);
-  /* GRÁFICOS */
+
+/* GRÁFICOS */
 const cores=["#2563eb","#16a34a","#f59e0b","#dc2626","#9333ea","#0891b2","#db2777","#64748b","#84cc16","#ea580c"];
 
 function canvas(id){
@@ -722,12 +725,6 @@ function agrupar(lista){
 function atualizarRelatorios(){
  const mes=$("relMes").value||mesAtual();
 
- /*
-  * Considera somente lançamentos pagos/recebidos.
-  * Normaliza tipo e status para reconhecer também
-  * registros antigos que possam ter sido salvos
-  * com letras maiúsculas ou nomes diferentes.
-  */
  const listaMes=dados.pessoal.filter(x=>
   String(x.data||"").startsWith(mes)&&
   statusNormalizado(x.status)==="pago"
@@ -753,14 +750,12 @@ function atualizarRelatorios(){
 
  comparativo(entradas,despesas);
 
- /* Gráfico de despesas pagas por categoria */
  pizza(
   "graficoDespesas",
   "legendaDespesas",
   agrupar(desp)
  );
 
- /* Gráfico de entradas recebidas por categoria */
  pizza(
   "graficoEntradas",
   "legendaEntradas",
@@ -894,5 +889,17 @@ function iniciarAplicativo(){
 
 iniciarAplicativo();
 </script>
+
+<!-- REGISTRO DO SERVICE WORKER PARA PWA -->
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Aplicativo preparado para PWA"))
+      .catch(error => console.error("Erro no Service Worker:", error));
+  });
+}
+</script>
+
 </body>
 </html>
