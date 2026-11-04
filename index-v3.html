@@ -1018,14 +1018,14 @@ function editarUber(id){
 function excluirUber(id){
  if(!confirm("Excluir este registro Uber / 99?"))return;
  dados.uber=dados.uber.filter(x=>x.id!==id);
- salvar();
+  salvar();
  atualizarTudo();
 }
 
 function resumoUber(){
  const registrosMes=dados.uber.filter(x=>String(x.data||"").startsWith(mesAtual()));
  const ganhos=registrosMes.reduce((s,x)=>s+numero(x.ganhos),0);
-  const combustivel=registrosMes.reduce((s,x)=>s+numero(x.combustivel),0);
+ const combustivel=registrosMes.reduce((s,x)=>s+numero(x.combustivel),0);
  const despesas=registrosMes.reduce((s,x)=>s+numero(x.despesas),0);
  const custos=combustivel+despesas;
  const lucro=ganhos-custos;
