@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#102b55">
 <link rel="manifest" href="./manifest.json">
-<title>Meu Financeiro Pro 2.0</title>
+<title>Meu Financeiro Pro 3.0</title>
 <style>
 :root{
  --azul:#102b55;
@@ -111,7 +111,7 @@ canvas{display:block;width:100%;max-height:300px}
 </head>
 <body>
 <header>
-<h1>Meu Financeiro Pro 2.0</h1>
+<h1>Meu Financeiro Pro 3.0</h1>
 <p>Controle pessoal, cartões e trabalho Uber/99</p>
 </header>
 
@@ -126,6 +126,7 @@ canvas{display:block;width:100%;max-height:300px}
 </nav>
 
 <main>
+<div id="avisoSeguranca" class="aviso oculto" role="alert"></div>
 <section id="inicio" class="tela ativa">
 <h2>Visão geral</h2>
 
@@ -492,7 +493,7 @@ function visualLancamento(x){
 
  const texto=(
   String(x.categoria||"")+" "+
-  String(x.descricao||"")
+    String(x.descricao||"")
  ).toLowerCase();
 
  let visual={
@@ -603,29 +604,57 @@ function adicionarMeses(data,meses){
  return `${base.getFullYear()}-${String(base.getMonth()+1).padStart(2,"0")}-${String(base.getDate()).padStart(2,"0")}`;
 }
 
+const CHAVE_BACKUP_V3="MFP_V2_BACKUP_ANTES_3_0";
+let modoSeguro=false;
+let erroArmazenamento="";
+
 function lerDados(){
  const vazio={pessoal:[],uber:[],cartoes:[],compras:[],fixas:[]};
-
  try{
-  const salvo=JSON.parse(localStorage.getItem(CHAVE)||"{}");
+  const bruto=localStorage.getItem(CHAVE);
+  if(bruto===null)return vazio;
+  const salvo=JSON.parse(bruto);
+  if(!salvo||typeof salvo!=="object"||Array.isArray(salvo))throw new Error("Formato de dados inválido");
+  for(const chave of ["pessoal","uber","cartoes","compras","fixas"]){
+   if(salvo[chave]!==undefined&&!Array.isArray(salvo[chave]))throw new Error("Estrutura inválida em "+chave);
+  }
   vazio.pessoal=Array.isArray(salvo.pessoal)?salvo.pessoal.map(normalizarLancamento):[];
   vazio.uber=Array.isArray(salvo.uber)?salvo.uber:[];
   vazio.cartoes=Array.isArray(salvo.cartoes)?salvo.cartoes:[];
   vazio.compras=Array.isArray(salvo.compras)?salvo.compras:[];
   vazio.fixas=Array.isArray(salvo.fixas)?salvo.fixas:[];
- }catch(e){}
-
+ }catch(e){
+  modoSeguro=true;
+  erroArmazenamento=String(e&&e.message?e.message:e);
+ }
  return vazio;
 }
-
 let dados=lerDados();
-
 function salvar(){
- localStorage.setItem(CHAVE,JSON.stringify(dados));
+ if(modoSeguro){aviso("Modo de segurança ativo. Nenhuma gravação foi feita. Restaure um backup válido primeiro.");return false;}
+ try{
+  const atual=localStorage.getItem(CHAVE);
+  if(atual!==null&&!localStorage.getItem(CHAVE_BACKUP_V3))localStorage.setItem(CHAVE_BACKUP_V3,atual);
+  localStorage.setItem(CHAVE,JSON.stringify(dados));
+  return true;
+ }catch(e){
+  modoSeguro=true;
+  erroArmazenamento=String(e&&e.message?e.message:e);
+  aviso("Não foi possível salvar com segurança. Seus dados armazenados não foram substituídos. Restaure um backup ou verifique o espaço do navegador.");
+  return false;
+ }
 }
 
 function aviso(m){
  alert(m);
+}
+function bloquearEdicaoSeguro(){
+ document.querySelectorAll("button").forEach(b=>{
+  if(!["btnExportar","btnImportar"].includes(b.id)&&!b.hasAttribute("data-tela"))b.disabled=true;
+ });
+ document.querySelectorAll("input,select,textarea").forEach(c=>{
+  if(c.id!=="arquivoBackup")c.disabled=true;
+ });
 }
 
 /* NAVEGAÇÃO */
@@ -994,9 +1023,10 @@ function excluirUber(id){
 }
 
 function resumoUber(){
- const ganhos=dados.uber.reduce((s,x)=>s+numero(x.ganhos),0);
- const combustivel=dados.uber.reduce((s,x)=>s+numero(x.combustivel),0);
- const despesas=dados.uber.reduce((s,x)=>s+numero(x.despesas),0);
+ const registrosMes=dados.uber.filter(x=>String(x.data||"").startsWith(mesAtual()));
+ const ganhos=registrosMes.reduce((s,x)=>s+numero(x.ganhos),0);
+  const combustivel=registrosMes.reduce((s,x)=>s+numero(x.combustivel),0);
+ const despesas=registrosMes.reduce((s,x)=>s+numero(x.despesas),0);
  const custos=combustivel+despesas;
  const lucro=ganhos-custos;
 
@@ -1146,8 +1176,12 @@ function mesParcela(compra,i){
  return adicionarMeses(compra.data,(dia>fechamento?1:0)+i).slice(0,7);
 }
 
-function valorParcela(x){
- return numero(x.valor)/Math.max(1,numero(x.parcelas));
+function valorParcela(x,indice=0){
+ const totalCentavos=Math.round(numero(x.valor)*100);
+ const quantidade=Math.max(1,Math.floor(numero(x.parcelas)||1));
+ const valorBase=Math.floor(totalCentavos/quantidade);
+ const sobra=totalCentavos-(valorBase*quantidade);
+ return (valorBase+(indice<sobra?1:0))/100;
 }
 
 function renderCompras(){
@@ -1177,7 +1211,7 @@ function renderFatura(){
 
   for(let i=0;i<c.parcelas;i++){
    if(mesParcela(c,i)===mes){
-    const valor=valorParcela(c);
+    const valor=valorParcela(c,i);
     total+=valor;
     itens.push({descricao:c.descricao,parcela:i+1,parcelas:c.parcelas,valor});
    }
@@ -1318,7 +1352,9 @@ function atualizarRelatorios(){
  $("relDespesas").textContent=dinheiro(despesas);
  $("relResultado").textContent=dinheiro(entradas-despesas);
 
- const fim=mes+"-31";
+ const [anoSelecionado,mesSelecionado]=mes.split("-").map(Number);
+ const ultimoDia=new Date(anoSelecionado,mesSelecionado,0).getDate();
+ const fim=mes+"-"+String(ultimoDia).padStart(2,"0");
  const acumulado=dados.pessoal.filter(x=>x.data<=fim);
  const saldo=calcularPessoal(acumulado);
 
@@ -1433,20 +1469,23 @@ function importarBackup(){
     return;
    }
 
-   if(!confirm("A restauração substituirá os dados atuais. Deseja continuar?"))return;
-
-   dados={
+   if(!confirm("Antes de restaurar, será criada uma cópia de segurança dos dados atuais. A restauração substituirá os dados atuais. Deseja continuar?"))return;
+   const atual=localStorage.getItem(CHAVE);
+   if(atual!==null)localStorage.setItem("MFP_V2_SEGURANCA_"+Date.now(),atual);
+   const novosDados={
     pessoal:recebido.pessoal.map(normalizarLancamento),
     uber:recebido.uber,
     cartoes:recebido.cartoes,
     compras:recebido.compras,
     fixas:Array.isArray(recebido.fixas)?recebido.fixas:[]
    };
-
-   salvar();
-   atualizarTudo();
+   localStorage.setItem(CHAVE,JSON.stringify(novosDados));
+   dados=novosDados;
+   modoSeguro=false;
+   erroArmazenamento="";
    $("arquivoBackup").value="";
-   aviso("Backup restaurado com sucesso!");
+   atualizarTudo();
+   aviso("Backup restaurado com sucesso! Uma cópia dos dados anteriores foi guardada neste navegador.");
 
   }catch(e){
    aviso("Não foi possível ler esse backup JSON.");
@@ -1482,9 +1521,15 @@ function iniciarAplicativo(){
  atualizarCategorias();
  atualizarOpcaoRepeticao();
 
- gerarFixas();
- salvar();
-
+ if(!modoSeguro){
+  gerarFixas();
+  salvar();
+ }
+ if(modoSeguro){
+  $("avisoSeguranca").classList.remove("oculto");
+  $("avisoSeguranca").textContent="ATENÇÃO: o navegador não conseguiu ler os dados salvos com segurança. Por proteção, o aplicativo bloqueou alterações automáticas e não substituiu seus dados. Use Restaurar backup para recuperar seus lançamentos. Detalhe: "+erroArmazenamento;
+  bloquearEdicaoSeguro();
+ }
  limparLancamento();
  limparUber();
  limparCartao();
