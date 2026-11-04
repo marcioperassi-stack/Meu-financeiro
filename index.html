@@ -7,7 +7,17 @@
 <link rel="manifest" href="./manifest.json">
 <title>Meu Financeiro Pro 2.0</title>
 <style>
-:root{--azul:#102b55;--azul2:#174783;--fundo:#eef3fa;--branco:#fff;--texto:#17243a;--verde:#16834a;--vermelho:#c73535;--cinza:#68758a;--borda:#dce4ef}
+:root{
+ --azul:#102b55;
+ --azul2:#174783;
+ --fundo:#eef3fa;
+ --branco:#fff;
+ --texto:#17243a;
+ --verde:#16834a;
+ --vermelho:#c73535;
+ --cinza:#68758a;
+ --borda:#dce4ef;
+}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fundo);color:var(--texto)}
 header{background:linear-gradient(135deg,var(--azul),var(--azul2));color:white;padding:20px 16px;text-align:center}
@@ -49,37 +59,54 @@ canvas{display:block;width:100%;max-height:300px}
 .legenda-item{font-size:13px;margin:7px 0}
 .etiqueta-parcela{display:inline-block;background:#e7edf6;color:#102b55;border-radius:7px;padding:5px 8px;font-size:12px;font-weight:bold;margin:5px 0}
 
-/* DEBITOS E CREDITOS DO DIA */
-.painel-dia{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:10px;
+/* ÍCONES E CORES DOS LANÇAMENTOS */
+.lancamento-visual{
+ display:flex;
+ align-items:flex-start;
+ gap:11px;
 }
-.dia-lista{
- max-height:300px;
- overflow-y:auto;
+.lancamento-icone{
+ width:44px;
+ height:44px;
+ min-width:44px;
+ border-radius:12px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:23px;
 }
-.dia-item{
- padding:10px;
- border-bottom:1px solid var(--borda);
- font-size:13px;
-}
-.dia-pendente{
- border-left:4px solid var(--vermelho);
-}
-.dia-pago{
- border-left:4px solid var(--verde);
-}
-.dia-total{
- font-size:18px;
+.lancamento-conteudo{flex:1;min-width:0}
+.lancamento-conteudo strong{overflow-wrap:anywhere}
+.lancamento-valor{font-size:16px;font-weight:bold;margin-top:5px}
+.lancamento-status{
+ display:inline-block;
+ border-radius:20px;
+ padding:5px 9px;
+ font-size:11px;
  font-weight:bold;
- margin-top:8px;
+ margin-top:6px;
 }
+.lancamento-borda{border-left:4px solid var(--cor-item,#64748b)}
+.lancamento-icone{
+ background:var(--fundo-item,#e2e8f0);
+ color:var(--cor-item,#475569);
+}
+.lancamento-entrada .lancamento-valor{color:#16834a}
+.lancamento-despesa .lancamento-valor{color:#c73535}
+.lancamento-pendente{opacity:1}
+.lancamento-pago{opacity:.92}
+.dia-lista{max-height:300px;overflow-y:auto}
+.dia-item{padding:10px;border-bottom:1px solid var(--borda);font-size:13px}
+.dia-total{font-size:18px;font-weight:bold;margin-top:8px}
+.painel-dia{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
 @media(max-width:480px){
  .painel-dia{grid-template-columns:1fr}
 }
-
-@media(min-width:600px){.resumo{grid-template-columns:repeat(3,minmax(0,1fr))}main{padding:20px}}
+@media(min-width:600px){
+ .resumo{grid-template-columns:repeat(3,minmax(0,1fr))}
+ main{padding:20px}
+}
 </style>
 </head>
 <body>
@@ -113,26 +140,21 @@ canvas{display:block;width:100%;max-height:300px}
 <div class="card"><div class="pequeno">Lucro líquido Uber/99</div><div class="numero" id="dashLucro">R$ 0,00</div></div>
 </div>
 
-<!-- NOVO PAINEL: USA OS LANCAMENTOS JA CADASTRADOS -->
 <div class="card">
 <h3>📅 Movimentações de hoje</h3>
-
 <div class="painel-dia">
-<div>
-<h3 class="vermelho">Débitos do dia</h3>
-<div class="dia-total vermelho" id="diaTotalDebitos">R$ 0,00</div>
-<div class="dia-lista" id="diaDebitos"></div>
+ <div>
+  <h3 class="vermelho">Débitos do dia</h3>
+  <div class="dia-total vermelho" id="diaTotalDebitos">R$ 0,00</div>
+  <div class="dia-lista" id="diaDebitos"></div>
+ </div>
+ <div>
+  <h3 class="verde">Créditos do dia</h3>
+  <div class="dia-total verde" id="diaTotalCreditos">R$ 0,00</div>
+  <div class="dia-lista" id="diaCreditos"></div>
+ </div>
 </div>
-
-<div>
-<h3 class="verde">Créditos do dia</h3>
-<div class="dia-total verde" id="diaTotalCreditos">R$ 0,00</div>
-<div class="dia-lista" id="diaCreditos"></div>
-</div>
-</div>
-
 <hr>
-
 <div class="item">
 <strong>Saldo previsto do dia</strong>
 <div class="dia-total" id="diaSaldoPrevisto">R$ 0,00</div>
@@ -155,7 +177,6 @@ canvas{display:block;width:100%;max-height:300px}
 
 <section id="lancamentos" class="tela">
 <h2>Lançamentos pessoais</h2>
-
 <div class="card">
 <h3 id="tituloLancamento">Cadastrar lançamento</h3>
 <form id="formLancamento">
@@ -326,11 +347,8 @@ canvas{display:block;width:100%;max-height:300px}
 
 <div class="card">
 <h3>Registrar compra</h3>
-
 <label>Cartão</label>
-<select id="cartaoCompra">
-<option value="">Selecione um cartão</option>
-</select>
+<select id="cartaoCompra"><option value="">Selecione um cartão</option></select>
 
 <label>Data da compra</label>
 <input type="date" id="dataCompra">
@@ -360,11 +378,8 @@ canvas{display:block;width:100%;max-height:300px}
 
 <div class="card">
 <h3>Consultar fatura</h3>
-
 <label>Cartão</label>
-<select id="cartaoFatura">
-<option value="">Todos os cartões</option>
-</select>
+<select id="cartaoFatura"><option value="">Todos os cartões</option></select>
 
 <label>Mês da fatura</label>
 <input type="month" id="mesFatura">
@@ -379,7 +394,6 @@ canvas{display:block;width:100%;max-height:300px}
 
 <section id="relatorios" class="tela">
 <h2>Relatórios financeiros</h2>
-
 <div class="card">
 <label>Selecionar mês</label>
 <input type="month" id="relMes">
@@ -419,10 +433,8 @@ canvas{display:block;width:100%;max-height:300px}
 
 <section id="reserva" class="tela">
 <h2>Reserva financeira Uber / 99</h2>
-
 <div class="card">
 <p>A reserva é calculada depois de descontar combustível e demais despesas do trabalho.</p>
-
 <div class="resumo">
 <div><small>Ganhos totais</small><h3 id="reservaGanhos">R$ 0,00</h3></div>
 <div><small>Combustível e outras despesas</small><h3 id="reservaCustos">R$ 0,00</h3></div>
@@ -434,7 +446,6 @@ canvas{display:block;width:100%;max-height:300px}
 
 <section id="backup" class="tela">
 <h2>Backup dos dados</h2>
-
 <div class="card">
 <h3>Exportar dados</h3>
 <p>Salve uma cópia dos lançamentos, despesas fixas, Uber/99, cartões e compras.</p>
@@ -475,6 +486,80 @@ const escapar=s=>String(s??"").replace(/[&<>"']/g,c=>({
 }[c]));
 
 const dataBR=d=>d?d.split("-").reverse().join("/"):"";
+
+/* ÍCONE E COR AUTOMÁTICOS POR CATEGORIA */
+function visualLancamento(x){
+
+ const texto=(
+  String(x.categoria||"")+" "+
+  String(x.descricao||"")
+ ).toLowerCase();
+
+ let visual={
+  icone:"📌",
+  cor:"#64748b",
+  fundo:"#e2e8f0"
+ };
+
+ const regras=[
+  {termos:["uber","99","corrida","motorista"],icone:"🚗",cor:"#0369a1",fundo:"#e0f2fe"},
+  {termos:["combustível","combustivel","gasolina","etanol","posto"],icone:"⛽",cor:"#b45309",fundo:"#fef3c7"},
+  {termos:["mercado","supermercado","compra","alimento"],icone:"🛒",cor:"#15803d",fundo:"#dcfce7"},
+  {termos:["aluguel","moradia","casa","condomínio","condominio"],icone:"🏠",cor:"#b91c1c",fundo:"#fee2e2"},
+  {termos:["água","agua","luz","energia","internet","telefone"],icone:"💡",cor:"#a16207",fundo:"#fef9c3"},
+  {termos:["saúde","saude","farmácia","farmacia","médico","medico","remédio","remedio"],icone:"💊",cor:"#be123c",fundo:"#ffe4e6"},
+  {termos:["cartão","cartao","fatura"],icone:"💳",cor:"#6d28d9",fundo:"#ede9fe"},
+  {termos:["empréstimo","emprestimo","agiota","dívida","divida"],icone:"💰",cor:"#c2410c",fundo:"#ffedd5"},
+  {termos:["salário","salario","pagamento","recebimento"],icone:"💵",cor:"#15803d",fundo:"#dcfce7"},
+  {termos:["manutenção","manutencao","oficina","pneu","carro"],icone:"🔧",cor:"#475569",fundo:"#e2e8f0"},
+  {termos:["lazer","viagem","passeio"],icone:"🎯",cor:"#7e22ce",fundo:"#f3e8ff"},
+  {termos:["imposto","taxa","documento"],icone:"🧾",cor:"#0f766e",fundo:"#ccfbf1"}
+ ];
+
+ for(const regra of regras){
+  if(regra.termos.some(t=>texto.includes(t))){
+   visual=regra;
+   break;
+  }
+ }
+
+ if(visual.icone==="📌"&&tipoNormalizado(x.tipo)==="entrada"){
+  visual={icone:"💰",cor:"#15803d",fundo:"#dcfce7"};
+ }
+
+ if(visual.icone==="📌"&&tipoNormalizado(x.tipo)==="despesa"){
+  visual={icone:"💸",cor:"#b91c1c",fundo:"#fee2e2"};
+ }
+
+ return visual;
+}
+
+function blocoVisualLancamento(x,compacto=false){
+ const v=visualLancamento(x);
+ const entrada=tipoNormalizado(x.tipo)==="entrada";
+ const pago=statusNormalizado(x.status)==="pago";
+
+ return `
+ <div class="lancamento-visual ${entrada?"lancamento-entrada":"lancamento-despesa"}">
+  <div class="lancamento-icone"
+   style="--cor-item:${v.cor};--fundo-item:${v.fundo}">
+   ${v.icone}
+  </div>
+  <div class="lancamento-conteudo">
+   <strong>${escapar(x.descricao||x.categoria||"Lançamento")}</strong>
+   <div class="pequeno">${escapar(x.categoria||"Sem categoria")}</div>
+   ${compacto?"":`<div class="pequeno">${dataBR(x.data)}</div>`}
+   <div class="lancamento-valor">
+    ${entrada?"+":"−"} ${dinheiro(totalLancamento(x))}
+   </div>
+   <span class="lancamento-status"
+    style="background:${pago?"#dcfce7":"#fee2e2"};color:${pago?"#166534":"#991b1b"}">
+    ${pago?(entrada?"RECEBIDO":"PAGO"):"PENDENTE"}
+   </span>
+  </div>
+ </div>
+ `;
+}
 
 /* NORMALIZAÇÃO DOS DADOS */
 function tipoNormalizado(v){
@@ -523,7 +608,6 @@ function lerDados(){
 
  try{
   const salvo=JSON.parse(localStorage.getItem(CHAVE)||"{}");
-
   vazio.pessoal=Array.isArray(salvo.pessoal)?salvo.pessoal.map(normalizarLancamento):[];
   vazio.uber=Array.isArray(salvo.uber)?salvo.uber:[];
   vazio.cartoes=Array.isArray(salvo.cartoes)?salvo.cartoes:[];
@@ -589,7 +673,7 @@ function atualizarOpcaoRepeticao(){
  $("blocoQuantidade").classList.toggle("oculto",fixa);
 
  $("avisoRepeticao").textContent=fixa
-  ?"Despesa fixa mensal: será criada como pendente a cada mês, até você cancelar a repetição."
+  ?"Despesa fixa mensal: será criada como pendente a cada mês, até você cancelar."
   :"Escolha de 1 até 300 repetições. Cada lançamento terá sua numeração de parcela.";
 }
 
@@ -635,7 +719,6 @@ function salvarLancamento(e){
 
  if(edit){
   const x=dados.pessoal.find(a=>a.id===edit);
-
   if(x){
    Object.assign(x,{
     data,tipo,categoria,descricao,
@@ -644,7 +727,6 @@ function salvarLancamento(e){
     status
    });
   }
-
   limparLancamento();
 
  }else if(recorrencia==="fixa"){
@@ -687,7 +769,6 @@ function salvarLancamento(e){
    :Math.max(1,Math.min(300,Math.floor(numero($("quantidadeLancamento").value)||1)));
 
   for(let i=0;i<qtd;i++){
-
    let dataNova=data;
 
    if(recorrencia==="diaria")dataNova=adicionarDias(data,i);
@@ -726,9 +807,7 @@ function editarLancamento(id){
  $("tituloLancamento").textContent="Editar lançamento";
  $("dataLancamento").value=x.data;
  $("tipoLancamento").value=x.tipo;
-
  atualizarCategorias();
-
  $("categoriaLancamento").value=x.categoria;
  $("descricaoLancamento").value=x.descricao||"";
  $("valorDinheiroLancamento").value=numero(x.dinheiro);
@@ -737,16 +816,13 @@ function editarLancamento(id){
  $("recorrenciaLancamento").value="unica";
  $("quantidadeLancamento").value=1;
  $("btnSalvarLancamento").textContent="Salvar alteração";
-
  atualizarOpcaoRepeticao();
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function excluirLancamento(id){
  if(!confirm("Deseja excluir este lançamento?"))return;
-
  dados.pessoal=dados.pessoal.filter(x=>x.id!==id);
-
  salvar();
  atualizarTudo();
 }
@@ -754,9 +830,7 @@ function excluirLancamento(id){
 function alterarStatusLancamento(id){
  const x=dados.pessoal.find(a=>a.id===id);
  if(!x)return;
-
  x.status=x.status==="pago"?"pendente":"pago";
-
  salvar();
  atualizarTudo();
 }
@@ -771,21 +845,21 @@ function renderLancamentos(){
  ).sort((a,b)=>b.data.localeCompare(a.data));
 
  $("listaLancamentos").innerHTML=lista.length
- ?lista.map(x=>`
- <div class="item">
- <strong>${escapar(x.descricao||x.categoria)}</strong>
- <div>${dataBR(x.data)} · ${escapar(x.categoria)}</div>
- ${x.parcela&&x.totalParcelas?`<div><span class="etiqueta-parcela">Parcela ${x.parcela} de ${x.totalParcelas}</span></div>`:""}
- <div>${x.tipo==="entrada"?"Entrada":"Despesa"} · Dinheiro: ${dinheiro(x.dinheiro)} · Banco: ${dinheiro(x.banco)}</div>
- <div>Total: <strong>${dinheiro(totalLancamento(x))}</strong> · ${x.status==="pago"?"Pago/Recebido":"Pendente"}</div>
- ${x.fixaId?'<div class="pequeno">Despesa fixa mensal</div>':""}
- <div class="acoes">
- <button type="button" onclick="editarLancamento('${x.id}')">Editar</button>
- <button type="button" onclick="alterarStatusLancamento('${x.id}')">${x.status==="pago"?"Marcar pendente":"Marcar pago"}</button>
- <button type="button" class="btn-perigo" onclick="excluirLancamento('${x.id}')">Excluir</button>
- </div>
- </div>
- `).join("")
+ ?lista.map(x=>{
+  const v=visualLancamento(x);
+  return `
+  <div class="item lancamento-borda" style="--cor-item:${v.cor}">
+   ${blocoVisualLancamento(x)}
+   ${x.parcela&&x.totalParcelas?`<div><span class="etiqueta-parcela">Parcela ${x.parcela} de ${x.totalParcelas}</span></div>`:""}
+   <div class="pequeno">Dinheiro: ${dinheiro(x.dinheiro)} · Banco: ${dinheiro(x.banco)}</div>
+   ${x.fixaId?'<div class="pequeno">Despesa fixa mensal</div>':""}
+   <div class="acoes">
+    <button type="button" onclick="editarLancamento('${x.id}')">Editar</button>
+    <button type="button" onclick="alterarStatusLancamento('${x.id}')">${x.status==="pago"?"Marcar pendente":"Marcar como pago"}</button>
+    <button type="button" class="btn-perigo" onclick="excluirLancamento('${x.id}')">Excluir</button>
+   </div>
+  </div>`;
+ }).join("")
  :'<p class="vazio">Nenhum lançamento encontrado.</p>';
 
  const fixas=dados.fixas.filter(x=>x.ativa);
@@ -804,10 +878,8 @@ function renderLancamentos(){
 
 function cancelarFixa(id){
  if(!confirm("Cancelar as próximas repetições desta despesa fixa? Os lançamentos já criados serão mantidos."))return;
-
  const x=dados.fixas.find(a=>a.id===id);
  if(x)x.ativa=false;
-
  salvar();
  atualizarTudo();
 }
@@ -819,10 +891,7 @@ function gerarFixas(){
   let seguranca=0;
 
   while(f.proxima&&f.proxima.slice(0,7)<=limite&&seguranca<300){
-
-   const existe=dados.pessoal.some(x=>
-    x.fixaId===f.id&&x.data===f.proxima
-   );
+   const existe=dados.pessoal.some(x=>x.fixaId===f.id&&x.data===f.proxima);
 
    if(!existe){
     dados.pessoal.push({
@@ -844,7 +913,6 @@ function gerarFixas(){
  });
 }
 
-/* SALDOS */
 function calcularPessoal(lista){
  let entradas=0,despesas=0,dinheiroSaldo=0,bancoSaldo=0;
 
@@ -874,15 +942,11 @@ function limparUber(){
  $("editUber").value="";
  $("dataUber").value=hoje();
  $("plataformaUber").value="Uber";
-
- ["ganhosUber","combustivelUber","despesasUber","kmUber","horasUber","descricaoUber"].forEach(id=>
-  $(id).value=""
- );
+ ["ganhosUber","combustivelUber","despesasUber","kmUber","horasUber","descricaoUber"].forEach(id=>$(id).value="");
 }
 
 function salvarUber(){
  const id=$("editUber").value;
-
  const x={
   id:id||idNovo(),
   data:$("dataUber").value,
@@ -895,17 +959,12 @@ function salvarUber(){
   descricao:$("descricaoUber").value.trim()
  };
 
- if(!x.data){
-  aviso("Informe a data do registro.");
-  return;
- }
+ if(!x.data){aviso("Informe a data do registro.");return;}
 
  if(id){
   const i=dados.uber.findIndex(a=>a.id===id);
   if(i>=0)dados.uber[i]=x;
- }else{
-  dados.uber.push(x);
- }
+ }else dados.uber.push(x);
 
  limparUber();
  salvar();
@@ -915,7 +974,6 @@ function salvarUber(){
 function editarUber(id){
  const x=dados.uber.find(a=>a.id===id);
  if(!x)return;
-
  $("editUber").value=x.id;
  $("dataUber").value=x.data;
  $("plataformaUber").value=x.plataforma;
@@ -925,15 +983,12 @@ function editarUber(id){
  $("kmUber").value=x.km;
  $("horasUber").value=x.horas;
  $("descricaoUber").value=x.descricao||"";
-
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function excluirUber(id){
  if(!confirm("Excluir este registro Uber / 99?"))return;
-
  dados.uber=dados.uber.filter(x=>x.id!==id);
-
  salvar();
  atualizarTudo();
 }
@@ -942,28 +997,18 @@ function resumoUber(){
  const ganhos=dados.uber.reduce((s,x)=>s+numero(x.ganhos),0);
  const combustivel=dados.uber.reduce((s,x)=>s+numero(x.combustivel),0);
  const despesas=dados.uber.reduce((s,x)=>s+numero(x.despesas),0);
-
  const custos=combustivel+despesas;
  const lucro=ganhos-custos;
 
- return {
-  ganhos,
-  combustivel,
-  despesas,
-  custos,
-  lucro,
-  reserva:Math.max(0,lucro)*.10
- };
+ return {ganhos,combustivel,despesas,custos,lucro,reserva:Math.max(0,lucro)*.10};
 }
 
 function renderUber(){
  const r=resumoUber();
-
  $("uberGanhosTotal").textContent=dinheiro(r.ganhos);
  $("uberCustosTotal").textContent=dinheiro(r.custos);
  $("uberLucroTotal").textContent=dinheiro(r.lucro);
  $("uberReservaTotal").textContent=dinheiro(r.reserva);
-
  $("reservaGanhos").textContent=dinheiro(r.ganhos);
  $("reservaCustos").textContent=dinheiro(r.custos);
  $("reservaLucro").textContent=dinheiro(r.lucro);
@@ -972,7 +1017,7 @@ function renderUber(){
  $("listaUber").innerHTML=dados.uber.length
  ?[...dados.uber].sort((a,b)=>b.data.localeCompare(a.data)).map(x=>`
  <div class="item">
- <strong>${dataBR(x.data)} · ${escapar(x.plataforma)}</strong>
+ <strong>🚗 ${dataBR(x.data)} · ${escapar(x.plataforma)}</strong>
  <div>Ganhos: ${dinheiro(x.ganhos)} · Combustível: ${dinheiro(x.combustivel)}</div>
  <div>Outras despesas: ${dinheiro(x.despesas)}</div>
  <div>Lucro: ${dinheiro(x.ganhos-x.combustivel-x.despesas)}</div>
@@ -980,8 +1025,7 @@ function renderUber(){
  <div>${escapar(x.descricao||"")}</div>
  <button class="btn" onclick="editarUber('${x.id}')">Editar</button>
  <button class="btn btn-perigo" onclick="excluirUber('${x.id}')">Excluir</button>
- </div>
- `).join("")
+ </div>`).join("")
  :'<p class="vazio">Nenhum registro cadastrado.</p>';
 }
 
@@ -999,7 +1043,6 @@ function limparCartao(){
 
 function salvarCartao(){
  const id=$("editCartao").value;
-
  const x={
   id:id||idNovo(),
   nome:$("nomeCartao").value.trim(),
@@ -1016,9 +1059,7 @@ function salvarCartao(){
  if(id){
   const i=dados.cartoes.findIndex(a=>a.id===id);
   if(i>=0)dados.cartoes[i]=x;
- }else{
-  dados.cartoes.push(x);
- }
+ }else dados.cartoes.push(x);
 
  limparCartao();
  salvar();
@@ -1028,7 +1069,6 @@ function salvarCartao(){
 function editarCartao(id){
  const x=dados.cartoes.find(a=>a.id===id);
  if(!x)return;
-
  $("editCartao").value=x.id;
  $("nomeCartao").value=x.nome;
  $("limiteCartao").value=x.limite;
@@ -1041,11 +1081,8 @@ function excluirCartao(id){
   aviso("Este cartão possui compras. Exclua as compras antes.");
   return;
  }
-
  if(!confirm("Excluir este cartão?"))return;
-
  dados.cartoes=dados.cartoes.filter(x=>x.id!==id);
-
  salvar();
  atualizarTudo();
 }
@@ -1054,19 +1091,15 @@ function renderCartoes(){
  $("listaCartoes").innerHTML=dados.cartoes.length
  ?dados.cartoes.map(x=>`
  <div class="item">
- <strong>${escapar(x.nome)}</strong>
+ <strong>💳 ${escapar(x.nome)}</strong>
  <div>Limite: ${dinheiro(x.limite)}</div>
  <div>Fechamento: dia ${x.fechamento} · Vencimento: dia ${x.vencimento}</div>
  <button class="btn" onclick="editarCartao('${x.id}')">Editar</button>
  <button class="btn btn-perigo" onclick="excluirCartao('${x.id}')">Excluir</button>
- </div>
- `).join("")
+ </div>`).join("")
  :'<p class="vazio">Nenhum cartão cadastrado.</p>';
 
- const op=dados.cartoes.map(x=>
-  `<option value="${x.id}">${escapar(x.nome)}</option>`
- ).join("");
-
+ const op=dados.cartoes.map(x=>`<option value="${x.id}">${escapar(x.nome)}</option>`).join("");
  $("cartaoCompra").innerHTML='<option value="">Selecione um cartão</option>'+op;
  $("cartaoFatura").innerHTML='<option value="">Todos os cartões</option>'+op;
 }
@@ -1077,7 +1110,6 @@ function salvarCompra(){
  const data=$("dataCompra").value;
  const descricao=$("descricaoCompra").value.trim();
  const valor=numero($("valorCompra").value);
-
  const parcelas=Math.max(1,Math.min(48,Math.floor(numero($("parcelasCompra").value)||1)));
 
  if(!cartao||!data||!descricao||valor<=0){
@@ -1086,13 +1118,9 @@ function salvarCompra(){
  }
 
  dados.compras.push({
-  id:idNovo(),
-  cartao,
-  data,
-  descricao,
+  id:idNovo(),cartao,data,descricao,
   categoria:$("categoriaCompra").value,
-  valor,
-  parcelas
+  valor,parcelas
  });
 
  $("dataCompra").value=hoje();
@@ -1106,9 +1134,7 @@ function salvarCompra(){
 
 function excluirCompra(id){
  if(!confirm("Excluir esta compra?"))return;
-
  dados.compras=dados.compras.filter(x=>x.id!==id);
-
  salvar();
  atualizarTudo();
 }
@@ -1117,7 +1143,6 @@ function mesParcela(compra,i){
  const c=dados.cartoes.find(x=>x.id===compra.cartao);
  const fechamento=c?numero(c.fechamento):31;
  const dia=Number(compra.data.slice(8,10));
-
  return adicionarMeses(compra.data,(dia>fechamento?1:0)+i).slice(0,7);
 }
 
@@ -1129,15 +1154,13 @@ function renderCompras(){
  $("listaCompras").innerHTML=dados.compras.length
  ?[...dados.compras].sort((a,b)=>b.data.localeCompare(a.data)).map(x=>{
   const c=dados.cartoes.find(a=>a.id===x.cartao);
-
   return `
   <div class="item">
-  <strong>${escapar(x.descricao)}</strong>
-  <div>${dataBR(x.data)} · ${escapar(x.categoria)} · ${escapar(c?c.nome:"Cartão não encontrado")}</div>
-  <div>Total: ${dinheiro(x.valor)} · ${x.parcelas} parcela(s) de ${dinheiro(valorParcela(x))}</div>
-  <button class="btn btn-perigo" onclick="excluirCompra('${x.id}')">Excluir compra</button>
-  </div>
-  `;
+   <strong>🛍️ ${escapar(x.descricao)}</strong>
+   <div>${dataBR(x.data)} · ${escapar(x.categoria)} · ${escapar(c?c.nome:"Cartão não encontrado")}</div>
+   <div>Total: ${dinheiro(x.valor)} · ${x.parcelas} parcela(s) de ${dinheiro(valorParcela(x))}</div>
+   <button class="btn btn-perigo" onclick="excluirCompra('${x.id}')">Excluir compra</button>
+  </div>`;
  }).join("")
  :'<p class="vazio">Nenhuma compra cadastrada.</p>';
 
@@ -1147,7 +1170,6 @@ function renderCompras(){
 function renderFatura(){
  const mes=$("mesFatura").value||mesAtual();
  const filtro=$("cartaoFatura").value;
-
  let total=0,itens=[];
 
  dados.compras.forEach(c=>{
@@ -1157,27 +1179,19 @@ function renderFatura(){
    if(mesParcela(c,i)===mes){
     const valor=valorParcela(c);
     total+=valor;
-
-    itens.push({
-     descricao:c.descricao,
-     parcela:i+1,
-     parcelas:c.parcelas,
-     valor
-    });
+    itens.push({descricao:c.descricao,parcela:i+1,parcelas:c.parcelas,valor});
    }
   }
  });
 
  $("totalFatura").textContent="Total da fatura: "+dinheiro(total);
-
  $("listaFatura").innerHTML=itens.length
  ?itens.map(x=>`
- <div class="item">
- <strong>${escapar(x.descricao)}</strong>
- <div>Parcela ${x.parcela} de ${x.parcelas}</div>
- <strong>${dinheiro(x.valor)}</strong>
- </div>
- `).join("")
+  <div class="item">
+   <strong>🧾 ${escapar(x.descricao)}</strong>
+   <div>Parcela ${x.parcela} de ${x.parcelas}</div>
+   <strong>${dinheiro(x.valor)}</strong>
+  </div>`).join("")
  :'<p class="vazio">Nenhuma compra nesta fatura.</p>';
 }
 
@@ -1193,29 +1207,23 @@ const cores=["#2563eb","#16a34a","#f59e0b","#dc2626","#9333ea","#0891b2","#db277
 function canvas(id){
  const c=$(id);
  if(!c)return null;
-
  const w=Math.max(280,c.parentElement.clientWidth-30);
  const h=260;
  const escala=window.devicePixelRatio||1;
-
  c.width=w*escala;
  c.height=h*escala;
  c.style.width=w+"px";
  c.style.height=h+"px";
-
  const ctx=c.getContext("2d");
  ctx.scale(escala,escala);
-
  return {ctx,w,h};
 }
 
 function pizza(id,legenda,grupos){
  const a=canvas(id);
  if(!a)return;
-
  const {ctx,w,h}=a;
  const total=grupos.reduce((s,x)=>s+numero(x.valor),0);
-
  ctx.clearRect(0,0,w,h);
 
  if(total<=0){
@@ -1223,7 +1231,6 @@ function pizza(id,legenda,grupos){
   ctx.font="14px Arial";
   ctx.textAlign="center";
   ctx.fillText("Sem dados neste período",w/2,h/2);
-
   $(legenda).innerHTML='<p class="vazio">Nenhum lançamento pago nesta categoria.</p>';
   return;
  }
@@ -1233,15 +1240,12 @@ function pizza(id,legenda,grupos){
 
  grupos.forEach((x,i)=>{
   const ang=numero(x.valor)/total*Math.PI*2;
-
   ctx.beginPath();
   ctx.moveTo(cx,cy);
   ctx.arc(cx,cy,r,inicio,inicio+ang);
   ctx.closePath();
-
   ctx.fillStyle=cores[i%cores.length];
   ctx.fill();
-
   inicio+=ang;
  });
 
@@ -1250,18 +1254,14 @@ function pizza(id,legenda,grupos){
  <span style="display:inline-block;width:12px;height:12px;background:${cores[i%cores.length]};margin-right:7px"></span>
  ${escapar(x.nome)}: <strong>${dinheiro(x.valor)}</strong>
  (${(x.valor/total*100).toFixed(1).replace(".",",")}%)
- </div>
- `).join("");
+ </div>`).join("");
 }
 
 function comparativo(ent,desp){
  const a=canvas("graficoComparativo");
  if(!a)return;
-
  const {ctx,w}=a;
-
  ctx.clearRect(0,0,w,260);
-
  const maior=Math.max(ent,desp,1);
  const base=205;
  const maxH=150;
@@ -1272,15 +1272,12 @@ function comparativo(ent,desp){
   {nome:"Despesas",valor:desp,x:w*.68,cor:"#dc2626"}
  ].forEach(b=>{
   const h=b.valor/maior*maxH;
-
   ctx.fillStyle=b.cor;
   ctx.fillRect(b.x-bw/2,base-h,bw,h);
-
   ctx.fillStyle="#64748b";
   ctx.font="12px Arial";
   ctx.textAlign="center";
   ctx.fillText(b.nome,b.x,base+22);
-
   ctx.fillStyle="#17243a";
   ctx.font="11px Arial";
   ctx.fillText(dinheiro(b.valor),b.x,Math.max(15,base-h-8));
@@ -1295,12 +1292,10 @@ function comparativo(ent,desp){
 
 function agrupar(lista){
  const mapa={};
-
  lista.forEach(x=>{
   const nome=x.categoria||"Outros";
   mapa[nome]=(mapa[nome]||0)+totalLancamento(x);
  });
-
  return Object.entries(mapa)
   .map(([nome,valor])=>({nome,valor}))
   .filter(x=>x.valor>0)
@@ -1310,15 +1305,12 @@ function agrupar(lista){
 /* RELATÓRIOS */
 function atualizarRelatorios(){
  const mes=$("relMes").value||mesAtual();
-
  const listaMes=dados.pessoal.filter(x=>
-  String(x.data||"").startsWith(mes)&&
-  statusNormalizado(x.status)==="pago"
+  String(x.data||"").startsWith(mes)&&statusNormalizado(x.status)==="pago"
  );
 
  const ent=listaMes.filter(x=>tipoNormalizado(x.tipo)==="entrada");
  const desp=listaMes.filter(x=>tipoNormalizado(x.tipo)==="despesa");
-
  const entradas=ent.reduce((s,x)=>s+totalLancamento(x),0);
  const despesas=desp.reduce((s,x)=>s+totalLancamento(x),0);
 
@@ -1335,96 +1327,52 @@ function atualizarRelatorios(){
  $("relTotalSaldo").textContent=dinheiro(saldo.total);
 
  comparativo(entradas,despesas);
-
  pizza("graficoDespesas","legendaDespesas",agrupar(desp));
  pizza("graficoEntradas","legendaEntradas",agrupar(ent));
 }
 
-/* MOVIMENTAÇÕES DO DIA */
+/* MOVIMENTAÇÕES DO DIA COM ÍCONES E CORES */
 function atualizarMovimentacoesDia(){
-
  const dataHoje=hoje();
+ const lista=dados.pessoal.filter(x=>x.data===dataHoje);
 
- const lista=dados.pessoal.filter(x=>
-  x.data===dataHoje
- );
+ const debitos=lista.filter(x=>tipoNormalizado(x.tipo)==="despesa");
+ const creditos=lista.filter(x=>tipoNormalizado(x.tipo)==="entrada");
 
- const debitos=lista.filter(x=>
-  tipoNormalizado(x.tipo)==="despesa"
- );
+ const totalDebitos=debitos.reduce((s,x)=>s+totalLancamento(x),0);
+ const totalCreditos=creditos.reduce((s,x)=>s+totalLancamento(x),0);
 
- const creditos=lista.filter(x=>
-  tipoNormalizado(x.tipo)==="entrada"
- );
+ function montarLista(lista){
+  if(!lista.length)return '<p class="vazio">Nenhum lançamento para hoje.</p>';
 
- const totalDebitos=debitos.reduce(
-  (s,x)=>s+totalLancamento(x),0
- );
-
- const totalCreditos=creditos.reduce(
-  (s,x)=>s+totalLancamento(x),0
- );
-
- function montarLista(lista,tipo){
-
-  if(!lista.length){
-   return '<p class="vazio">Nenhum lançamento para hoje.</p>';
-  }
-
-  return [...lista]
-   .sort((a,b)=>
-    (statusNormalizado(a.status)==="pago"?1:0)-
-    (statusNormalizado(b.status)==="pago"?1:0)
-   )
-   .map(x=>{
-
-    const pago=statusNormalizado(x.status)==="pago";
-
-    return `
-    <div class="dia-item ${pago?'dia-pago':'dia-pendente'}">
-
-     <strong>${escapar(x.descricao||x.categoria)}</strong>
-
-     <div>${escapar(x.categoria||"")}</div>
-
-     <div class="${tipo==='despesa'?'vermelho':'verde'}">
-      ${dinheiro(totalLancamento(x))}
-     </div>
-
-     <strong class="${pago?'verde':'vermelho'}">
-      ${pago
-       ?(tipo==='despesa'?'PAGO':'RECEBIDO')
-       :'PENDENTE'}
-     </strong>
-
-     <button class="btn btn-sec"
-      type="button"
-      onclick="alterarStatusLancamento('${x.id}')">
-      ${pago?'Marcar pendente':'Marcar como pago'}
-     </button>
-
-    </div>
-    `;
-   }).join("");
+  return [...lista].sort((a,b)=>
+   (statusNormalizado(a.status)==="pago"?1:0)-
+   (statusNormalizado(b.status)==="pago"?1:0)
+  ).map(x=>{
+   const v=visualLancamento(x);
+   return `
+   <div class="dia-item lancamento-borda" style="--cor-item:${v.cor}">
+    ${blocoVisualLancamento(x,true)}
+    <button class="btn btn-sec" type="button"
+     onclick="alterarStatusLancamento('${x.id}')">
+     ${statusNormalizado(x.status)==="pago"?"Marcar pendente":"Marcar como pago"}
+    </button>
+   </div>`;
+  }).join("");
  }
 
  $("diaTotalDebitos").textContent=dinheiro(totalDebitos);
  $("diaTotalCreditos").textContent=dinheiro(totalCreditos);
-
- $("diaDebitos").innerHTML=montarLista(debitos,"despesa");
- $("diaCreditos").innerHTML=montarLista(creditos,"entrada");
-
- $("diaSaldoPrevisto").textContent=
-  dinheiro(totalCreditos-totalDebitos);
+ $("diaDebitos").innerHTML=montarLista(debitos);
+ $("diaCreditos").innerHTML=montarLista(creditos);
+ $("diaSaldoPrevisto").textContent=dinheiro(totalCreditos-totalDebitos);
 }
 
-/* PAINEL */
+/* PAINEL INICIAL */
 function atualizarInicio(){
  const mes=mesAtual();
-
  const listaMes=dados.pessoal.filter(x=>
-  String(x.data||"").startsWith(mes)&&
-  statusNormalizado(x.status)==="pago"
+  String(x.data||"").startsWith(mes)&&statusNormalizado(x.status)==="pago"
  );
 
  const rMes=calcularPessoal(listaMes);
@@ -1443,7 +1391,6 @@ function atualizarInicio(){
  $("dashMes").textContent=
   `Entradas: ${dinheiro(rMes.entradas)} · Despesas: ${dinheiro(rMes.despesas)} · Resultado: ${dinheiro(rMes.resultado)}`;
 
- // Atualiza débitos e créditos usando os lançamentos existentes
  atualizarMovimentacoesDia();
 }
 
@@ -1457,21 +1404,18 @@ function exportarBackup(){
 
  const blob=new Blob([conteudo],{type:"application/json"});
  const url=URL.createObjectURL(blob);
-
  const a=document.createElement("a");
+
  a.href=url;
  a.download="backup-meu-financeiro-pro.json";
-
  document.body.appendChild(a);
  a.click();
  a.remove();
-
  URL.revokeObjectURL(url);
 }
 
 function importarBackup(){
  const arquivo=$("arquivoBackup").files[0];
-
  if(!arquivo){
   aviso("Selecione primeiro um arquivo de backup.");
   return;
@@ -1501,7 +1445,6 @@ function importarBackup(){
 
    salvar();
    atualizarTudo();
-
    $("arquivoBackup").value="";
    aviso("Backup restaurado com sucesso!");
 
@@ -1552,9 +1495,8 @@ function iniciarAplicativo(){
 iniciarAplicativo();
 </script>
 
-<!-- REGISTRO DO SERVICE WORKER PARA PWA -->
 <script>
-if ("serviceWorker" in navigator) {
+if("serviceWorker" in navigator){
  window.addEventListener("load",()=>{
   navigator.serviceWorker.register("./service-worker.js")
    .then(()=>console.log("Aplicativo preparado para PWA"))
